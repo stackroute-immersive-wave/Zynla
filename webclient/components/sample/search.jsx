@@ -38,6 +38,7 @@ Child.propTypes = {
     };
 export default Child;
 
+
 // ReactDom.render(
 // 	<MainComponent/>,document.getElementById('mountapp')
 // 	);
