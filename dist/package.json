@@ -4,7 +4,7 @@
   "scripts": {
     "test": "mocha $(find server/test -name '*.js')",
     "wpbuild": "node ./node_modules/webpack/bin/webpack.js",
-    "gbuild": "gulp lint",
+    "build": "gulp build",
     "clean": "gulp clean",
     "start": "nodemon -L bin/www"
   },
