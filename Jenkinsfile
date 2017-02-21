@@ -10,9 +10,10 @@ node {
   sh "npm prune"
   sh "npm install"
 
-
+/*
   stage 'Linting'
   sh "gulp build"
+*/
 
   stage 'Testing'
   sh "npm run test"
