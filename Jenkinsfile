@@ -15,8 +15,10 @@ node {
   sh "gulp build"
 */
 
+/*
   stage 'Testing'
   sh "npm run test"
+*/
 
 }
 
