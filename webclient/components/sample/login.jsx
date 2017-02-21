@@ -83,7 +83,7 @@ render() {
   return (
   <div>
   <Grid centered style = {{margin: 30 + 'px'}}>
-       <h2 style={{margin: -6 + 'px'}}>Welcome to Zoomato</h2>
+       <h2 style={{margin: -6 + 'px'}}>Welcome to Zynla</h2>
        <Form onSubmit={this.onSubmitLoginData}>
 
             <Form.Field id="formfieldlogin">

@@ -12,7 +12,7 @@ node {
 
 
   stage 'Linting'
-  sh "npm run build"
+  sh "gulp build"
 
   stage 'Testing'
   sh "npm run test"
