@@ -11,12 +11,12 @@ node {
   sh "npm install"
 
   stage 'Linting'
-  sh "npm run build"
+  sh "npm run gbuild"
 
-/*
+
   stage 'Testing'
   sh "npm run test"
-*/
+
 
 }
 
