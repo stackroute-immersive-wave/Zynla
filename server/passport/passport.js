@@ -1,27 +1,28 @@
-const passport = require('passport'), FacebookStrategy = require('passport-facebook').Strategy;
+const passport = require('passport');
+const FacebookStrategy = require('passport-facebook').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const users = require('../server/users/userEntity');
-const connectFlash = require('connect-flash');
-const configAuth = require('../server/config/auth');
-
+const users = require('../users/userEntity');
+// const connectFlash = require('connect-flash');
+const configAuth = require('../config/auth');
 passport.use(new LocalStrategy(function(username, password, cb) {
- users.findOne({"username": username}, function(err, user)
- {
+/* eslint-disable*/
+ users.findOne({'username': username}, function(err, user) {
+ /* eslint-enable*/
    if (err) { return cb(err); }
    if (!user) {return cb(null, false); }
-   if (user.password != password) {return cb(null, false); }
+   if (user.password !== password) {return cb(null, false); }
    return cb(null, user);
  });
 }));
 
 passport.serializeUser(function(user, done) {
- console.log('serializeUser');
+ // console.log('serializeUser');
  done(null, user);
 });
 
 passport.deserializeUser(function(id, done) {
-console.log("deserializeUser");
+// console.log('deserializeUser');
 users.findById(id, function(err, user) {
  done(err, user);
 });
@@ -41,26 +42,27 @@ passport.use(new LocalStrategy({
                 if (err) {
                     return done(err);
                 } else if (!user) {
-                    console.log(user);
+                    // console.log(user);
                     const error = new Error('Your Email ID is not registered');
                     error.name = 'You have not Registered Yet! Please Sign Up first';
                     return done(error.name);
                 } else if (!user.local.isEmailVerified) {
-                    console.log(user);
+                    // console.log(user);
                     const error = new Error('Email ID is not Verified');
-                    console.log(user.local.isEmailVerified+"fhf")
+                    // console.log(user.local.isEmailVerified+'fhf')
                     error.name = 'Please verify your registered mail!';
                     return done(error.name);
                 } else if (!user.validPassword(password)) {
-                    console.log(user);
+                    // console.log(user);
                     const error = new Error('Incorrect password');
                     error.name = 'Please enter correct password!';
                     return done(error.name);
-                } else  {
-                  console.log(user);
+                    /* eslint-disable*/
+                } else {
+                  // console.log(user);
                     let userData = {};
-                    let image= user.local.photos;
-                    console.log(image);
+                    // let image= user.local.photos;
+                    // console.log(image);
                     userData._id = user._id;
                     userData.email = user.local.email;
                     userData.firstname = user.local.firstname;
@@ -70,39 +72,34 @@ passport.use(new LocalStrategy({
                     userData.localType = user.local.localType;
                     userData.photos = user.local.photos;
                     userData.token = users.generateToken(userData.email);
-                    console.log(userData.photos);
+                    // console.log(userData.photos);
                     user.update({
                         'local.email': userData.email
                     }, {
                         $set: {
                             'local.loggedinStatus': true
                         }
-                    }, function(err) {
+                    }, function() {
                         if (err) {
-                            console.log("status not updated");
+                            // console.log('status not updated');
                         } else {
-                            console.log("LoginStatus updated Successfully");
+                            // console.log('LoginStatus updated Successfully');
                         }
                     });
-                    console.log(userData);
+                    // console.log(userData);
                     return done(null, userData);
                 }
+                /* eslint-enable*/
             });
         });
     }));
-
-
-
-
-
-
-
+/*eslint-disable */
 var fbStrategy = configAuth.facebookAuth;
     String.prototype.capitalize = function(){
        return this.replace( /(^|\s)([a-z])/g , function(m,p1,p2){return p1+p2.toUpperCase(); });
       };
       /*eslint-enable */
-    fbStrategy.passReqToCallback = true; 
+    fbStrategy.passReqToCallback = true;
     passport.use(new FacebookStrategy(fbStrategy, function(req,
     token, refreshToken, profile, done) {
         // asynchronous
@@ -111,7 +108,9 @@ var fbStrategy = configAuth.facebookAuth;
             if (!req.user) {
                 users.findOne({
                     'facebook.id': profile.id
+                /* eslint-disable*/
                 }, function(err, user) {
+                /* eslint-enable*/
                     if (err)
                     {
                         return done(err);
@@ -120,156 +119,155 @@ var fbStrategy = configAuth.facebookAuth;
                         // if there is a user id already but no token
                         if (!user.facebook.token) {
                           user.facebook.token = token;
-                            
                             user.facebook.email = (profile.emails[0].value || '').toLowerCase();
-                            user.facebook.name = 
-                            (profile.displayName).toLowerCase().capitalize();
+                            user.facebook.name =
+                            profile.displayName.toLowerCase().capitalize();
                             user.facebook.photos = profile.photos[0].value;
-                            user.facebook.authType = "facebook";
+                            user.facebook.authType = 'facebook';
                             user.save(function() {
-                                if (err)
-                                {
+                                if (err) {
                                     return done(err);
                                 }
                                 return done(null, user);
                             });
                         }
-                        return done(null, user); // user found, return that user
-                    } 
+                        return done(null, user);
+                        // user found, return that user
+                    }
+                    /* eslint-disable*/
                     else {
+                    /* eslint-enable*/
                         // if there is no user, create them
                         /*eslint-disable */
                         var newUser = new users();
                         /*eslint-enable */
                         newUser.facebook.id = profile.id;
                         newUser.facebook.token = token;
-
-                        
                         newUser.facebook.email = (profile.emails[0].value || '').toLowerCase();
-                          newUser.facebook.name = 
-                          (profile.displayName).toLowerCase().capitalize();
+                          newUser.facebook.name =
+                          profile.displayName.toLowerCase().capitalize();
                           newUser.facebook.photos = profile.photos[0].value;
-                          newUser.facebook.authType = "facebook";
-                        newUser.save(function(err) {
+                          newUser.facebook.authType = 'facebook';
+                        newUser.save(function() {
                             if (err)
+                            {
                                 return done(err);
+                            }
                             return done(null, newUser);
                         });
                     }
                 });
-            } 
+            }
             else {
                 // user already exists and is logged in, we have to link accounts
                 /*eslint-disable */
                 var user = req.user;
-                /*eslint-enable */ // pull the user out of the session
+                /*eslint-enable */
+                // pull the user out of the session
                 user.facebook.id = profile.id;
                 user.facebook.token = token;
-                  //user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
+                  // user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                   user.facebook.email = (profile.emails[0].value || '').toLowerCase();
-                  user.facebook.name = (profile.displayName).toLowerCase().capitalize();
+                  user.facebook.name = profile.displayName.toLowerCase().capitalize();
                   user.facebook.photos = profile.photos[0].value;
-                  user.facebook.authType = "facebook";
+                  user.facebook.authType = 'facebook';
                 user.save(function(err) {
-                    if (err)
+                    if (err) {
                         return done(err);
+                    }
                     return done(null, user);
                 });
                 return;
             }
         });
     }));
-
-
-
 passport.use(new GoogleStrategy({
-
-    clientID        : configAuth.googleAuth.clientID,
-    clientSecret    : configAuth.googleAuth.clientSecret,
-    callbackURL     : configAuth.googleAuth.callbackURL,
-    passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
-
+    clientID: configAuth.googleAuth.clientID,
+    clientSecret: configAuth.googleAuth.clientSecret,
+    callbackURL: configAuth.googleAuth.callbackURL,
+    passReqToCallback: true
 },
+/* eslint-disable*/
 function(req, token, refreshToken, profile, done) {
-
+/* eslint-enable*/
     // asynchronous
-    console.log(profile);
+    // console.log(profile);
     process.nextTick(function() {
-
         // check if the user is already logged in
         if (!req.user) {
-
-            users.findOne({ 'google.id' : profile.id }, function(err, user) {
-                if (err)
+            /* eslint-disable*/
+            users.findOne({ 'google.id': profile.id }, function(err, user) {
+            /* eslint-enable*/
+                if (err) {
                     return done(err);
-
+                }
                 if (user) {
-
-                    // if there is a user id already but no token (user was linked at one point and then removed)
                     if (!user.google.token) {
                         user.google.token = token;
-                        user.google.name  = (profile.displayName).toLowerCase().capitalize();
+                        user.google.name = profile.displayName.toLowerCase().capitalize();
                         user.google.photos = profile.photos[0].value;
-                        user.google.email = (profile.emails[0].value || '').toLowerCase(); // pull the first email
-                        user.google.authType = "google";
-
-                        user.save(function(err) {
-                            if (err)
-                                return done(err);
+                        user.google.email = (profile.emails[0].value || '').toLowerCase();
+                        // pull the first email
+                        user.google.authType = 'google';
+                        user.save(function(err1) {
+                            if (err1) {
+                                return done(err1);
+                            }
                             return done(null, user);
                         });
                     }
-
                     return done(null, user);
-                } else {
-                    var newUser          = new users();
-
-                    newUser.google.id    = profile.id;
+                }
+                /* eslint-disable*/
+                else {
+                /* eslint-enable*/
+                    /* eslint-disable*/
+                    var newUser = new users();
+                    /* eslint-enable*/
+                    newUser.google.id = profile.id;
                     newUser.google.token = token;
-                    newUser.google.name  = (profile.displayName).toLowerCase().capitalize();
+                    newUser.google.name = profile.displayName.toLowerCase().capitalize();
                     newUser.google.photos = profile.photos[0].value;
-                    newUser.google.email = (profile.emails[0].value || '').toLowerCase(); // pull the first email
-                    newUser.google.authType = "google";
-
+                    newUser.google.email = (profile.emails[0].value || '').toLowerCase();
+                    // pull the first email
+                    newUser.google.authType = 'google';
+                    /* eslint-disable*/
                     newUser.save(function(err) {
-                        if (err)
+                    /* eslint-enable*/
+                        if (err) {
                             return done(err);
-
+                        }
                         return done(null, newUser);
                     });
                 }
             });
-
-        } else {
+        }
+        else {
             // user already exists and is logged in, we have to link accounts
-            var user               = req.user; // pull the user out of the session
-
-            user.google.id    = profile.id;
+            /* eslint-disable*/
+            var user = req.user;
+            /* eslint-enable*/
+            // pull the user out of the session
+            user.google.id = profile.id;
             user.google.token = token;
-            user.google.name  = (profile.displayName).toLowerCase().capitalize();
+            user.google.name = profile.displayName.toLowerCase().capitalize();
             user.google.photos = profile.photos[0].value;
-            user.google.email = (profile.emails[0].value || '').toLowerCase(); // pull the first email
-            user.google.authType = "google";
-
+            user.google.email = (profile.emails[0].value || '').toLowerCase();
+            // pull the first email
+            user.google.authType = 'google';
             user.save(function(err) {
-                if (err)
+                if (err) {
                     return done(err);
-
+                }
                 return done(null, user);
             });
-
         }
-
     });
-
 }));
-
-
-
 // passport.use(new FacebookStrategy({
 //     clientID: configAuth.facebookAuth.clientID,
 //     clientSecret: configAuth.facebookAuth.clientSecret,
-//     // profileFields: ['id', 'displayName', 'email'], 
+//     // profileFields: ['id', 'displayName', 'email'],
 //     callbackURL: configAuth.facebookAuth.callbackURL
 //   },
 //   function(req,accessToken, refreshToken, profile, done) {
@@ -277,7 +275,7 @@ function(req, token, refreshToken, profile, done) {
 
 //     users.findOne({'facebook.id': profile.id}, function(err, user) {
 
-//       if (err) { 
+//       if (err) {
 //       	return done(err);
 //       }
 //       else if(user)
@@ -310,5 +308,4 @@ function(req, token, refreshToken, profile, done) {
 // });
 //   }
 // ));
-
 module.exports = passport;

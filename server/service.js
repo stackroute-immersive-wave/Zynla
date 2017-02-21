@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const config = require('../config/');
 const logger = require('../applogger');
-const passport = require('../passport/passport');
+const passport = require('./passport/passport');
 const connectflash = require('connect-flash');
 
 function createApp() {
