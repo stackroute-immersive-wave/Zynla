@@ -10,9 +10,8 @@ import {
     Dropdown
 } from 'semantic-ui-react';
 import {Link} from 'react-router';
-let {browserHistory, Router} = require('react-router');
-// let Cards = require('./favourite');
-// let Invite = require('./invite');
+import {Route, Router, hashHistory} from 'react-router';
+let Invite = require('./invite');
 let style = {
     height: 0
 };
@@ -110,8 +109,10 @@ export default class NavBar extends Component {
                                   id='divStyle' onClick={this.handleItemClick}/>
                                 <Menu.Item name='chat' active={activeItem === 'chat'}
                                   id='divStyle' onClick={this.togetherJS.bind(this)}/>
+                                <Link to='/invite'>
                                 <Menu.Item name='invite' active={activeItem === 'invite'}
                                   id='divStyle' onClick={this.handleItemClick}/>
+                                </Link>
                                 <Dropdown icon='user' active={activeItem === 'friends'}
                                   id='divStyle' onClick={this.handleItemClick} floating labeled
                                    button className='icon'>
@@ -153,7 +154,9 @@ export default class NavBar extends Component {
                     </Sidebar>
                     <Sidebar.Pusher onClick={this.toggleSideBar.bind(this)}>
                         <Segment basic style={style}>
-                            <Router history={browserHistory}/>
+                            <Router history={hashHistory}>
+                                <Route path='/invite' component={Invite}/>
+                            </Router>
                         </Segment>
                     </Sidebar.Pusher>
                 </Sidebar.Pushable>
