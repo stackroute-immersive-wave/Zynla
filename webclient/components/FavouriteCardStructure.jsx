@@ -15,4 +15,8 @@ class Cards extends React.Component {
     }
 }
 
+Child2.propTypes= {
+   displayImage: React.PropTypes.string.isRequired
+ }
+
 module.exports = Cards;

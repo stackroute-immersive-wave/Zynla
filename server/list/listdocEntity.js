@@ -24,6 +24,9 @@ const schema = new mongoose.Schema({
     displayImage: {
         type: String
     },
+    profileImage: {
+        type: String
+    },
     addedOn: {
         type: String
     },
