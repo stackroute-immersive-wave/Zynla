@@ -1,8 +1,7 @@
 'use strict';
 const logger = require('./../../applogger');
 const router = require('express').Router();
-// const bcrypt = require('bcrypt-nodejs');
-// const mongoose = require('mongoose');
+
 const User = require('./userEntity');
 const passport = require('passport');
 const nodemailer = require('nodemailer');

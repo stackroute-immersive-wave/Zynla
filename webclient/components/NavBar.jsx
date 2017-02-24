@@ -10,8 +10,10 @@ import {
     Dropdown
 } from 'semantic-ui-react';
 import {Link} from 'react-router';
+import Cookie from 'react-cookie';
 import {Route, Router, hashHistory} from 'react-router';
-let Invite = require('./invite');
+let Cards = require('./Home');
+let Invite = require('./Invite');
 let style = {
     height: 0
 };
@@ -21,13 +23,13 @@ let Style = {
     float: 'left'
 };
 
-export default class NavBar extends Component {
+class NavBar extends Component {
     state = {
         visible: false,
         open: false
     }
 
-    componentDidMount() {
+    componentWillMount() {
         style = {
             height: $(window).height()
         };
@@ -51,8 +53,8 @@ export default class NavBar extends Component {
         this.setState({activeItem: name});
         if (this.state.visible) {
             this.toggleVisibility();
-          }
         }
+    }
 
     togetherJS() {
         const script = document.createElement('script');
@@ -69,7 +71,7 @@ export default class NavBar extends Component {
             success: function(res) {
                 if (typeof res.redirect === 'string') {
                     window.location.replace(window.location.protocol + '//' + window.location.host
-                     + res.redirect);
+                    + res.redirect);
                 }
                 // console.log(res.responseText);
                 // browserHistory.push('/');
@@ -84,9 +86,12 @@ export default class NavBar extends Component {
     render() {
         const {visible} = this.state;
         const {activeItem} = this.state;
+        const backImage = {
+            image: Cookie.load('profilepicture')
+        };
         // const {open, dimmer} = this.state;
         return (
-            <div>
+            <div style={style}>
                 <Menu secondary id='divStyle'>
                     <Grid>
                         <Grid.Column width={3}>
@@ -94,9 +99,10 @@ export default class NavBar extends Component {
                               id='divStyle' onClick={this.toggleVisibility}/>
                         </Grid.Column>
                         <Grid.Column width={10}>
-                            <Link to='/'>
-                                <Image src='./../image/logo.png' name='image' active={activeItem
-                                  === 'image'} onClick={this.handleItemClick} className='logosize'/>
+                            <Link to='/home'>
+                                <Image src='./../image/logo.png' name='image' active=
+                                {activeItem === 'image'} onClick={this.handleItemClick}
+                                className='logosize'/>
                             </Link>
                             <Input action='Search' style={Style} placeholder='Search...'
                               className='search'/>
@@ -110,23 +116,16 @@ export default class NavBar extends Component {
                                 <Menu.Item name='chat' active={activeItem === 'chat'}
                                   id='divStyle' onClick={this.togetherJS.bind(this)}/>
                                 <Link to='/invite'>
-                                <Menu.Item name='invite' active={activeItem === 'invite'}
-                                  id='divStyle' onClick={this.handleItemClick}/>
+                                    <Menu.Item name='invite' active={activeItem === 'invite'}
+                                      id='divStyle' onClick={this.handleItemClick}/>
                                 </Link>
-                                <Dropdown icon='user' active={activeItem === 'friends'}
-                                  id='divStyle' onClick={this.handleItemClick} floating labeled
-                                   button className='icon'>
+                                <Dropdown icon='user' style={backImage} active={activeItem ===
+                                  'friends'} id='divStyle' onClick={this.handleItemClick} floating
+                                  labeled button className='icon'>
                                     <Dropdown.Menu>
-                                        <Input icon='search' iconPosition='left'
-                                          className='search'/>
-                                        <Dropdown.Divider/>
-                                        <Dropdown.Header icon='tags' content='Tag Label'/>
-                                        <Dropdown.Menu scrolling>
-                                            <Dropdown.Item key='aa'/>
-                                            <Dropdown.Item key='aa'/>
-                                            <Dropdown.Item key='aa'/>
-                                            <Dropdown.Item key='aa'/>
-                                        </Dropdown.Menu>
+                                        <Image src={Cookie.load('profilepicture')} alt='img'/>
+                                        <span className='profileColor'>
+                                            {Cookie.load('username')}</span>
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </Menu.Menu>
@@ -153,8 +152,9 @@ export default class NavBar extends Component {
                         </Accordion>
                     </Sidebar>
                     <Sidebar.Pusher onClick={this.toggleSideBar.bind(this)}>
-                        <Segment basic style={style}>
+                        <Segment basic>
                             <Router history={hashHistory}>
+                                <Route path='/home' component={Cards}/>
                                 <Route path='/invite' component={Invite}/>
                             </Router>
                         </Segment>

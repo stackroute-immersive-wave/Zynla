@@ -15,7 +15,9 @@
 .border {
     border-radius: 30%;
 }
-
+.profileColor{
+    color:  #be252a;
+}
 .bottomStyle {
     font-size: 15px !important;
     font-weight: bold;
@@ -73,7 +75,7 @@
 
 .imgsize {
     height: 150px;
-    width: 290px;
+    width: 500px;
 }
 
 .favimgsize {

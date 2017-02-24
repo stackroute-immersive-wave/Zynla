@@ -45,6 +45,7 @@ class invite extends React.Component {
                   value={this.state.value} autoFocus/>
                 <Button color='white' onClick={this.invite}>{this.state.button}</Button>
                 {this.state.status}
+
             </div>
         );
     }
