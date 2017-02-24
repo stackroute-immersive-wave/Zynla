@@ -25,4 +25,7 @@ class DisplayComponent extends React.Component {
         );
     }
 }
+DisplayComponent .propTypes = {
+   display: React.PropTypes.func
+ };
 module.exports = DisplayComponent;

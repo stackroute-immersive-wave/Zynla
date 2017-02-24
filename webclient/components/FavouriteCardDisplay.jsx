@@ -71,4 +71,7 @@ class DisplayFavComponent extends React.Component {
         );
     }
   }
+  DisplayFavComponent .propTypes = {
+   json: React.PropTypes.func
+ };
   module.exports = DisplayFavComponent;

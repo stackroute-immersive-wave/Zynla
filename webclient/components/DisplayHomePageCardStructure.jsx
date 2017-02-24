@@ -13,7 +13,7 @@ class Cards extends React.Component {
     render() {
         return (
             <div id='qw'>
-                <Card className='item' onClick={this.handleChange.bind(this)}>
+                <Card className='item' onClick={this.handleChange}>
                     <Image src={this.props.displayImage} className="imgsize"/>
                     <Card.Header id='textheader' className='spacing'>
                         <b>{this.props.heading}</b>
@@ -54,5 +54,18 @@ class Cards extends React.Component {
         );
     }
 }
+Cards .propTypes = {
+   displayImage: React.PropTypes.string.isRequired,
+   heading: React.PropTypes.string.isRequired,
+   question: React.PropTypes.string.isRequired,
+   postedBy: React.PropTypes.string.isRequired,
+   addedOn: React.PropTypes.number.isRequired,
+   category: React.PropTypes.string.isRequired,
+   upVotes: React.PropTypes.string.isRequired,
+   downVotes: React.PropTypes.string.isRequired,
+   answerCounts: React.PropTypes.string.isRequired,
+   acceptedCounts: React.PropTypes.string.isRequired,
+   remove: React.PropTypes.func.isRequired
+ };
 
 module.exports = Cards;
