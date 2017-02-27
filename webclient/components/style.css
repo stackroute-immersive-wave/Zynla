@@ -1,8 +1,27 @@
 #divStyle {
-    background-color: #be252a;
+    background-color:#CC9900
+
+;
     color: white !important;
     font-family: Arial, Helvetica, sans-serif;
     text-align: left !important;
+}
+
+
+
+#qw{
+  originLeft: false;
+  originTop: false;
+
+  border: 2px solid smokegrey;
+	box-shadow: 5px 5px 5px rgba(34, 25, 25, 0.4);
+transition: opacity .4s ease-in-out;
+}
+#qw:hover Card:not(:hover) {
+	opacity: 0.4;
+}
+#qw:hover Card:not(:hover) {
+	opacity: 0.4;
 }
 
 .chat {
@@ -36,7 +55,9 @@
 
 .margin {
     float: right;
-    color: teal;
+    color: #CC9900
+;
+
 }
 
 .checkmark {
@@ -69,10 +90,14 @@
 
 .spacing {
     margin-top: 9px;
-    margin-left: 10px;
+    margin-left: 4px;
     margin-right: 4px;
+
 }
 
+.spacing.margin{
+  font-size: 100px;
+}
 .imgsize {
     height: 150px;
     width: 500px;
@@ -115,6 +140,7 @@
 
 .item {
     z-index: 10;
+    padding-top: 5px;
 }
 
 .arrowsize {

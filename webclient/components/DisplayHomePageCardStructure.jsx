@@ -10,10 +10,11 @@ class Cards extends React.Component {
         };
     }
 
+
     render() {
         return (
             <div id='qw'>
-                <Card raised='true'color = 'red' className='item' onClick={this.handleChange}>
+                <Card  raised='true'  className='item' onClick={this.handleChange}>
                     <Image src={this.props.displayImage} className="imgsize"/>
                     <Card.Header id='textheader' className='spacing'>
                         <b>{this.props.heading}</b>
@@ -39,7 +40,7 @@ class Cards extends React.Component {
                         <Icon name='dislike outline' color='red' className='space1'/>
                         {this.props.downVotes}
 
-                        <Icon name='add circle' className="margin" size='large'/>
+                        <Icon name='add circle' className="margin" size='large' style={{'font-size': 40 + 'px'}} />
                     </div>
                     <div id="footer" className='spacing'>
                         <Icon name='write square' size='large'/>
