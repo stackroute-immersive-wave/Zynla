@@ -13,7 +13,11 @@ class Cards extends React.Component {
     render() {
         return (
             <div id='qw'>
+<<<<<<< HEAD
                 <Card raised='true'color = 'red' className='item' onClick={this.handleChange}>
+=======
+                <Card className='item' onClick={this.handleChange}>
+>>>>>>> 5a3debcb4284fbb6250b6e6b20cef7d95c656e6a
                     <Image src={this.props.displayImage} className="imgsize"/>
                     <Card.Header id='textheader' className='spacing'>
                         <b>{this.props.heading}</b>
@@ -38,6 +42,7 @@ class Cards extends React.Component {
                         <Icon name='like outline' color='green' id='space'/>{this.props.upVotes}
                         <Icon name='dislike outline' color='red' className='space1'/>
                         {this.props.downVotes}
+<<<<<<< HEAD
                         <Icon name='add circle' className="margin" size='large'/>
                     </div>
                     <div id="footer" className='spacing'>
@@ -46,6 +51,18 @@ class Cards extends React.Component {
                         <Icon name='checkmark box' color='green' size='large'
                           className="checkmark"/>
                         <b>{this.props.acceptedCounts}  Accepted</b>
+=======
+                        <Icon name='add' className="margin" size='large'/>
+                    </div>
+                    <div id="footer" className='spacing'>
+                        <Icon name='write square' size='large'/>
+                        <b>{this.props.answerCounts}
+                            Answers</b>
+                        <Icon name='checkmark box' color='green' size='large'
+                          className="checkmark"/>
+                        <b>{this.props.acceptedCounts}
+                            Accepted</b>
+>>>>>>> 5a3debcb4284fbb6250b6e6b20cef7d95c656e6a
                     </div>
                 </Card>
             </div>

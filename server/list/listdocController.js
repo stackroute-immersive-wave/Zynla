@@ -1,7 +1,10 @@
 const List = require('./listdocEntity');
 const logger = require('./../../applogger');
+<<<<<<< HEAD
 const nodemailer = require('nodemailer');
 let host = 'localhost:8080';
+=======
+>>>>>>> 5a3debcb4284fbb6250b6e6b20cef7d95c656e6a
 
 let listController = {
 
@@ -35,6 +38,7 @@ let listController = {
         }, (err) => {
             res.send(err);
         });
+<<<<<<< HEAD
     },
     inviteFrnds: function(req, res) {
   // router.post('/send', function handleSayHello(req, res) {
@@ -87,6 +91,9 @@ let listController = {
          }
      });
  }
+=======
+    }
+>>>>>>> 5a3debcb4284fbb6250b6e6b20cef7d95c656e6a
 };
 
 module.exports = listController;
