@@ -90,8 +90,8 @@ router.post('/send', function handleSayHello(req, res) {
                     service: 'Gmail',
                     secure: false,
                     auth: {
-                        user: 'zynla0001@gmail.com', // Your email id
-                        pass: 'Zynla@123' // Your password
+                        user: 'geniegenie0001@gmail.com', // Your email id
+                        pass: 'genie123' // Your password
                     },
                     tls: {
                         rejectUnauthorized: false

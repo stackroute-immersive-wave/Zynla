@@ -213,7 +213,6 @@ function(req, token, refreshToken, profile, done) {
                         });
                             });
                     }
-                    return done(null, user);
                 }
                 /* eslint-disable*/
                 else {
