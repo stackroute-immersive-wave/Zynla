@@ -69,7 +69,7 @@ class Login extends React.Component {
                 },
                 success: function() {
                     // console.log('gggggggggggggg');
-                    hashHistory.push('/home');
+                    hashHistory.push('/');
                     // let socket =io();
                     // socket.emit('userLoginStatus',{value:1});
                 },
