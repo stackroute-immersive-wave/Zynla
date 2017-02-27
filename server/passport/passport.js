@@ -3,7 +3,6 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const users = require('../users/userEntity');
-// const connectFlash = require('connect-flash');
 const configAuth = require('../config/auth');
 passport.use(new LocalStrategy(function(username, password, cb) {
 /* eslint-disable*/
@@ -17,12 +16,10 @@ passport.use(new LocalStrategy(function(username, password, cb) {
 }));
 
 passport.serializeUser(function(user, done) {
- // console.log('serializeUser');
  done(null, user);
 });
 
 passport.deserializeUser(function(id, done) {
-// console.log('deserializeUser');
 users.findById(id, function(err, user) {
  done(err, user);
 });
@@ -37,7 +34,7 @@ passport.use(new LocalStrategy({
     }, function(req, email, password, done) {
         process.nextTick(function() {
             users.findOne({
-                'local.email': email
+                email: email
             }, function(err, user) {
                 if (err) {
                     return done(err);
@@ -46,7 +43,7 @@ passport.use(new LocalStrategy({
                     const error = new Error('Your Email ID is not registered');
                     error.name = 'You have not Registered Yet! Please Sign Up first';
                     return done(error.name);
-                } else if (!user.local.isEmailVerified) {
+                } else if (!user.isEmailVerified) {
                     // console.log(user);
                     const error = new Error('Email ID is not Verified');
                     // console.log(user.local.isEmailVerified+'fhf')
@@ -64,20 +61,20 @@ passport.use(new LocalStrategy({
                     // let image= user.local.photos;
                     // console.log(image);
                     userData._id = user._id;
-                    userData.email = user.local.email;
-                    userData.firstname = user.local.firstname;
-                    userData.lastname = user.local.lastname;
-                    userData.name = user.local.name;
-                    userData.authType = user.local.authType;
-                    userData.localType = user.local.localType;
-                    userData.photos = user.local.photos;
+                    userData.email = user.email;
+                    userData.firstname = user.firstname;
+                    userData.lastname = user.lastname;
+                    userData.name = user.name;
+                    userData.authType = user.authType;
+                    userData.localType = user.localType;
+                    userData.photos = user.photos;
                     userData.token = users.generateToken(userData.email);
                     // console.log(userData.photos);
                     user.update({
-                        'local.email': userData.email
+                        'email': userData.email
                     }, {
                         $set: {
-                            'local.loggedinStatus': true
+                            'loggedinStatus': true
                         }
                     }, function() {
                         if (err) {
@@ -107,7 +104,7 @@ var fbStrategy = configAuth.facebookAuth;
             // check if the user is already logged in
             if (!req.user) {
                 users.findOne({
-                    'facebook.id': profile.id
+                     email: (profile.emails[0].value || '').toLowerCase()
                 /* eslint-disable*/
                 }, function(err, user) {
                 /* eslint-enable*/
@@ -117,18 +114,17 @@ var fbStrategy = configAuth.facebookAuth;
                     }
                     if (user) {
                         // if there is a user id already but no token
-                        if (!user.facebook.token) {
-                          user.facebook.token = token;
-                            user.facebook.email = (profile.emails[0].value || '').toLowerCase();
-                            user.facebook.name =
-                            profile.displayName.toLowerCase().capitalize();
-                            user.facebook.photos = profile.photos[0].value;
-                            user.facebook.authType = 'facebook';
-                            user.save(function() {
-                                if (err) {
-                                    return done(err);
-                                }
-                                return done(null, user);
+                        if (!user.token) {
+                          users.findOne({email: (profile.emails[0].value || '').toLowerCase()},
+                            function(err1, user1)
+                            {
+                                user1.token = token;
+                                user1.save(function(err2) {
+                                if (err2) {
+                                    return done(err2);
+                            }
+                            return done(null, user);
+                        });
                             });
                         }
                         return done(null, user);
@@ -141,13 +137,14 @@ var fbStrategy = configAuth.facebookAuth;
                         /*eslint-disable */
                         var newUser = new users();
                         /*eslint-enable */
-                        newUser.facebook.id = profile.id;
-                        newUser.facebook.token = token;
-                        newUser.facebook.email = (profile.emails[0].value || '').toLowerCase();
-                          newUser.facebook.name =
+                        newUser.id = profile.id;
+                        newUser.token = token;
+                        newUser.email = (profile.emails[0].value || '').toLowerCase();
+                        newUser.name =
                           profile.displayName.toLowerCase().capitalize();
-                          newUser.facebook.photos = profile.photos[0].value;
-                          newUser.facebook.authType = 'facebook';
+                          newUser.photos = profile.photos[0].value;
+                          newUser.authType = 'facebook';
+                          newUser.isnew = 'Y';
                         newUser.save(function() {
                             if (err)
                             {
@@ -164,13 +161,13 @@ var fbStrategy = configAuth.facebookAuth;
                 var user = req.user;
                 /*eslint-enable */
                 // pull the user out of the session
-                user.facebook.id = profile.id;
-                user.facebook.token = token;
+                user.id = profile.id;
+                user.token = token;
                   // user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
-                  user.facebook.email = (profile.emails[0].value || '').toLowerCase();
-                  user.facebook.name = profile.displayName.toLowerCase().capitalize();
-                  user.facebook.photos = profile.photos[0].value;
-                  user.facebook.authType = 'facebook';
+                  user.email = (profile.emails[0].value || '').toLowerCase();
+                  user.name = profile.displayName.toLowerCase().capitalize();
+                  user.photos = profile.photos[0].value;
+                  user.authType = 'facebook';
                 user.save(function(err) {
                     if (err) {
                         return done(err);
@@ -181,6 +178,7 @@ var fbStrategy = configAuth.facebookAuth;
             }
         });
     }));
+
 passport.use(new GoogleStrategy({
     clientID: configAuth.googleAuth.clientID,
     clientSecret: configAuth.googleAuth.clientSecret,
@@ -196,25 +194,24 @@ function(req, token, refreshToken, profile, done) {
         // check if the user is already logged in
         if (!req.user) {
             /* eslint-disable*/
-            users.findOne({ 'google.id': profile.id }, function(err, user) {
+            users.findOne({ 'email': (profile.emails[0].value || '').toLowerCase()}, function(err, user) {
             /* eslint-enable*/
                 if (err) {
                     return done(err);
                 }
                 if (user) {
-                    if (!user.google.token) {
-                        user.google.token = token;
-                        user.google.name = profile.displayName.toLowerCase().capitalize();
-                        user.google.photos = profile.photos[0].value;
-                        user.google.email = (profile.emails[0].value || '').toLowerCase();
-                        // pull the first email
-                        user.google.authType = 'google';
-                        user.save(function(err1) {
-                            if (err1) {
-                                return done(err1);
+                    if (!user.token) {
+                        users.findOne({email: (profile.emails[0].value || '').toLowerCase()},
+                            function(err1, user1)
+                            {
+                                user1.token = token;
+                                user1.save(function(err2) {
+                                if (err2) {
+                                    return done(err2);
                             }
                             return done(null, user);
                         });
+                            });
                     }
                     return done(null, user);
                 }
@@ -224,13 +221,13 @@ function(req, token, refreshToken, profile, done) {
                     /* eslint-disable*/
                     var newUser = new users();
                     /* eslint-enable*/
-                    newUser.google.id = profile.id;
-                    newUser.google.token = token;
-                    newUser.google.name = profile.displayName.toLowerCase().capitalize();
-                    newUser.google.photos = profile.photos[0].value;
-                    newUser.google.email = (profile.emails[0].value || '').toLowerCase();
-                    // pull the first email
-                    newUser.google.authType = 'google';
+                    newUser.id = profile.id;
+                    newUser.token = token;
+                    newUser.name = profile.displayName.toLowerCase().capitalize();
+                    newUser.photos = profile.photos[0].value;
+                    newUser.email = (profile.emails[0].value || '').toLowerCase();
+                    newUser.authType = 'google';
+                    newUser.isnew = 'Y';
                     /* eslint-disable*/
                     newUser.save(function(err) {
                     /* eslint-enable*/
@@ -248,13 +245,13 @@ function(req, token, refreshToken, profile, done) {
             var user = req.user;
             /* eslint-enable*/
             // pull the user out of the session
-            user.google.id = profile.id;
-            user.google.token = token;
-            user.google.name = profile.displayName.toLowerCase().capitalize();
-            user.google.photos = profile.photos[0].value;
-            user.google.email = (profile.emails[0].value || '').toLowerCase();
+            user.id = profile.id;
+            user.token = token;
+            user.name = profile.displayName.toLowerCase().capitalize();
+            user.photos = profile.photos[0].value;
+            user.email = (profile.emails[0].value || '').toLowerCase();
             // pull the first email
-            user.google.authType = 'google';
+            user.authType = 'google';
             user.save(function(err) {
                 if (err) {
                     return done(err);
@@ -264,48 +261,6 @@ function(req, token, refreshToken, profile, done) {
         }
     });
 }));
-// passport.use(new FacebookStrategy({
-//     clientID: configAuth.facebookAuth.clientID,
-//     clientSecret: configAuth.facebookAuth.clientSecret,
-//     // profileFields: ['id', 'displayName', 'email'],
-//     callbackURL: configAuth.facebookAuth.callbackURL
-//   },
-//   function(req,accessToken, refreshToken, profile, done) {
-//   	process.nextTick(function(){
 
-//     users.findOne({'facebook.id': profile.id}, function(err, user) {
-
-//       if (err) {
-//       	return done(err);
-//       }
-//       else if(user)
-//       {
-//       done(null, user);
-//       }
-//       else
-//       {
-//       	var newUsers = new users();
-//       	newUsers.facebook.id = profile.id;
-//       	newUsers.facebook.token = accessToken;
-//       	newUsers.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
-//       	newUsers.facebook.email = profile.emails[0].value;
-//       	console.log(newUsers);
-
-//       	newUsers.save(function(err)
-//       	{
-//       		if(err)
-//       		{
-//       			throw err;
-//       		}
-//       		else
-//       		{
-//       			return done(err,newUsers);
-//       		}
-//       	})
-
-//       }
-//     })
-// });
-//   }
-// ));
 module.exports = passport;
+

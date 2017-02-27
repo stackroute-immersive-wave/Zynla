@@ -4,39 +4,19 @@ const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 const CONFIG = require('../config/auth');
 let schema = new mongoose.Schema({
-    local:
-  {
+  //   local:
+  // {
     token: String,
-    firstname: String,
-    lastname: String,
+    name: String,
     email: String,
     password: String,
     authType: String,
     localType: String,
-    name: String,
     loggedinStatus: Boolean,
     isEmailVerified: Boolean,
     verificationID: Number,
-    photos: String
-        },
-facebook:
-{
-    id: String,
-    token: String,
-    email: String,
-    name: String,
-    authType: String,
-    photos: String
-},
-google: {
-      id: String,
-      token: String,
-      email: String,
-      name: String,
-      displayName: String,
-      photos: String,
-      authType: String
-    }
+    photos: String,
+    isnew: String
 });
 
 schema.statics.generateHash = function(password) {
