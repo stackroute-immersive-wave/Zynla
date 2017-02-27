@@ -63,10 +63,7 @@
     "react-cookie": "^1.0.4",
     "react-dom": "^15.3.2",
     "react-grid-system": "^1.5.2",
-<<<<<<< HEAD
     "react-packery-component": "^1.0.2",
-=======
->>>>>>> 5a3debcb4284fbb6250b6e6b20cef7d95c656e6a
     "react-router": "^3.0.0",
     "request": "^2.79.0",
     "semantic-ui-react": "^0.63.5",
