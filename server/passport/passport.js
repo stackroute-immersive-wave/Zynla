@@ -62,8 +62,6 @@ passport.use(new LocalStrategy({
                     // console.log(image);
                     userData._id = user._id;
                     userData.email = user.email;
-                    userData.firstname = user.firstname;
-                    userData.lastname = user.lastname;
                     userData.name = user.name;
                     userData.authType = user.authType;
                     userData.localType = user.localType;

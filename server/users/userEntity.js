@@ -35,15 +35,15 @@ schema.methods.generateHashEmail = function(email) {
 // checking if password is valid
 schema.methods.validPassword = function(password) {
     // console.log('Checking password valid....');
-    return bcrypt.compareSync(password, this.local.password);
+    return bcrypt.compareSync(password, this.password);
 };
 schema.methods.validVID = function(verificationID) {
     // console.log('Checking password valid....');
-    return bcrypt.compareSync(verificationID, this.local.verificationID);
+    return bcrypt.compareSync(verificationID, this.verificationID);
 };
 schema.methods.validEmail = function(email) {
     // console.log('Checking password valid....');
-    return bcrypt.compareSync(email, this.local.email);
+    return bcrypt.compareSync(email, this.email);
 };
 schema.statics.generateToken = function(email) {
     let token = jwt.sign({
