@@ -16,6 +16,7 @@ import {
 } from 'semantic-ui-react';
 import {Link} from 'react-router';
 import Cookie from 'react-cookie';
+import Questions from './answerbutton/questions.jsx';
 // const logger = require('./../../applogger');
 import Textarea from 'react-textarea-autosize';
 import {Route, Router, hashHistory} from 'react-router';
@@ -208,8 +209,10 @@ class NavBar extends Component {
                                 <Menu.Item name='PostQuestion'
                                   active={activeItem === 'PostQuestion'}
                                    id='divStyle' onClick={this.handleOpen.bind(this)}/>
-                                <Menu.Item name='Answer' active={activeItem === 'Answer'}
-                                   id='divStyle' onClick={this.handleItemClick}/>
+                                   <Link to='/answer'>
+                                         <Menu.Item name='Answer' active={activeItem === 'Answer'}
+                                       id='divStyle' onClick={this.handleItemClick}/>
+                                     </Link>
                                 <Menu.Item name='chat' active={activeItem === 'chat'}
                                    id='divStyle' onClick={this.togetherJS.bind(this)}/>
                                 <Link to='/invite'>
@@ -255,6 +258,7 @@ class NavBar extends Component {
                             <Router history={hashHistory}>
                                 <Route path='/home' component={Cards}/>
                                 <Route path='/invite' component={Invite}/>
+                                <Route path='/answer' component={Questions}/>
                             </Router>
                         </Segment>
                     </Sidebar.Pusher>
