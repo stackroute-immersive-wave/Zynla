@@ -1,12 +1,14 @@
 #divStyle {
-    background-color:#CC9900
-
-;
+    background-color:   #B2242E;
     color: white !important;
     font-family: Arial, Helvetica, sans-serif;
     text-align: left !important;
 }
 
+.sidebarFontColor{
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
 
 
 #qw{
@@ -55,7 +57,7 @@ transition: opacity .4s ease-in-out;
 
 .margin {
     float: right;
-    color: #CC9900
+    color: #B2242E
 ;
 
 }
@@ -136,6 +138,8 @@ transition: opacity .4s ease-in-out;
 .search {
     padding-left: 50px;
     width: 600px !important;
+
+
 }
 
 .item {

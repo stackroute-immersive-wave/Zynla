@@ -95,7 +95,7 @@ class NavBar extends Component {
                 <Menu secondary id='divStyle'>
                     <Grid>
                         <Grid.Column width={3}>
-                            <Menu.Item icon='list' active={activeItem === 'menu'} size='small'
+                            <Menu.Item icon='list' active={activeItem === 'menu'}  style={{'font-size': 20 + 'px'}}
                               id='divStyle' onClick={this.toggleVisibility}/>
                         </Grid.Column>
                         <Grid.Column width={10}>
@@ -132,22 +132,22 @@ class NavBar extends Component {
                         </Grid.Column>
                     </Grid>
                 </Menu>
-                <Sidebar.Pushable as={Segment}>
+                <Sidebar.Pushable as={Segment} >
                     <Sidebar as={Menu} animation='scale down' width='thin' visible={visible}
                       icon='labeled' vertical id='divStyle'>
                         <Accordion>
-                            <Accordion.Title>
-                                <h5>Categories</h5>
+                            <Accordion.Title >
+                                <h5 className = 'sidebarFontColor'>Categories</h5>
                             </Accordion.Title>
                             <Accordion.Content>
                                 <p>c</p>
                                 <p>c++</p>
                             </Accordion.Content>
                             <Accordion.Title>
-                                <h5>Notification</h5>
+                                <h5 className = 'sidebarFontColor'>Notification</h5>
                             </Accordion.Title>
                             <Accordion.Title>
-                                <h5>Setting</h5>
+                                <h5 className = 'sidebarFontColor'>Setting</h5>
                             </Accordion.Title>
                         </Accordion>
                     </Sidebar>
