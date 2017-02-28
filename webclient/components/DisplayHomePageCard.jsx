@@ -17,7 +17,7 @@ class DisplayComponent extends React.Component {
     render() {
         let Data = this.props.display.map(function(item) {
             return (
-                <Grid.Column><CardsComponent displayImage={item.displayImage}
+                <Grid.Column><CardsComponent id={item.id} displayImage={item.displayImage}
                   heading={item.heading} question={item.question} postedBy={item.postedBy}
                   addedOn={item.addedOn} category={item.category} upVotes={item.upVotes}
                   downVotes={item.downVotes} answerCounts={item.answerCounts} acceptedCounts="5"/>

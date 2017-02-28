@@ -21,7 +21,7 @@ function setupStaticRoutes(app) {
 function setupRestRoutes(app) {
   // console.log('Inside service setupRestRoutes');
   app.use('/users', require(path.join(__dirname, './users')));
-    app.use('/restaurant', require(path.join(__dirname, './restaurant')));
+  app.use('/list', require(path.join(__dirname, './list')));
   // app.use('/resturant', require(path.join(__dirname, './resturant')));
   //  MOUNT YOUR REST ROUTE HERE
   //  Eg:
@@ -103,7 +103,14 @@ function setupWebpack(app) {
 }
 
 function setupMongooseConnections() {
-  mongoose.connect(config.MONGO_URL);
+  mongoose.connect(config.MONGO_URL, {
+ server: {
+   socketOptions: {
+     socketTimeoutMS: 0,
+     connectionTimeout: 100000
+   }
+ }
+});
 
   mongoose.connection.on('connected', function() {
     logger.debug('Mongoose is now connected to ', config.MONGO_URL);

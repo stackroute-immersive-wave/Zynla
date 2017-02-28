@@ -22,6 +22,7 @@ import Textarea from 'react-textarea-autosize';
 import {Route, Router, hashHistory} from 'react-router';
 let Cards = require('./Home');
 let Invite = require('./Invite');
+import Answerpage from './anspage';
 let style = {
     height: 0
 };
@@ -259,6 +260,7 @@ class NavBar extends Component {
                                 <Route path='/home' component={Cards}/>
                                 <Route path='/invite' component={Invite}/>
                                 <Route path='/answer' component={Questions}/>
+                                <Route path='/anspage' component={Answerpage}/>
                             </Router>
                         </Segment>
                     </Sidebar.Pusher>

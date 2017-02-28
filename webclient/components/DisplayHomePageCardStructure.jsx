@@ -1,6 +1,6 @@
 import React from 'react';
 import {Icon, Image, Card} from 'semantic-ui-react';
-
+import {Link} from 'react-router';
 class Cards extends React.Component {
     constructor() {
         super();
@@ -13,6 +13,7 @@ class Cards extends React.Component {
     render() {
         return (
             <div id='qw'>
+              <Link to = {'/anspage?id=' + this.props.id}>
                 <Card raised='true'color = 'red' className='item' onClick={this.handleChange}>
                     <Image src={this.props.displayImage} className="imgsize"/>
                     <Card.Header id='textheader' className='spacing'>
@@ -49,6 +50,7 @@ class Cards extends React.Component {
                         <b>{this.props.acceptedCounts}  Accepted</b>
                       </div>
                 </Card>
+              </Link>
             </div>
         );
     }
@@ -64,7 +66,8 @@ Cards .propTypes = {
    downVotes: React.PropTypes.string.isRequired,
    answerCounts: React.PropTypes.string.isRequired,
    acceptedCounts: React.PropTypes.string.isRequired,
-   remove: React.PropTypes.func.isRequired
+   remove: React.PropTypes.func.isRequired,
+   id: React.PropTypes.number
  };
 
 module.exports = Cards;
