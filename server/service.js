@@ -103,7 +103,14 @@ function setupWebpack(app) {
 }
 
 function setupMongooseConnections() {
-  mongoose.connect(config.MONGO_URL);
+  mongoose.connect(config.MONGO_URL, {
+ server: {
+   socketOptions: {
+     socketTimeoutMS: 0,
+     connectionTimeout: 100000
+   }
+ }
+});
 
   mongoose.connection.on('connected', function() {
     logger.debug('Mongoose is now connected to ', config.MONGO_URL);

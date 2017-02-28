@@ -3,8 +3,12 @@ const logger = require('./../../applogger');
 const router = require('express').Router();
 
 const User = require('./userEntity');
+const UserProfile = require('./userProfileEntity').userModel;
 const passport = require('passport');
 const nodemailer = require('nodemailer');
+let neo4j = require('neo4j-driver').v1;
+let driver = neo4j.driver('bolt://192.168.56.1', neo4j.auth.basic('neo4j', '9455338161'));
+let session = driver.session();
 // const RegisteredUser = require('./userEntity');
 // const Strategy = require('passport-local').Strategy;
 // const userCtrl = require('./userController');
@@ -74,7 +78,7 @@ router.post('/login', passport.authenticate('local', {failureRedirect: '/'}), (r
 router.post('/send', function handleSayHello(req, res) {
         // console.log(req.body.data);
         User.find({
-            'local.email': req.body.data
+            email: req.body.data
         }, function(err, profile) {
             if (err) {
                 res.send(err);
@@ -98,29 +102,25 @@ router.post('/send', function handleSayHello(req, res) {
                 console.log(profile);
                 /*eslint-disable */
                 // var hashVID = bcrypt.hashSync(profile[0].local.verificationID, 10);
-                var VID = profile[0].generateHashVID(profile[0].local.verificationID);
+                var VID = profile[0].generateHashVID(profile[0].verificationID);
                 /*eslint-enable */
                 VIDcheck = VID;
                 // var linkEmail = profile[0].generateHashEmail(profile[0].local.email);
                 console.log(VID + ' is the VID');
-                link = 'http://' + req.get('host') + '/users/verify?id=' + VID + '&email=' + profile[0].local.email;
+                link = 'http://' + req.get('host') + '/users/verify?id=' + VID + '&email=' + profile[0].email;
                 var text = 'Hello from \n\n' + req.body.data;
                 mailOptions = {
                     from: 'geniegenie0001@gmail.com', // sender address
-                    to: profile[0].local.email, // list of receivers
+                    to: profile[0].email, // list of receivers
                     subject: 'Verify your Email with Genie', // Subject line
                     text: text,
-                    html: '<center><h1>Welcome to Genie</h1></center><br><br><br>'+
+                    html: '<center><h1>Welcome to Zynla</h1></center><br><br><br>'+
                     'Hi,<br><br>To complete Signup Click on the button to verify yourself.'+
                     '<br><br><br><a href=' + link + ' style=background-color:#44c767;'+
                     '-moz-border-radius:28px;-webkit-border-radius:28px;border-radius:28px;'+
                     'border:1px solid #18ab29;display:inline-block;padding:16px 31px;'+
                     'color:#ffffff;text-shadow:0px 1px 0px #2f6627;'+
                     'text-decoration:none;> Verify </a><br><br>'+
-                    '<b>Why verify?</b>'+
-                    '<br><br>For using Genie we require a verified email to prevent spam.'+
-                    '<br><br>Verifying lets you join Genie quickly and easily.'+
-                    '<br><br>Cheers,<br><br><b>Team Genie</b><br><br><small>'+
                     '<i>This link is valid for an hour.This is an Auto-generated mail,'+
                     'please do not reply</i></small>'
                 };
@@ -143,22 +143,25 @@ router.post('/send', function handleSayHello(req, res) {
 // LOCAL SIGN UP
     router.post('/signup', function(req, res) {
         let newUser = new User();
+        // let newProfileUser = new UserProfile();
         String.prototype.capitalizeFirstLetter = function() {
             return this.charAt(0).toUpperCase() + this.slice(1);
         }
         rand = Math.floor((Math.random() * 100) + 54);
-        newUser.local.verificationID = rand;
-        newUser.local.name = (req.body.firstName.toLowerCase().capitalizeFirstLetter() + ' ' + req.body.lastName.toLowerCase().capitalizeFirstLetter());
-        newUser.local.email = req.body.email;
-        newUser.local.password = User.generateHash(req.body.password);
-        newUser.local.firstname = (req.body.firstName).toLowerCase().capitalizeFirstLetter();
-        newUser.local.lastname = (req.body.lastName).toLowerCase().capitalizeFirstLetter();
-        newUser.local.localType = 'Customer';
-        newUser.local.authType = 'local';
-        newUser.local.loggedinStatus = false;
-        newUser.local.isEmailVerified = false;
-        newUser.local.photos = 'defultImage.jpg';
-        res.cookie('profilepicture', newUser.local.photos);
+        newUser.verificationID = rand;
+        // newProfileUser.id = rand;
+        // newProfileUser.emailId = req.body.email;
+        newUser.name = (req.body.firstName.toLowerCase().capitalizeFirstLetter() + ' ' + req.body.lastName.toLowerCase().capitalizeFirstLetter());
+        newUser.email = req.body.email;
+        // newProfileUser.emailId = req.body.email;
+        newUser.password = User.generateHash(req.body.password);
+        newUser.localType = 'Customer';
+        newUser.authType = 'local';
+        newUser.loggedinStatus = false;
+        newUser.isEmailVerified = false;
+        newUser.photos = 'defultImage.jpg';
+        newUser.isnew = 'Y';
+        res.cookie('profilepicture', newUser.photos);
         newUser.save(function(err) {
             if (err) {
                 res.send('Error in registration');
@@ -167,6 +170,24 @@ router.post('/send', function handleSayHello(req, res) {
             }
         });
     });
+
+
+// Updated in UserProfile
+    router.post('/userProfileData', function(req, res) {
+        let newProfileUser = new UserProfile();
+        rand = Math.floor((Math.random() * 100) + 54);
+        newProfileUser.id = rand;
+        newProfileUser.emailId = req.body.email;
+        newProfileUser.save(function(err) {
+            if (err) {
+                res.send('Error in registration');
+            } else {
+                res.send('Successfully registered');
+            }
+        });
+    });
+
+
 
 
 // VIRIFY EMAIL ID
@@ -188,11 +209,11 @@ router.post('/send', function handleSayHello(req, res) {
                     if (checkID == VIDcheck) {
                         console.log('email is verified');
                         User.update({
-                            'local.email': req.query.email
+                            'email': req.query.email
                         }, {
                             $set: {
-                                'local.isEmailVerified': true,
-                                'local.verificationID': 0
+                                'isEmailVerified': true,
+                                'verificationID': 0
                             }
                         }, function(err) {
                             if (err) {
@@ -201,6 +222,9 @@ router.post('/send', function handleSayHello(req, res) {
                                 console.log('Account Verified and Changed to true');
                             }
                         });
+                        res.cookie('email',req.query.email);
+                        var query = 'create (n:User {name : "'+req.query.email+'"})';
+                        session.run(query);
                         res.redirect('/#/successfullyregistered');
                     } else {
                         console.log('email is not verified');
@@ -225,7 +249,7 @@ router.post('/send', function handleSayHello(req, res) {
     });
 
    router.delete('/deleteuser', function(req, res) {
-        request = req.body.data;
+        let request = req.body.data;
         console.log(request);
         User.remove({
             'local.email': request
@@ -243,17 +267,19 @@ router.post('/send', function handleSayHello(req, res) {
 
 // Check whether user is already exist or not
     router.post('/checkuser', function(req, res) {
+        let authType;
         User.find({
-            'local.email': req.body.email
+            'email': req.body.email
         }, function(err, profile) {
             if (profile.length) {
-                console.log(req.body.email);
+                console.log(profile[0].authType);
                 console.log(profile.length);
-                res.json({'userexists': true});
+                authType = profile.authType;
+                res.json({'userexists': true,'authType':profile[0].authType});
             } else {
                 console.log(req.body.email);
                 console.log(profile.length);
-                res.json({'userexists': false});
+                res.json({'userexists': false,'authType':authType});
             }
             if (err) {
                 res.send(err);
@@ -282,11 +308,24 @@ router.get('/auth/facebook', passport.authenticate('facebook', {
     // handle the callback after facebook has authenticated the user
     router.get('/auth/facebook/callback', passport.authenticate('facebook', {failureRedirect: '/#/'})
         , (req, res) => {
-        res.cookie('token', req.user.facebook.token);
-        res.cookie('authType', req.user.facebook.authType);
-        res.cookie('username', req.user.facebook.name);
-        res.cookie('profilepicture', req.user.facebook.photos);
-        res.redirect('/#/home');
+        res.cookie('token', req.user.token);
+        res.cookie('authType', req.user.authType);
+        res.cookie('username', req.user.name);
+        res.cookie('profilepicture', req.user.photos);
+        res.cookie('email',req.user.email);
+        if(req.user.isnew ==='N')
+        {
+            res.redirect('/#/home');
+        }
+        else
+        {
+        var query = 'create (n:User {name : "'+req.user.email+'"})';
+        session.run(query).then(function(){
+            console.log("comes");
+        });
+            console.log(query);
+            res.redirect('/#/successfullyregistered');
+        }
     });
 
 
@@ -300,16 +339,90 @@ router.get('/auth/google', passport.authenticate('google', {
 
     // the callback after google has authorized the user
     router.get('/auth/google/callback', passport.authenticate('google', {failureRedirect: '/#/'}), (req, res) => {
-        res.cookie('token', req.user.google.token);
-        res.cookie('username', req.user.google.name);
-        res.cookie('authType', req.user.google.authType);
-        res.cookie('profilepicture', req.user.google.photos);
-        res.redirect('/#/home');
+        let user = new User();
+        res.cookie('token', req.user.token);
+        res.cookie('username', req.user.name);
+        res.cookie('authType', req.user.authType);
+        res.cookie('profilepicture', req.user.photos);
+        res.cookie('email',req.user.email);
+        if(req.user.isnew ==='N')
+        {
+            res.redirect('/#/home');
+        }
+        else
+        {
+        var query = 'create (n:User {name : "'+req.user.email+'"})';
+        session.run(query).then(function(){
+            console.log("comes");
+        });
+        console.log(query);
+            res.redirect('/#/successfullyregistered');
+        }
     });
 
 
+router.get('/displayCatagory', function(req, res) {
+    var result1 = [];
+    logger.debug('Inside display catagory');
+    var query = 'match (n:Domain) return n';
+    session.run(query)
+        .then(function(result){
+            for(var x of result.records)
+              result1.push(x._fields[0].properties.name);
+            console.log(result1);
+            res.send(result1);
+        })
+        .catch(function(error) {
+            console.log('promise error: ', error);
+        });
+});
 
+    router.post('/addCatagory', function(req, res) {
+        console.log("dddddddddddddd");
+        console.log(req.body);
+        let arr1 = JSON.parse(req.body.catagory);
+        console.log(typeof(arr1));
+        console.log('got the         ',arr1);
+        let newUser = new UserProfile();
+        let arr = [];
+        rand = Math.floor((Math.random() * 100) + 54);
+        for(let y of arr1)
+        {
+            arr.push(y);
+        }
+        newUser.id=rand;
+        newUser.emailId = req.body.email;
+        console.log('rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr',arr);
+        newUser.interestCategory = arr;
+        res.cookie('email', newUser.emailId);
+        res.cookie('catagories', newUser.interestCategory);
+        console.log(arr);
+        newUser.save(function(err) {
+            if (err) {
+                res.send('Error in registration');
+            } else {
+                console.log("inside successfullyregistered function 11111111111");
+                res.send('Successfully registered');
+            }  
+        });
+        // res.redirect('/#/home');
+    });
 
+    router.put('/updateIsNew/:emails',function(req,res)
+    {
+        let isNew = req.body.isNew;
+            console.log(isNew);
+            User.findOne({'email':req.params.emails}, function(err,users){
+              users.isnew = isNew;
+              users.save(function(){
+                if(err) {
+                    console.log("error occured in update")
+                }
+                // console.log("updated successfully");
+                res.send('updated successfully');
+              });
+            });
+    });
 // router.get('/auth/facebook', passport.authenticate('facebook',
 //   {session: false,
 //   scope : ['email']

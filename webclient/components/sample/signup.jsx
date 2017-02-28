@@ -79,6 +79,17 @@ export default class Signup extends React.Component {
             method: 'post',
             data: value.formData
           }).then(function() {
+            // Axios({
+            //     url: 'http://localhost:8080/users/userProfileData',
+            //     method: 'post',
+            //     data: {"email" : value.formData.email}
+            // }).then(function()
+            // {
+            //     console.log("successfully stored in userProfile");
+            // }).catch(function()
+            // {
+            //     console.log("error occured in userProfile");
+            // });
               // console.log(msg.firstname);
           }).catch(function() {
               // console.log(err);
@@ -133,11 +144,19 @@ export default class Signup extends React.Component {
                     email: event.target.value
                 }
               }).then(function(response) {
-                    if (response.data.userexists) {
+                    if (response.data.userexists &&
+                        response.data.authType === 'google' ||
+                        response.data.authType === 'facebook') {
+                      self.setState({userexists: 'Already Exists via ' + response.data.authType});
+                      self.setState({mailexists: false});
+                        // console.log(msg);
+                    }
+                     else if (response.data.userexists && response.data.authType === 'local') {
                       self.setState({userexists: 'Already Exists'});
                       self.setState({mailexists: false});
                         // console.log(msg);
-                    } else {
+                    }
+                    else {
                         // console.log(msg);
                         self.setState({userexists: ' '});
                         self.setState({mailexists: true});

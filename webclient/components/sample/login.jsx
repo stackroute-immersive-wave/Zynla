@@ -69,7 +69,7 @@ class Login extends React.Component {
                 },
                 success: function() {
                     // console.log('gggggggggggggg');
-                    hashHistory.push('/');
+                    hashHistory.push('/home');
                     // let socket =io();
                     // socket.emit('userLoginStatus',{value:1});
                 },
@@ -96,7 +96,6 @@ render() {
             <Form.Field id="formfieldlogin"><br/>
             <Form.Input type='password' name="password" placeholder='Password'
             icon='lock' iconPosition='left' id="formstyle" required/>
-            <a href="#/forgotpassword" id='forgotpassword'>Forgot Password?</a>
             </Form.Field><br/><br/><br/>
 
             <Button color='teal' id="buttonwidth1" circular disabled=

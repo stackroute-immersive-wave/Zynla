@@ -18,7 +18,7 @@ export default class SentMailPage extends React.Component {
                     <Grid.Row/>
                     <Grid.Row>
                         <Grid.Column width={2}>
-                            <h1 id="genie">GENIE</h1>
+                            <h1 id="genie">Zynla</h1>
                         </Grid.Column>
                         <Grid.Column width={9}/>
                         <Grid.Column width={5}>
@@ -26,7 +26,7 @@ export default class SentMailPage extends React.Component {
                                 <Button className="buttonlogin" circular style={{
                                     backgroundColor: 'white'
                                 }}>
-                                    <a href="#/login" id="head" style={{
+                                    <a href="#/" id="head" style={{
                                         color: 'black'
                                     }}>LOGIN</a>
                                 </Button>
