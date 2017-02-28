@@ -22,6 +22,7 @@ import Textarea from 'react-textarea-autosize';
 import {Route, Router, hashHistory} from 'react-router';
 let Cards = require('./Home');
 let Invite = require('./Invite');
+let Profile = require('./NavBarpro');
 import Answerpage from './anspage';
 let style = {
     height: 0
@@ -161,7 +162,7 @@ class NavBar extends Component {
                         </Grid.Column>
                         <Grid.Column width={10}>
                             <Link to='/home'>
-                                <Image src='./../image/logo.png' name='image'
+                                <Image style={backImage} name='image'
                                  active= {activeItem === 'image'}
                                   onClick={this.handleItemClick} className='logosize'/>
                             </Link>
@@ -222,6 +223,10 @@ class NavBar extends Component {
                                     <Menu.Item name='invite' active={activeItem === 'invite'}
                                        id='divStyle' onClick={this.handleItemClick}/>
                                 </Link>
+                                <Link to='/profile'>
+                                    <Menu.Item name='Profile' active={activeItem === 'Profile'}
+                                       id='divStyle' onClick={this.handleItemClick}/>
+                                </Link>
                                 <Dropdown icon='user' style={backImage}
                                   active={activeItem === 'friends'}
                                    id='divStyle'
@@ -265,6 +270,7 @@ class NavBar extends Component {
                                 <Route path='/invite' component={Invite}/>
                                 <Route path='/answer' component={Questions}/>
                                 <Route path='/anspage' component={Answerpage}/>
+                                <Route path='/profile' component={Profile}/>
                             </Router>
                         </Segment>
                     </Sidebar.Pusher>
