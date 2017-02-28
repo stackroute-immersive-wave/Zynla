@@ -154,13 +154,10 @@ class NavBar extends Component {
                 <Menu secondary id='divStyle'>
                     <Grid>
                         <Grid.Column width={3}>
-<<<<<<< HEAD
-                            <Menu.Item icon='list' active={activeItem === 'menu'}  style={{'font-size': 20 + 'px'}}
-                              id='divStyle' onClick={this.toggleVisibility}/>
-=======
+
                             <Menu.Item icon='list' active={activeItem === 'menu'}
-                              size='small' id='divStyle' onClick={this.toggleVisibility}/>
->>>>>>> 3cbfbbed20ad7fa6e95dfa7755f337653b5c509a
+                              style={{'font-size': 20 + 'px'}}
+                              id='divStyle' onClick={this.toggleVisibility}/>
                         </Grid.Column>
                         <Grid.Column width={10}>
                             <Link to='/home'>
@@ -240,15 +237,11 @@ class NavBar extends Component {
                         </Grid.Column>
                     </Grid>
                 </Menu>
-<<<<<<< HEAD
-                <Sidebar.Pushable as={Segment} >
-                    <Sidebar as={Menu} animation='scale down' width='thin' visible={visible}
-                      icon='labeled' vertical id='divStyle'>
-=======
+
                 <Sidebar.Pushable as={Segment}>
                     <Sidebar as={Menu} animation='scale down' width='thin'
                        visible={visible} icon='labeled' vertical id='divStyle'>
->>>>>>> 3cbfbbed20ad7fa6e95dfa7755f337653b5c509a
+
                         <Accordion>
                             <Accordion.Title >
                                 <h5 className = 'sidebarFontColor'>Categories</h5>

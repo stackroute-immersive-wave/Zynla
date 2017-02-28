@@ -4,11 +4,8 @@ import {Grid} from 'semantic-ui-react';
 const Packery = require('react-packery-component')(React);
 
 let packeryOptions = {
-  //ss  ransitionDuration: 0,
-    gutter: 20,
-
-
-
+  // ransitionDuration: 0,
+    gutter: 20
 };
 
 class DisplayComponent extends React.Component {
@@ -19,12 +16,8 @@ class DisplayComponent extends React.Component {
     render() {
         let Data = this.props.display.map(function(item) {
             return (
-<<<<<<< HEAD
 
-                <Grid.Column><CardsComponent displayImage={item.displayImage}
-=======
                 <Grid.Column><CardsComponent id={item.id} displayImage={item.displayImage}
->>>>>>> 3cbfbbed20ad7fa6e95dfa7755f337653b5c509a
                   heading={item.heading} question={item.question} postedBy={item.postedBy}
                   addedOn={item.addedOn} category={item.category} upVotes={item.upVotes}
                   downVotes={item.downVotes} answerCounts={item.answerCounts} acceptedCounts="5"/>
