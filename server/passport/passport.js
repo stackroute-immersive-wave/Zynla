@@ -68,17 +68,21 @@ passport.use(new LocalStrategy({
                     userData.photos = user.photos;
                     userData.token = users.generateToken(userData.email);
                     // console.log(userData.photos);
-                    user.update({
-                        'email': userData.email
-                    }, {
-                        $set: {
-                            'loggedinStatus': true
-                        }
-                    }, function() {
+                    users.findOne({
+                        email: userData.email
+                    },function(err,user) {
                         if (err) {
                             // console.log('status not updated');
                         } else {
                             // console.log('LoginStatus updated Successfully');
+                            user.loggedinStatus = true;
+                            user.save(function(err1)
+                            {
+                                if(err1)
+                                {
+                                    console.log(err1);
+                                }
+                            });
                         }
                     });
                     // console.log(userData);
@@ -260,4 +264,3 @@ function(req, token, refreshToken, profile, done) {
 }));
 
 module.exports = passport;
-
