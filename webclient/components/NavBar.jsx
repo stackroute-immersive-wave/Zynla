@@ -16,14 +16,14 @@ import {
 } from 'semantic-ui-react';
 import {Link} from 'react-router';
 import Cookie from 'react-cookie';
-import Questions from './answerbutton/questions.jsx';
 // const logger = require('./../../applogger');
 import Textarea from 'react-textarea-autosize';
 import {Route, Router, hashHistory} from 'react-router';
 let Cards = require('./Home');
 let Invite = require('./Invite');
 let Profile = require('./NavBarpro');
-import Answerpage from './anspage';
+let Questions = require('./answerbutton/questions.jsx');
+let Answerpage = require('./anspage');
 let style = {
     height: 0
 };
@@ -62,8 +62,19 @@ class NavBar extends Component {
         }
     }
 
+    callAlert() {
+      /*eslint-disable*/
+      alert('please login or signup to con');
+      /*eslint-enable*/
+    }
+
     handleOpen() {
-        this.setState({active: true});
+        if(Cookie.load('email')) {
+          this.setState({active: true});
+        }
+        else {
+          this.callAlert();
+        }
     }
 
     handleClose() {
@@ -149,6 +160,11 @@ class NavBar extends Component {
         const backImage = {
             image: Cookie.load('profilepicture')
         };
+        if(!Cookie.load('email')) {
+          Answerpage = require('./error.jsx');
+          Invite = require('./error.jsx');
+          Profile = require('./error.jsx');
+        }
         // const {open, dimmer} = this.state;
         return (
             <div style={style}>

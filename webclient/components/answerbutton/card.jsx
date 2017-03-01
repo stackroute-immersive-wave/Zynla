@@ -10,7 +10,7 @@ import {
 } from 'semantic-ui-react';
 import { Form, TextArea, Container } from 'semantic-ui-react';
 // import RichTextEditor from 'react-rte';
-// import Cookie from 'react-cookie';
+import Cookie from 'react-cookie';
 // const logger = require('./../../applogger');
 
 class MyCard extends React.Component {
@@ -40,7 +40,7 @@ class MyCard extends React.Component {
       // console.log('inside post Answer');
       let ansdata = {
           questionId: this.props.id,
-          mail: 'Arun',
+          mail: Cookie.load('email'),
           content: this.state.content
       };
       // let context = this;
@@ -61,7 +61,12 @@ class MyCard extends React.Component {
       });
     }
     handleOpen() {
-        this.setState({active: true});
+        if(Cookie.load('email')) {
+          this.setState({active: true});
+        }
+        else {
+          // alert('Please log in to post answer');
+        }
     }
     handleClose() {
         this.setState({active: false});
