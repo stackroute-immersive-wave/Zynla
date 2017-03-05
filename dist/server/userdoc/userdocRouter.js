@@ -11,7 +11,7 @@ router.post('/add', function(req, res) {
      // console.log('Insertion success', doc);
      res.send('insertion success');
    }, (err)=>{
-     // console.log(err);
+     // console.logeg(err);
      res.send(err, 'not saved');
    });
 
@@ -20,16 +20,13 @@ router.post('/add', function(req, res) {
 });
 
 router.post('/updateEdu', function(req, res) {
-        let primary = req.body.primary;
-        let highSchool = req.body.highSchool;
-        let university = req.body.university;
         UserModel.update({
-            emailId: 'rag@123.com'
+            emailId: req.body.emailId
         }, {
             $set: {
-                'profile.education.primary': primary,
-                'profile.education.highSchool': highSchool,
-                'profile.education.university': university
+                'profile.education.primary': req.body.primary,
+                'profile.education.highSchool': req.body.highSchool,
+                'profile.education.university': req.body.university
             }
         }, function(err) {
             if (err) {
@@ -40,22 +37,16 @@ router.post('/updateEdu', function(req, res) {
     });
 
 router.post('/updateLoc', function(req, res) {
-        let Line1 = req.body.Line1;
-        let Line2 = req.body.Line2;
-        let country = req.body.country;
-        let region = req.body.region;
-        let city = req.body.city;
-        let postalCode = req.body.postalCode;
         UserModel.update({
-            emailId: 'rag@123.com'
+            emailId: req.body.emailId
         }, {
             $set: {
-                'profile.address.Line1': Line1,
-                'profile.address.Line2': Line2,
-                'profile.address.country': country,
-                'profile.address.region': region,
-                'profile.address.city': city,
-                'profile.address.postalCode': postalCode
+                'profile.address.Line1': req.body.Line1,
+                'profile.address.Line2': req.body.Line2,
+                'profile.address.country': req.body.country,
+                'profile.address.region': req.body.region,
+                'profile.address.city': req.body.city,
+                'profile.address.postalCode': req.body.postalCode
             }
         }, function(err) {
             if (err) {
@@ -66,20 +57,15 @@ router.post('/updateLoc', function(req, res) {
     });
 
 router.post('/updatePro', function(req, res) {
-        let picture = req.body.picture;
-        let description = req.body.description;
-        let dob = req.body.dob;
-        let gender = req.body.gender;
-        let phone = req.body.phone;
         UserModel.update({
-            emailId: 'rag@123.com'
+            emailId: req.body.email
         }, {
             $set: {
-                'profile.picture': picture,
-                'profile.description': description,
-                'profile.dob': dob,
-                'profile.gender': gender,
-                'profile.phone': phone
+                'profile.picture': req.body.picture,
+                'profile.description': req.body.description,
+                'profile.dob': req.body.dob,
+                'profile.gender': req.body.gender,
+                'profile.phone': req.body.phone
             }
         }, function(err) {
             if (err) {
@@ -89,9 +75,8 @@ router.post('/updatePro', function(req, res) {
         });
     });
 
-router.get('/getuserprofile', function(req, res) {
- // console.log('Inside get');
-  UserModel.find(function() {
+router.post('/getuserprofile', function(req, res) {
+  UserModel.findOne({emailId: req.body.email}, function() {
   // console.log('comes');
   }).then((docs) => {
        res.send(docs);
@@ -99,38 +84,53 @@ router.get('/getuserprofile', function(req, res) {
        res.send('Cant get the docs', err);
    });
  });
-// router.post('/addProfileEducation', userdocController.add);
 
-// router.post('/find', userdocController.find);
-//
-// router.post('/update', userdocController.update);
-// router.post('/login',passport.authenticate('local', {
-//       failureFlash: 'Invalid Username and Password',
-//       successFlash: 'Welcome to foodie App'
-//    }),userdocController.login);
-//
-// router.get('/logout', userdocController.logout);
-//
-//
-// router.delete('/delete', function(req, res){
-// 	logger.debug('Inside user post');
-// 	let db= new user(req.body);
-// 	db.delete();
-// 	db.send('Added successfully');
-// 	})
-// logger.debug('Received request'+JSON.stringify(req.body));
-// if(req.body)
-// {
-//   let user = new UserModel(req.body);
-//   user.save(function(err){
-//   if(err){
-//     res.send(err);
-//   }
-//   else{
-//      res.json({message:'User saved successfully'});
-//   }
-//   });
-// }
-//
-// Get details of all users in the system
+ router.get('/getallusers', function(req, res) {
+        UserModel.find(function(err, docs) {
+            if (err) {
+                res.send('Error:' + err);
+            } else if (docs !== null) {
+                res.send(docs);
+                // res.send('Fetched restaurant successfully')
+            } else {
+                res.send('Read Restaurant successfully');
+            }
+        });
+    });
+    router.post('/getQuestions', function(req, res) {
+        // console.log('Inside get');
+        UserModel.findOne({
+          emailId: req.body.email
+        }, function() {
+
+          //  console.log('comes');
+        }).then((docs) => {
+            res.send(docs.lists);
+        }, (err) => {
+            res.send('Cant get the docs', err);
+        });
+    });
+    router.post('/getAnswers', function(req, res) {
+         // console.log('Inside get');
+        UserModel.findOne({
+            emailId: req.body.email
+        }, function() {
+            // console.log('comes');
+        }).then((docs) => {
+            res.send(docs.answers);
+        }, (err) => {
+            res.send('Cant get the docs', err);
+        });
+    });
+    router.post('/getInterestedTopics', function(req, res) {
+      UserModel.findOne({
+          emailId: req.body.email
+      }, function() {
+          // console.log('comes');
+      }).then((docs) => {
+          res.send(docs.interestCategory);
+      }, (err) => {
+          res.send('Cant get the docs', err);
+      });
+        });
 module.exports = router;

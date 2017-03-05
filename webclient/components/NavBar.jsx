@@ -21,7 +21,7 @@ import Textarea from 'react-textarea-autosize';
 import {Route, Router, hashHistory} from 'react-router';
 let Cards = require('./Home');
 let Invite = require('./Invite');
-let Profile = require('./NavBarpro');
+let Profile = require('./profile/NavBarpro');
 let Questions = require('./answerbutton/questions.jsx');
 let Answerpage = require('./anspage');
 let style = {
