@@ -1,41 +1,54 @@
-import React from 'react';
+// importing the required files
+import React, {PropTypes} from 'react';
 import {
    Image,
    Button,
    Card,
    Icon,
    Menu,
-   Header,
-   Dimmer
+   Modal,
+   Form
 } from 'semantic-ui-react';
-import { Form, TextArea, Container } from 'semantic-ui-react';
-// import RichTextEditor from 'react-rte';
+import {TextArea} from 'semantic-ui-react';
+import RichTextEditor from 'react-rte';
 import Cookie from 'react-cookie';
-// const logger = require('./../../applogger');
-
+import SuggestedCards from './suggQueCardsCollection.jsx';
 class MyCard extends React.Component {
     constructor() {
         super();
         this.state = {
             active: false,
-            // value: RichTextEditor.createEmptyValue(),
-            content: ''
+            value: RichTextEditor.createEmptyValue(),
+            content: '',
+            queSuggest: [],
+            open: false,
+            modalStatus: false,
+            modalOpen: false
         };
         this.textVal = this.textVal.bind(this);
         this.postAnswer = this.postAnswer.bind(this);
     }
-    // static propTypes = {
-    //     onChange: PropTypes.func
-    // };
+    // functions to maintain modal states
+    open = () => this.setState({ open: true });
+    close = () => this.setState({ open: false });
+    modalOpen() {
+       this.setState({ modalStatus: true });
+     }
+    static propTypes = {
+        onChange: PropTypes.func
+    };
+    // setting the written content in answer text area in state
     textVal(e) {
       this.setState({content: e.target.value});
     }
-    // onChange = (value) => {
-    //     this.setState({value});
-    //     if (this.props.onChange) {
-    //         this.props.onChange(value.toString('html'));
-    //     }
-    // };
+    // setting the written content in answer rich text editor in state
+    onChange = (value) => {
+        this.setState({value});
+        if (this.props.onChange) {
+            this.props.onChange(value.toString('html'));
+        }
+    };
+    // function to store answer to mongo and neo4j
     postAnswer() {
       // console.log('inside post Answer');
       let ansdata = {
@@ -51,6 +64,7 @@ class MyCard extends React.Component {
         data: ansdata,
         success: function() {
             // console.log('success',data);
+            this.showRelatedQues();
             this.setState({
               active: false
             });
@@ -60,6 +74,24 @@ class MyCard extends React.Component {
           }
       });
     }
+    // function to show related questions after answering
+    showRelatedQues() {
+      // console.log('inside showRelatedQues');
+      $.ajax({
+          url: 'http://localhost:8080/list/suggestQues/' + this.props.id,
+          type: 'GET',
+          success: function(data) {
+            // console.log('inside success show related questions');
+              this.setState({queSuggest: data.records});
+                // console.log(JSON.stringify(data, undefined, 2));
+          },
+          error: function() {
+              // console.log('error occurred on AJAX');
+              // console.log(err);
+          }
+      });
+    }
+    // check whether cookie is available so that only registered users can access
     handleOpen() {
         if(Cookie.load('email')) {
           this.setState({active: true});
@@ -68,11 +100,16 @@ class MyCard extends React.Component {
           // alert('Please log in to post answer');
         }
     }
-    handleClose() {
-        this.setState({active: false});
-    }
+    // function to close the modal
+    handleClose = () => {
+      this.setState({
+      modalStatus: false
+  });
+  // console.log('close');
+}
     render() {
-        const {active} = this.state;
+        const { open } = this.state;
+        // card component which contains dynamic data
         return (
             <div>
                 <Card fluid>
@@ -110,7 +147,7 @@ class MyCard extends React.Component {
                             {this.props.anscount}
                         </Menu.Item>
                         <Button className='anspad' color='teal'
-                          onClick={this.handleOpen.bind(this)}>Answer</Button>
+                          onClick={this.modalOpen.bind(this)}>Answer</Button>
                         <Menu.Menu position='right'>
                             <Menu.Item>
                                 <Icon name='flag' color='red'/>
@@ -119,31 +156,48 @@ class MyCard extends React.Component {
                     </Menu>
                 </Card>
                 <br/>
-                <Dimmer active={active} onClickOutside={this.handleClose.bind(this)} page>
-                    <Header as='h2' icon>
-                        <Header.Subheader>
-                            <Container>
-                                <Form>
-                                    <Form.Field>
-                                      <h1 className='ques'>{this.props.title}</h1>
-                                        <h2 style={{
-                                            marginLeft: -940 + 'px',
-                                            color: 'white'
-                                        }}>Your answer here:</h2>
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <TextArea onChange={this.textVal}/>
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <Button primary size='large'
-                                          onClick={this.postAnswer.bind(this)}
-                                          type='button'>Submit</Button>
-                                    </Form.Field>
-                                </Form>
-                            </Container>
-                        </Header.Subheader>
-                    </Header>
-                </Dimmer>
+                {
+                /* modal for writing answers */
+              }
+                <Modal dimmer={true} open={this.state.modalStatus}>
+                  <Modal.Header>{this.props.title}</Modal.Header>
+                  <Modal.Content>
+                    <Form>
+                      <Form.Field>
+                        <TextArea className='areasize' placeholder='your answer here..'
+                           onChange={this.textVal}/>
+                           </Form.Field>
+                           </Form>
+                  </Modal.Content>
+                  <Modal.Actions>
+                  <Button color='green' onClick={this.handleClose} inverted>
+                    <Icon name='remove' /> Cancel
+          </Button>
+        {
+        /* modal for showing suggested questions */
+      }
+                    <Modal
+                      dimmer={true}
+                      open={open}
+                      onOpen={this.open}
+                      onClose={this.close}
+                      size='small'
+                      trigger={<Button primary size='large'
+                        onClick={this.postAnswer.bind(this)}
+                        type='button'>Submit</Button>}>
+                      <Modal.Header>does your answer matches with these questions..?</Modal.Header>
+                      <Modal.Content>
+                        {
+                        /* <p>That's everything!</p> */
+                      }
+                        <SuggestedCards quedata={this.state.queSuggest}/>
+                      </Modal.Content>
+                      <Modal.Actions>
+                        <Button icon='check' content='All Done' onClick={this.close} />
+                      </Modal.Actions>
+                    </Modal>
+                  </Modal.Actions>
+                </Modal>
             </div>
         );
     }

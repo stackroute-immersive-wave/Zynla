@@ -5,7 +5,7 @@ const Answer = require('./carddocEntity');
 
 let cardController = {
 
-    addCard: function(req, res) {
+    addAnswer: function(req, res) {
         // console.log('inside add router');
         /*eslint-disable*/
         let query = ' \

@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const schema = new mongoose.Schema({
     id: {
-      type: Number,
-      required: true
+      type: Number
     },
     emailId: {
       type: String,
@@ -55,6 +54,7 @@ const schema = new mongoose.Schema({
       downVote: Number
     }],
     watchingList: [{
+      id: Number,
       heading: String,
       category: String,
       statement: String,
@@ -62,7 +62,9 @@ const schema = new mongoose.Schema({
       addedOn: String,
       noofans: Number,
       upVotes: Number,
-      downVotes: Number
+      downVotes: Number,
+      profileImage: String,
+      displayImage: String
     }],
     watchingTopic: [{
       type: String

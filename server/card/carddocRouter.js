@@ -2,6 +2,6 @@
 const router = require('express').Router();
 const cardCtrl = require('./carddocController');
 
-router.post('/add', cardCtrl.addCard);
+router.post('/add', cardCtrl.addAnswer);
 
 module.exports = router;

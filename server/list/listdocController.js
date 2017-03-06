@@ -39,7 +39,7 @@ let listController = {
             res.send(err);
         });
     },
-
+// router function to display all questions
     viewList: function(req, res) {
         // logger.debug('Inside get');
         List.find().then((docs) => {
@@ -58,7 +58,31 @@ let listController = {
             res.send('Cant get the docs', err);
         });
     },
-
+    // router function to display suggested questions
+    suggestQues: function(req, res) {
+      // console.log('router suggest ques');
+      /* eslint-disable */
+      let query = 'match(n:Question)-[r:question_of]-> (m:Concept)\
+                   where id(n)=945\
+                  match (b:QuestionIntent{value:r.intent})-[z:same_as]->(a:QuestionIntent)\
+                   -[:same_as]->(l:QuestionIntent)\
+                  match (m)<-[:question_of {intent:a.value}]-(s:Question)\
+                  match (m)<-[:question_of {intent:l.value}]-(u:Question)\
+                  match (s)<-[:post]-(cv:User)\
+                  return s,u,cv\
+                  ';
+      /* eslint-enable */
+                  session.run(query).then(function(result) {
+                      // console.log(result);
+                      if (result) {
+                        // console.log('before result');
+                        res.send(result);
+                        // console.log('after result');
+                      }
+                  }, function() {
+                    // console.log('error while connecting',err);
+                  });
+                },
     addquestion: function(req, res) {
         // logger.debug(req.body);
         res.send('comes');
