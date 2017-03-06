@@ -28,7 +28,8 @@ users.findById(id, function(err, user) {
 // Log in Via Application
 passport.use(new LocalStrategy({
         usernameField: 'email',
-        passwordField: 'password'
+        passwordField: 'password',
+        passReqToCallback: true
     }, function(req, email, password, done) {
         process.nextTick(function() {
             users.findOne({
@@ -39,7 +40,7 @@ passport.use(new LocalStrategy({
                 } else if (!user) {
                     const error = new Error('Your Email ID is not registered');
                     error.name = 'You have not Registered Yet! Please Sign Up first';
-                    return done(error.name);
+                    return done(err);
                 } else if (!user.isEmailVerified) {
                     const error = new Error('Email ID is not Verified');
                     error.name = 'Please verify your registered mail!';

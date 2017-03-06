@@ -109,7 +109,7 @@ class MenuExamplePointing extends Component {
     getProfile() {
       let email = Cookie.load('email');
         $.ajax({
-            url: 'http://localhost:8085/userdoc/getuserprofile',
+            url: 'http://localhost:8080/userdoc/getuserprofile',
             type: 'POST',
             data: {email: email},
             success: function(data) {

@@ -3,6 +3,7 @@ import {hashHistory} from 'react-router';
 import {Button, Modal, Dimmer} from 'semantic-ui-react';
 import {Form} from 'semantic-ui-react';
 import Cookie from 'react-cookie';
+import CountrySelect from 'react-country-select';
 export default class UserProfileData extends React.Component {
     constructor()
     {
@@ -13,14 +14,22 @@ export default class UserProfileData extends React.Component {
           open: true,
           errordate: false,
           errordatemessage: '',
-          errordatecheck: false
+          errordatecheck: false,
+          country: ''
         };
         this.updateUserProfile = this.updateUserProfile.bind(this);
+        this.onSelect = this.onSelect.bind(this);
     }
     handleOpen = () => this.setState({ active: true })
     handleClose = () => this.setState({ active: false })
 
     close = () => hashHistory.push('/successfullyregistered');
+
+    onSelect(val) {
+      // console.log("values selected are:", val);
+      this.setState({country: val.label});
+      // you can handle options selected here.
+    }
 
     errorDate(event)
     {
@@ -50,13 +59,15 @@ export default class UserProfileData extends React.Component {
     updateUserProfile(e, value) {
       e.preventDefault();
       let profileObject = JSON.stringify(value.formData);
+      // console.log(profileObject);
       // console.log(typeof(Date.parse(value.formData.dateofbirth)));
       // console.log(Cookie.load('email'));
       $.ajax({
             url: 'http://localhost:8080/users/updateProfile/' + Cookie.load('email'),
             type: 'put',
             data: {
-                data1: profileObject
+                data1: profileObject,
+                country: this.state.country
             },
             success: function() {
                 hashHistory.push('/home');
@@ -98,21 +109,23 @@ render() {
         </Form.Field>
 
         <Form.Field>
-        <Form.Input label='Country' name="country"
-        placeholder='Country'/>
+        <label htmlFor="country">Country:</label>
+            <CountrySelect multi={false} name='country'
+            onSelect={this.onSelect}/>
         </Form.Field>
 
-        <Button type='submit' onClick={this.handleOpen}
-        circular disabled={!this.state.errordatecheck}> SUBMIT</Button>
+        <a href='https://localhost:8080/#/home'>
+        <Button
+        circular>Skip</Button>
+        </a>
         {this.state.opendimmer ? < Dimmer
                  active = {active}
                  page/>
          : null
      }
-        <a href='https://localhost:8080/#/home' style = {{float: 'right', marginTop: -4 + 'px'}}>
-        <Button
-        circular>Skip</Button>
-        </a>
+        <Button type='submit' onClick={this.handleOpen}
+        circular disabled={!this.state.errordatecheck}
+        style = {{float: 'right', marginTop: -4 + 'px'}}> SUBMIT</Button>
         </Form>
         </Modal.Content>
         </Modal>

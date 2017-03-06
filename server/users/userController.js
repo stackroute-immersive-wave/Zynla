@@ -306,6 +306,19 @@ displayCatagory: function(req, res) {
             if (err) {
                 res.send('Error in registration');
             } else {
+                let id = req.body.email;
+                // var domainArray = ['java', 'semantic-ui', 'javascript'];
+                let query = 'match (n:User {name:"'+id+'"})';
+                for(var i = 0; i < arr.length; i++) {
+                    query+=',(d' + i + ': Domain {name:"'+arr[i]+'"}) ';
+                }
+                query += 'create (n)-[:follows]->(d0)';
+                for(let i = 1; i< arr.length; i++) {
+                    query+=',(n)-[:follows]->(d'+ i +')';
+                }
+                session.run(query).then(function(){
+            console.log('updated to neo4j');
+        });
             res.send('Successfully registered');
             }  
         });
@@ -344,9 +357,10 @@ displayCatagory: function(req, res) {
             }
             else
             {
+                console.log(req.body.country);
                 userProfile.profile.dob = data.dateofbirth;
                 userProfile.profile.gender = data.gender;
-                userProfile.profile.address.country = data.country;
+                userProfile.profile.address.country = req.body.country;
                 userProfile.save(function(){
                 if(err) {
                     console.log("error occured in update")
