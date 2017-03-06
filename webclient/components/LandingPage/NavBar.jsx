@@ -68,7 +68,7 @@ class NavBar extends Component {
       /*eslint-enable*/
     }
 
-    handleOpen() {
+    handlePostQuestionClick() {
         if(Cookie.load('email')) {
           this.setState({active: true});
         }
@@ -77,7 +77,7 @@ class NavBar extends Component {
         }
     }
 
-    handleClose() {
+    handleDimmerClose() {
         this.setState({active: false});
     }
 
@@ -88,7 +88,7 @@ class NavBar extends Component {
         }
     }
 
-    updateheading(evt) {
+    updateHeading(evt) {
         this.setState({heading: evt.target.value});
     }
     updatestatement(evt) {
@@ -98,9 +98,8 @@ class NavBar extends Component {
         this.setState({Concept: evt.target.value});
     }
 
-    submitstatement() {
-        // this.props.value(this.state.heading, this.state.statement, this.state.Concept);
-        // logger.debug('inside navBar');
+    submitStatement() {
+        // ajax call after submitting the values which needed to be asked
         let data = {
             email: Cookie.load('username'),
             heading: this.state.heading,
@@ -112,16 +111,13 @@ class NavBar extends Component {
             type: 'POST',
             data: data,
             success: function() {
-                // logger.debug('Added statement successfully' + data1);
                 /*eslint-disable*/
                 alert('Question posted successfully');
                 /*eslint-enable*/
                 this.setState({active: false});
-                // logger.debug(data1);
             }.bind(this),
             error: function() {
-                // logger.debug('error occurred on AJAX');
-                // logger.debug(err);
+
             }
         });
     }
@@ -187,7 +183,7 @@ class NavBar extends Component {
                         </Grid.Column>
                         <Grid.Column width={3}>
                             <Dimmer active={active}
-                               onClickOutside={this.handleClose.bind(this)} page>
+                               onClickOutside={this.handleDimmerClose.bind(this)} page>
                                 <Header as='h2' icon>
                                     <Header.Subheader>
                                         <Container>
@@ -200,24 +196,23 @@ class NavBar extends Component {
                                                         ASK QUESTION :</h2>
                                                 </Form.Field>
                                                 <Form.Field>
-                                                    <Input onChange={this.updateheading.bind(this)}
-                                                       placeholder='Enter Description here...'/>
+                                                    <Input onChange={this.updateHeading.bind(this)}
+                                                       placeholder='Enter Description here ...'/>
                                                 </Form.Field>
                                                 <Form.Field>
                                                     <Textarea
                                                        onChange={this.updatestatement.bind(this)}
                                                        size='large'
-                                                        placeholder='Enter statement here ...'/>
+                                                        placeholder='Enter Statement here ...'/>
                                                 </Form.Field>
                                                 <Form.Field>
                                                     <Input onChange={this.updateConcept.bind(this)}
-                                                       placeholder='Enter Concept here...'/>
+                                                       placeholder='Enter Concept here ...'/>
                                                 </Form.Field>
-                                                <div id="errormessage"/>
                                                 <Form.Field>
                                                     <Button primary size='large' type='submit'
                                                       value='Submit'
-                                                       onClick={this.submitstatement.bind(this)}>
+                                                       onClick={this.submitStatement.bind(this)}>
                                                        Submit</Button>
                                                 </Form.Field>
                                             </Form>
@@ -228,7 +223,7 @@ class NavBar extends Component {
                             <Menu.Menu position='right' style={Style} id='divStyle'>
                                 <Menu.Item name='PostQuestion'
                                   active={activeItem === 'PostQuestion'}
-                                   id='divStyle' onClick={this.handleOpen.bind(this)}/>
+                                   id='divStyle' onClick={this.handlePostQuestionClick.bind(this)}/>
                                    <Link to='/answer'>
                                          <Menu.Item name='Answer' active={activeItem === 'Answer'}
                                        id='divStyle' onClick={this.handleItemClick}/>

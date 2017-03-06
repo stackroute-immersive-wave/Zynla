@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer');
 const cookie = require('react-cookie');
 let em = cookie.load('username');
 let neo4j = require('neo4j-driver').v1;
-let driver = neo4j.driver('bolt://192.168.1.204', neo4j.auth.basic('neo4j', '9455338161'));
+let driver = neo4j.driver('bolt://192.168.1.101', neo4j.auth.basic('neo4j', '9455338161'));
 let session = driver.session();
 let listController = {
 
@@ -83,12 +83,13 @@ let listController = {
                     // console.log('error while connecting',err);
                   });
                 },
+
+    // router function to add a question
     addquestion: function(req, res) {
         // logger.debug(req.body);
-        res.send('comes');
         /*eslint-disable*/
         let query = 'match (c:Concept), \
-                      (u:User {name:"'+Cookie.load('username')+'"}) \
+                      (u:User {name:"Arun"}) \
                       where c.name = "'+req.body.Concept+'" \
                       create (n:Question {Content:"'+req.body.statement+'",name:"'+req.body.heading+'"}), \
                       (n)-[:question_of]->(c), \
