@@ -1,21 +1,50 @@
 import React from 'react';
-import {Icon, Image, Card} from 'semantic-ui-react';
+import {Icon, Image, Card, Button} from 'semantic-ui-react';
 import {Link} from 'react-router';
-class Cards extends React.Component {
+import Cookie from 'react-cookie';
+class DisplayFavouriteCategoryStructure extends React.Component {
     constructor() {
         super();
         this.state = {
             check1: true,
-            check2: false
+            check2: false,
+            iconName: 'add circle',
+            text: 'save'
         };
     }
-
+    /* To save the card which you follow in mongo db & Neo4j*/
+      saveToProfile() {
+        let emailId = Cookie.load('email');
+            $.ajax({
+                url: '/users/saveToProfile',
+                type: 'PUT',
+                data: {
+                  emailId: emailId,
+                  id: this.props.id,
+                  displayImage: this.props.displayImage,
+                  heading: this.props.heading,
+                  statement: this.props.question,
+                  postedBy: this.props.postedBy,
+                  profileImage: this.props.profileImage,
+                  addedOn: this.props.addedOn,
+                  category: this.props.category,
+                  upVotes: this.props.upVotes,
+                  downVotes: this.props.downVotes,
+                  noofans: this.props.answerCounts
+                },
+                success: function() {
+                    this.setState({iconName: 'add', text: 'saved'});
+                }.bind(this),
+                error: function() {
+                }
+            });
+        }
 
     render() {
         return (
             <div id='qw'>
-        <Link to = {'/answerPage?id=' + this.props.id}>
-                <Card raised='true' className='item' onClick={this.handleChange}>
+              <Card raised='true' className='item' onClick={this.handleChange}>
+                  <Link to = {'/answerPage?id=' + this.props.id}>
                     <Image src={this.props.displayImage} className="imgsize"/>
                     <Card.Header id='textheader' className='spacing'>
                         <b>{this.props.heading}</b>
@@ -36,29 +65,33 @@ class Cards extends React.Component {
                             </Card.Meta>
                         </div>
                     </div>
+                  </Link>
                     <div className='spacing'>
                         <Icon name='like outline' color='green' id='space'/>{this.props.upVotes}
                         <Icon name='dislike outline' color='red' className='space1'/>
                         {this.props.downVotes}
                         <Icon name='eye' color='black' size='large' className="viewIcon"/>
                         <b>{this.props.views}  Views</b>
-                        <Icon name='add circle' className="margin" size='large'
-                           style={{'font-size': 40 + 'px'}} />
+                        <Button onClick={this.saveToProfile.bind(this)} className ='BtnClr'>
+                          <Icon name={this.state.iconName} className="margin" size='tiny'
+                           style={{'font-size': 20 + 'px'}}/>{this.state.text}
+                         </Button>
                     </div>
-                    <div id="footer" className='spacing'>
+                    <Link to = {'/anspage?id=' + this.props.id}>
+                        <div id="footer" className='spacing'>
                         <Icon name='write square' size='large'/>
                         <b>{this.props.answerCounts}  Answers</b>
                         <Icon name='checkmark box' color='green' size='large'
                           className="checkmark"/>
                         <b>{this.props.acceptedCounts}  Accepted</b>
                       </div>
+                    </Link>
                 </Card>
-              </Link>
             </div>
         );
     }
 }
-Cards .propTypes = {
+DisplayFavouriteCategoryStructure .propTypes = {
    displayImage: React.PropTypes.string.isRequired,
    heading: React.PropTypes.string.isRequired,
    question: React.PropTypes.string.isRequired,
@@ -68,10 +101,11 @@ Cards .propTypes = {
    upVotes: React.PropTypes.string.isRequired,
    downVotes: React.PropTypes.string.isRequired,
    answerCounts: React.PropTypes.string.isRequired,
+   profileImage: React.PropTypes.string.isRequired,
    views: React.PropTypes.number.isRequired,
    acceptedCounts: React.PropTypes.string.isRequired,
    remove: React.PropTypes.func.isRequired,
    id: React.PropTypes.number
  };
 
-module.exports = Cards;
+module.exports = DisplayFavouriteCategoryStructure;

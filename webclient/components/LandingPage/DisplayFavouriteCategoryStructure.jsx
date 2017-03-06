@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image} from 'semantic-ui-react';
 
-class Cards extends React.Component {
+class DisplayFavouriteCategoryStructure extends React.Component {
     constructor() {
         super();
     }
@@ -15,8 +15,8 @@ class Cards extends React.Component {
     }
 }
 
-Cards .propTypes = {
+DisplayFavouriteCategoryStructure .propTypes = {
    displayImage: React.PropTypes.string.isRequired
  };
 
-module.exports = Cards;
+module.exports = DisplayFavouriteCategoryStructure;

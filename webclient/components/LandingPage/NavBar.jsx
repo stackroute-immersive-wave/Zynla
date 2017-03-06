@@ -20,10 +20,10 @@ import Cookie from 'react-cookie';
 import Textarea from 'react-textarea-autosize';
 import {Route, Router, hashHistory} from 'react-router';
 let Cards = require('./Home');
-let Invite = require('./Invite');
-let Profile = require('./profile/NavBarpro');
-let Questions = require('./answerbutton/questions.jsx');
-let Answerpage = require('./cardAnswerPage/answerPage.jsx');
+let Invite = require('./../Invite');
+let Profile = require('./../profile/NavBarpro');
+let Questions = require('./../answerbutton/questions.jsx');
+let Answerpage = require('./../cardAnswerPage/answerPage.jsx');
 let style = {
     height: 0
 };
@@ -161,9 +161,9 @@ class NavBar extends Component {
             image: Cookie.load('profilepicture')
         };
         if(!Cookie.load('email')) {
-          Answerpage = require('./error.jsx');
-          Invite = require('./error.jsx');
-          Profile = require('./error.jsx');
+          Answerpage = require('./../error.jsx');
+          Invite = require('./../error.jsx');
+          Profile = require('./../error.jsx');
         }
         // const {open, dimmer} = this.state;
         return (
@@ -178,7 +178,7 @@ class NavBar extends Component {
                         </Grid.Column>
                         <Grid.Column width={10}>
                             <Link to='/home'>
-                                <Image style={backImage} name='image'
+                                <Image src='./../../image/logo.png' style={backImage} name='image'
                                  active= {activeItem === 'image'}
                                   onClick={this.handleItemClick} className='logosize'/>
                             </Link>

@@ -19,6 +19,14 @@ router.get('/verify', userController.verifyEmail);
 router.post('/checkuser', userController.checkUser);
 
 router.get('/logout', userController.logOut);
+// Update user watchingList
+router.put('/saveToProfile', userController.saveToProfile);
+
+// Get the user Following List
+router.get('/viewFollowCard', userController.viewFollowCard);
+
+// Get the folloeing category
+router.get('/', userController.viewFav);
 
 router.get('/auth/facebook', passport.authenticate('facebook', {
         session: false,

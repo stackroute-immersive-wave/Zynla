@@ -1,7 +1,7 @@
 import React from 'react';
-import CardsComponent from './FavouriteCardStructure.jsx';
+import DisplayFavouriteCategoryStructure from './DisplayFavouriteCategoryStructure.jsx';
 import {Grid, Icon} from 'semantic-ui-react';
-class DisplayFavComponent extends React.Component {
+class DisplayFavouriteCategory extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -9,7 +9,7 @@ class DisplayFavComponent extends React.Component {
             end: 3
         };
     }
-
+    /* Favourite category maximum 4 display by right side Click*/
     changeStartRight() {
         let start;
         let end;
@@ -29,6 +29,7 @@ class DisplayFavComponent extends React.Component {
           }
         this.setState({start: start, end: end});
     }
+    /* Favourite category maximum 4 display by left side Click*/
     changeStartLeft() {
         let start = 0;
         if (this.state.start - 4 < 0) {
@@ -50,7 +51,7 @@ class DisplayFavComponent extends React.Component {
         let Data = displayImage.map(function(item) {
             return (
                 <Grid.Column>
-                    <CardsComponent displayImage={item.displayImage}/>
+                    <DisplayFavouriteCategoryStructure displayImage={item.displayImage}/>
                 </Grid.Column>
             );
         });
@@ -73,7 +74,7 @@ class DisplayFavComponent extends React.Component {
         );
     }
   }
-  DisplayFavComponent .propTypes = {
+  DisplayFavouriteCategory .propTypes = {
    json: React.PropTypes.func
  };
-  module.exports = DisplayFavComponent;
+  module.exports = DisplayFavouriteCategory;
