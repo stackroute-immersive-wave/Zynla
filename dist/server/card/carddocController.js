@@ -1,43 +1,45 @@
-// const logger = require('./../../applogger');
-// const userModel = require('./carddocEntity').userModel;
-//
-// // let userController = {
-// //     add: function(req, res) {
-// //         logger.debug('Inside user post');
-// //         let db = new userModel(req.body);
-// //         db.save();
-// //         res.send('Added successfully');
-// //     },
-// //     find: function(req, res) {
-// //         userModel.find(req.body, function(err, docs) {
-// //             if (err) {
-// //                 res.send('Error:' + err);
-// //             } else if (docs !== null) {
-// //                 res.send(docs);
-// //             } else {
-// //                 res.send('incorrect');
-// //             }
-// //         });
-// //     },
-// //     update: function(req, res) {
-// //         userModel.update(req.body.old, req.body.new, function(err, docs) {
-// //             if (err) {
-// //                 res.send('Error:' + err);
-// //             } else if (docs !== null) {
-// //                 res.send(docs);
-// //             } else {
-// //                 res.send('not changed');
-// //             }
-// //         });
-// //     },
-// //     login: function(req, res) {
-// //       res.json({responseText:'authenticated'});
-// //    },
-// //
-// //    logout: function(req, res){
-// //      console.log('Session deleted');
-// //      req.session.destroy();
-// //      res.send({redirect: '/'});
-// //    }
-// // }
-// module.exports = userController;
+let neo4j = require('neo4j-driver').v1;
+let driver = neo4j.driver('bolt://192.168.1.204', neo4j.auth.basic('neo4j', '9455338161'));
+let session = driver.session();
+const Answer = require('./carddocEntity');
+
+let cardController = {
+
+    addAnswer: function(req, res) {
+        // console.log('inside add router');
+        /*eslint-disable*/
+        let query = ' \
+  match (q:Question), \
+ (u:User {name:"' + req.body.mail + '"}) \
+ where id(q) = ' + req.body.questionId + ' \
+ create (n:Answer {Content:"' + req.body.content + '"}), \
+ (l:Like {count:0}), \
+ (dl:Unlike {Count:0}), \
+ (n)-[:has]->(l),\
+ (l)-[:context_of]->(q),\
+ (n)-[:has]->(dl),\
+ (dl)-[:context_of]->(q),\
+ (n)-[:answer_of]->(q), \
+ (u)-[:post {on : timestamp()}]->(n) \
+ return n \
+  ';
+        /*eslint-enable*/
+        session.run(query).then(function(result) {
+            // console.log('query run :', result);
+            /*eslint-disable*/
+            let id = result.records[0]._fields[0].identity.low;
+            /*eslint-enable*/
+            let db = new Answer({id: id, createdBy: req.body.mail,
+              content: req.body.content, answeredOn: new Date().getTime()});
+            db.save(function(err) {
+                if (err) {
+                    res.send('Error:' + err);
+                } else {
+                    res.send('saved successfully');
+                }
+            });
+        });
+    }
+};
+
+module.exports = cardController;

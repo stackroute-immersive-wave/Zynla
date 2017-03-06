@@ -1,3 +1,4 @@
+// importing the required files
 import React from 'react';
 import {
     Grid,
@@ -5,8 +6,8 @@ import {
     Icon,
     Breadcrumb
 } from 'semantic-ui-react';
-import Cards from './cards.jsx';
-class anspage extends React.Component {
+import Cards from './cardsCollection.jsx';
+class Questions extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -20,6 +21,7 @@ class anspage extends React.Component {
 //     objArray :[]
 //     }
 // }
+    // function to get questions from database
     getQuestions() {
       // console.log('inside getquestions');
         $.ajax({
@@ -35,10 +37,11 @@ class anspage extends React.Component {
             }
         });
     }
+    // getQuestions function is called as soon as the page renders
     componentDidMount() {
         this.getQuestions();
     }
-
+// display question component
     render() {
         return (
             <Grid divided='vertically'>
@@ -66,4 +69,4 @@ class anspage extends React.Component {
         );
     }
 }
-module.exports = anspage;
+module.exports = Questions;

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {hashHistory, Route, Router} from 'react-router';
-import NavBar from './components/NavBar';
+import NavBar from './components/LandingPage/NavBar';
 import Login from './components/sample/login.jsx';
 import Signup from './components/sample/signup.jsx';
 import SentMailPage from './components/sample/SentMailPage';
