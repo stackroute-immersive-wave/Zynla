@@ -70,8 +70,6 @@ class Login extends React.Component {
                 success: function() {
                     // console.log('gggggggggggggg');
                     hashHistory.push('/home');
-                    // let socket =io();
-                    // socket.emit('userLoginStatus',{value:1});
                 },
                 error: function(err) {
                     this.setState({openSnackbar: true, snackbarMsg: err.responseText});
@@ -86,19 +84,19 @@ render() {
        <h2 style={{margin: -6 + 'px'}}>Welcome to Zynla</h2>
        <Form onSubmit={this.onSubmitLoginData}>
 
-            <Form.Field id="formfieldlogin">
+            <Form.Field>
             <Form.Input name= "userName" placeholder= 'Email-ID' icon='user'
             iconPosition='left' id="formstyle" onChange={this.ChangeEmail.bind(this)}
             error={this.state.erroremail} required />
             <p style={{color: '#a54f4f'}}>{this.state.errormessageemail}</p>
             </Form.Field>
 
-            <Form.Field id="formfieldlogin"><br/>
+            <Form.Field><br/>
             <Form.Input type='password' name="password" placeholder='Password'
             icon='lock' iconPosition='left' id="formstyle" required/>
             </Form.Field><br/><br/><br/>
 
-            <Button color='teal' id="buttonwidth1" circular disabled=
+            <Button color='teal' circular disabled=
             {!this.state.email || !this.state.validemail}>
             <Button.Content type='submit' ><Icon name='sign in'/>Login</Button.Content>
             </Button><br/><br/>
@@ -109,13 +107,13 @@ render() {
 
        </Form>
             <a href='users/auth/facebook'>
-            <Button color='blue' id='buttonwidthfacebook' circular>
+            <Button color='blue' circular>
             <Button.Content visible><Icon name='facebook'/>Login With Facebook</Button.Content>
             </Button>
             </a>
 
             <a href='users/auth/google'>
-            <Button color='red' id='buttonwidthgoogle' circular>
+            <Button color='red' circular>
             <Button.Content visible><Icon name='google'/>Login With Google</Button.Content>
             </Button>
             </a>

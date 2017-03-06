@@ -7,6 +7,7 @@ export default class SuccessfullyRegistered extends React.Component {
   constructor() {
     super();
     this.state = {
+      follows: [],
       catagories: []
 
     };
@@ -14,7 +15,7 @@ export default class SuccessfullyRegistered extends React.Component {
   // componentWillMount() {
   //   this.getCatagory();
   //  }
-   componentWillMount() {
+   componentDidMount() {
     $.ajax({
       url: 'http://localhost:8080/users/displayCatagory',
       type: 'GET',
@@ -30,10 +31,19 @@ export default class SuccessfullyRegistered extends React.Component {
     });
    }
 
+   addCategories(items, category)
+   {
+    // console.log('getting items from createcards',items);
+      this.setState({follows: items});
+      this.setState({catagories: category});
+      // console.log('display states',this.state.follows);
+   }
+
 
   render() {
     return(
-        <CreateCards categories={this.state.catagories} email={Cookie.load('email')}/>
+        <CreateCards categories={this.state.catagories} email={Cookie.load('email')}
+        itemss={this.state.follows} addCategories={this.addCategories.bind(this)}/>
       );
 }
 }

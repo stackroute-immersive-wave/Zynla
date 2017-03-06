@@ -1,11 +1,10 @@
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const bcrypt = require('bcrypt-nodejs');
-const jwt = require('jsonwebtoken');
-const CONFIG = require('../config/auth');
 let schema = new mongoose.Schema({
   //   local:
   // {
+    id: String,
     token: String,
     name: String,
     email: String,
@@ -32,11 +31,6 @@ schema.methods.generateHashEmail = function(email) {
     return bcrypt.hashSync(email, bcrypt.genSaltSync(8), null);
 };
 
-// checking if password is valid
-schema.methods.validPassword = function(password) {
-    // console.log('Checking password valid....');
-    return bcrypt.compareSync(password, this.password);
-};
 schema.methods.validVID = function(verificationID) {
     // console.log('Checking password valid....');
     return bcrypt.compareSync(verificationID, this.verificationID);
@@ -45,13 +39,6 @@ schema.methods.validEmail = function(email) {
     // console.log('Checking password valid....');
     return bcrypt.compareSync(email, this.email);
 };
-schema.statics.generateToken = function(email) {
-    let token = jwt.sign({
-        id: email
-    }, CONFIG.JWT.secret, {
-        expiresIn: 15 * 60
-    });
-    return token;
-};
+
 let User = mongoose.model('user', schema);
 module.exports = User;

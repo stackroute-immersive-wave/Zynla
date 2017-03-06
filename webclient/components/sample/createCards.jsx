@@ -1,7 +1,8 @@
 import React from 'react';
-import {Container, Grid, Checkbox, Button, Image} from 'semantic-ui-react';
+import {Grid, Dimmer, Button, Image} from 'semantic-ui-react';
 import {hashHistory} from 'react-router';
 import $ from 'jquery';
+
 class CreateCards extends React.Component
 {
     constructor()
@@ -10,58 +11,69 @@ class CreateCards extends React.Component
         this.state = {
             follow: []
         };
-        this.setSelected = this.setSelected.bind(this);
     }
-    changeFollow(e, result) {
-        /*eslint-disable */
-        let context = this;
-        /*eslint-enable */
-        if (result.checked) {
-            let temp = true;
-            this.state.follow.map(function(item) {
-                if (result.label === item) {
+
+    setSelected(item)
+    {
+        // console.log(item);
+        let temp = true;
+            this.state.follow.map(function(items) {
+                if (item === items) {
                     temp = false;
                 }
             });
-            if (temp) {
-                this.state.follow.push(result.label)/* eslint-disable*/;
+            if(temp)
+            {
+                this.state.follow.push(item);
+                this.props.addCategories(this.state.follow, this.props.categories);
             }
-        } else if (result.label !== undefined) {
-            /* eslint-enable*/
-            let arr = [];
-            this.state.follow.map(function(item) {
-                if (result.label !== item) {
-                    arr.push(item);
+            else
+            {
+                let i = this.state.follow.indexOf(item);
+                if(i !== -1) {
+                    this.state.follow.splice(i, 1);
+                    // console.log(this.state.follow);
+                    this.props.addCategories(this.state.follow, this.props.categories);
                 }
-                context.setState({follow: arr});
-            });
-        }
-    }
-    setSelected()
-    {
-        let temp = true;
-        let array = [];
-        this.state.follow.map(function(item) {
-            if (this.refs.card.id === item) {
-                temp = false;
             }
-        });
-        if (temp) {
-            this.state.follow.push(this.refs.card.id);
-        } else {
-            let i = this.state.follow.indexOf(this.refs.card.id);
-            if (i !== -1) {
-                array.splice(i, 1);
-            }
-        }
+        // this.state.follow.map(function(items)
+        // {
+        //     console.log('ffffffff');
+        //     if(items === item)
+        //     {
+        //         let i = this.state.follow.indexOf(item);
+        //         if(i != -1) {
+        //             this.state.follow.splice(i, 1);
+        //             console.log(this.state.follow);
+        //         }
+        //     }
+        //     else {
+        //             this.state.follow.push(item);
+        //             console.log(this.state.follow);
+        //         }
+        // });
+        // // e.preventDefault();
+        // console.log('Event',this.props.categories);
+        // console.log('Event', e);
+        // console.log('Refs',this.refs.card.getAttribute('id'));
         //   if(this.state.follow !== )
         //   this.state.follow.push(result.label);
         // else
         //   this.refs.card.id
-        this.state.follow.push(this.refs.card.id);
+        // this.state.follow.push(this.refs.card.id);
     }
+
+
     submitCatagory()
     {
+        if(this.state.follow.length === 0)
+        {
+            /* eslint-disable*/
+            alert('Please select atleast one category');
+            /* eslint-enable*/
+        }
+        else
+        {
         let jObject = {};
         jObject = JSON.stringify(this.state.follow);
         $.ajax({
@@ -80,12 +92,11 @@ class CreateCards extends React.Component
                         isNew: 'N'
                     },
                     success: function() {
-                        // console.log('Successfully updated isNew ');
-                        hashHistory.push('/home');
+                        // console.log(Cookie.load('email'));
+                        hashHistory.push('/userProfile');
                     },
                     error: function() {
                         // console.log('error occurred on AJAX for update');
-                        // console.log(err);
                     }
                 });
             }.bind(this),
@@ -94,38 +105,65 @@ class CreateCards extends React.Component
                 // console.log(err);
             }
         });
+        }
     }
     render()
     {
-        let button = <Button onClick={this.submitCatagory.bind(this)}>GO</Button>;
         /* eslint-disable */
         let context = this;
+        let cardButton;
         /* eslint-enable */
         let data = this.props.categories.map(function(item) {
+            let tempButtom = true;
+            context.props.itemss.map(function(category) {
+                // console.log(item);
+                if(item.name === category)
+                {
+                    tempButtom = false;
+                }
+            });
+            if(tempButtom)
+            {
+                // console.log('in if');
+                cardButton = null;
+            }
+            else
+            {
+                // console.log('in else');
+cardButton = <Image src='https://8biticon.com/static/images/tick.png' style={{height: 50 + 'px'}}/>;
+            }
+            // console.log('card Buttton: ', cardButton)
             return (
                 // eslint-disable
-                <Grid.Column onClick={context.changeFollow.bind(context)}>
+                <Grid.Column>
                   {/* eslint-enable */}
-                    <Checkbox label={item} onChange={context.changeFollow.bind(context)}/>
-                    <div id={item} ref="card" onClick={context.setSelected}>
-                        <Image
-                           src="https://www.syncano.io/blog/content/images/2016/02/reactjs.jpg"/>
-                    </div>
+        <Image src = {item.image} style = {{height: 300 + 'px'}} shape = 'circular'
+        onClick={() => context.setSelected(item.name)}/>
+          <div style={{marginLeft: 134 + 'px', marginTop: 22 + 'px'}}>{cardButton}</div>
+
                 </Grid.Column>
             );
         });
         return (
-            <Container>
-                <Grid columns="1">
-                    {data}
-                </Grid>
-                {button}
-            </Container>
+         <Dimmer active style={{height: 800 + 'px'}}>
+                <Grid.Row>
+                    <Grid.Column width = {12} style = {{width: 800 + 'px'}}>
+                        <Grid columns = "3" style = {{width: 1081 + 'px', marginLeft: 115 + 'px'}}>
+                            {data}
+                        </Grid>
+                    </Grid.Column>
+                    <Grid.Column width = {4} style = {{float: 'right', marginTop: -355 + 'px'}}>
+                    <Button primary content = 'Next' icon = 'right arrow' labelPosition='right'
+                    onClick={this.submitCatagory.bind(this)} style={{marginRight: 30 + 'px'}}/>
+                    </Grid.Column>
+                </Grid.Row>
+        </Dimmer>
         );
     }
 }
 CreateCards.propTypes = {
     email: React.PropTypes.string.isRequired,
-    categories: React.PropTypes.array.isRequired
+    categories: React.PropTypes.array.isRequired,
+    addCategories: React.PropTypes.func.isRequired
 };
 export default CreateCards;

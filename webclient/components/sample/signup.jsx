@@ -1,10 +1,9 @@
 import React from 'react';
 import {hashHistory} from 'react-router';
-import {Button, Image, Modal, Dimmer, Header} from 'semantic-ui-react';
+import {Button, Modal, Dimmer, Header} from 'semantic-ui-react';
 import {Form} from 'semantic-ui-react';
 import validator from 'validator';
 import Axios from 'axios';
-import Snackbar from 'material-ui/Snackbar';
 export default class Signup extends React.Component {
     constructor()
     {
@@ -42,7 +41,6 @@ export default class Signup extends React.Component {
     handleOpen = () => this.setState({ active: true })
     handleClose = () => this.setState({ active: false })
 
-    show = (dimmer) => () => this.setState({dimmer, open: true})
     close = () => hashHistory.push('/');
     // email verification link
     sentemail(email) {
@@ -79,21 +77,9 @@ export default class Signup extends React.Component {
             method: 'post',
             data: value.formData
           }).then(function() {
-            // Axios({
-            //     url: 'http://localhost:8080/users/userProfileData',
-            //     method: 'post',
-            //     data: {"email" : value.formData.email}
-            // }).then(function()
-            // {
-            //     console.log("successfully stored in userProfile");
-            // }).catch(function()
-            // {
-            //     console.log("error occured in userProfile");
-            // });
-              // console.log(msg.firstname);
+
           }).catch(function() {
-              // console.log(err);
-              // alert(err + 'check the details' + Object.keys(value.formData));
+
           });
           this.sentemail(value.formData.email);
         }
@@ -101,9 +87,9 @@ export default class Signup extends React.Component {
              this.setState({openSnackbar: true, snackbarMsg: 'check password field'});
         }
   }
-  handleRequestClose = () => {
-          this.setState({openSnackbar: false});
-      };
+  // handleRequestClose = () => {
+  //         this.setState({openSnackbar: false});
+  //     };
 
     // validation for firstname
     ChangeFirst = (event) => {
@@ -119,12 +105,14 @@ export default class Signup extends React.Component {
     // validation for lastname
     ChangeLast = (event) => {
         this.setState({lastname: event.target.value});
-        if (validator.isAlpha(event.target.value)) {
-            this.setState({errorlast: false});
-            this.setState({errormessagelast: false});
-        } else {
-            this.setState({errorlast: true});
-            this.setState({errormessagelast: 'Enter a valid name'});
+        if(this.state.lastname.length > 0) {
+            if (validator.isAlpha(event.target.value)) {
+                this.setState({errorlast: false});
+                this.setState({errormessagelast: false});
+            } else {
+                this.setState({errorlast: true});
+                this.setState({errormessagelast: 'Enter a valid name'});
+            }
         }
     }
     // validation for email
@@ -181,7 +169,6 @@ export default class Signup extends React.Component {
         let hasLetter = new RegExp('[a-z]');
         let hasCaps = new RegExp('[A-Z]');
         let hasNumbers = new RegExp('[0-9]');
-          if(event.target.value.length > 4) {
         if (hasLetter.test(passwordInfo) && points >= 6 &&
             hasCaps.test(passwordInfo) && hasNumbers.test(passwordInfo)) {
             this.setState({errorpassword: false});
@@ -193,7 +180,6 @@ export default class Signup extends React.Component {
             this.setState({errormessagepassword:
             'Password should contain numbers, letters(A&a) and minimum length 6'});
         }
-      }
     }
     // validation for confirmpassword
     ChangeRepassword = (event) => {
@@ -213,52 +199,52 @@ export default class Signup extends React.Component {
   }
 }
 render() {
-    const {open, dimmer, active} = this.state;
+    const {open, active} = this.state;
     return (
         <div>
-        <Modal dimmer={dimmer} open={open} onClose={this.close}
-        size="small" closeIcon="close" id='modalsignupcss'>
-        <Modal.Header id="signup"><Image src="../../images/ginianim.gif"
-        avatar/>Sign Up</Modal.Header>
+        <Modal open={open} onClose={this.close}
+        size="small" closeIcon="close">
+        <Modal.Header style={{backgroundColor: 'teal'}}>
+        <p style={{color: 'white'}}>Sign Up</p>
+        </Modal.Header>
         <Modal.Content>
-        <Form id="formfield" onSubmit={this.onRegisterUser}>
-        <Form.Field id="formfield">
+        <Form onSubmit={this.onRegisterUser}>
+        <Form.Field>
         <Form.Input label='First Name' name='firstName' placeholder=
         'First Name' type='text' onChange={this.ChangeFirst}
         error={this.state.errorfirst} required/>
-        <p id="textcolor">{this.state.errormessagefirst}</p>
+        <p style={{color: 'red'}}>{this.state.errormessagefirst}</p>
         </Form.Field>
-        <Form.Field id="formfield">
+        <Form.Field>
         <Form.Input label='Last Name' id="input" name="lastName"
         placeholder='Last Name' type='text' onChange=
-        {this.ChangeLast.bind(this)} error={this.state.errorlast} required/>
-        <p id="textcolor">{this.state.errormessagelast}</p>
+        {this.ChangeLast.bind(this)} error={this.state.errorlast}/>
+        <p style={{color: 'red'}}>{this.state.errormessagelast}</p>
         </Form.Field>
-        <Form.Field id="formfield">
+        <Form.Field>
         <Form.Input label='Email' id="to" name="email"
         placeholder='Email-ID' type='text'
         onChange={this.ChangeEmail.bind(this)}
         error={this.state.erroremail} required/>
-        <p id="textcolor">{this.state.errormessageemail}</p>
-        <p id="textcolor">{this.state.userexists}</p>
+        <p style={{color: 'red'}}>{this.state.errormessageemail}</p>
+        <p style={{color: 'red'}}>{this.state.userexists}</p>
         </Form.Field>
-        <Form.Field id="formfield">
+        <Form.Field>
         <Form.Input label='Password' id="input" name="password"
         placeholder='Password' type='password' onChange={this.ChangePassword.bind(this)}
         error={this.state.errorpassword} required/>
-        <p id="textcolor">{this.state.errormessagepassword}</p>
+        <p style={{color: 'red'}}>{this.state.errormessagepassword}</p>
         </Form.Field>
-        <Form.Field id="formfield">
+        <Form.Field>
         <Form.Input label='Confirm Password' id="input" name="repassword"
         type='password' placeholder='Confirm Password'
         onChange={this.ChangeRepassword.bind(this)} error={this.state.errorrepassword} required/>
-        <p id="textcolor">{this.state.errormessage}</p>
+        <p style={{color: 'red'}}>{this.state.errormessage}</p>
         </Form.Field>
-        <Button type='submit' id='buttonstyle' onClick={this.handleOpen}
-        circular disabled={!this.state.firstname
-        || !this.state.lastname || !this.state.email ||
+        <Button type = 'submit' onClick={this.handleOpen}
+        circular disabled={!this.state.firstname || !this.state.email ||
         !this.state.password || !this.state.repassword || !this.state.mailexists
-        || !this.state.verifypassword || !this.state.confirmpassword} > SET UP YOUR ACCOUNT
+        || !this.state.verifypassword || !this.state.confirmpassword} > CREATE YOUR ACCOUNT
         </Button>
         {this.state.opendimmer ? < Dimmer
                  active = {active}
@@ -266,22 +252,16 @@ render() {
                  page>
 
                 <Header as='h2' icon inverted>
-                  <Image src='../images/mail.gif' size="small" />
-                   <Header.Subheader><h3>Please hold for a minute to get verification mail......
+                   <Header.Subheader><h3>Verification mail Sending......
                    </h3></Header.Subheader>
                  </Header>
         </Dimmer > : null}
-        <span id="message"/>
-        <h4 id="text">Already a member?&nbsp;<a href='#/login' id='space'>
+        <h4 id="text">Already a member?&nbsp;<a href='#/'>
         Sign in here</a>
         </h4>
         </Form>
         </Modal.Content>
         </Modal>
-        {this.state.openSnackbar ? < Snackbar open = {this.state.openSnackbar}
-        message={this.state.snackbarMsg} autoHideDuration={1200}
-        onRequestClose={this.handleRequestClose}/>
-        : null}
         </div>
         );
 }
