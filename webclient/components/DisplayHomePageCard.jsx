@@ -20,7 +20,8 @@ class DisplayComponent extends React.Component {
                 <Grid.Column><CardsComponent id={item.id} displayImage={item.displayImage}
                   heading={item.heading} question={item.question} postedBy={item.postedBy}
                   addedOn={item.addedOn} category={item.category} upVotes={item.upVotes}
-                  downVotes={item.downVotes} answerCounts={item.answerCounts} acceptedCounts="5"/>
+                  downVotes={item.downVotes} answerCounts={item.answerCounts} views={item.views}
+                  acceptedCounts="5"/>
               </Grid.Column>
 
             );

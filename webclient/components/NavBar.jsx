@@ -23,7 +23,7 @@ let Cards = require('./Home');
 let Invite = require('./Invite');
 let Profile = require('./profile/NavBarpro');
 let Questions = require('./answerbutton/questions.jsx');
-let Answerpage = require('./anspage');
+let Answerpage = require('./cardAnswerPage/answerPage.jsx');
 let style = {
     height: 0
 };
@@ -285,7 +285,7 @@ class NavBar extends Component {
                                 <Route path='/home' component={Cards}/>
                                 <Route path='/invite' component={Invite}/>
                                 <Route path='/answer' component={Questions}/>
-                                <Route path='/anspage' component={Answerpage}/>
+                                <Route path='/answerPage' component={Answerpage}/>
                                 <Route path='/profile' component={Profile}/>
                             </Router>
                         </Segment>

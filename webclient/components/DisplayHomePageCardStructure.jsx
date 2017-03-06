@@ -14,7 +14,7 @@ class Cards extends React.Component {
     render() {
         return (
             <div id='qw'>
-        <Link to = {'/anspage?id=' + this.props.id}>
+        <Link to = {'/answerPage?id=' + this.props.id}>
                 <Card raised='true' className='item' onClick={this.handleChange}>
                     <Image src={this.props.displayImage} className="imgsize"/>
                     <Card.Header id='textheader' className='spacing'>
@@ -40,7 +40,8 @@ class Cards extends React.Component {
                         <Icon name='like outline' color='green' id='space'/>{this.props.upVotes}
                         <Icon name='dislike outline' color='red' className='space1'/>
                         {this.props.downVotes}
-
+                        <Icon name='eye' color='black' size='large' className="viewIcon"/>
+                        <b>{this.props.views}  Views</b>
                         <Icon name='add circle' className="margin" size='large'
                            style={{'font-size': 40 + 'px'}} />
                     </div>
@@ -67,6 +68,7 @@ Cards .propTypes = {
    upVotes: React.PropTypes.string.isRequired,
    downVotes: React.PropTypes.string.isRequired,
    answerCounts: React.PropTypes.string.isRequired,
+   views: React.PropTypes.number.isRequired,
    acceptedCounts: React.PropTypes.string.isRequired,
    remove: React.PropTypes.func.isRequired,
    id: React.PropTypes.number

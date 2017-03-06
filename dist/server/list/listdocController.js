@@ -108,8 +108,22 @@ let listController = {
             }
         });
     },
-
-    inviteFrnds: function(req, res) {
+    updateviews: function(req, res) {
+      let id = req.body.id;
+      // console.log("ID:" + id);
+      List.findOneAndUpdate({
+          id: id
+      }, {
+          $set: {
+              views: req.body.views
+          }
+      }, {new: true}).then((doc) => {
+          res.send(doc);
+      }, (err) => {
+          res.send(err);
+      });
+  },
+  inviteFrnds: function(req, res) {
         // router.post('/send', function handleSayHello(req, res) {
         // logger.debug(req.body.data);
         let transporter = nodemailer.createTransport({
