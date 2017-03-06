@@ -240,7 +240,7 @@ handleClose = () => this.setState({ active: false })
      country: this.state.country,
      region: this.state.region,
      city: this.state.city,
-     postalCode: this.sate.postalCode,
+     postalCode: this.state.postalCode,
      emailId: Cookie.load('email')
    };
 //   // console.log(JSON.stringify(locData);

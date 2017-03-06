@@ -5,7 +5,7 @@ const User = require('./userEntity');
 const UserProfile = require('./userProfileEntity').userModel;
 const nodemailer = require('nodemailer');
 let neo4j = require('neo4j-driver').v1;
-let driver = neo4j.driver('bolt://192.168.43.160', neo4j.auth.basic('neo4j', '9455338161'));
+let driver = neo4j.driver('bolt://192.168.1.206', neo4j.auth.basic('neo4j', '9455338161'));
 let session = driver.session();
 /*eslint-disable */
 var rand,
