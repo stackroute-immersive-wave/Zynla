@@ -53,11 +53,23 @@ passport.use(new LocalStrategy({
                     userData.authType = user.authType;
                     userData.localType = user.localType;
                     userData.photos = user.photos;
+<<<<<<< HEAD
                     users.findOne({
                         email: userData.email
                     }, function(err, user) {
                         if (err0) {
                         } else {
+=======
+                    userData.token = users.generateToken(userData.email);
+                    // console.log(userData.photos);
+                    users.findOne({
+                        email: userData.email
+                    },function(err,user) {
+                        if (err) {
+                            // console.log('status not updated');
+                        } else {
+                            // console.log('LoginStatus updated Successfully');
+>>>>>>> c3e4983e7a74f18ff16420a21047a8c2eebda4ac
                             user.loggedinStatus = true;
                             user.save(function(err1)
                             {
@@ -180,4 +192,3 @@ let fbStrategy = configAuth.facebookAuth;
 
 
 module.exports = passport;
-

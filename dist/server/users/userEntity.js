@@ -4,39 +4,19 @@ const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 const CONFIG = require('../config/auth');
 let schema = new mongoose.Schema({
-    local:
-  {
+  //   local:
+  // {
     token: String,
-    firstname: String,
-    lastname: String,
+    name: String,
     email: String,
     password: String,
     authType: String,
     localType: String,
-    name: String,
     loggedinStatus: Boolean,
     isEmailVerified: Boolean,
     verificationID: Number,
-    photos: String
-        },
-facebook:
-{
-    id: String,
-    token: String,
-    email: String,
-    name: String,
-    authType: String,
-    photos: String
-},
-google: {
-      id: String,
-      token: String,
-      email: String,
-      name: String,
-      displayName: String,
-      photos: String,
-      authType: String
-    }
+    photos: String,
+    isnew: String
 });
 
 schema.statics.generateHash = function(password) {
@@ -55,15 +35,15 @@ schema.methods.generateHashEmail = function(email) {
 // checking if password is valid
 schema.methods.validPassword = function(password) {
     // console.log('Checking password valid....');
-    return bcrypt.compareSync(password, this.local.password);
+    return bcrypt.compareSync(password, this.password);
 };
 schema.methods.validVID = function(verificationID) {
     // console.log('Checking password valid....');
-    return bcrypt.compareSync(verificationID, this.local.verificationID);
+    return bcrypt.compareSync(verificationID, this.verificationID);
 };
 schema.methods.validEmail = function(email) {
     // console.log('Checking password valid....');
-    return bcrypt.compareSync(email, this.local.email);
+    return bcrypt.compareSync(email, this.email);
 };
 schema.statics.generateToken = function(email) {
     let token = jwt.sign({

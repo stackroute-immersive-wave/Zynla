@@ -55,6 +55,7 @@ class DisplayFavComponent extends React.Component {
             );
         });
         return (
+          <div className = 'favbg'>
             <Grid centered>
                 <Grid.Column width={2} className='arrowsize'>
                     <Icon name='chevron left' onClick={this.changeStartLeft.bind(this)}/>
@@ -68,6 +69,7 @@ class DisplayFavComponent extends React.Component {
                     <Icon name='chevron right' onClick={this.changeStartRight.bind(this)}/>
                 </Grid.Column>
             </Grid>
+          </div>
         );
     }
   }

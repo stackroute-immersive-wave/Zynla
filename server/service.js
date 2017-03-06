@@ -22,6 +22,8 @@ function setupRestRoutes(app) {
   // console.log('Inside service setupRestRoutes');
   app.use('/users', require(path.join(__dirname, './users')));
   app.use('/list', require(path.join(__dirname, './list')));
+  app.use('/userdoc', require(path.join(__dirname, './userdoc')));
+  app.use('/answers', require(path.join(__dirname, './card')));
   // app.use('/resturant', require(path.join(__dirname, './resturant')));
   //  MOUNT YOUR REST ROUTE HERE
   //  Eg:

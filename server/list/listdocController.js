@@ -22,7 +22,15 @@ let listController = {
             upVotes: req.body.upVotes,
             downVotes: req.body.downVotes,
             answerCounts: req.body.answerCounts,
-            topCards: req.body.isAccepted
+            topCards: req.body.isAccepted,
+            views: req.body.views,
+            createdBy: req.body.topCards.createdBy,
+            content: req.body.topCards.content,
+            createdOn: req.body.topCards.createdOn,
+            image: req.body.topCards.image,
+            upVote: req.body.topCards.upVote,
+            downVote: req.body.topCards.downVote,
+            isAccepted: req.body.topCards.isAccepted
         });
 
         newList.save().then((doc) => {
@@ -38,6 +46,16 @@ let listController = {
             res.send(docs);
         }, (err) => {
             res.send(err);
+        });
+    },
+
+    getQuestion: function(req, res) {
+        // console.log('Inside Ques get' + req.params.id);
+        List.find({id: req.params.id}).then((docs) => {
+            // console.log('inside route', JSON.stringify(docs));
+            res.send(docs);
+        }, (err) => {
+            res.send('Cant get the docs', err);
         });
     },
 

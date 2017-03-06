@@ -16,12 +16,14 @@ import {
 } from 'semantic-ui-react';
 import {Link} from 'react-router';
 import Cookie from 'react-cookie';
-import Questions from './answerbutton/questions.jsx';
 // const logger = require('./../../applogger');
 import Textarea from 'react-textarea-autosize';
 import {Route, Router, hashHistory} from 'react-router';
 let Cards = require('./Home');
 let Invite = require('./Invite');
+let Profile = require('./profile/NavBarpro');
+let Questions = require('./answerbutton/questions.jsx');
+let Answerpage = require('./anspage');
 let style = {
     height: 0
 };
@@ -60,8 +62,19 @@ class NavBar extends Component {
         }
     }
 
+    callAlert() {
+      /*eslint-disable*/
+      alert('please login or signup to con');
+      /*eslint-enable*/
+    }
+
     handleOpen() {
-        this.setState({active: true});
+        if(Cookie.load('email')) {
+          this.setState({active: true});
+        }
+        else {
+          this.callAlert();
+        }
     }
 
     handleClose() {
@@ -147,18 +160,25 @@ class NavBar extends Component {
         const backImage = {
             image: Cookie.load('profilepicture')
         };
+        if(!Cookie.load('email')) {
+          Answerpage = require('./error.jsx');
+          Invite = require('./error.jsx');
+          Profile = require('./error.jsx');
+        }
         // const {open, dimmer} = this.state;
         return (
             <div style={style}>
                 <Menu secondary id='divStyle'>
                     <Grid>
                         <Grid.Column width={3}>
+
                             <Menu.Item icon='list' active={activeItem === 'menu'}
-                              size='small' id='divStyle' onClick={this.toggleVisibility}/>
+                              style={{'font-size': 20 + 'px'}}
+                              id='divStyle' onClick={this.toggleVisibility}/>
                         </Grid.Column>
                         <Grid.Column width={10}>
                             <Link to='/home'>
-                                <Image src='./../image/logo.png' name='image'
+                                <Image style={backImage} name='image'
                                  active= {activeItem === 'image'}
                                   onClick={this.handleItemClick} className='logosize'/>
                             </Link>
@@ -219,6 +239,10 @@ class NavBar extends Component {
                                     <Menu.Item name='invite' active={activeItem === 'invite'}
                                        id='divStyle' onClick={this.handleItemClick}/>
                                 </Link>
+                                <Link to='/profile'>
+                                    <Menu.Item name='Profile' active={activeItem === 'Profile'}
+                                       id='divStyle' onClick={this.handleItemClick}/>
+                                </Link>
                                 <Dropdown icon='user' style={backImage}
                                   active={activeItem === 'friends'}
                                    id='divStyle'
@@ -234,22 +258,24 @@ class NavBar extends Component {
                         </Grid.Column>
                     </Grid>
                 </Menu>
+
                 <Sidebar.Pushable as={Segment}>
                     <Sidebar as={Menu} animation='scale down' width='thin'
                        visible={visible} icon='labeled' vertical id='divStyle'>
+
                         <Accordion>
-                            <Accordion.Title>
-                                <h5>Categories</h5>
+                            <Accordion.Title >
+                                <h5 className = 'sidebarFontColor'>Categories</h5>
                             </Accordion.Title>
                             <Accordion.Content>
                                 <p>c</p>
                                 <p>c++</p>
                             </Accordion.Content>
                             <Accordion.Title>
-                                <h5>Notification</h5>
+                                <h5 className = 'sidebarFontColor'>Notification</h5>
                             </Accordion.Title>
                             <Accordion.Title>
-                                <h5>Setting</h5>
+                                <h5 className = 'sidebarFontColor'>Setting</h5>
                             </Accordion.Title>
                         </Accordion>
                     </Sidebar>
@@ -259,6 +285,8 @@ class NavBar extends Component {
                                 <Route path='/home' component={Cards}/>
                                 <Route path='/invite' component={Invite}/>
                                 <Route path='/answer' component={Questions}/>
+                                <Route path='/anspage' component={Answerpage}/>
+                                <Route path='/profile' component={Profile}/>
                             </Router>
                         </Segment>
                     </Sidebar.Pusher>

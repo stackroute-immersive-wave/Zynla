@@ -1,6 +1,6 @@
 import React from 'react';
 import {Icon, Image, Card} from 'semantic-ui-react';
-
+import {Link} from 'react-router';
 class Cards extends React.Component {
     constructor() {
         super();
@@ -10,10 +10,12 @@ class Cards extends React.Component {
         };
     }
 
+
     render() {
         return (
             <div id='qw'>
-                <Card raised='true'color = 'red' className='item' onClick={this.handleChange}>
+        <Link to = {'/anspage?id=' + this.props.id}>
+                <Card raised='true' className='item' onClick={this.handleChange}>
                     <Image src={this.props.displayImage} className="imgsize"/>
                     <Card.Header id='textheader' className='spacing'>
                         <b>{this.props.heading}</b>
@@ -39,7 +41,8 @@ class Cards extends React.Component {
                         <Icon name='dislike outline' color='red' className='space1'/>
                         {this.props.downVotes}
 
-                        <Icon name='add circle' className="margin" size='large'/>
+                        <Icon name='add circle' className="margin" size='large'
+                           style={{'font-size': 40 + 'px'}} />
                     </div>
                     <div id="footer" className='spacing'>
                         <Icon name='write square' size='large'/>
@@ -49,6 +52,7 @@ class Cards extends React.Component {
                         <b>{this.props.acceptedCounts}  Accepted</b>
                       </div>
                 </Card>
+              </Link>
             </div>
         );
     }
@@ -64,7 +68,8 @@ Cards .propTypes = {
    downVotes: React.PropTypes.string.isRequired,
    answerCounts: React.PropTypes.string.isRequired,
    acceptedCounts: React.PropTypes.string.isRequired,
-   remove: React.PropTypes.func.isRequired
+   remove: React.PropTypes.func.isRequired,
+   id: React.PropTypes.number
  };
 
 module.exports = Cards;

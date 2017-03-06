@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [02 03 2017 08:43:28.580] [DEBUG] - Inside display catagory
 [02 03 2017 08:43:42.254] [DEBUG] - Inside display catagory
 [02 03 2017 08:45:45.743] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/ZynlaAocial
@@ -69,3 +70,7 @@
 [02 03 2017 18:34:22.875] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/ZynlaAocial
 [02 03 2017 18:35:13.493] [DEBUG] - Inside display catagory
 [02 03 2017 18:35:39.172] [DEBUG] - Inside display catagory
+=======
+[02 03 2017 12:50:47.665] [DEBUG] - Mongoose is now connected to  mongodb://192.168.1.60:27017/zynla
+[02 03 2017 12:57:36.613] [DEBUG] - Mongoose is now disconnected..!
+>>>>>>> c3e4983e7a74f18ff16420a21047a8c2eebda4ac
