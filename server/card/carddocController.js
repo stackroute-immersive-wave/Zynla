@@ -1,11 +1,11 @@
 let neo4j = require('neo4j-driver').v1;
-let driver = neo4j.driver('bolt://192.168.1.204', neo4j.auth.basic('neo4j', '9455338161'));
+let driver = neo4j.driver('bolt://192.168.1.101', neo4j.auth.basic('neo4j', '9455338161'));
 let session = driver.session();
 const Answer = require('./carddocEntity');
 
 let cardController = {
 
-    addCard: function(req, res) {
+    addAnswer: function(req, res) {
         // console.log('inside add router');
         /*eslint-disable*/
         let query = ' \

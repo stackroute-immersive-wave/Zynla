@@ -5,7 +5,7 @@ const User = require('./userEntity');
 const UserProfile = require('./userProfileEntity').userModel;
 const nodemailer = require('nodemailer');
 let neo4j = require('neo4j-driver').v1;
-let driver = neo4j.driver('bolt://192.168.1.206', neo4j.auth.basic('neo4j', '9455338161'));
+let driver = neo4j.driver('bolt://192.168.1.204', neo4j.auth.basic('neo4j', '9455338161'));
 let session = driver.session();
 /*eslint-disable */
 var rand,
@@ -260,7 +260,69 @@ googleCallBack: function(req, res) {
         res.redirect('/#/successfullyregistered');
         }
     },
+    /* To save the following card in mongo db and neo4j*/
+    saveToProfile: function(req, res) {
+      logger.debug("inside saveToProfile");
+      let id = req.body.id;
+      let emailId = req.body.emailId;
+        /*eslint-disable*/
+        let query ="match (q:Question), (u:User) where id(q)="+id +" and u.name='"+emailId+"' create (q)<-[:follow {on:timestamp()}]-(u) return q";
 
+        /*eslint-enable*/
+
+        // match (q:Question), (u:User) where id(q)=' + req.body.id + '  \
+        // and u.name="' + req.body.emailId + '" \
+        // create (q)<-[:follow {on:timestamp()}]-(u)'
+        // match (q:Question), (u:User) where id(q)=950 and u.name="erkeerthana26@gmail.com"
+        //
+        // // create (q)<-[:follow {on:timestamp()}]-(u)
+        session.run(query).then(function(result) {
+          /*eslint-disable*/
+          let id = result.records[0]._fields[0].identity.low;
+            /*eslint-enable*/
+        let emailId = req.body.emailId;
+        logger.debug('Inside get');
+        UserProfile.findOneAndUpdate({
+            emailId: emailId
+        }, {
+            $push: {
+                watchingList: {
+                    id: id,
+                    displayImage: req.body.displayImage,
+                    heading: req.body.heading,
+                    statement: req.body.statement,
+                    postedBy: req.body.postedBy,
+                    profileImage: req.body.profileImage,
+                    addedOn: req.body.addedOn,
+                    category: req.body.category,
+                    upVotes: req.body.upVotes,
+                    downVotes: req.body.downVotes,
+                    noofans: req.body.noofans
+                }
+            }
+        }, {new: true}).then((doc) => {
+            res.send(doc);
+        }, (err) => {
+            res.send(err);
+        });
+      });
+    },
+    /* To view the following card*/
+    viewFollowCard: function(req, res) {
+      UserProfile.find().then((docs) => {
+          res.send(docs);
+      }, (err) => {
+          res.send(err);
+      });
+    },
+    /* Getting all the following category cards*/
+    viewFav: function(req, res) {
+        UserProfile.find().then((docs) => {
+            res.send(docs);
+        }, (err) => {
+            res.send(err);
+        });
+    },
 
 displayCatagory: function(req, res) {
     var result1 = [];
@@ -307,7 +369,7 @@ displayCatagory: function(req, res) {
                 res.send('Error in registration');
             } else {
             res.send('Successfully registered');
-            }  
+            }
         });
         // res.redirect('/#/home');
     },
