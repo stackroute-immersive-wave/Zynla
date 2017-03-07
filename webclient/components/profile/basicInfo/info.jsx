@@ -309,7 +309,7 @@ handleClose = () => this.setState({ active: false })
     </Accordion.Title>
 
     <Accordion.Content>
-     <Form action='#'>
+     <Form action='?#/profile'>
     <Form.Field>
       <label>Primary</label>
       <Input size = 'small' placeholder={this.state.primaryLabel}
@@ -332,7 +332,7 @@ handleClose = () => this.setState({ active: false })
       {this.state.LocTitle}</h1>
     </Accordion.Title>
     <Accordion.Content>
-     <Form action='#'>
+     <Form action='?#/profile'>
     <Form.Field>
       <label>Line1</label>
       <Input onChange = {this.changeLine1.bind(this)} placeholder={this.state.line1Label} />
@@ -367,7 +367,7 @@ handleClose = () => this.setState({ active: false })
     {this.state.AbtTitle}</h1>
     </Accordion.Title>
     <Accordion.Content>
-     <Form action='#'>
+     <Form action='?#/profile'>
      <Form.Field>
       <label>Picture</label>
       <Input placeholder={this.state.pictureLabel} onChange = {this.changePhoto.bind(this)} />

@@ -90,7 +90,7 @@ transition: opacity .4s ease-in-out;
 }
 
 .margin {
-    float: right;
+    
     color: #B2242E
 ;
 
@@ -167,6 +167,10 @@ transition: opacity .4s ease-in-out;
 
 .space1 {
     margin-left: 20px !important;
+}
+
+.BtnClr {
+  margin-left: 100px;
 }
 
 .search {

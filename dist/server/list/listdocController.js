@@ -4,8 +4,7 @@ const nodemailer = require('nodemailer');
 // let host = 'localhost:8080';
 const cookie = require('react-cookie');
 let em = cookie.load('username');
-let neo4j = require('neo4j-driver').v1;
-let driver = neo4j.driver('bolt://192.168.1.101', neo4j.auth.basic('neo4j', '9455338161'));
+let driver = require('../config/neo4j');
 let session = driver.session();
 let listController = {
 
@@ -58,6 +57,24 @@ let listController = {
             res.send('Cant get the docs', err);
         });
     },
+
+    getconcepts: function(req, res) {
+          let arr = [];
+          let query = 'match (n:Concept) where n.name=~".*' + req.body.q + '.*" return n; ';
+          session.run(query).then(function(result) {
+            // console.log(result.records[0]);
+            if(result) {
+              for(let x of result.records) {
+                /* eslint-disable */
+                arr.push(x._fields[0].properties.name);
+                /* eslint-enable */
+              }
+                // console.log('Array:' + arr);
+              res.send(arr);
+            }
+          });
+          },
+
     // router function to display suggested questions
     suggestQues: function(req, res) {
       // console.log('router suggest ques');
@@ -192,7 +209,99 @@ let listController = {
                 res.json({yo: info.response});
             }
         });
-    }
+    },
+    likeStatus: function(req,res) {
+        var id = req.body.id;
+        var email = req.body.email;
+        var data = {'like':false, 'unlike':false};
+        let query = 'match (n:Question)-[:has]->(l)<-[:liked]-(x:User) where id(n)='+id+' and x.name="'+email+'" return x;';
+        session.run(query).then(function(result) {
+            if (result) {
+                if(result.records.length>0){
+                    data.like = true;
+                }
+                query = 'match (n:Question)-[:has]->(l)<-[:unliked]-(x:User) where id(n)='+id+' and x.name="'+email+'" return x;';
+                session.run(query).then(function(result1) {
+                    if(result1) {
+                        if(result1.records.length>0){
+                            data.unlike = true;
+                        }
+                        res.send(data);
+                    }
+                });
+            }
+            else {
+                console.log("error in updating the like");
+            }
+       });
+    },
+    updateLike: function(req, res) {
+       console.log('inside update like',req.body);
+       var id = req.body.id;
+       var email = req.body.email;
+       let query = "";
+        if(req.body.type == 'add') {
+            query = 'match(n:Question)-[:has]->(m:Like), \
+                    (p:User {name:"'+email+'"})\
+                    where id(n)='+req.body.id+' \
+                    set m.count='+req.body.upVotes+' \
+                    create (p)-[:liked]->(m) \
+                    return m;';
+        }
+
+        else {
+            query = 'match(n:Question)-[:has]->(m:Like)<-[x:liked]- \
+                    (p:User {name:"'+email+'"})\
+                    where id(n)='+req.body.id+' \
+                    set m.count='+req.body.upVotes+' \
+                    delete x \
+                    return m;';
+        }
+       session.run(query).then(function(result) {
+            if (result) {
+                console.log('id',id);
+                List.update({'id':id, 'upVotes':req.body.upVotes}, function(docs){
+                    res.send("success");
+                });
+            }
+            else {
+                console.log("error in updating the like");
+            }
+       });
+   },
+    updateunlike: function(req, res) {
+       var id = req.body.id;
+       var email = req.body.email;
+       let query = "";
+        if(req.body.type == 'add') {
+            query = 'match(n:Question)-[:has]->(m:Unlike), \
+                    (p:User {name:"'+email+'"})\
+                    where id(n)='+req.body.id+' \
+                    set m.count='+req.body.downVotes+' \
+                    create (p)-[:unliked]->(m) \
+                    return m;';
+        }
+
+        else {
+            query = 'match(n:Question)-[:has]->(m:Unlike)<-[x:unliked]- \
+                    (p:User {name:"'+email+'"})\
+                    where id(n)='+req.body.id+' \
+                    set m.count='+req.body.downVotes+' \
+                    delete x \
+                    return m;';
+        }
+       session.run(query).then(function(result) {
+            if (result) {
+                console.log('id',id);
+                List.update({'id':id, 'downVotes':req.body.downVotes}, function(docs){
+                    res.send("success");
+                });
+            }
+            else {
+                console.log("error in updating the like");
+            }
+       });
+   }
 };
 
 module.exports = listController;

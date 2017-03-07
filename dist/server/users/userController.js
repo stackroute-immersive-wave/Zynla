@@ -4,8 +4,7 @@ const logger = require('./../../applogger');
 const User = require('./userEntity');
 const UserProfile = require('./userProfileEntity').userModel;
 const nodemailer = require('nodemailer');
-let neo4j = require('neo4j-driver').v1;
-let driver = neo4j.driver('bolt://192.168.1.204', neo4j.auth.basic('neo4j', '9455338161'));
+let driver = require('../config/neo4j');
 let session = driver.session();
 /*eslint-disable */
 var rand,
@@ -333,7 +332,7 @@ displayCatagory: function(req, res) {
             for(var x of result.records){
                 result1.push({
                     "name":(x._fields[0].properties.name),
-                    "image":(x._fields[0].properties.image)
+                    "image":(x._fields[0].properties.Image)
                 });
             }
             console.log(result1);

@@ -70,6 +70,10 @@ class answerPage extends React.Component {
             // value: RichTextEditor.createEmptyValue(),
             id: '',
             views: 0,
+            upVotes: 0,
+            downVotes: 0,
+            colorName: 'green',
+            colorNameUnlike: 'red',
             objArray: [
                 {
                     id: 0,
@@ -181,7 +185,113 @@ class answerPage extends React.Component {
     }
     componentWillMount() {
         this.getData();
+        this.getLikeStatus();
     }
+
+    updatelike() {
+        let type = 'add';
+        let color = 'blue';
+        let upVotesTemp = parseInt(this.state.upVotes, 10) + 1;
+        if(this.state.colorName === 'green') {
+            type = 'add';
+            upVotesTemp = parseInt(this.state.upVotes, 10) + 1;
+            color = 'blue';
+        }
+        else {
+            type = 'delete';
+            upVotesTemp = parseInt(this.state.upVotes, 10) - 1;
+            color = 'green';
+        }
+      let id = window.location.hash.split('id=')[1];
+      // console.log('upvotes before increment',this.state.upVotes);
+      // console.log('upvotes after increment',upVotesTemp);
+      $.ajax({
+            url: 'http://localhost:8080/list/updateLike',
+            type: 'POST',
+            data: {
+                id: id,
+                upVotes: upVotesTemp,
+                email: Cookie.load('email'),
+                type: type
+            },
+            success: function() {
+                // console.log('comes');
+                this.setState({
+                    colorName: color,
+                    upVotes: upVotesTemp
+                });
+            }.bind(this)
+          });
+    }
+    updateunlike() {
+        // console.log("coming to update unlike");
+        let type = 'add';
+        let color = 'red';
+        let downVotesTemp = parseInt(this.state.downVotes, 10) + 1;
+        if(this.state.colorNameUnlike === 'red') {
+            type = 'add';
+            downVotesTemp = parseInt(this.state.downVotes, 10) + 1;
+            color = 'black';
+        }
+        else {
+            type = 'delete';
+            downVotesTemp = parseInt(this.state.downVotes, 10) - 1;
+            color = 'red';
+        }
+      let id = window.location.hash.split('id=')[1];
+      $.ajax({
+            url: 'http://localhost:8080/list/updateunlike',
+            type: 'POST',
+            data: {
+                id: id,
+                downVotes: downVotesTemp,
+                email: Cookie.load('email'),
+                type: type
+            },
+            success: function() {
+                this.setState({
+                    colorNameUnlike: color,
+                    downVotes: downVotesTemp
+                });
+            }.bind(this)
+          });
+    }
+    getLikeStatus() {
+        let id = window.location.hash.split('id=')[1];
+        let email = Cookie.load('email');
+     $.ajax({
+            url: 'http://localhost:8080/list/likestatus',
+            type: 'POST',
+            data: {
+                id: id,
+                email: email
+            },
+            success: function(data) {
+                // console.log(data);
+                if(data.like) {
+                    this.setState({
+                        colorName: 'blue'
+                    });
+                }
+                else {
+                    this.setState({
+                        colorName: 'green'
+                    });
+                }
+                if(data.unlike) {
+                    this.setState({
+                        colorNameUnlike: 'black'
+                    });
+                }
+                else {
+                    this.setState({
+                        colorNameUnlike: 'red'
+                    });
+                }
+            }.bind(this)
+          });
+    }
+
     render() {
         let quesObj = this.state.objArray;
         return (
@@ -206,10 +316,20 @@ class answerPage extends React.Component {
                             </a>
                         </Segment>
                         <div style ={crumstyle}>
-                            <Icon style={likestyle} name='thumbs up' size='large' color='green'/>
-                            {quesObj[0].upVotes}
-                            <Icon style={unlikestyle} name='thumbs down' size='large' color='red'/>
-                            {quesObj[0].downVotes}
+                          <Button onClick={this.updatelike.bind(this)}>
+                            <Icon style={likestyle}
+                              name='thumbs up'
+                              size='large'
+                              color={this.state.colorName || 'green'} />
+                            {this.state.upVotes}
+                          </Button>
+                          <Button onClick={this.updateunlike.bind(this)}>
+                            <Icon style={unlikestyle}
+                              name='thumbs down'
+                              size='large'
+                              color={this.state.colorNameUnlike || 'red'} />
+                              {this.state.downVotes}
+                            </Button>
                             <Button basic color='blue' content='Views' style={viewstyle} label={{
                                 as: 'a',
                                 basic: true,
@@ -217,10 +337,10 @@ class answerPage extends React.Component {
                                 pointing: 'left',
                                 content: quesObj[0].views + 1
                             }}/>
-                            <Modal trigger={< Button positive style = {
+                            <Modal trigger={<Button positive style = {
                                 buttonfolstyle
                             }
-                            size = 'mini' > Click to Answer < /Button>}>
+                            size = 'mini' > Click to Answer </Button>} closeIcon='close'>
                                 <Modal.Content>
                                     <div style={titlestyle1}>
                                         {quesObj[0].heading}
@@ -231,9 +351,6 @@ class answerPage extends React.Component {
                                     </Form>
                                 </Modal.Content>
                                 <Modal.Actions>
-                                    <Button color='red'>
-                                        Cancel
-                                    </Button>
                                     <Button color='green' onClick={this.postAnswer.bind(this)}
                                       type='button'>
                                         Submit
