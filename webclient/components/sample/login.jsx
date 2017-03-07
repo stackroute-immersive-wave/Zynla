@@ -1,6 +1,6 @@
 let React = require('react');
 let {hashHistory} = require('react-router');
-import {Button, Grid, Icon, Form } from 'semantic-ui-react';
+import {Button, Grid, Icon, Form, Segment } from 'semantic-ui-react';
 import validator from 'validator';
 import $ from 'jquery';
 
@@ -79,11 +79,13 @@ class Login extends React.Component {
 
 render() {
   return (
-  <div>
-  <Grid centered style = {{margin: 30 + 'px'}}>
-       <h2 style={{margin: -6 + 'px'}}>Welcome to Zynla</h2>
-       <Form onSubmit={this.onSubmitLoginData}>
-
+    <div id="mount">
+      <img src="./../../image/Zynla.png" className="imagePosition" />
+      <p className="tagline">A place to share knowledge and better understand the world</p>
+  <div className="centerPosition">
+<Segment compact >
+  <Grid centered >
+       <Form onSubmit={this.onSubmitLoginData} className="contentCenter">
             <Form.Field>
             <Form.Input name= "userName" placeholder= 'Email-ID' icon='user'
             iconPosition='left' id="formstyle" onChange={this.ChangeEmail.bind(this)}
@@ -94,7 +96,7 @@ render() {
             <Form.Field><br/>
             <Form.Input type='password' name="password" placeholder='Password'
             icon='lock' iconPosition='left' id="formstyle" required/>
-            </Form.Field><br/><br/><br/>
+            </Form.Field><br/>
 
             <Button color='teal' circular disabled=
             {!this.state.email || !this.state.validemail}>
@@ -106,21 +108,26 @@ render() {
             </p>
 
        </Form>
+          <div className="contentCenter">
+          <div>
             <a href='users/auth/facebook'>
             <Button color='blue' circular>
             <Button.Content visible><Icon name='facebook'/>Login With Facebook</Button.Content>
             </Button>
             </a>
-
+          </div><br/><br/>
+            <div>
             <a href='users/auth/google'>
             <Button color='red' circular>
             <Button.Content visible><Icon name='google'/>Login With Google</Button.Content>
             </Button>
             </a>
-
-
+          </div>
+        </div>
        </Grid>
-  </div>);
+</Segment>
+  </div>
+</div>);
 }
 }
 

@@ -8,7 +8,7 @@ class DisplayFavouriteCategoryStructure extends React.Component {
         this.state = {
             check1: true,
             check2: false,
-            iconName: 'add circle',
+            iconName: 'save',
             text: 'save'
         };
     }

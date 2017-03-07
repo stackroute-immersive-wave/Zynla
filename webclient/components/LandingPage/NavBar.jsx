@@ -29,8 +29,7 @@ let style = {
 };
 let Style = {
     marginTop: '5px',
-    marginBottom: '5px',
-    float: 'left'
+    marginBottom: '5px'
 };
 
 class NavBar extends Component {
@@ -176,7 +175,7 @@ class NavBar extends Component {
                               style={{'font-size': 20 + 'px'}}
                               id='divStyle' onClick={this.toggleVisibility}/>
                         </Grid.Column>
-                        <Grid.Column width={10}>
+                        <Grid.Column width={9}>
                             <Link to='/home'>
                                 <Image src='./../../image/logo.png' style={backImage} name='image'
                                  active= {activeItem === 'image'}
@@ -185,7 +184,7 @@ class NavBar extends Component {
                             <Input action='Search' style={Style}
                                placeholder='Search...' className='search'/>
                         </Grid.Column>
-                        <Grid.Column width={3}>
+                        <Grid.Column width={4}>
                             <Dimmer active={active}
                                onClickOutside={this.handleClose.bind(this)} page>
                                 <Header as='h2' icon>
