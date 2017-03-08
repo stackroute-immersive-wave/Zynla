@@ -118,6 +118,12 @@ render() {
             </Button>
             </a>
 
+            <a href='users/auth/instagram'>
+            <Button color='green' circular>
+            <Button.Content visible><Icon name='instagram'/>Login With Instagram</Button.Content>
+            </Button>
+            </a>
+
 
        </Grid>
   </div>);

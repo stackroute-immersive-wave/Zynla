@@ -11,9 +11,6 @@ export default class SentMailPage extends React.Component {
     }
     render() {
         return (
-            <div style={{
-                backgroundImage: 'url(`../../images/homes.jpg`)'
-            }}>
                 <Grid container={'true'} centered={'true'}>
                     <Grid.Row/>
                     <Grid.Row>
@@ -23,17 +20,17 @@ export default class SentMailPage extends React.Component {
                         <Grid.Column width={9}/>
                         <Grid.Column width={5}>
                             <h2>
-                                <Button className="buttonlogin" circular style={{
+                                <Button circular style={{
                                     backgroundColor: 'white'
                                 }}>
-                                    <a href="#/" id="head" style={{
+                                    <a href="#/"  style={{
                                         color: 'black'
                                     }}>LOGIN</a>
                                 </Button>
                                 &nbsp;&nbsp;<Button className="buttonsignin" circular style={{
                 backgroundColor: 'white'
             }}>
-                                    <a href="#/signup" id="head" style={{
+                                    <a href="#/signup" style={{
                                         color: 'black'
                                     }}>SIGNUP</a>
                                 </Button>
@@ -50,8 +47,8 @@ export default class SentMailPage extends React.Component {
                         }}>
                             <p id='head1'>
                               {SentMail.head1}<br/>
-                                <h3 id='headlink'>{SentMail.head2}</h3>
-                                <h1 id='head4'>{SentMail.head3}</h1>
+                                <h3 >{SentMail.head2}</h3>
+                                <h1 >{SentMail.head3}</h1>
 
                             </p>
                         </Grid.Column>
@@ -72,7 +69,6 @@ export default class SentMailPage extends React.Component {
                     <Grid.Row/>
                     <Grid.Row/>
                 </Grid>
-            </div>
         );
     }
 }

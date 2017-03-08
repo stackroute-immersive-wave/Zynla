@@ -37,6 +37,14 @@ router.get('/auth/facebook/callback',
     passport.authenticate('facebook', {failureRedirect: '/#/'})
     , userController.facebookCallBack);
 
+router.get('/auth/instagram', passport.authenticate('instagram', {
+        session: false
+    }), userController.instagram);
+
+router.get('/auth/instagram/callback',
+    passport.authenticate('instagram', {failureRedirect: '/#/'})
+    , userController.instagramCallBack);
+
 router.get('/auth/google', passport.authenticate('google', {
     session: false,
     scope: ['email']

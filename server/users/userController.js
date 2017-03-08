@@ -132,7 +132,7 @@ sendEmail: function (req, res) {
         let checkID = req.query.id;
         let checkMail = req.query.email;
         User.find({
-            'local.email': req.query.email
+            'email': req.query.email
         }, function(err, profile) {
 
             if (err) {
@@ -211,6 +211,32 @@ facebook: function(req, res) {
 
     // handle the callback after facebook has authenticated the user
 facebookCallBack: function(req, res) {
+        res.cookie('token', req.user.token);
+        res.cookie('authType', req.user.authType);
+        res.cookie('username', req.user.name);
+        res.cookie('profilepicture', req.user.photos);
+        res.cookie('email',req.user.email);
+        if(req.user.isnew ==='N')
+        {
+            res.redirect('/#/home');
+        }
+        else
+        {
+        var query = 'create (n:User {name : "'+req.user.email+'"})';
+        session.run(query).then(function(){
+            console.log("comes");
+        });
+            console.log(query);
+            res.redirect('/#/successfullyregistered');
+        }
+    },
+
+instagram: function(req, res) {
+        res.json(req.user);
+    },
+
+    // handle the callback after facebook has authenticated the user
+instagramCallBack: function(req, res) {
         res.cookie('token', req.user.token);
         res.cookie('authType', req.user.authType);
         res.cookie('username', req.user.name);
@@ -369,15 +395,18 @@ displayCatagory: function(req, res) {
                 res.send('Error in registration');
             } else {
                 let id = req.body.email;
+                console.log('email in addcategory',req.body.email);
                 // var domainArray = ['java', 'semantic-ui', 'javascript'];
                 let query = 'match (n:User {name:"'+id+'"})';
                 for(var i = 0; i < arr.length; i++) {
                     query+=',(d' + i + ': Domain {name:"'+arr[i]+'"}) ';
                 }
+                console.log('node 1',query);
                 query += 'create (n)-[:follows]->(d0)';
                 for(let i = 1; i< arr.length; i++) {
                     query+=',(n)-[:follows]->(d'+ i +')';
                 }
+                console.log('node 2',query);
                 session.run(query).then(function(){
             console.log('updated to neo4j');
         });

@@ -1,5 +1,6 @@
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
+const InstagramStrategy = require('passport-instagram').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const users = require('../users/userEntity');
@@ -56,7 +57,7 @@ passport.use(new LocalStrategy({
                     userData.photos = user.photos;
                     users.findOne({
                         email: userData.email
-                    }, function(err, user) {
+                    }, function(err0, user) {
                         if (err0) {
                         } else {
                             user.loggedinStatus = true;
@@ -93,7 +94,7 @@ function(req, token, refreshToken, profile, done) {
         // check if the user is already logged in
         if (!req.user) {
             /* eslint-disable*/
-            users.findOne({ 'id' : profile.id }, function(err, user) {
+            users.findOne({ 'email' : (profile.emails[0].value || '').toLowerCase() }, function(err, user) {
             /* eslint-enable*/
             if (err)
                     return done(err);
@@ -140,7 +141,7 @@ let fbStrategy = configAuth.facebookAuth;
         process.nextTick(function() {
             // find the user in the database based on their facebook id
             /* eslint-disable */
-            users.findOne({ id: profile.id }, function(err, user) {
+            users.findOne({ email: (profile.emails[0].value || '').toLowerCase() }, function(err, user) {
                 /* eslint-enable */
               // if there is an error, stop everything and return that
                 // ie an error connecting to the database
@@ -177,6 +178,50 @@ let fbStrategy = configAuth.facebookAuth;
             });
         return;
         });
+    }));
+
+passport.use(new InstagramStrategy({
+    clientID: '62be12ccaf0f431a8f8d5fbd150a54d1',
+    clientSecret: '274b5123329d4283a7e65751d7b30d63',
+    callbackURL: 'http://localhost:8080/users/auth/instagram/callback',
+    scopes        : ['likes'+'basic']
+  },
+  function(accessToken, refreshToken, profile, done) {
+        process.nextTick(function() {
+        // check if the user is already logged in
+            /* eslint-disable*/
+            users.findOne({ 'id' : profile.id }, function(err, user) {
+            /* eslint-enable*/
+            if (err)
+            {
+                    return done(err);
+                }
+                // if the user is found, then log them in
+                if (user) {
+                    return done(null, user); // user found, return that user
+                } else {
+                    // if there is no user found with that google id, create them
+                    var newUser = new users();
+                        /*eslint-enable */
+                        console.log(profile);
+                    newUser.id = profile.id;
+                    newUser.token = accessToken;
+                    newUser.email = profile.username+'@gmail.com';
+                    newUser.name =
+                    profile.username.toLowerCase().capitalize();
+                    newUser.photos = profile.profile_picture;
+                    newUser.authType = 'instagram';
+                    newUser.isnew = 'Y';
+                    newUser.save(function() {
+                        if (err)
+                        {
+                            return done(err);
+                        }
+                        return done(null, newUser);
+                    });
+                }
+            });
+    });
     }));
 
 

@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer');
 const cookie = require('react-cookie');
 let em = cookie.load('username');
 let neo4j = require('neo4j-driver').v1;
-let driver = neo4j.driver('bolt://192.168.1.101', neo4j.auth.basic('neo4j', '9455338161'));
+let driver = neo4j.driver('bolt://192.168.2.5', neo4j.auth.basic('neo4j', '9455338161'));
 let session = driver.session();
 let listController = {
 
@@ -89,7 +89,7 @@ let listController = {
         // logger.debug(req.body);
         /*eslint-disable*/
         let query = 'match (c:Concept), \
-                      (u:User {name:"Arun"}) \
+                      (u:User {name:'+req.body.email+'}) \
                       where c.name = "'+req.body.Concept+'" \
                       create (n:Question {Content:"'+req.body.statement+'",name:"'+req.body.heading+'"}), \
                       (n)-[:question_of]->(c), \
