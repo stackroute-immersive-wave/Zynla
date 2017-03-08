@@ -122,19 +122,15 @@ render() {
             <Button.Content visible><Icon name='google'/>Login With Google</Button.Content>
             </Button>
             </a>
-<<<<<<< HEAD
-
+            </div><br/><br/>
+            <div>
             <a href='users/auth/instagram'>
             <Button color='green' circular>
             <Button.Content visible><Icon name='instagram'/>Login With Instagram</Button.Content>
             </Button>
             </a>
-
-
-=======
           </div>
         </div>
->>>>>>> 39dc9fd9536651409955070d8d22162f235f4ff5
        </Grid>
 </Segment>
   </div>

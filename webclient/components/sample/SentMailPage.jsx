@@ -23,7 +23,7 @@ export default class SentMailPage extends React.Component {
                                 <Button circular style={{
                                     backgroundColor: 'white'
                                 }}>
-                                    <a href="#/"  style={{
+                                    <a href="#/" style={{
                                         color: 'black'
                                     }}>LOGIN</a>
                                 </Button>

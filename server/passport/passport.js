@@ -184,7 +184,7 @@ passport.use(new InstagramStrategy({
     clientID: '62be12ccaf0f431a8f8d5fbd150a54d1',
     clientSecret: '274b5123329d4283a7e65751d7b30d63',
     callbackURL: 'http://localhost:8080/users/auth/instagram/callback',
-    scopes        : ['likes'+'basic']
+    scopes: ['likes' + 'basic']
   },
   function(accessToken, refreshToken, profile, done) {
         process.nextTick(function() {
@@ -196,17 +196,18 @@ passport.use(new InstagramStrategy({
             {
                     return done(err);
                 }
+                /*  eslint-disable */
                 // if the user is found, then log them in
                 if (user) {
-                    return done(null, user); // user found, return that user
+                    return done(null, user);
                 } else {
                     // if there is no user found with that google id, create them
-                    var newUser = new users();
-                        /*eslint-enable */
-                        console.log(profile);
+                    let newUser = new users();
+                        /* eslint-enable */
+                        // console.log(profile);
                     newUser.id = profile.id;
                     newUser.token = accessToken;
-                    newUser.email = profile.username+'@gmail.com';
+                    newUser.email = profile.username + '@gmail.com';
                     newUser.name =
                     profile.username.toLowerCase().capitalize();
                     newUser.photos = profile.profile_picture;
