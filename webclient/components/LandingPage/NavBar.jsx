@@ -41,7 +41,8 @@ class NavBar extends Component {
         Concept: '',
         suggestedQuestions: [],
         allQuestionIntentArr: [],
-        questionIntent: ''
+        questionIntent: '',
+        selectedConcepts: []
     }
 
     componentWillMount() {
@@ -91,17 +92,30 @@ class NavBar extends Component {
     }
 
     updateHeading(evt) {
-        this.setState({heading: evt.target.value});
+      // gets the particular heading and gets the intent from that heading
+      this.setState({heading: evt.target.value});
+      let str = evt.target.value;
+      let arr = this.state.allQuestionIntentArr;
+      for(let i in arr) {
+        if(str.includes(arr[i])) {
+          this.setState({
+            questionIntent: arr[i]
+          });
+        }
+        else {
+          continue;
+        }
+      }
     }
-    updatestatement(evt) {
+    updateStatement(evt) {
+      // gets the statement and changes the state
         this.setState({statement: evt.target.value});
     }
 
     updateConcept(evt) {
-      // console.log("comes");
         let arr = [];
-        // console.log(evt.target.value);
         this.setState({Concept: evt.target.value});
+        // ajax call to get the concepts from the neo4j based on particular keywoard
         $.ajax({
             url: 'http://localhost:8080/list/getconcepts/',
             type: 'POST',
@@ -109,38 +123,35 @@ class NavBar extends Component {
               q: evt.target.value
             },
             success: function(data) {
-              // console.log('Successfully got array from neo4j' + data);
-               for(let i of data) {
-                // let keyvalue = i.substring(0, 2).toLowerCase();
-                 arr.push({key: i, value: i, text: i});
-                // arr.push(data[i]);
+               for(let i in data) {
+                 if(i !== null) {
+                    arr.push({key: data[i], value: data[i], text: data[i]});
+                 }
                }
-              //  console.log("After array editing " + arr);
                this.setState({
                  suggestedQuestions: arr
                });
             }.bind(this),
-           error: function(err) {
-             this.setState({
-               suggestedQuestions: err
-             });
-           }.bind(this)
+           error: function() {
+           }
       });
     }
 
     updateQuestionTags(evt, result) {
-      // console.log("INside update question tags");
-      this.submitstatement(result.value);
-      // console.log(result.value);
+      // gets the all question tags and stores in an array
+      this.setState({selectedConcepts: result.value});
     }
 
     submitStatement() {
         // ajax call after submitting the values which needed to be asked
+        let conceptArr = {};
+        conceptArr = JSON.stringify(this.state.selectedConcepts);
         let data = {
             email: Cookie.load('username'),
             heading: this.state.heading,
             statement: this.state.statement,
-            Concept: this.state.Concept
+            Concept: conceptArr,
+            intent: this.state.questionIntent
         };
         $.ajax({
             url: 'http://localhost:8080/list/addquestion',
@@ -226,34 +237,45 @@ class NavBar extends Component {
                                         <Container>
                                             <Form>
                                                 <Form.Field>
-                                                    <h2 style={{
-                                                        marginLeft: -940 + 'px',
-                                                        color: 'white'
-                                                    }}>
-                                                        ASK QUESTION :</h2>
+                                                  <h2 style={{
+                                                      marginBottom: 48 + 'px',
+                                                      fontSize: 30 + 'px',
+                                                      color: 'white'
+                                                  }}>
+                                                      ASK QUESTION </h2>
                                                 </Form.Field>
                                                 <Form.Field>
-                                                    <Input onChange={this.updateHeading.bind(this)}
-                                                       placeholder='Enter Description here ...'/>
+                                                  <Textarea
+                                                     onChange={this.updateHeading.bind(this)}
+                                                     rows='1'
+                                                     placeholder='Enter Description here...'
+                                                        style={{width: 700 + 'px'}}
+                                                    />
                                                 </Form.Field>
                                                 <Form.Field>
-                                                    <Textarea
-                                                       onChange={this.updatestatement.bind(this)}
-                                                       size='large'
-                                                        placeholder='Enter Statement here ...'/>
+                                                  <Textarea
+                                                     onChange={this.updateStatement.bind(this)}
+                                                     size='large'
+                                                      placeholder='Enter statement here ...'
+                                                     style={{ width: 700 + 'px',
+                                                        height: 150 + 'px'}}
+                                                    />
                                                 </Form.Field>
                                                 <Form.Field>
-                                                  <Dropdown placeholder='Enter tags...'
+                                                  <Dropdown placeholder='Enter concepte...'
                                                     onChange = {this.updateQuestionTags.bind(this)}
                                                     onKeyUp={this.updateConcept.bind(this)}
                                                     fluid multiple search selection
                                                     options={this.state.suggestedQuestions} />
                                                 </Form.Field>
                                                 <Form.Field>
+                                                  <div>
                                                     <Button primary size='large' type='submit'
                                                       value='Submit'
-                                                       onClick={this.submitStatement.bind(this)}>
-                                                       Submit</Button>
+                                                      onClick={this.submitStatement.bind(this)}
+                                                      style={{width: 200 + 'px'}}>
+                                                      Submit Question</Button>
+                                                   </div>
                                                 </Form.Field>
                                             </Form>
                                         </Container>
