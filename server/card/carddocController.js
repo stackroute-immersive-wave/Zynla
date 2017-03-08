@@ -1,5 +1,4 @@
-let neo4j = require('neo4j-driver').v1;
-let driver = neo4j.driver('bolt://192.168.1.101', neo4j.auth.basic('neo4j', '9455338161'));
+let driver = require('../config/neo4j');
 let session = driver.session();
 const Answer = require('./carddocEntity');
 

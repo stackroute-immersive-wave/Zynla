@@ -58,6 +58,7 @@ const schema = new mongoose.Schema({
     },
     topCards: [
         {
+            id: Number,
             createdBy: String,
             content: String,
             createdOn: String,

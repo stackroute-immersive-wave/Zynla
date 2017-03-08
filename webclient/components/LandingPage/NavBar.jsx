@@ -29,8 +29,7 @@ let style = {
 };
 let Style = {
     marginTop: '5px',
-    marginBottom: '5px',
-    float: 'left'
+    marginBottom: '5px'
 };
 
 class NavBar extends Component {
@@ -39,7 +38,10 @@ class NavBar extends Component {
         open: false,
         heading: '',
         statement: '',
-        Concept: ''
+        Concept: '',
+        suggestedQuestions: [],
+        allQuestionIntentArr: [],
+        questionIntent: ''
     }
 
     componentWillMount() {
@@ -94,8 +96,42 @@ class NavBar extends Component {
     updatestatement(evt) {
         this.setState({statement: evt.target.value});
     }
+
     updateConcept(evt) {
+      // console.log("comes");
+        let arr = [];
+        // console.log(evt.target.value);
         this.setState({Concept: evt.target.value});
+        $.ajax({
+            url: 'http://localhost:8080/list/getconcepts/',
+            type: 'POST',
+            data: {
+              q: evt.target.value
+            },
+            success: function(data) {
+              // console.log('Successfully got array from neo4j' + data);
+               for(let i of data) {
+                // let keyvalue = i.substring(0, 2).toLowerCase();
+                 arr.push({key: i, value: i, text: i});
+                // arr.push(data[i]);
+               }
+              //  console.log("After array editing " + arr);
+               this.setState({
+                 suggestedQuestions: arr
+               });
+            }.bind(this),
+           error: function(err) {
+             this.setState({
+               suggestedQuestions: err
+             });
+           }.bind(this)
+      });
+    }
+
+    updateQuestionTags(evt, result) {
+      // console.log("INside update question tags");
+      this.submitstatement(result.value);
+      // console.log(result.value);
     }
 
     submitStatement() {
@@ -159,6 +195,7 @@ class NavBar extends Component {
         if(!Cookie.load('email')) {
           Answerpage = require('./../error.jsx');
           Invite = require('./../error.jsx');
+          Questions = require('./../error.jsx');
           Profile = require('./../error.jsx');
         }
         // const {open, dimmer} = this.state;
@@ -172,7 +209,7 @@ class NavBar extends Component {
                               style={{'font-size': 20 + 'px'}}
                               id='divStyle' onClick={this.toggleVisibility}/>
                         </Grid.Column>
-                        <Grid.Column width={10}>
+                        <Grid.Column width={9}>
                             <Link to='/home'>
                                 <Image src='./../../image/logo.png' style={backImage} name='image'
                                  active= {activeItem === 'image'}
@@ -181,7 +218,7 @@ class NavBar extends Component {
                             <Input action='Search' style={Style}
                                placeholder='Search...' className='search'/>
                         </Grid.Column>
-                        <Grid.Column width={3}>
+                        <Grid.Column width={4}>
                             <Dimmer active={active}
                                onClickOutside={this.handleDimmerClose.bind(this)} page>
                                 <Header as='h2' icon>
@@ -206,8 +243,11 @@ class NavBar extends Component {
                                                         placeholder='Enter Statement here ...'/>
                                                 </Form.Field>
                                                 <Form.Field>
-                                                    <Input onChange={this.updateConcept.bind(this)}
-                                                       placeholder='Enter Concept here ...'/>
+                                                  <Dropdown placeholder='Enter tags...'
+                                                    onChange = {this.updateQuestionTags.bind(this)}
+                                                    onKeyUp={this.updateConcept.bind(this)}
+                                                    fluid multiple search selection
+                                                    options={this.state.suggestedQuestions} />
                                                 </Form.Field>
                                                 <Form.Field>
                                                     <Button primary size='large' type='submit'
