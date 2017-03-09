@@ -72,8 +72,20 @@ class NavBar extends Component {
     }
 
     handlePostQuestionClick() {
+      /*eslint-disable*/
+      let context = this;
+      /*eslint-enable*/
         if(Cookie.load('email')) {
           this.setState({active: true});
+          $.ajax({
+            url: 'http://localhost:8080/list/getQuestionIntent/',
+            type: 'GET',
+            success: function(res) {
+                context.setState({allQuestionIntentArr: res});
+            },
+            error: function() {
+            }
+        });
         }
         else {
           this.callAlert();
@@ -94,16 +106,18 @@ class NavBar extends Component {
     updateHeading(evt) {
       // gets the particular heading and gets the intent from that heading
       this.setState({heading: evt.target.value});
-      let str = evt.target.value;
-      let arr = this.state.allQuestionIntentArr;
-      for(let i in arr) {
-        if(str.includes(arr[i])) {
-          this.setState({
-            questionIntent: arr[i]
-          });
-        }
-        else {
-          continue;
+      let question = evt.target.value.toLowerCase();
+      let allQuestionIntents = this.state.allQuestionIntentArr;
+      for(let i in allQuestionIntents) {
+        if(i !== null) {
+          allQuestionIntents[i].toLowerCase();
+          if(allQuestionIntents[i].includes(question)) {
+            this.setState({questionIntent: allQuestionIntents[i]});
+            break;
+          }
+          else {
+            continue;
+          }
         }
       }
     }
@@ -146,6 +160,7 @@ class NavBar extends Component {
         // ajax call after submitting the values which needed to be asked
         let conceptArr = {};
         conceptArr = JSON.stringify(this.state.selectedConcepts);
+        // console.log("Inside submit statement question intent is " + this.state.questionIntent);
         let data = {
             email: Cookie.load('username'),
             heading: this.state.heading,
@@ -265,7 +280,7 @@ class NavBar extends Component {
                                                   <Dropdown placeholder='Enter concepte...'
                                                     onChange = {this.updateQuestionTags.bind(this)}
                                                     onKeyUp={this.updateConcept.bind(this)}
-                                                    fluid multiple search selection
+                                                    multiple search selection
                                                     options={this.state.suggestedQuestions} />
                                                 </Form.Field>
                                                 <Form.Field>

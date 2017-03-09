@@ -4,8 +4,7 @@ const nodemailer = require('nodemailer');
 // let host = 'localhost:8080';
 const cookie = require('react-cookie');
 let em = cookie.load('username');
-let neo4j = require('neo4j-driver').v1;
-let driver = neo4j.driver('bolt://192.168.1.194', neo4j.auth.basic('neo4j', '9455338161'));
+let driver = require('../config/neo4j');
 let session = driver.session();
 let listController = {
 
@@ -49,15 +48,32 @@ let listController = {
         });
     },
 
-    getQuestion: function(req, res) {
-        // console.log('Inside Ques get' + req.params.id);
-        List.find({id: req.params.id}).then((docs) => {
-            // console.log('inside route', JSON.stringify(docs));
-            res.send(docs);
-        }, (err) => {
-            res.send('Cant get the docs', err);
-        });
-    },
+    // getQuestion: function(req, res) {
+    //     // console.log('Inside Ques get' + req.params.id);
+    //     List.find({'id': req.params.id}).then((docs) => {
+    //         // console.log('inside route', JSON.stringify(docs));
+    //         res.send(docs);
+    //     }, (err) => {
+    //         res.send('Cant get the docs', err);
+    //     });
+    // },
+
+    getQuestionIntent: function(req, res) {
+     let questionIntentArr = [];
+     let query = 'match (q:QuestionIntent) return q.value;';
+     session.run(query).then(function(result) {
+       if(result) {
+         for(let x in result.records) {
+           if(x !== null) {
+            /* eslint-disable */
+              questionIntentArr.push(result.records[x]._fields[0]);
+              /* eslint-enable */
+           }
+         }
+       }
+       res.send(questionIntentArr);
+     });
+   },
 
     getconcepts: function(req, res) {
         let arr = [];
@@ -132,23 +148,26 @@ let listController = {
                     }
                 }
                 // query to post a question at a particular base tag
+                /*eslint-disable*/
                 let query = 'match (c:Concept), \
-                          (u:User {name:"Arun"}) \
-                          where c.name = "' + arr[max] + '" \
-                          create (n:Question {Content:"' + req.body.statement + '",name:"' + req.body.heading + '"}), \
-                          (n)-[:question_of{intent:"' + req.body.intent + '"}]->(c), \
-                          (u)-[:post {on : timestamp()}]->(n) \
-                          return n \
-                          ';
+                            (u:User {name:"Arun"}) \
+                            where c.name = "' + arr[max] + '" \
+                            create (n:Question {Content:"' + req.body.statement + '",name:"' + req.body.heading + '"}), \
+                            (n)-[:question_of{intent:"' + req.body.intent + '"}]->(c), \
+                            (u)-[:post {on : timestamp()}]->(n), \
+                            (l:Like {count:0}), \
+                            (dl:Unlike {count:0}), \
+                            (n)-[:has]->(l), \
+                            (n)-[:has]->(dl) \
+                            return n \
+                            ';
                 /*eslint-enable*/
                 session.run(query).then(function(result) {
-                    // logger.debug(result);
                     console.log(result.records);
                     if (result) {
                         /*eslint-disable*/
                         let id = result.records[0]._fields[0].identity.low;
                         /*eslint-enable*/
-                        // logger.debug(id);
                         let db = new List({
                             id: id,
                             category: req.body.Concept,
