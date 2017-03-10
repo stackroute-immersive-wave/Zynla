@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {
-    Input,
     Header,
     Container,
     Menu,
@@ -24,6 +23,7 @@ let Invite = require('./../Invite');
 let Profile = require('./../profile/NavBarpro');
 let Questions = require('./../answerbutton/questions.jsx');
 let Answerpage = require('./../cardAnswerPage/answerPage.jsx');
+let Search = require('./../search/search');
 let style = {
     height: 0
 };
@@ -42,7 +42,8 @@ class NavBar extends Component {
         suggestedQuestions: [],
         allQuestionIntentArr: [],
         questionIntent: '',
-        selectedConcepts: []
+        selectedConcepts: [],
+        searchQuery: ''
     }
 
     componentWillMount() {
@@ -156,6 +157,13 @@ class NavBar extends Component {
       this.setState({selectedConcepts: result.value});
     }
 
+    updatesearchQuery(evt, result) {
+      let res = result.value.toString();
+      this.setState({
+        searchQuery: res
+      });
+    }
+
     submitStatement() {
         // ajax call after submitting the values which needed to be asked
         let conceptArr = {};
@@ -241,8 +249,14 @@ class NavBar extends Component {
                                  active= {activeItem === 'image'}
                                   onClick={this.handleItemClick} className='logosize'/>
                             </Link>
-                            <Input action='Search' style={Style}
-                               placeholder='Search...' className='search'/>
+                            <Dropdown className = "navSearch" placeholder='Search...'
+                              onChange = {this.updatesearchQuery.bind(this)}
+                              onKeyUp={this.updateConcept.bind(this)}
+                              multiple search selection
+                              options={this.state.suggestedQuestions} />
+                            <Link to = {'/search?question=' + this.state.searchQuery}>
+                            <Button>Search</Button>
+                            </Link>
                         </Grid.Column>
                         <Grid.Column width={4}>
                             <Dimmer active={active}
@@ -359,6 +373,7 @@ class NavBar extends Component {
                                 <Route path='/answer' component={Questions}/>
                                 <Route path='/answerPage' component={Answerpage}/>
                                 <Route path='/profile' component={Profile}/>
+                                <Route path='/search' component={Search}/>
                             </Router>
                         </Segment>
                     </Sidebar.Pusher>

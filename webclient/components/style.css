@@ -90,7 +90,7 @@ transition: opacity .4s ease-in-out;
 }
 
 .margin {
-    
+
     color: #B2242E
 ;
 
@@ -190,4 +190,9 @@ transition: opacity .4s ease-in-out;
 }
 .viewIcon {
     margin-left: 20px !important;
+}
+
+.navSearch {
+  margin-top: 8px;
+  margin-left: 30px;
 }

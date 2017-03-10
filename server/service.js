@@ -25,6 +25,7 @@ function setupRestRoutes(app) {
   app.use('/userdoc', require(path.join(__dirname, './userdoc')));
   app.use('/answers', require(path.join(__dirname, './card')));
   app.use('/invite', require(path.join(__dirname, './invite')));
+  app.use('/search', require(path.join(__dirname, './search')));
   // app.use('/resturant', require(path.join(__dirname, './resturant')));
   //  MOUNT YOUR REST ROUTE HERE
   //  Eg:
