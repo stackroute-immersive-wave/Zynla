@@ -2,6 +2,7 @@ let React = require('react');
 let {hashHistory} = require('react-router');
 import {Button, Grid, Icon, Form, Segment } from 'semantic-ui-react';
 import validator from 'validator';
+// import graph from 'fbgraph';
 import $ from 'jquery';
 
 class Login extends React.Component {
@@ -10,8 +11,6 @@ class Login extends React.Component {
        this.state =
        {
         open: true,
-        openSnackbar: false,
-        snackbarMsg: '',
         erroremail: false,
         errormessageemail: '',
         email: '',
@@ -56,10 +55,17 @@ class Login extends React.Component {
 //   }
 // });
 // }
+//   inviteFriends()
+//   {
+//   let wallPost = {
+//   message: 'I a;m gonna come at you like a spider monkey, chip!'
+// };
 
-    onSubmitLoginData(e, value) {
+// graph.post('Srinivaaas' + "/feed", wallPost, function(err, res) {
+  // returns the post id
+  // console.log(res);
+    onSubmitLoginData(value) {
         // console.log(value.formData);
-        e.preventDefault();
         $.ajax({
                 url: 'http://localhost:8080/users/login',
                 type: 'POST',
@@ -71,9 +77,10 @@ class Login extends React.Component {
                     // console.log('gggggggggggggg');
                     hashHistory.push('/home');
                 },
-                error: function(err) {
-                    this.setState({openSnackbar: true, snackbarMsg: err.responseText});
-                }.bind(this)
+                error: function() {
+                  // console.log(err);
+                    // this.setState({openSnackbar: true, snackbarMsg: err.responseText});
+                }
             });
     }
 

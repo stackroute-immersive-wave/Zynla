@@ -103,8 +103,8 @@ function(req, token, refreshToken, profile, done) {
                 if (user) {
                     return done(null, user); // user found, return that user
                 } else {
-                    // if there is no user found with that google id, create them
-                    var newUser = new users();
+                    // if there is no user found with that google email, create them
+                   var newUser = new users();
                         /*eslint-enable */
                     newUser.id = profile.id;
                     newUser.token = token;

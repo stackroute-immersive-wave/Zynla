@@ -11,27 +11,30 @@ export default class SentMailPage extends React.Component {
     }
     render() {
         return (
-                <Grid container={'true'} centered={'true'}>
-                    <Grid.Row/>
+            <div id="mount">
+                <img src="./../../image/Zynla.png" className="imagePosition" />
+                <Grid container>
                     <Grid.Row>
-                        <Grid.Column width={2}>
-                            <h1 id="genie">Zynla</h1>
-                        </Grid.Column>
+                        <Grid.Column width={2}/>
                         <Grid.Column width={9}/>
                         <Grid.Column width={5}>
-                            <h2>
+                            <h2 style={{
+                                    marginTop: -80 + 'px'
+                                }}>
                                 <Button circular style={{
-                                    backgroundColor: 'white'
+                                    backgroundColor: 'grey'
                                 }}>
                                     <a href="#/" style={{
-                                        color: 'black'
+                                        color: 'white'
                                     }}>LOGIN</a>
                                 </Button>
-                                &nbsp;&nbsp;<Button className="buttonsignin" circular style={{
-                backgroundColor: 'white'
-            }}>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <Button circular style={{
+                                    backgroundColor: 'grey',
+                                    marginLeft: 30 + 'px'
+                                }}>
                                     <a href="#/signup" style={{
-                                        color: 'black'
+                                        color: 'white'
                                     }}>SIGNUP</a>
                                 </Button>
                             </h2>
@@ -69,6 +72,7 @@ export default class SentMailPage extends React.Component {
                     <Grid.Row/>
                     <Grid.Row/>
                 </Grid>
+            </div>
         );
     }
 }

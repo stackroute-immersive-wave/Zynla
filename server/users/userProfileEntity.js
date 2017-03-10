@@ -9,6 +9,7 @@ const schema = new mongoose.Schema({
       required: true
     },
     profile: {
+      name: String,
       picture: String,
       description: String,
       dob: String,

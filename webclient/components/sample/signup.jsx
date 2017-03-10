@@ -1,6 +1,6 @@
 import React from 'react';
 import {hashHistory} from 'react-router';
-import {Button, Modal, Dimmer, Header} from 'semantic-ui-react';
+import {Button, Modal, Dimmer, Header, Loader} from 'semantic-ui-react';
 import {Form} from 'semantic-ui-react';
 import validator from 'validator';
 import Axios from 'axios';
@@ -9,8 +9,6 @@ export default class Signup extends React.Component {
     {
         super();
         this.state = {
-          openSnackbar: false,
-            snackbarMsg: '',
             opendimmer: false,
             emailId: '',
             userexists: '',
@@ -42,57 +40,43 @@ export default class Signup extends React.Component {
     handleClose = () => this.setState({ active: false })
 
     close = () => hashHistory.push('/');
-    // email verification link
-    sentemail(email) {
-        Axios({
-            url: ' http://localhost:8080/users/send',
-            method: 'post',
-            data: {
-                data: email
-              }
-            }).then(function() {
-                hashHistory.push('/mail');
-            }).catch(function() {
-                Axios({
-                    url: ' http://localhost:8080/users/deleteuser',
-                    method: 'delete',
-                    data: {
-                        data: email
-                      }
-                      }).then(function() {
-                          hashHistory.push('/mailnotsend');
-                      }).catch(function() {
-                        // console.log('error');
-                      });
-            });
-        }
+
     // new user signup
     onRegisterUser(e, value) {
-      e.preventDefault();
+      // e.preventDefault();
       if(value.formData.password === value.formData.repassword)
         {
           this.setState({opendimmer: true});
-          Axios({
+          $.ajax({
             url: 'http://localhost:8080/users/signup',
             method: 'post',
-            data: value.formData
-          }).then(function() {
-
-          }).catch(function() {
-
+            data: value.formData,
+            success: function(dataEmail) {
+            $.ajax({
+            url: ' http://localhost:8080/users/send',
+            method: 'post',
+            data: {
+                data: dataEmail.email
+              },
+              success: function() {
+                    hashHistory.push('/mail');
+                },
+            error: function() {
+                  // console.log(err);
+                    // this.setState({openSnackbar: true, snackbarMsg: err.responseText});
+                }
+            });
+                },
+                error: function() {
+                  // console.log(err);
+                    // this.setState({openSnackbar: true, snackbarMsg: err.responseText});
+                }
           });
-          this.sentemail(value.formData.email);
-        }
-        else{
-             this.setState({openSnackbar: true, snackbarMsg: 'check password field'});
         }
   }
-  // handleRequestClose = () => {
-  //         this.setState({openSnackbar: false});
-  //     };
 
     // validation for firstname
-    ChangeFirst = (event) => {
+    changeFirst = (event) => {
         this.setState({firstname: event.target.value});
         if (validator.isAlpha(event.target.value)) {
             this.setState({errorfirst: false});
@@ -103,7 +87,7 @@ export default class Signup extends React.Component {
         }
     }
     // validation for lastname
-    ChangeLast = (event) => {
+    changeLast = (event) => {
         this.setState({lastname: event.target.value});
         if(this.state.lastname.length > 0) {
             if (validator.isAlpha(event.target.value)) {
@@ -116,7 +100,7 @@ export default class Signup extends React.Component {
         }
     }
     // validation for email
-    ChangeEmail = (event) => {
+    changeEmail = (event) => {
         this.setState({email: event.target.value});
         // console.log(event.target.value);
         // check whether the user is alreay exists or not
@@ -161,7 +145,7 @@ export default class Signup extends React.Component {
       }
     }
     // validation for password
-    ChangePassword = (event) => {
+    changePassword = (event) => {
         this.setState({password: event.target.value});
         // console.log(event.target.value)
         let points = event.target.value.length;
@@ -182,7 +166,7 @@ export default class Signup extends React.Component {
         }
     }
     // validation for confirmpassword
-    ChangeRepassword = (event) => {
+    changeRepassword = (event) => {
         this.setState({repassword: event.target.value});
           if(event.target.value.length > 2) {
             if (validator.equals(event.target.value, this.state.password)) {
@@ -211,34 +195,34 @@ render() {
         <Form onSubmit={this.onRegisterUser}>
         <Form.Field>
         <Form.Input label='First Name' name='firstName' placeholder=
-        'First Name' type='text' onChange={this.ChangeFirst}
+        'First Name' type='text' onChange={this.changeFirst}
         error={this.state.errorfirst} required/>
         <p style={{color: 'red'}}>{this.state.errormessagefirst}</p>
         </Form.Field>
         <Form.Field>
         <Form.Input label='Last Name' id="input" name="lastName"
         placeholder='Last Name' type='text' onChange=
-        {this.ChangeLast.bind(this)} error={this.state.errorlast}/>
+        {this.changeLast.bind(this)} error={this.state.errorlast}/>
         <p style={{color: 'red'}}>{this.state.errormessagelast}</p>
         </Form.Field>
         <Form.Field>
         <Form.Input label='Email' id="to" name="email"
         placeholder='Email-ID' type='text'
-        onChange={this.ChangeEmail.bind(this)}
+        onChange={this.changeEmail.bind(this)}
         error={this.state.erroremail} required/>
         <p style={{color: 'red'}}>{this.state.errormessageemail}</p>
         <p style={{color: 'red'}}>{this.state.userexists}</p>
         </Form.Field>
         <Form.Field>
         <Form.Input label='Password' id="input" name="password"
-        placeholder='Password' type='password' onChange={this.ChangePassword.bind(this)}
+        placeholder='Password' type='password' onChange={this.changePassword.bind(this)}
         error={this.state.errorpassword} required/>
         <p style={{color: 'red'}}>{this.state.errormessagepassword}</p>
         </Form.Field>
         <Form.Field>
         <Form.Input label='Confirm Password' id="input" name="repassword"
         type='password' placeholder='Confirm Password'
-        onChange={this.ChangeRepassword.bind(this)} error={this.state.errorrepassword} required/>
+        onChange={this.changeRepassword.bind(this)} error={this.state.errorrepassword} required/>
         <p style={{color: 'red'}}>{this.state.errormessage}</p>
         </Form.Field>
         <Button type = 'submit' onClick={this.handleOpen}
@@ -252,6 +236,7 @@ render() {
                  page>
 
                 <Header as='h2' icon inverted>
+                <Loader active inline />
                    <Header.Subheader><h3>Verification mail Sending......
                    </h3></Header.Subheader>
                  </Header>
