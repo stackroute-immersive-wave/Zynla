@@ -22,13 +22,14 @@ class DisplayHomePageCard extends React.Component {
                   heading={item.heading} question={item.question} postedBy={item.postedBy}
                   addedOn={item.addedOn} category={item.category} upVotes={item.upVotes}
                   downVotes={item.downVotes} answerCounts={item.answerCounts} views={item.views}
+                  profileImage={item.profileImage}
                 />
               </Grid.Column>
 
             );
         });
         return (
-          <Packery
+          <Packery className = {'my-gallary-class'}
             elementType={'div'} options={packeryOptions} className = 'packery'>
               {Data}
             </Packery>

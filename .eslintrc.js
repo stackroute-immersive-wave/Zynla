@@ -178,7 +178,7 @@ module.exports = {
     "no-ternary": 0, // disallow the use of ternary operators (off by default)
     "no-trailing-spaces": 1, // disallow trailing whitespace at the end of lines
     "no-underscore-dangle": 1, // disallow dangling underscores in identifiers
-    "no-extra-parens": 1, // disallow wrapping of non-IIFE statements in parens
+    // "no-extra-parens": 1, // disallow wrapping of non-IIFE statements in parens
     "one-var": [1, "never"], // allow just one var statement per function (off by default)
     "operator-assignment": [1, "never"], // require assignment operator shorthand where possible or prohibit it entirely (off by default)
     "padded-blocks": [1, "never"], // enforce padding within blocks (off by default)

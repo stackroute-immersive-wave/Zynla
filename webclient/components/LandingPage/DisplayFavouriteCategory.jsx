@@ -56,17 +56,18 @@ class DisplayFavouriteCategory extends React.Component {
             );
         });
         return (
-          <div className = 'favbg'>
-            <Grid centered>
-                <Grid.Column width={2} className='arrowsize'>
+          <div>
+
+            <Grid centered >
+                <Grid.Column width={1} className='arrowsize'>
                     <Icon name='chevron left' onClick={this.changeStartLeft.bind(this)}/>
                 </Grid.Column>
-                <Grid.Column width={6} centered>
-                    <Grid centered columns={4}>
+                <Grid.Column width={8} centered >
+                    <Grid centered columns={4} >
                         {Data}
                     </Grid>
                 </Grid.Column>
-                <Grid.Column width={2} className='arrowsize'>
+                <Grid.Column width={3} className='arrowsize'>
                     <Icon name='chevron right' onClick={this.changeStartRight.bind(this)}/>
                 </Grid.Column>
             </Grid>

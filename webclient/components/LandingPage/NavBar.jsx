@@ -3,7 +3,6 @@ import {
     Header,
     Container,
     Menu,
-    Segment,
     Sidebar,
     Accordion,
     Grid,
@@ -23,7 +22,7 @@ let Invite = require('./../Invite');
 let Profile = require('./../profile/NavBarpro');
 let Questions = require('./../answerbutton/questions.jsx');
 let Answerpage = require('./../cardAnswerPage/answerPage.jsx');
-let Search = require('./../search/search');
+
 let style = {
     height: 0
 };
@@ -344,8 +343,9 @@ class NavBar extends Component {
                         </Grid.Column>
                     </Grid>
                 </Menu>
-
-                <Sidebar.Pushable as={Segment}>
+                <Grid>
+                    <Grid.Column width={2}>
+                <Sidebar.Pushable as={Grid}>
                     <Sidebar as={Menu} animation='scale down' width='thin'
                        visible={visible} icon='labeled' vertical id='divStyle'>
 
@@ -365,19 +365,18 @@ class NavBar extends Component {
                             </Accordion.Title>
                         </Accordion>
                     </Sidebar>
-                    <Sidebar.Pusher onClick={this.toggleSideBar.bind(this)}>
-                        <Segment basic>
-                            <Router history={hashHistory}>
-                                <Route path='/home' component={Cards}/>
-                                <Route path='/invite' component={Invite}/>
-                                <Route path='/answer' component={Questions}/>
-                                <Route path='/answerPage' component={Answerpage}/>
-                                <Route path='/profile' component={Profile}/>
-                                <Route path='/search' component={Search}/>
-                            </Router>
-                        </Segment>
-                    </Sidebar.Pusher>
-                </Sidebar.Pushable>
+                  </Sidebar.Pushable>
+              </Grid.Column>
+              <Grid.Column width={14}>
+              <Router history={hashHistory}>
+                  <Route path='/home' component={Cards}/>
+                  <Route path='/invite' component={Invite}/>
+                  <Route path='/answer' component={Questions}/>
+                  <Route path='/answerPage' component={Answerpage}/>
+                  <Route path='/profile' component={Profile}/>
+              </Router>
+            </Grid.Column>
+          </Grid>
             </div>
         );
     }

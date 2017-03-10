@@ -67,9 +67,6 @@ transition: opacity .4s ease-in-out;
     background-color: blue;
 }
 
-.border {
-    border-radius: 30%;
-}
 .profileColor{
     color:  #be252a;
 }
@@ -83,19 +80,81 @@ transition: opacity .4s ease-in-out;
     font-weight: bold;
     margin-left: 20px;
 }
+.spacing {
+  padding-top: 10px;
+  }
 
+.spacing.margin{
+ font-size: 100px;
+}
+#iconColor{
+  background-color: #be252a !important;
+  color: white !important;
+}
+.CardSegment{
+ /*originLeft: false;
+ originTop: false;*/
+width: 250px;
+border: 2px solid smokegrey;
+box-shadow: 5px 5px 5px rgba(34, 25, 25, 0.4);
+transition: opacity .4s ease-in-out;
+margin-right: 25px;
+margin-bottom: 15px;
+}
+.PaddingCards{
+  padding-top: 9px;
+  padding-left: 9px;
+  padding-right: 9px;
+}
+#PaddingCards1{
+  padding-left: 9px;
+  padding-right: 9px;
+}
+.PaddingCardsBottom{
+  margin-top: -7px;
+  padding-left: 9px;
+  padding-right: 9px;
+  margin-bottom: -4px;
+}
+#font{
+  font-family: Georgia, serif;
+  letter-spacing: 1px;
+  word-spacing: 2px;
+  color:black;
+}
+.imgsize {
+width: 250px;
+}
+#iconColor{
+  background-color: #be252a !important;
+  color: white !important;
+}
+.favimgsize {
+   height: 150px;
+   width: 150px !important;
+   margin-bottom: 25px;
+   margin-top: 25px;
+}
+.border {
+   border-radius: 30%;
+}
+.LinkColor {
+   color: #be252a !important;
+}
+.arrowsize {
+   height: 60px;
+   width: 60px;
+   margin-top: 90px;
+   margin-left: 20px;
+}s
+.item {
+   /*z-index: 10;*/
+   padding-top: 5px;
+}
 .margin1 {
     float: left;
     color: teal;
 }
-
-.margin {
-
-    color: #B2242E
-;
-
-}
-
 .checkmark {
     margin-left: -20px;
 }
@@ -104,44 +163,10 @@ transition: opacity .4s ease-in-out;
     color: "#01541e";
 }
 
-#space {
-    margin-left: 30px;
-    padding-right: 10px;
-}
 
 #textsize {
     font-family: Georgia, serif;
     font-size: 16px;
-}
-
-#textheader {
-    font-family: Georgia, serif;
-    font-size: 19px;
-}
-
-.clr {
-    padding-left: 10px;
-    color: blue !important;
-}
-
-.spacing {
-    margin-top: 9px;
-    margin-left: 4px;
-    margin-right: 4px;
-
-}
-
-.spacing.margin{
-  font-size: 100px;
-}
-.imgsize {
-    height: 150px;
-    width: 500px;
-}
-
-.favimgsize {
-    height: 60px;
-    width: 60px;
 }
 
 .logosize {
@@ -165,33 +190,10 @@ transition: opacity .4s ease-in-out;
     margin-right: 10px;
 }
 
-.space1 {
-    margin-left: 20px !important;
-}
-
-.BtnClr {
-  margin-left: 100px;
-}
-
 .search {
     padding-left: 50px;
     width: 550px !important;
 }
-
-.item {
-    z-index: 10;
-    padding-top: 5px;
-}
-
-.arrowsize {
-    height: 40px;
-    width: 40px;
-    margin-top: 20px;
-}
-.viewIcon {
-    margin-left: 20px !important;
-}
-
 .navSearch {
   margin-top: 8px;
   margin-left: 30px;
