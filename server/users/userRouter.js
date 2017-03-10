@@ -23,7 +23,7 @@ router.get('/logout', userController.logOut);
 router.put('/saveToProfile', userController.saveToProfile);
 
 // Get the user Following List
-router.get('/viewFollowCard', userController.viewFollowCard);
+router.get('/viewFollowCard/:emailId', userController.viewFollowCard);
 
 // Get the folloeing category
 router.get('/', userController.viewFav);

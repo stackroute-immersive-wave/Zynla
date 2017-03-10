@@ -337,12 +337,14 @@ googleCallBack: function(req, res) {
     },
     /* To view the following card*/
     viewFollowCard: function(req, res) {
-      UserProfile.find().then((docs) => {
-          res.send(docs);
-      }, (err) => {
-          res.send(err);
-      });
-    },
+         let emailId = req.params.emailId;
+         console.log(emailId);
+       UserProfile.find({"emailId":emailId}).then((docs) => {
+           res.send(docs);
+       }, (err) => {
+           res.send(err);
+       });
+     },
     /* Getting all the following category cards*/
     viewFav: function(req, res) {
         UserProfile.find().then((docs) => {

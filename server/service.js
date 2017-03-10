@@ -137,6 +137,12 @@ function setupMongooseConnections() {
     });
   });
 }
+function setupRedisStore() {
+  let redisData = require('./redis/redisData.js');
+redisData.getConceptFromNeo4j();
+redisData.getIntentFromNeo4j();
+redisData.getQuestionFromNeo4j();
+}
 
 // App Constructor function is exported
 module.exports = {
@@ -145,5 +151,6 @@ module.exports = {
   setupRestRoutes: setupRestRoutes,
   setupMiddlewares: setupMiddlewares,
   setupMongooseConnections: setupMongooseConnections,
+  setupRedisStore: setupRedisStore,
   setupWebpack: setupWebpack
 };
