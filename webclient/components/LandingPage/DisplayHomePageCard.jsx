@@ -28,7 +28,7 @@ class DisplayHomePageCard extends React.Component {
             );
         });
         return (
-          <Packery className = {'my-gallary-class'}
+          <Packery
             elementType={'div'} options={packeryOptions} className = 'packery'>
               {Data}
             </Packery>
