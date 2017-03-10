@@ -170,6 +170,7 @@ class NavBar extends Component {
         // console.log("Inside submit statement question intent is " + this.state.questionIntent);
         let data = {
             email: Cookie.load('username'),
+            profilepicture: Cookie.load('profilepicture'),
             heading: this.state.heading,
             statement: this.state.statement,
             Concept: conceptArr,

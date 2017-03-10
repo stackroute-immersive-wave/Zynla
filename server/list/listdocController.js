@@ -124,6 +124,16 @@ let listController = {
         let arr = [];
         let c = 0;
         let max = 0;
+        let imagesArray = [
+          'http://www.consagous.com/wp-content/uploads/2016/03/semantic-ui.png',
+          'http://jsforcats.com/images/console-replace.gif',
+          'https://avatars.githubusercontent.com/u/5067638?v=3',
+          'https://avatars1.githubusercontent.com/u/14251478?v=3&s=88',
+          'https://avatars2.githubusercontent.com/u/3317125?v=3&s=88',
+          'https://avatars1.githubusercontent.com/u/7304827?v=3&s=88',
+          'https://avatars1.githubusercontent.com/u/13505139?v=3&s=88'
+        ];
+        let randomNumber = Math.floor(Math.random() * imagesArray.length);
         // query to get all the concepts and find the base concept from the input provided
         let query1 = 'match (c:Concept) return c.name;';
         session.run(query1).then(function(result) {
@@ -174,6 +184,8 @@ let listController = {
                             tags: req.body.Concept,
                             heading: req.body.heading,
                             question: req.body.statement,
+                            displayImage: imagesArray[randomNumber],
+                            profileImage: req.body.profilepicture,
                             addedOn: new Date().getTime(),
                             upVotes: '0',
                             downVotes: '0',
