@@ -2,7 +2,7 @@
   "name": "Zynla",
   "version": "1.0.0",
   "scripts": {
-    "test": "mocha $(find server/test -name '*.js')",
+    "test": "mocha",
     "wpbuild": "node ./node_modules/webpack/bin/webpack.js",
     "gbuild": "gulp lint",
     "clean": "gulp clean",

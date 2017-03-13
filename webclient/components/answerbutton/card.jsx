@@ -8,7 +8,9 @@ import {
    Icon,
    Menu,
    Modal,
-   Form
+   Form,
+   Dimmer,
+   Loader
 } from 'semantic-ui-react';
 import {TextArea} from 'semantic-ui-react';
 import RichTextEditor from 'react-rte';
@@ -31,10 +33,14 @@ class QueCard extends React.Component {
         };
         this.textVal = this.textVal.bind(this);
         this.postAnswer = this.postAnswer.bind(this);
+        this.handleOpenLoader = this.handleOpenLoader.bind(this);
+        this.handleCloseLoader = this.handleCloseLoader.bind(this);
     }
     // functions to maintain modal states
     open = () => this.setState({ open: true });
     close = () => this.setState({ open: false, modalStatus: false });
+    handleOpenLoader() {this.setState({ active: true });}
+    handleCloseLoader() {this.setState({ active: false });}
     modalOpen() {
        this.setState({ modalStatus: true });
      }
@@ -56,6 +62,7 @@ class QueCard extends React.Component {
     postAnswer() {
       // console.log('inside post Answer');
       // answer data to be stored
+      this.handleOpenLoader();
       let ansdata = {
           questionId: this.props.id,
           mail: Cookie.load('email'),
@@ -128,6 +135,7 @@ class QueCard extends React.Component {
 //    // console.log('display states',this.state.follows);
 // }
     getSuggQueArray(arr) {
+      this.handleCloseLoader();
       this.setState({questionLists: arr});
     }
     linkAnswer() {
@@ -157,9 +165,13 @@ class QueCard extends React.Component {
     }
     render() {
         const { open } = this.state;
+        const { active } = this.state;
         // card component which contains dynamic data
         return (
             <div>
+                <Dimmer active={active} page>
+                  <Loader>Fetching Related Questions</Loader>
+                </Dimmer>
                 <Card fluid>
                     <Card.Content extra>
                         <Image className='imageAns' floated='left'

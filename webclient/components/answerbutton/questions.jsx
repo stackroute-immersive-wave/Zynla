@@ -5,7 +5,9 @@ import {
     Grid,
     Divider,
     Icon,
-    Breadcrumb
+    Breadcrumb,
+    Dimmer,
+    Loader
 } from 'semantic-ui-react';
 import QueCards from './cardsCollection.jsx';
 // suggested questions display page
@@ -17,7 +19,11 @@ class Questions extends React.Component {
             objArray: []
         };
         this.getQuestions = this.getQuestions.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
+    handleOpen() {this.setState({ active: true });}
+    handleClose() {this.setState({ active: false });}
 //     getInitialState(){
 //   return {
 //     objArray :[]
@@ -26,12 +32,14 @@ class Questions extends React.Component {
     // function to get questions from database
     getQuestions() {
       // console.log('inside getquestions');
+      this.handleOpen();
         $.ajax({
             url: 'http://localhost:8080/list/',
             type: 'GET',
             success: function(data) {
                 // console.log(JSON.stringify(data, undefined, 2));
                 this.setState({objArray: data});
+                this.handleClose();
             }.bind(this),
             error: function() {
                 // console.log('error occurred on AJAX');
@@ -45,7 +53,12 @@ class Questions extends React.Component {
     }
 // display question component
     render() {
+        const { active } = this.state;
         return (
+          <div>
+            <Dimmer active={active} page>
+            <Loader>Fetching Questions</Loader>
+          </Dimmer>
             <Grid divided='vertically'>
                 <Grid.Row columns={3}>
                     <Grid.Column width={2}/>
@@ -68,6 +81,7 @@ class Questions extends React.Component {
                     <Grid.Column width={2}/>
                 </Grid.Row>
             </Grid>
+          </div>
         );
     }
 }

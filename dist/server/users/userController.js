@@ -471,6 +471,22 @@ displayCatagory: function(req, res) {
               });
             }
         });
+    },
+    getAllUserName: function(req, res) {
+        User.find(function(err, docs) {
+          let names=[];
+          let len=docs.length;
+            if (err) {
+                res.send('Error:' + err);
+            } else {
+
+              for(let i=0;i<len;i=i+1)
+                {
+              names.push({name:docs[i].name,email:docs[i].email});
+            }
+                res.send(names);
+            }
+        });
     }
 }
 

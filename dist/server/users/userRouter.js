@@ -10,6 +10,7 @@ router.post('/login', passport.authenticate('local', {failureRedirect: '/'}),
 
 // Delete a user based on :id
 router.post('/send', userController.sendEmail);
+router.get('/getAllUserName', userController.getAllUserName);
 
 // Update a user based on :id
 router.post('/signup', userController.signUp);
