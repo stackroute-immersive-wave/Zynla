@@ -3,13 +3,12 @@ import {
     Header,
     Container,
     Menu,
-    Sidebar,
-    Accordion,
     Grid,
     Image,
     Button,
     Dropdown,
     Dimmer,
+    Popup,
     Form
 } from 'semantic-ui-react';
 import {Link} from 'react-router';
@@ -220,12 +219,12 @@ class NavBar extends Component {
     }
 
     render() {
-        const {visible} = this.state;
+        // const {visible} = this.state;
         const {activeItem} = this.state;
         const {active} = this.state;
-        const backImage = {
-            image: Cookie.load('profilepicture')
-        };
+        // const backImage = {
+        //     image: Cookie.load('profilepicture')
+        // };
         if(!Cookie.load('email')) {
           Answerpage = require('./../error.jsx');
           Invite = require('./../error.jsx');
@@ -237,18 +236,15 @@ class NavBar extends Component {
             <div style={style}>
                 <Menu secondary id='divStyle'>
                     <Grid>
-                        <Grid.Column width={3}>
+                      <Grid.Column width={2}>
 
-                            <Menu.Item icon='list' active={activeItem === 'menu'}
-                              style={{'font-size': 20 + 'px'}}
-                              id='divStyle' onClick={this.toggleVisibility}/>
-                        </Grid.Column>
-                        <Grid.Column width={9}>
-                            <Link to='/home'>
-                                <Image src='./../../image/logo.png' style={backImage} name='image'
-                                 active= {activeItem === 'image'}
-                                  onClick={this.handleItemClick} className='logosize'/>
-                            </Link>
+                         <Link to='/home'>
+                             <Image src='./../../image/logo.png'
+                             name='image' active= {activeItem === 'image'}
+                             onClick={this.handleItemClick} className='logosize'/>
+                         </Link>
+                     </Grid.Column>
+                     <Grid.Column width={11}>
                             <Dropdown className = "navSearch" placeholder='Search...'
                               onChange = {this.updatesearchQuery.bind(this)}
                               onKeyUp={this.updateConcept.bind(this)}
@@ -258,7 +254,7 @@ class NavBar extends Component {
                             <Button>Search</Button>
                             </Link>
                         </Grid.Column>
-                        <Grid.Column width={4}>
+                        <Grid.Column width={3}>
                             <Dimmer active={active}
                                onClickOutside={this.handleDimmerClose.bind(this)} page>
                                 <Header as='h2' icon>
@@ -329,55 +325,47 @@ class NavBar extends Component {
                                     <Menu.Item name='Profile' active={activeItem === 'Profile'}
                                        id='divStyle' onClick={this.handleItemClick}/>
                                 </Link>
-                                <Dropdown icon='user' style={backImage}
-                                  active={activeItem === 'friends'}
-                                   id='divStyle'
-                                   onClick={this.handleItemClick}
-                                   floating labeled button className='icon'>
-                                    <Dropdown.Menu>
-                                        <Image src={Cookie.load('profilepicture')} alt='img'/>
-                                        <span className='profileColor'>
-                                            {Cookie.load('username')}</span>
-                                    </Dropdown.Menu>
-                                </Dropdown>
+                                <Popup wide trigger={< Button icon='user' id='divStyle'
+                                  />} on='click' position='bottom left'
+                                  hideOnScroll>
+                                  <div>
+                                   <Grid >
+                                     <Grid.Column width={5}>
+                                       <Image src={Cookie.load('profilepicture')}
+                                       className='profileImageSize' alt='img'/>
+                                     </Grid.Column>
+                                     <Grid.Column >
+                                       <p className='profileColor'>
+                                           {Cookie.load('username')}</p>
+                                           <div>
+                                           <Link to='/logout'>
+                                               <Menu.Item name='Logout'
+                                                 active={activeItem === 'Logout'}
+                                                  onClick={this.handleItemClick}/>
+                                           </Link>
+                                           </div>
+                                     </Grid.Column>
+                                   </Grid>
+                                 </div>
+                                 </Popup>
                             </Menu.Menu>
                         </Grid.Column>
                     </Grid>
                 </Menu>
                 <Grid>
-                    <Grid.Column width={2}>
-                <Sidebar.Pushable as={Grid}>
-                    <Sidebar as={Menu} animation='scale down' width='thin'
-                       visible={visible} icon='labeled' vertical id='divStyle'>
+                     <Grid.Column width={1}/>
+                     <Grid.Column width={14}>
+                         <Router history={hashHistory}>
+                             <Route path='/home' component={Cards} />
+                             <Route path='/invite' component={Invite} />
+                             <Route path='/answer' component={Questions} />
+                             <Route path='/answerPage' component={Answerpage} />
+                             <Route path='/profile' component={Profile} />
+                         </Router>
+                           <Grid.Column width={1}/>
+                     </Grid.Column>
 
-                        <Accordion>
-                            <Accordion.Title >
-                                <h5 className = 'sidebarFontColor'>Categories</h5>
-                            </Accordion.Title>
-                            <Accordion.Content>
-                                <p>c</p>
-                                <p>c++</p>
-                            </Accordion.Content>
-                            <Accordion.Title>
-                                <h5 className = 'sidebarFontColor'>Notification</h5>
-                            </Accordion.Title>
-                            <Accordion.Title>
-                                <h5 className = 'sidebarFontColor'>Setting</h5>
-                            </Accordion.Title>
-                        </Accordion>
-                    </Sidebar>
-                  </Sidebar.Pushable>
-              </Grid.Column>
-              <Grid.Column width={14}>
-              <Router history={hashHistory}>
-                  <Route path='/home' component={Cards}/>
-                  <Route path='/invite' component={Invite}/>
-                  <Route path='/answer' component={Questions}/>
-                  <Route path='/answerPage' component={Answerpage}/>
-                  <Route path='/profile' component={Profile}/>
-              </Router>
-            </Grid.Column>
-          </Grid>
+                 </Grid>
             </div>
         );
     }

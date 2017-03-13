@@ -4,7 +4,8 @@ import {
     Image,
     Card,
     Button,
-    Segment
+    Segment,
+    Popup
 } from 'semantic-ui-react';
 import {Link} from 'react-router';
 import Cookie from 'react-cookie';
@@ -18,10 +19,8 @@ class DisplayFavouriteCategoryStructure extends React.Component {
             text: 'save'
         };
     }
-
     handleShow = () => this.setState({active: true})
     handleHide = () => this.setState({active: false})
-
     /* To save the card which you follow in mongo db & Neo4j*/
     saveToProfile() {
         let emailId = Cookie.load('email');
@@ -50,51 +49,61 @@ class DisplayFavouriteCategoryStructure extends React.Component {
     }
     render() {
         const {active} = this.state;
-        const content = (
-                <Button circular onClick={this.saveToProfile.bind(this)}
-                  icon='plus' className='spacing' id='iconColor'
-                  size='tiny' style={{'font-size': 20 + 'px'}}/>
-          );
-
+        const content = (<Button circular onClick={this.saveToProfile.bind(this)}
+          icon='plus' className='spacing' id='iconColor' size='tiny' style={{
+            'font-size': 13 + 'px'
+        }}/>);
         return (
             <div className='CardSegment'>
                 <Card raised='true' className='item' onClick={this.handleChange}>
-                    <Link to= {'/answerPage?id=' + this.props.id}>
+
                         <div className="PaddingCards">
                             <Image src={this.props.displayImage} className="imgsize"
-                             onMouseEnter={this.handleShow} dimmer={{active, content}}
-                              onMouseLeave={this.handleHide}/>
-                            <div>
-                            <Card.Header id='textheader' className='spacing'>
-                                <b>{this.props.heading}</b>
-                            </Card.Header>
+                              onMouseEnter={this.handleShow} dimmer={{
+                                active,
+                                content
+                            }} onMouseLeave={this.handleHide}/>
                             </div>
-                          </div>
-                            </Link>
-                            <div className='spacing' id='PaddingCards1'>
-                                <Image className="border" floated='left' size='mini'
-                                  src='http://semantic-ui.com/images/avatar/large/steve.jpg'
-                                />
-                                <Card.Meta>
-                                    <a href='' className='LinkColor'>{this.props.postedBy}</a>
-                                </Card.Meta>
-                                <Card.Meta>
-                                    {this.props.addedOn}
-                                </Card.Meta>
+                            <Link to= {'/answerPage?id=' + this.props.id}>
+                            <div className="PaddingCards">
+                                <Card.Header id='textheader' className='spacing'>
+                                    <b>{this.props.heading}</b>
+                                </Card.Header>
                             </div>
 
-                        <div className="PaddingCardsBottom">
-                            <Segment.Group horizontal>
-                              <Segment><Icon name='like outline' color='green'/>{this.props.upVotes}
+                    </Link>
+                    <div className='spacing' id='PaddingCards1'>
+                        <Image className="border" floated='left' size='mini'
+                          src='http://semantic-ui.com/images/avatar/large/steve.jpg'/>
+                        <Card.Meta>
+                            <a href='' className='LinkColor'>{this.props.postedBy}</a>
+                        </Card.Meta>
+                        <Card.Meta>
+                            {this.props.addedOn}
+                        </Card.Meta>
+                    </div>
+                    <div className="PaddingCardsBottom">
+                        <Segment.Group horizontal>
+                            <Segment>
+                                <Popup trigger={< Icon name = 'like outline' color = 'green' />}
+                                 content='Likes' position='bottom left' size='tiny'/>
+                                 {this.props.upVotes}
                             </Segment>
-                              <Segment><Icon name='eye' color='black' size='large'/>
-                              <b>{this.props.views}
-                              </b></Segment>
-                              <Segment><Icon name='write square' size='large'/>
-                              <b>{this.props.answerCounts}
-                              </b></Segment>
-                            </Segment.Group>
-                      </div>
+                            <Segment>
+                                <Popup trigger={< Icon name = 'eye' color = 'black'
+                                  size = 'large' />} content='Views'
+                                  position='bottom left' size='tiny'/>
+                                <b>{this.props.views}
+                                </b>
+                            </Segment>
+                            <Segment>
+                                <Popup trigger={< Icon name = 'write square' size = 'large' />}
+                                 content='Answers' position='bottom left' size='tiny'/>
+                                <b>{this.props.answerCounts}
+                                </b>
+                            </Segment>
+                        </Segment.Group>
+                    </div>
                 </Card>
             </div>
         );
@@ -116,5 +125,4 @@ DisplayFavouriteCategoryStructure.propTypes = {
     remove: React.PropTypes.func.isRequired,
     id: React.PropTypes.number
 };
-
 module.exports = DisplayFavouriteCategoryStructure;

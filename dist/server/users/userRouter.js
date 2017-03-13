@@ -23,7 +23,7 @@ router.get('/logout', userController.logOut);
 router.put('/saveToProfile', userController.saveToProfile);
 
 // Get the user Following List
-router.get('/viewFollowCard', userController.viewFollowCard);
+router.get('/viewFollowCard/:emailId', userController.viewFollowCard);
 
 // Get the folloeing category
 router.get('/', userController.viewFav);
@@ -36,6 +36,14 @@ router.get('/auth/facebook', passport.authenticate('facebook', {
 router.get('/auth/facebook/callback',
     passport.authenticate('facebook', {failureRedirect: '/#/'})
     , userController.facebookCallBack);
+
+router.get('/auth/instagram', passport.authenticate('instagram', {
+        session: false
+    }), userController.instagram);
+
+router.get('/auth/instagram/callback',
+    passport.authenticate('instagram', {failureRedirect: '/#/'})
+    , userController.instagramCallBack);
 
 router.get('/auth/google', passport.authenticate('google', {
     session: false,

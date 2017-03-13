@@ -1,8 +1,9 @@
+// written by Arun Mohan Raj
 // importing the required files
 import React from 'react';
-import Card from './card.jsx';
+import QueCard from './card.jsx';
 
-class Cards extends React.Component {
+class QueCards extends React.Component {
 	constructor () {
 		super();
 	}
@@ -14,7 +15,7 @@ class Cards extends React.Component {
 				return (
 					// sending data to child card
 			<div>
-					<Card dp={item.profileImage} name={item.postedBy} time={item.addedOn} id={item.id}
+					<QueCard dp={item.profileImage} name={item.postedBy} time={item.addedOn} id={item.id}
 					title={item.heading} content={item.question} upvote={item.upVotes}
 					downvote={item.downVotes} anscount={item.answerCounts}/>
 			</div>
@@ -28,7 +29,7 @@ class Cards extends React.Component {
 		);
 	}
 }
-Cards.propTypes = {
+QueCards.propTypes = {
 	quesCollection: React.PropTypes.Array
 };
-module.exports = Cards;
+module.exports = QueCards;

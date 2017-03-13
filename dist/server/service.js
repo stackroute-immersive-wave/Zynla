@@ -24,6 +24,8 @@ function setupRestRoutes(app) {
   app.use('/list', require(path.join(__dirname, './list')));
   app.use('/userdoc', require(path.join(__dirname, './userdoc')));
   app.use('/answers', require(path.join(__dirname, './card')));
+  app.use('/invite', require(path.join(__dirname, './invite')));
+  app.use('/search', require(path.join(__dirname, './search')));
   // app.use('/resturant', require(path.join(__dirname, './resturant')));
   //  MOUNT YOUR REST ROUTE HERE
   //  Eg:
@@ -135,6 +137,12 @@ function setupMongooseConnections() {
     });
   });
 }
+function setupRedisStore() {
+  let redisData = require('./redis/redisData.js');
+redisData.getConceptFromNeo4j();
+redisData.getIntentFromNeo4j();
+redisData.getQuestionFromNeo4j();
+}
 
 // App Constructor function is exported
 module.exports = {
@@ -143,5 +151,6 @@ module.exports = {
   setupRestRoutes: setupRestRoutes,
   setupMiddlewares: setupMiddlewares,
   setupMongooseConnections: setupMongooseConnections,
+  setupRedisStore: setupRedisStore,
   setupWebpack: setupWebpack
 };

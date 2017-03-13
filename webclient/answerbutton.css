@@ -1,14 +1,14 @@
-.cardsFav{
+.cardsFav {
      width:700px !important;
      margin-left: 150px !important;
    }
-   .imageAns{
+   .imageAns {
      border-radius: 50%;
    }
-   .ansWidth{
+   .ansWidth {
      width:98%;
    }
-   .anspad{
+   .anspad {
      margin: 5px 10px 5px 20px !important;
      /*background-color: #F1F8FB !important;*/
    }
@@ -19,6 +19,10 @@
      position: relative;
      margin-left: 65% !important;
    }
-   .ques{
+   .checkmarkbtn {
+     position: relative;
+     margin-left: 90% !important;
+   }
+   .ques {
      color: white !important;
    }

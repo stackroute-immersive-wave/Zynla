@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Card, Icon, Menu, Popup} from 'semantic-ui-react';
+import {Image, Card, Icon, Menu, Popup, Divider} from 'semantic-ui-react';
 let poststyle1 = {
     fontFamily: 'Georgia',
     fontSize: 15,
@@ -22,6 +22,7 @@ class cardAnswer extends React.Component {
     }
     render() {
       return (
+        <div>
             <Card fluid>
                 <Card.Content style={poststyle1}>
                   <Image floated='left' size='mini'
@@ -63,6 +64,8 @@ class cardAnswer extends React.Component {
                     </Menu.Menu>
                 </Menu>
             </Card>
+            <Divider clearing/>
+          </div>
         );
     }
 }

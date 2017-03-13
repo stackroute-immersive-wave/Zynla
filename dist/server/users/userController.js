@@ -19,20 +19,16 @@ let userCtrl = {
 
 // Login
 logIn: function (req, res) {
-        res.cookie('token', req.user);
         res.cookie('username', req.user.name);
         res.cookie('authType', req.user.authType);
         res.cookie('profilepicture', req.user.photos);
+        res.cookie('email', req.user.email);
         res.send(req.user);
     },
 
 // SEND EMAIL
-/*eslint-disable */
-    // var host,
-    //     link,
-    //     mailOptions;
-/*eslint-enable */
 sendEmail: function (req, res) {
+        // console.log(req.body.data);
         // console.log(req.body.data);
         User.find({
             email: req.body.data
@@ -42,6 +38,7 @@ sendEmail: function (req, res) {
               //  console.log('error ocuured');
             } else {
                 /*eslint-disable */
+                // Create a Nodemailer transport object
                 var transporter = nodemailer.createTransport({
                     /*eslint-disable */
                     service: 'Gmail',
@@ -55,17 +52,16 @@ sendEmail: function (req, res) {
                 host = req.get('host');
                 console.log(profile);
                 /*eslint-disable */
-                // var hashVID = bcrypt.hashSync(profile[0].local.verificationID, 10);
-                var VID = profile[0].generateHashVID(profile[0].verificationID);
+                // var VID = User.generateHashVID(profile[0].verificationID);
+                var VID = profile[0].verificationID
                 /*eslint-enable */
                 VIDcheck = VID;
-                // var linkEmail = profile[0].generateHashEmail(profile[0].local.email);
                 console.log(VID + ' is the VID');
                 link = 'http://' + req.get('host') + '/users/verify?id=' + VID + '&email=' + profile[0].email;
                 var text = 'Hello from \n\n' + req.body.data;
                 mailOptions = {
                     from: 'zynla0001@gmail.com', // sender address
-                    to: profile[0].email, // list of receivers
+                    to: profile[0].email, // reciever
                     subject: 'Verify your Email with Zynla', // Subject line
                     text: text,
                     html: '<center><h1>Welcome to Zynla</h1></center><br><br><br>'+
@@ -79,6 +75,7 @@ sendEmail: function (req, res) {
                     'please do not reply</i></small>'
                 };
                 console.log(mailOptions + host);
+                // Sent mail to recipient
                 transporter.sendMail(mailOptions, function(error, info) {
                     if (error) {
                         console.log(error);
@@ -97,7 +94,6 @@ sendEmail: function (req, res) {
 // LOCAL SIGN UP
     signUp: function(req, res) {
         let newUser = new User();
-        // let newProfileUser = new UserProfile();
         String.prototype.capitalizeFirstLetter = function() {
             return this.charAt(0).toUpperCase() + this.slice(1);
         }
@@ -120,7 +116,7 @@ sendEmail: function (req, res) {
             if (err) {
                 res.send('Error in registration');
             } else {
-                res.send('Successfully registered');
+                res.send({email: req.body.email});
             }
         });
     },
@@ -131,7 +127,7 @@ sendEmail: function (req, res) {
         let checkID = req.query.id;
         let checkMail = req.query.email;
         User.find({
-            'local.email': req.query.email
+            'email': req.query.email
         }, function(err, profile) {
 
             if (err) {
@@ -198,9 +194,24 @@ sendEmail: function (req, res) {
     },
 
 logOut: function(req,res){
-console.log('Session deleted');
-req.session.destroy();
- res.send({redirect: '/'});
+        res.clearCookie('username');
+        res.clearCookie('profilepicture');
+        res.clearCookie('email');
+        User.update({
+            'email': req.body.email
+        }, {
+            $set: {
+                'local.loggedinStatus': false
+            }
+        }, function(err) {
+            if (err) {
+                console.log("status not updated");
+            } else {
+                req.logout();
+
+                // res.send('Successfully Logged out');
+            }
+        });
 },
 
 // FACEBOOK AUTHENTICATION
@@ -210,6 +221,32 @@ facebook: function(req, res) {
 
     // handle the callback after facebook has authenticated the user
 facebookCallBack: function(req, res) {
+        res.cookie('token', req.user.token);
+        res.cookie('authType', req.user.authType);
+        res.cookie('username', req.user.name);
+        res.cookie('profilepicture', req.user.photos);
+        res.cookie('email',req.user.email);
+        if(req.user.isnew ==='N')
+        {
+            res.redirect('/#/home');
+        }
+        else
+        {
+        var query = 'create (n:User {name : "'+req.user.email+'"})';
+        session.run(query).then(function(){
+            console.log("comes");
+        });
+            console.log(query);
+            res.redirect('/#/successfullyregistered');
+        }
+    },
+// Instagram AUTHENTICATION
+instagram: function(req, res) {
+        res.json(req.user);
+    },
+
+    // handle the callback after instagram has authenticated the user
+instagramCallBack: function(req, res) {
         res.cookie('token', req.user.token);
         res.cookie('authType', req.user.authType);
         res.cookie('username', req.user.name);
@@ -266,15 +303,7 @@ googleCallBack: function(req, res) {
       let emailId = req.body.emailId;
         /*eslint-disable*/
         let query ="match (q:Question), (u:User) where id(q)="+id +" and u.name='"+emailId+"' create (q)<-[:follow {on:timestamp()}]-(u) return q";
-
         /*eslint-enable*/
-
-        // match (q:Question), (u:User) where id(q)=' + req.body.id + '  \
-        // and u.name="' + req.body.emailId + '" \
-        // create (q)<-[:follow {on:timestamp()}]-(u)'
-        // match (q:Question), (u:User) where id(q)=950 and u.name="erkeerthana26@gmail.com"
-        //
-        // // create (q)<-[:follow {on:timestamp()}]-(u)
         session.run(query).then(function(result) {
           /*eslint-disable*/
           let id = result.records[0]._fields[0].identity.low;
@@ -308,12 +337,14 @@ googleCallBack: function(req, res) {
     },
     /* To view the following card*/
     viewFollowCard: function(req, res) {
-      UserProfile.find().then((docs) => {
-          res.send(docs);
-      }, (err) => {
-          res.send(err);
-      });
-    },
+         let emailId = req.params.emailId;
+         console.log(emailId);
+       UserProfile.find({"emailId":emailId}).then((docs) => {
+           res.send(docs);
+       }, (err) => {
+           res.send(err);
+       });
+     },
     /* Getting all the following category cards*/
     viewFav: function(req, res) {
         UserProfile.find().then((docs) => {
@@ -322,7 +353,7 @@ googleCallBack: function(req, res) {
             res.send(err);
         });
     },
-
+/* display category image from neo4j */
 displayCatagory: function(req, res) {
     var result1 = [];
     logger.debug('Inside display catagory');
@@ -332,7 +363,7 @@ displayCatagory: function(req, res) {
             for(var x of result.records){
                 result1.push({
                     "name":(x._fields[0].properties.name),
-                    "image":(x._fields[0].properties.Image)
+                    "image":(x._fields[0].properties.image)
                 });
             }
             console.log(result1);
@@ -342,7 +373,7 @@ displayCatagory: function(req, res) {
             console.log('promise error: ', error);
         });
 },
-
+/* Add category to mongodb as well as in neo4j */
     addCategory: function(req, res) {
         console.log("dddddddddddddd");
         console.log(req.body);
@@ -367,12 +398,27 @@ displayCatagory: function(req, res) {
             if (err) {
                 res.send('Error in registration');
             } else {
+                let id = req.body.email;
+                console.log('email in addcategory',req.body.email);
+                /* Add category to neo4j */
+                let query = 'match (n:User {name:"'+id+'"})';
+                for(var i = 0; i < arr.length; i++) {
+                    query+=',(d' + i + ': Domain {name:"'+arr[i]+'"}) ';
+                }
+                console.log('node 1',query);
+                query += 'create (n)-[:follows]->(d0)';
+                for(let i = 1; i< arr.length; i++) {
+                    query+=',(n)-[:follows]->(d'+ i +')';
+                }
+                console.log('node 2',query);
+                session.run(query).then(function(){
+            console.log('updated to neo4j');
+        });
             res.send('Successfully registered');
             }
         });
-        // res.redirect('/#/home');
     },
-
+/* After selecting category chage user type fro 'Y' to 'N' */
     updateIsNew: function(req,res)
     {
         let isNew = req.body.isNew;
@@ -391,12 +437,17 @@ displayCatagory: function(req, res) {
               });
             });
     },
-
+    /* Update basic information to profile*/
         updateProfile: function(req, res) {
             console.log(req.params.emails);
             // console.log(req.body.data1[dateofbirth]);
+            let username = '';
             let data = JSON.parse(req.body.data1);
-            console.log(JSON.parse(req.body.data1))
+            console.log(JSON.parse(req.body.data1));
+            User.findOne({email: req.params.emails},function(err, user)
+            {
+                username = user.name;
+            })
         UserProfile.findOne({
             'emailId': req.params.emails
         }, function(err, userProfile) {
@@ -405,9 +456,11 @@ displayCatagory: function(req, res) {
             }
             else
             {
+                console.log(req.body.country);
                 userProfile.profile.dob = data.dateofbirth;
                 userProfile.profile.gender = data.gender;
-                userProfile.profile.address.country = data.country;
+                userProfile.profile.address.country = req.body.country;
+                userProfile.profile.name = username;
                 userProfile.save(function(){
                 if(err) {
                     console.log("error occured in update")
@@ -415,10 +468,7 @@ displayCatagory: function(req, res) {
                 console.log(userProfile.profile.dob);
                 res.cookie('email', req.params.emails);
                 res.send('Profile updaed successfully');
-                // console.log("updated successfully");
-                // res.redirect('/#/userprofile');
               });
-                // res.cookie('email', req.params.emails);
             }
         });
     }

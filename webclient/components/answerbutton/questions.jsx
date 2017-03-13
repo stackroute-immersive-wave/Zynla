@@ -1,3 +1,4 @@
+// written by Arun Mohan Raj
 // importing the required files
 import React from 'react';
 import {
@@ -6,7 +7,8 @@ import {
     Icon,
     Breadcrumb
 } from 'semantic-ui-react';
-import Cards from './cardsCollection.jsx';
+import QueCards from './cardsCollection.jsx';
+// suggested questions display page
 class Questions extends React.Component {
     constructor() {
         super();
@@ -60,7 +62,7 @@ class Questions extends React.Component {
                         </div>
                         <Divider clearing/>
                         <div>
-                            <Cards quesCollection={this.state.objArray}/>
+                            <QueCards quesCollection={this.state.objArray}/>
                         </div>
                         </Grid.Column>
                     <Grid.Column width={2}/>

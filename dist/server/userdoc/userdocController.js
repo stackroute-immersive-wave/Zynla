@@ -138,8 +138,10 @@ let userDocController = {
             let folldet = [];
             let len = result.records.length;
             for (let i = 0; i < len; i = i + 1) {
-                foll.push({'name': result.records[i]._fields[0].properties.name,
+                /* eslint-disable*/
+                foll.push({name: result.records[i]._fields[0].properties.name,
                 'id': result.records[i]._fields[0].identity.low});
+                /* eslint-enable*/
                 // console.log(foll[i]);
             }
             for (let j = 0; j < len; j = j + 1) {

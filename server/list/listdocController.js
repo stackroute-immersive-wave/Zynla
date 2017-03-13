@@ -38,6 +38,7 @@ let listController = {
             res.send(err);
         });
     },
+    // written by Arun Mohan Raj
     // router function to display all questions
     viewList: function(req, res) {
         // logger.debug('Inside get');
@@ -48,15 +49,15 @@ let listController = {
         });
     },
 
-    // getQuestion: function(req, res) {
-    //     // console.log('Inside Ques get' + req.params.id);
-    //     List.find({'id': req.params.id}).then((docs) => {
-    //         // console.log('inside route', JSON.stringify(docs));
-    //         res.send(docs);
-    //     }, (err) => {
-    //         res.send('Cant get the docs', err);
-    //     });
-    // },
+    getCardQuestion: function(req, res) {
+        // console.log('Inside Ques get' + req.params.id);
+        List.find({id: req.params.id}).then((docs) => {
+            // console.log('inside route', JSON.stringify(docs));
+            res.send(docs);
+        }, (err) => {
+            res.send('Cant get the docs', err);
+        });
+    },
 
     getQuestionIntent: function(req, res) {
      let questionIntentArr = [];
@@ -92,31 +93,31 @@ let listController = {
             }
         });
     },
-    // router function to display suggested questions
+    // written by Arun Mohan Raj
+    // function to display suggested questions
     suggestQues: function(req, res) {
-        // console.log('router suggest ques');
-        /* eslint-disable */
-        let query = 'match(n:Question)-[r:question_of]-> (m:Concept)\
-                   where id(n)=945\
-                  match (b:QuestionIntent{value:r.intent})-[z:same_as]->(a:QuestionIntent)\
-                   -[:same_as]->(l:QuestionIntent)\
-                  match (m)<-[:question_of {intent:a.value}]-(s:Question)\
-                  match (m)<-[:question_of {intent:l.value}]-(u:Question)\
-                  match (s)<-[:post]-(cv:User)\
-                  return s,u,cv\
-                  ';
-        /* eslint-enable */
-        session.run(query).then(function(result) {
-            // console.log(result);
-            if (result) {
-                // console.log('before result');
-                res.send(result);
-                // console.log('after result');
-            }
-        }, function() {
-            // console.log('error while connecting',err);
-        });
-    },
+          // console.log('router suggest ques');
+          /* eslint-disable */
+          let query = 'match(n:Question)-[r:question_of]-> (m:Concept) \
+                       where id(n)=970 \
+                      match (b:QuestionIntent{value:r.intent})-[z:same_as]->(a:QuestionIntent) \
+                       -[:same_as]->(l:QuestionIntent) \
+                      match (m)<-[:question_of {intent:a.value}]-(s:Question) \
+                      match (m)<-[:question_of {intent:l.value}]-(u:Question) \
+                      match q=(s)<-[:post]-(cv:User) \
+                      return distinct q';
+          /* eslint-enable */
+                      session.run(query).then(function(result) {
+                          // console.log(result);
+                          if (result) {
+                            // console.log('before result');
+                            res.send(result);
+                            // console.log('after result');
+                          }
+                      }, function() {
+                        // console.log('error while connecting',err);
+                      });
+                    },
 
     // router function to add a question
     addquestion: function(req, res) {
@@ -124,15 +125,19 @@ let listController = {
         let arr = [];
         let c = 0;
         let max = 0;
+        /*eslint-disable*/
         let imagesArray = [
-          'http://www.consagous.com/wp-content/uploads/2016/03/semantic-ui.png',
-          'http://jsforcats.com/images/console-replace.gif',
-          'https://avatars.githubusercontent.com/u/5067638?v=3',
-          'https://avatars1.githubusercontent.com/u/14251478?v=3&s=88',
-          'https://avatars2.githubusercontent.com/u/3317125?v=3&s=88',
-          'https://avatars1.githubusercontent.com/u/7304827?v=3&s=88',
-          'https://avatars1.githubusercontent.com/u/13505139?v=3&s=88'
-        ];
+         'http://www.phonefacts.co.uk/wp-content/uploads/2011/11/1-and-zeros.jpg',
+         'http://maxpixel.freegreatpicture.com/static/photo/1x/Online-Digital-Mobile-Smartphone-Data-Computer-1231889.jpg',
+         'http://maxpixel.freegreatpicture.com/static/photo/1x/Float-Hand-Keep-About-Ball-Binary-Ball-Binary-457334.jpg',
+         'http://maxpixel.freegreatpicture.com/static/photo/1x/Gloomy-Cohesion-Watch-Dark-Responsibility-Darkness-1156942.jpg',
+         'https://c1.staticflickr.com/9/8386/8493376660_8e17303a8d.jpg',
+         'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/IBM_Bluemix_logo.svg/1036px-IBM_Bluemix_logo.svg.png',
+         'http://www.oppo.nl/files/2012/03/hd-abstracte-wallpaper-met-felle-kleuren-hd-abstracte-achtergrond.jpg',
+         'https://c1.staticflickr.com/8/7570/15087405704_f571d14063_b.jpg',
+         'http://maxpixel.freegreatpicture.com/static/photo/1x/Shape-Simple-Hex-Hexagonal-Abstract-Modern-675576.jpg'
+       ];
+       /*eslint-enable*/
         let randomNumber = Math.floor(Math.random() * imagesArray.length);
         // query to get all the concepts and find the base concept from the input provided
         let query1 = 'match (c:Concept) return c.name;';
@@ -226,6 +231,45 @@ let listController = {
             res.send(err);
         });
     },
+    updatecomments: function(req, res) {
+   let query = ' \
+match (n:Question),\
+(u:User {name:"' + req.body.mail + '" }) \
+where id(n) = ' + req.body.questionId + ' \
+create (m:Comment{name:"'+req.body.content+'"}), \
+ (n)<-[:comment_of]-(m), \
+(m)-[:commented_by{on : timestamp()}]->(u) \
+return m';
+
+session.run(query).then(function(result) {
+    // logger.debug(result);result.records[0]._fields[0].identity.low;
+    console.log(result);
+    if (result) {
+      let id = result.records[0]._fields[0].identity.low;
+          console.log("ID:" + id);
+          List.findOneAndUpdate({
+              id: req.body.questionId
+          }, {
+              $set: {
+                  comment:{
+                    id: id,
+                    createdBy: req.body.createdBy,
+                    content: req.body.content,
+                    createdOn: new Date().getTime()
+                  }
+              }
+          }, {new: true}).then((doc) => {
+            console.log(doc);
+            res.send(doc);
+          });
+    } else {
+        // logger.debug('error occurred');
+        (err) => {
+            res.send(err);
+        }
+    }
+});
+},
     inviteFrnds: function(req, res) {
         // router.post('/send', function handleSayHello(req, res) {
         // logger.debug(req.body.data);
@@ -354,7 +398,7 @@ let listController = {
         }
         session.run(query).then(function(result) {
             if (result) {
-                console.log('id', id);
+                // console.log('id', id);
                 List.update({
                     'id': id,
                     'downVotes': req.body.downVotes
@@ -362,10 +406,25 @@ let listController = {
                     res.send("success");
                 });
             } else {
-                console.log("error in updating the like");
+                // console.log("error in updating the like");
             }
         });
-    }
+    },
+    getImages:function(req, res){
+      // console.log("Inside getImages");
+     let query = 'match(n:Domain) return n.name';
+     let arr = [];
+     session.run(query).then(function(result) {
+        //  console.log("result:"+result);
+         for(let i in result.records) {
+             if(i !== null) {
+               arr.push(result.records[i]._fields[0]);
+             }
+         }
+         res.send(arr);
+     }, function() {
+         // console.log('error while connecting',err);
+     });
+   }
 };
-
 module.exports = listController;

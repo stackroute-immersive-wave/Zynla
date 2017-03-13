@@ -49,9 +49,6 @@ let ansstyle1 = {
 let followstyle = {
     float: 'right'
 };
-let astyle = {
-    marginLeft: '5%'
-};
 let formstyle = {
     margin: '3% 3% 3% 3% '
 };
@@ -112,6 +109,7 @@ class answerPage extends React.Component {
         this.getviewscount = this.getviewscount.bind(this);
         this.getData = this.getData.bind(this);
         this.postAnswer = this.postAnswer.bind(this);
+        this.addcomment = this.addcomment.bind(this);
     }
     // static propTypes = {
     //     onChange: PropTypes.func
@@ -126,7 +124,9 @@ class answerPage extends React.Component {
     textVal(e) {
         this.setState({content: e.target.value});
     }
-
+    comment(e) {
+           this.setState({comment: e.target.value});
+       }
     postAnswer() {
         let id = window.location.hash.split('id=')[1];
         // console.log('inside post Answer');
@@ -150,6 +150,7 @@ class answerPage extends React.Component {
             }
         });
     }
+
     getviewscount() {
         // console.log('views before increment', this.state.views);
         let id = window.location.hash.split('id=')[1];
@@ -169,6 +170,26 @@ class answerPage extends React.Component {
             }.bind(this)
         });
     }
+    addcomment() {
+       // console.log('views before increment');
+       let id = window.location.hash.split('id=')[1];
+
+       let commentdata = {
+           questionId: id,
+           mail: Cookie.load('email'),
+           content: this.state.comment
+       };
+       // console.log("comments:"+commentdata);
+       $.ajax({
+           url: '/list/updatecomment',
+           type: 'PUT',
+           data: commentdata,
+           success: function() {
+               // this.setState({comment: Comments});
+               // console.log('inside success', this.state.commentdata);
+             }
+       });
+   }
 
     getData() {
         let id = window.location.hash.split('id=')[1];
@@ -298,11 +319,10 @@ class answerPage extends React.Component {
 
             <Grid divided='vertically'>
                 <Grid.Row columns={3}>
-                    <Grid.Column width={2}/>
-                    <Grid.Column width={10}>
+                    <Grid.Column width={13}>
                         <div style={titlestyle}>
                             {quesObj[0].heading}
-                            <Icon style={followstyle} name='add' size='small' color='green'/>
+                            <Icon circular style={followstyle} name='add' size='small' color='red'/>
                         </div>
                         <div style={questionstyle}>{quesObj[0].question}</div>
                         <Breadcrumb>
@@ -358,14 +378,15 @@ class answerPage extends React.Component {
                                 </Modal.Actions>
                             </Modal>
                             <Button negative style ={buttonfolstyle} size='mini'>Report</Button>
-                            <Modal trigger={< a style = {
-                                astyle
-                            } > Add Comment < /a>}>
-                                <Form style={formstyle}>
-                                    <Form.TextArea/>
-                                    <Button content='Submit' primary/>
-                                </Form>
-                            </Modal>
+                            <Modal trigger={<Button basic color = 'black' size='mini'
+                             style={buttonfolstyle}>Add Comments</Button>}>
+                               <Form style={formstyle}>
+                                   <TextArea onChange={this.comment.bind(this)}
+                                     value={this.state.comment}/>
+                               </Form>
+                               <Button content='Submit' primary
+                                 onClick={this.addcomment.bind(this)}/>
+                           </Modal>
 
                         </div>
                         <div style={ansstyle1}>{quesObj[0].answerCounts}

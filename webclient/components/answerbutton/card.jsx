@@ -1,3 +1,4 @@
+// written by Arun Mohan Raj
 // importing the required files
 import React, {PropTypes} from 'react';
 import {
@@ -13,24 +14,27 @@ import {TextArea} from 'semantic-ui-react';
 import RichTextEditor from 'react-rte';
 import Cookie from 'react-cookie';
 import SuggestedCards from './suggQueCardsCollection.jsx';
-class MyCard extends React.Component {
+// question card component
+class QueCard extends React.Component {
     constructor() {
         super();
         this.state = {
             active: false,
             value: RichTextEditor.createEmptyValue(),
-            content: '',
+            anscontent: '',
             queSuggest: [],
             open: false,
             modalStatus: false,
-            modalOpen: false
+            modalOpen: false,
+            selectques: [],
+            questionLists: []
         };
         this.textVal = this.textVal.bind(this);
         this.postAnswer = this.postAnswer.bind(this);
     }
     // functions to maintain modal states
     open = () => this.setState({ open: true });
-    close = () => this.setState({ open: false });
+    close = () => this.setState({ open: false, modalStatus: false });
     modalOpen() {
        this.setState({ modalStatus: true });
      }
@@ -39,7 +43,7 @@ class MyCard extends React.Component {
     };
     // setting the written content in answer text area in state
     textVal(e) {
-      this.setState({content: e.target.value});
+      this.setState({anscontent: e.target.value});
     }
     // setting the written content in answer rich text editor in state
     onChange = (value) => {
@@ -51,21 +55,25 @@ class MyCard extends React.Component {
     // function to store answer to mongo and neo4j
     postAnswer() {
       // console.log('inside post Answer');
+      // answer data to be stored
       let ansdata = {
           questionId: this.props.id,
           mail: Cookie.load('email'),
-          content: this.state.content
+          content: this.state.anscontent
       };
-      // let context = this;
+      /* eslint-disable */
+      let context = this;
+      /* eslint-enable */
       // console.log(JSON.stringify(ansdata));
+      // ajax call to add answer in neo4j and mongoDB
       $.ajax({
         url: 'http://localhost:8080/answers/add',
         type: 'POST',
         data: ansdata,
         success: function() {
             // console.log('success',data);
-            this.showRelatedQues();
-            this.setState({
+            context.showRelatedQues();
+            context.setState({
               active: false
             });
           },
@@ -77,12 +85,16 @@ class MyCard extends React.Component {
     // function to show related questions after answering
     showRelatedQues() {
       // console.log('inside showRelatedQues');
+      /* eslint-disable */
+      let context = this;
+      /* eslint-enable */
+      // ajax call to get related questions
       $.ajax({
           url: 'http://localhost:8080/list/suggestQues/' + this.props.id,
           type: 'GET',
           success: function(data) {
             // console.log('inside success show related questions');
-              this.setState({queSuggest: data.records});
+              context.setState({queSuggest: data.records});
                 // console.log(JSON.stringify(data, undefined, 2));
           },
           error: function() {
@@ -107,6 +119,42 @@ class MyCard extends React.Component {
   });
   // console.log('close');
 }
+// function to get the selected questions
+// addSimiliarQuestions(selectedQue, questions)
+// {
+//  // console.log('getting items from createcards',items);
+//    this.setState({selectques: selectedQue});
+//    this.setState({questionLists: questions});
+//    // console.log('display states',this.state.follows);
+// }
+    getSuggQueArray(arr) {
+      this.setState({questionLists: arr});
+    }
+    linkAnswer() {
+      let queArray = this.state.questionLists;
+      for (let i = 0; i < queArray.length; i = i + 1) {
+        let ansdata = {
+            questionId: queArray[i],
+            mail: Cookie.load('email'),
+            content: this.state.anscontent
+        };
+        /* eslint-disable */
+        let context = this;
+        /* eslint-enable */
+        $.ajax({
+          url: 'http://localhost:8080/answers/add',
+          type: 'POST',
+          data: ansdata,
+          success: function() {
+              // console.log('success', data);
+            },
+          error: function() {
+              // console.log(this.props.url, status, err.toString());
+            }
+        });
+      }
+      this.close();
+    }
     render() {
         const { open } = this.state;
         // card component which contains dynamic data
@@ -174,8 +222,8 @@ class MyCard extends React.Component {
                     <Icon name='remove' /> Cancel
           </Button>
         {
-        /* modal for showing suggested questions */
-      }
+          /* modal for showing suggested questions */
+        }
                     <Modal
                       dimmer={true}
                       open={open}
@@ -190,10 +238,13 @@ class MyCard extends React.Component {
                         {
                         /* <p>That's everything!</p> */
                       }
-                        <SuggestedCards quedata={this.state.queSuggest}/>
+                        <SuggestedCards qid={this.props.id} quedata={this.state.queSuggest}
+                          ansContent={this.state.anscontent}
+                          suggArr={this.getSuggQueArray.bind(this)}/>
                       </Modal.Content>
                       <Modal.Actions>
-                        <Button icon='check' content='All Done' onClick={this.close} />
+                        <Button icon='check' content='All Done'
+                          onClick={this.linkAnswer.bind(this)} />
                       </Modal.Actions>
                     </Modal>
                   </Modal.Actions>
@@ -202,15 +253,15 @@ class MyCard extends React.Component {
         );
     }
 }
-MyCard.propTypes = {
+QueCard.propTypes = {
   id: React.PropTypes.number.isRequired,
   dp: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
   time: React.PropTypes.number.isRequired,
   title: React.PropTypes.string.isRequired,
   content: React.PropTypes.string.isRequired,
-  upvote: React.PropTypes.string.isRequired,
-  downvote: React.PropTypes.string.isRequired,
-  anscount: React.PropTypes.string.isRequired
+  upvote: React.PropTypes.number.isRequired,
+  downvote: React.PropTypes.number.isRequired,
+  anscount: React.PropTypes.number.isRequired
 };
-module.exports = MyCard;
+module.exports = QueCard;

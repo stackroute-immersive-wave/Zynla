@@ -1,22 +1,22 @@
 import React from 'react';
-import {Image} from 'semantic-ui-react';
+import {Button} from 'semantic-ui-react';
 
 class DisplayFavouriteCategoryStructure extends React.Component {
-    constructor() {
-        super();
-    }
+   constructor() {
+       super();
+   }
 
-    render() {
-      return(
-        <div>
-          <Image src={this.props.displayImage} className='favimgsize' bordered/>
-        </div>
-      );
-    }
+   render() {
+     return(
+       <div className='buttonPosition'>
+         <Button color='red' className='buttonSize'>{this.props.displayImage}</Button>
+       </div>
+     );
+   }
 }
 
 DisplayFavouriteCategoryStructure .propTypes = {
-   displayImage: React.PropTypes.string.isRequired
- };
+  displayImage: React.PropTypes.string.isRequired
+};
 
 module.exports = DisplayFavouriteCategoryStructure;

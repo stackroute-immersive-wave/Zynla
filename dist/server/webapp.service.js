@@ -24,5 +24,7 @@ module.exports = function() {
 
   service.setupMongooseConnections();
 
+  service.setupRedisStore();
+
   return app;
 };
