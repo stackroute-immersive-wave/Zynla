@@ -3,7 +3,7 @@ const supertest = require('supertest');
 const sinon = require('sinon');
 const sinonMongoose = require('sinon-mongoose');
 const expect = require('chai').expect;
-const app = require('../bin/www');
+// const app = require('../bin/www');
 const cardDoc = require('../server/card/carddocEntity');
 const url = supertest('http://localhost:8080/card');
 
