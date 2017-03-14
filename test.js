@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 let window;
 window.fbAsyncInit = function() {
     FB.init({
@@ -29,7 +28,6 @@ function invite() {
 function inviteCallback(response) {
     console.log(response);
 }
-=======
 var http = require('http');
 var p='EAACEdEose0cBANv15ZA6Qq3ZBg1Nwh8A2XeNMicV2L5l5w20KcJZCv9j1w3KjwazUIb8hHcYAQHg4BaUSn3PId1RIQzFp1pjDPkO7U3zcsKvZCsYI1W1ZAyiZAHEENrXkU8gXr8GloxMGZATOU01eX9nOPkFvZBjaxZBccPEk0A1xF2K6eP5awTE0EIJ6esC7nAEZD'
 exports.getFbData = function(accessToken, apiPath, callback) {
@@ -60,4 +58,3 @@ exports.getFbData = function(accessToken, apiPath, callback) {
 }(p, 'me?fields=friends', function(data){
     console.log(data);
 });
->>>>>>> fc1eede8485e2ab858d4019a9494e54f59832692
