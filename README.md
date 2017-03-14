@@ -20,8 +20,8 @@ To install the required dependencies
 
 To build the app
 
-	$ npm run build
+	$ npm run wpbuild
 
 To run the app
 
-	$ npm run serve
+	$ npm start
