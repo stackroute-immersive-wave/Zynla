@@ -4,7 +4,6 @@ const UserProfile = require('../users/userProfileEntity').userModel;
 const ListDoc = require('../list/listdocEntity');
 const nodemailer = require('nodemailer');
 let driver = require('../config/neo4j');
-
 let host;
 
 let checkTypeProfile = function(type, typeId, email)
@@ -104,7 +103,7 @@ sendInviteEmail: function (req, res) {
                     ListDoc.findOne({id: qId},function(err, question)
                     {
                         if(checkTypeProfile(watchingList, qId, email))
-                        { 
+                        {
                         let session = driver.session();
                         var query = 'match (n:User) where n.name='+email+''+
                                         +'match (q:Question) where id(q)='+qId+''+
@@ -140,7 +139,7 @@ sendInviteEmail: function (req, res) {
                     });
                         res.cookie('email',req.query.email);
                         res.redirect('/#/successfullyregistered');
-                    
+
                 } else {
                     console.log('error occured in email id');
                     //res.end('<h1>Link expired</h1>');

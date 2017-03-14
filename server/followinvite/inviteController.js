@@ -4,27 +4,20 @@ const UserProfile = require('../users/userProfileEntity').userModel;
 const ListDoc = require('../list/listdocEntity');
 const sentInviteMail = require('../function/sentInviteMail');
 // let driver = require('../config/neo4j');
-
-
-
 let inviteCtrl = {
 sendInviteEmail: function (req) {
-        // console.log(req.body.data);
-        // console.log(req.body.questionId);
-        // console.log(req.body.emailId);
-        // console.log(req.body.senderName);
+        // // console.log(req.body.data);
+        // // console.log(req.body.questionId);
+        // // console.log(req.body.emailId);
+        // // console.log(req.body.senderName);
         let host = req.get('host');
-        // console.log(req.body.id);
-        // console.log(req.body.type);
-        // console.log(req.body.emailId);
-        // console.log(req.body.sender);
         sentInviteMail(host, req.body.id, req.body.type, req.body.emailId, req.body.sender);
-    }, 
+    },
     followQuestion: function(req, res) {
         let questionId = req.query.id;
         let email = req.query.email;
-        // console.log('emaillllllll', email);
-        // console.log('questionIdddddd', questionId);
+        // console.log('emaillllllll',email);
+        // console.log('questionIdddddd',questionId);
         UserProfile.find({
             emailId: req.query.email
         }, function(err) {
@@ -42,11 +35,11 @@ sendInviteEmail: function (req) {
                         let isQuesPresent = false;
                         UserProfile.findOne({emailId: email}, function(error1, user)
                         {
-                        // console.log('user', user);
+                        // console.log('user',user);
                         user.watchingList.map(function(item)
                         {
-                            // console.log('type of question id   ', typeof (questionId));
-                            // console.log('type of item.id   ', typeof (item.id));
+                            // console.log('type of question id   ',typeof(questionId));
+                            // console.log('type of item.id   ',typeof(item.id));
                             if(item.id === qId)
                             {
                                 isQuesPresent = true;
@@ -59,7 +52,7 @@ sendInviteEmail: function (req) {
                         // var query = 'match (n:User) where n.name='+email+''+
                         //                 +'match (q:Question) where id(q)='+questionId+''+
                         //                 +'create (n)-[:follow]->(q)'+
-                        //                 +'return n, q';
+                        //                 +'return n,q';
                         // session.run(query);
                         // session.close();
                         // console.log(question);
@@ -68,16 +61,16 @@ sendInviteEmail: function (req) {
                             }, {
                                 $push: {
                                     watchingList: {
-                                        id: question.id, 
-                                        displayImage: question.displayImage, 
-                                        heading: question.heading, 
-                                        statement: question.question, 
-                                        postedBy: question.postedBy, 
-                                        profileImage: question.profileImage, 
-                                        addedOn: question.addedOn, 
-                                        category: question.category, 
-                                        upVotes: question.upVotes, 
-                                        downVotes: question.downVotes, 
+                                        id: question.id,
+                                        displayImage: question.displayImage,
+                                        heading: question.heading,
+                                        statement: question.question,
+                                        postedBy: question.postedBy,
+                                        profileImage: question.profileImage,
+                                        addedOn: question.addedOn,
+                                        category: question.category,
+                                        upVotes: question.upVotes,
+                                        downVotes: question.downVotes,
                                         noofans: question.answerCounts
                                     }
                                 }
