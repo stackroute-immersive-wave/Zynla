@@ -363,7 +363,7 @@ displayCatagory: function(req, res) {
             for(var x of result.records){
                 result1.push({
                     "name":(x._fields[0].properties.name),
-                    "image":(x._fields[0].properties.image)
+                    "image":(x._fields[0].properties.Image)
                 });
             }
             console.log(result1);

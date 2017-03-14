@@ -1,6 +1,6 @@
 import React from 'react';
 import MainInterestCard from './mainInterestCard.jsx';
-class Cards extends React.Component {
+class interestsCard extends React.Component {
     constructor () {
         super();
     }
@@ -23,7 +23,7 @@ class Cards extends React.Component {
       }
 }
 
-module.exports = Cards;
-Cards.propTypes = {
+module.exports = interestsCard;
+interestsCard.propTypes = {
   interestData: React.PropTypes.Array
 };

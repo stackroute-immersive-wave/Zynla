@@ -16,7 +16,7 @@ let commentStyle = {
     fontFamily: 'Cochin',
     fontSize: 18
 };
-class answerPage extends React.Component {
+class mainAnswerCard extends React.Component {
 
    constructor() {
        super();
@@ -61,8 +61,8 @@ class answerPage extends React.Component {
        );
    }
 }
-module.exports = answerPage;
-answerPage.propTypes = {
+module.exports = mainAnswerCard;
+mainAnswerCard.propTypes = {
   answer: React.PropTypes.string,
   upVote: React.PropTypes.number,
   downVote: React.PropTypes.number,

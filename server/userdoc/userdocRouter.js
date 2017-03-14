@@ -21,7 +21,9 @@ router.post('/getAnswers', userDocController.getAnswers);
 // route for retrieving interestCategory of user
 router.post('/getInterestedTopics', userDocController.getInterestedTopics);
 // route for retrieving followers of user
-router.post('/getfollowers', userDocController.getFollowers);
+router.post('/getFollowers', userDocController.getFollowers);
 // route for retrieving followings of user
-router.post('/getfollowing', userDocController.getFollowings);
+router.post('/getFollowing', userDocController.getFollowings);
+router.post('/addProfile', userDocController.addProfile
+);
 module.exports = router;

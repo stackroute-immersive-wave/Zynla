@@ -4,9 +4,6 @@ const UserProfile = require('../users/userProfileEntity').userModel;
 const ListDoc = require('../list/listdocEntity');
 const sentInviteMail = require('../function/sentInviteMail');
 // let driver = require('../config/neo4j');
-
-
-
 let inviteCtrl = {
 sendInviteEmail: function (req) {
         // // console.log(req.body.data);
@@ -89,7 +86,7 @@ sendInviteEmail: function (req) {
                         }
                     });
                     });
-                        res.cookie('email',req.query.email);
+                        res.cookie('email', req.query.email);
                         res.redirect('/#/successfullyregistered');
             }
         });

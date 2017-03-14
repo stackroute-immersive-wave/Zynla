@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
 import {Menu, Button, Image, Grid} from 'semantic-ui-react';
 import Cookie from 'react-cookie';
-let Que = require('./questions/displayQuestions.jsx');
-let Ans = require('./answers/displayAnswers.jsx');
-let Info = require('./basicInfo/info.jsx');
-let probody = {
-  backgroundImage: 'url(' +
-  'https://s-media-cache-ak0.pinimg.com/736x/af/65/cd/af65cdbdc68f2a1eee8c2ba1d57b1d25.jpg' + ')',
-  backgroundSize: '100%'
-};
+let DisplayQues = require('./questions/displayQuestions.jsx');
+let DisplayAns = require('./answers/displayAnswers.jsx');
+let BasicInfo = require('./basicInfo/basicInfo.jsx');
+let DisplayFollowing = require('./following/displayFollowing');
+let DisplayFollower = require('./followers/displayFollower');
 let picStyle = {
     marginTop: '3%'
 };
@@ -27,12 +24,9 @@ let menuStyle = {
     marginLeft: '-18%',
     width: '120%'
 };
-let contentstyle = {
-  marginTop: '2%',
-  marginLeft: '-10%'
-};
-class MenuExamplePointing extends Component {
-    /*eslint-disable*/
+
+class NavBarPro extends Component {
+
     state = {
         activeItem: 'info',
         questionCount: 1,
@@ -42,40 +36,45 @@ class MenuExamplePointing extends Component {
         primary: '',
         secondary: '',
         university: '',
-        objArray : [],
+        objArray: [],
+          /*eslint-disable*/
         content: (
-          <Info />
+          <BasicInfo />
         )
     }
 
     handleItemClick = (e, {name}) => {
       // console.log('comes');
       let temp = (
-        <Info />
+        <BasicInfo />
       );
       // console.log('Name:' + name);
       if(name === 'info') {
         temp = (
-          <Info />
+          <BasicInfo />
         );
       }
       else if(name === 'Questions') {
         temp = (
-          <Que />
+          <DisplayQues />
         );
       }
       else if(name === 'Answers') {
         temp = (
-          <Ans />
+          <DisplayAns />
         );
       }
       /*eslint-enable*/
-      // else if(name === 'follower') {
-      //
-      // }
-      // else if(name === 'following') {
-      //
-      // }
+      else if(name === 'follower') {
+        temp = (
+          <DisplayFollower/>
+        );
+      }
+      else if(name === 'following') {
+        temp = (
+          <DisplayFollowing />
+        );
+      }
       this.setState({
         activeItem: name,
         content: temp
@@ -130,7 +129,7 @@ class MenuExamplePointing extends Component {
         const followerCount = this.state.followerCount;
         const followingCount = this.state.followingCount;
         return (
-            <div style = {probody}>
+            <div>
                 <Grid centered columns={1}>
                     <Grid.Column style={picStyle}>
                       <Image style={imageStyle} src={Cookie.load('profilepicture')}
@@ -147,45 +146,45 @@ class MenuExamplePointing extends Component {
                             <Menu secondary onChange = {this.onChange.bind(this)}>
                                     <Menu.Item name='info' active={activeItem === 'info'}
                                       onClick={this.handleItemClick}>
-                                      <Button color='red' content='Info'
+                                      <Button className='butstyle' content='Basic Info'
                                         icon='info'/>
                                     </Menu.Item>
                                     <Menu.Item name='Questions' active={activeItem === 'Questions'}
                                        onClick={this.handleItemClick.bind(this)}>
-                                       <Button color='red' content='Questions Posted'
+                                       <Button className='butstyle' content='Questions Posted'
                                          icon='question circle' label={{
                                              basic: true,
-                                             color: 'red',
+                                             color: '#B2242E',
                                              pointing: 'left',
                                              content: this.state.questionCount
                                          }}/>
                                     </Menu.Item>
                                     <Menu.Item name='Answers' active={activeItem === 'Answers'}
                                        onClick={this.handleItemClick}>
-                                       <Button color='red' content='Answers Answered'
+                                       <Button className='butstyle' content='Answers Answered'
                                          icon='question circle' label={{
                                              basic: true,
-                                             color: 'red',
+                                             color: '#B2242E',
                                              pointing: 'left',
                                              content: this.state.answerCount
                                          }}/>
                                     </Menu.Item>
                                     <Menu.Item name='follower' active={activeItem === 'follower'}
                                        onClick={this.handleItemClick}>
-                                       <Button color='red' content='Followers'
+                                       <Button className='butstyle' content='Followers'
                                          icon='user plus' label={{
                                            basic: true,
-                                           color: 'red',
+                                           color: 'white',
                                            pointing: 'left',
                                            content: followerCount
                                        }}/>
                                      </Menu.Item>
                                     <Menu.Item name='following' active={activeItem === 'following'}
                                        onClick={this.handleItemClick}>
-                                       <Button color='red' content='Following'
+                                       <Button className='butstyle' content='Following'
                                          icon='fork' label={{
                                            basic: true,
-                                           color: 'red',
+                                           color: 'white',
                                            pointing: 'left',
                                            content: followingCount
                                        }}/>
@@ -193,10 +192,10 @@ class MenuExamplePointing extends Component {
                                     <Menu.Item name='watchingtopic'
                                       active={activeItem === 'watchingtopic'}
                                        onClick={this.handleItemClick}>
-                                       <Button color='red' content='Watching Topic'
+                                       <Button className='butstyle' content='Watching Topic'
                                          icon='fork' label={{
                                            basic: true,
-                                           color: 'red',
+                                           color: 'white',
                                            pointing: 'left',
                                            content: '0'
                                        }}/>
@@ -207,7 +206,7 @@ class MenuExamplePointing extends Component {
 
                     </Grid>
                 </div>
-                <div style = {contentstyle}>
+                <div>
                 {this.state.content}
               </div>
             </div>
@@ -215,4 +214,4 @@ class MenuExamplePointing extends Component {
     }
 }
 
-module.exports = MenuExamplePointing;
+module.exports = NavBarPro;

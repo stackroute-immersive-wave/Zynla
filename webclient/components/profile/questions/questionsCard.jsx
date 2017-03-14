@@ -1,6 +1,6 @@
 import React from 'react';
 import MainQuestionCard from './mainQuestionCard.jsx';
-class Cards extends React.Component {
+class questionsCard extends React.Component {
     constructor () {
         super();
     }
@@ -27,7 +27,7 @@ class Cards extends React.Component {
       }
 }
 
-module.exports = Cards;
-Cards.propTypes = {
+module.exports = questionsCard;
+questionsCard.propTypes = {
   questionData: React.PropTypes.Array
 };

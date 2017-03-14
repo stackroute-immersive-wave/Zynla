@@ -14,7 +14,7 @@ class Cards extends React.Component {
      this.displayAllCategory = this.displayAllCategory.bind(this);
    }
 
-   componentWillMount() {
+   componentDidMount() {
      this.displayFollowingCards();
      this.displayAllCategory();
    }

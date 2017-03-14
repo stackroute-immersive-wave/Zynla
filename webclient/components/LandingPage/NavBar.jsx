@@ -21,6 +21,7 @@ let Invite = require('./../Invite');
 let Profile = require('./../profile/NavBarpro');
 let Questions = require('./../answerbutton/questions.jsx');
 let Answerpage = require('./../cardAnswerPage/answerPage.jsx');
+let Search = require('./../search/search.jsx');
 
 let style = {
     height: 0
@@ -353,18 +354,18 @@ class NavBar extends Component {
                     </Grid>
                 </Menu>
                 <Grid>
-                     <Grid.Column width={1}/>
-                     <Grid.Column width={14}>
+                     <Grid.Column width={2}/>
+                     <Grid.Column width={13}>
                          <Router history={hashHistory}>
                              <Route path='/home' component={Cards} />
                              <Route path='/invite' component={Invite} />
                              <Route path='/answer' component={Questions} />
                              <Route path='/answerPage' component={Answerpage} />
                              <Route path='/profile' component={Profile} />
+                             <Route path='/search' component={Search} />
                          </Router>
-                           <Grid.Column width={1}/>
                      </Grid.Column>
-
+                     <Grid.Column width={1}/>
                  </Grid>
             </div>
         );

@@ -412,17 +412,20 @@ session.run(query).then(function(result) {
     },
     getImages:function(req, res){
       // console.log("Inside getImages");
+      let session2 = driver.session();
      let query = 'match(n:Domain) return n.name';
      let arr = [];
-     session.run(query).then(function(result) {
+     session2.run(query).then(function(result) {
         //  console.log("result:"+result);
          for(let i in result.records) {
              if(i !== null) {
                arr.push(result.records[i]._fields[0]);
              }
          }
+         session2.close();
          res.send(arr);
      }, function() {
+       res.send(['semanticui', 'Java', 'Nodejs', 'Expressjs']);
          // console.log('error while connecting',err);
      });
    }

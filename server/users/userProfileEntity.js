@@ -2,60 +2,145 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const schema = new mongoose.Schema({
     id: {
-      type: Number
+      type: Number,
+      required: true
     },
     emailId: {
       type: String,
       required: true
     },
     profile: {
-      name: String,
-      picture: String,
-      description: String,
-      dob: String,
-      gender: String,
+      picture: {
+        type: String,
+        default: ''
+      },
+      description: {
+        type: String,
+        default: ''
+      },
+      dob: {
+        type: String,
+        default: ''
+      },
+      gender: {
+        type: String,
+        default: ''
+      },
       address: {
-        Line1: String,
-        Line2: String,
-        country: String,
-        region: String,
-        city: String,
-        postalCode: String
+        Line1: {
+          type: String,
+          default: ''
+        },
+        Line2: {
+          type: String,
+          default: ''
+        },
+        country: {
+          type: String,
+          default: ''
+        },
+        region: {
+          type: String,
+          default: ''
+        },
+        city: {
+          type: String,
+          default: ''
+        },
+        postalCode: {
+          type: String,
+          default: ''
+        }
         },
       education: {
-        primary: String,
-        highSchool: String,
-        university: String
+        primary: {
+          type: String,
+          default: ''
+        },
+        highSchool: {
+          type: String,
+          default: ''
+        },
+        university: {
+          type: String,
+          default: ''
+        }
       },
-      phone: String
+      phone: {
+        type: String,
+        default: ''
+      }
     },
     lists: [{
       id: {
         type: Number
       },
-      heading: String,
-      category: String,
-      statement: String,
-      image: String,
-      displayImage: String,
-      addedOn: String,
-      upVote: Number,
-      postedBy: String,
-      acceptedCount: Number,
-      downVote: Number
+      heading: {
+        type: String,
+      dafault: ''
+    },
+      category: {
+        type: String,
+      dafault: ''
+    },
+      statement: {
+        type: String,
+      dafault: ''
+    },
+      image: {
+        type: String,
+      dafault: ''},
+      displayImage: {
+        type: String,
+      dafault: ''
+    },
+      addedOn: {
+        type: String,
+      dafault: ''
+    },
+      upVote: {
+        type: String,
+      dafault: 0
+    },
+      postedBy: {
+        type: String,
+      dafault: ''
+    },
+      acceptedCount: {
+        type: String,
+      dafault: 0
+    },
+      downVote: {
+        type: String,
+      dafault: 0
+    }
     }],
     answers: [{
       id: {
         type: Number
       },
-      statement: String,
-      addedOn: String,
-      image: String,
-      upVote: Number,
-      downVote: Number
+      statement: {
+        type: String,
+        dafault: ''
+    },
+      addedOn: {
+        type: String,
+      dafault: ''
+    },
+      image: {
+        type: String,
+      dafault: ''
+    },
+      upVote: {
+        type: Number,
+      dafault: 0
+    },
+      downVote: {
+        type: Number,
+      dafault: 0
+    }
     }],
     watchingList: [{
-      id: Number,
       heading: String,
       category: String,
       statement: String,
@@ -63,9 +148,7 @@ const schema = new mongoose.Schema({
       addedOn: String,
       noofans: Number,
       upVotes: Number,
-      downVotes: Number,
-      profileImage: String,
-      displayImage: String
+      downVotes: Number
     }],
     watchingTopic: [{
       type: String
@@ -74,13 +157,15 @@ const schema = new mongoose.Schema({
       type: String
     }],
     reputation: {
-      type: Number
+      type: Number,
+      dafault: 0
     },
     followingUser: [{
       type: Number
     }],
     followerCount: {
-      type: Number
+      type: Number,
+      dafault: 0
     }
 });
 const model = mongoose.model('userDoc', schema);

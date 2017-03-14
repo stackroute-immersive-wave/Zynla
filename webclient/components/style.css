@@ -4,6 +4,10 @@
    font-family: Arial, Helvetica, sans-serif;
    text-align: left !important;
 }
+.butstyle{
+  background-color: #B2242E !important;
+  color: white !important;
+}
 
 .packery {
  margin-top: 20px !important;
@@ -99,7 +103,7 @@ font-size: 100px;
 .CardSegment{
 /*originLeft: false;
 originTop: false;*/
-width: 220px;
+width: 250px;
 border: 2px solid smokegrey;
 box-shadow: 5px 5px 5px rgba(34, 25, 25, 0.4);
 transition: opacity .4s ease-in-out;
@@ -207,4 +211,13 @@ width: 250px;
 .navSearch {
  margin-top: 8px;
  margin-left: 30px;
+}
+
+.chatcard {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.chatinput {
+  margin-top: 10px;
 }

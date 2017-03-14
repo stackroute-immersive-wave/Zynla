@@ -4,7 +4,7 @@ import {
    Grid,
    Card
 } from 'semantic-ui-react';
-class interestPage extends React.Component {
+class mainInterestCard extends React.Component {
 
    constructor() {
        super();
@@ -36,7 +36,7 @@ class interestPage extends React.Component {
        );
    }
 }
-module.exports = interestPage;
-interestPage.propTypes = {
+module.exports = mainInterestCard;
+mainInterestCard.propTypes = {
   heading: React.PropTypes.string
 };

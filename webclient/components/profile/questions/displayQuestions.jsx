@@ -6,7 +6,7 @@ import {
    Dimmer,
    Loader
 } from 'semantic-ui-react';
-class questionpage extends React.Component {
+class displayQuestions extends React.Component {
 
   handleOpen = () => this.setState({ active: true })
   handleClose = () => this.setState({ active: false })
@@ -25,7 +25,7 @@ class questionpage extends React.Component {
        let email = Cookie.load('email');
        // console.log(email);
          $.ajax({
-             url: 'http://localhost:8085/userdoc/getQuestions',
+             url: 'http://localhost:8080/userdoc/getQuestions',
              type: 'POST',
              data: {email: email},
              success: function(data) {
@@ -51,4 +51,4 @@ class questionpage extends React.Component {
      );
    }
 }
-module.exports = questionpage;
+module.exports = displayQuestions;

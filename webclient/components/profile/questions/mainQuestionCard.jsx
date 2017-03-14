@@ -9,10 +9,8 @@ import {
 let queStyle = {
   marginLeft: '5%'
 };
-let cardStyle = {
-  width: '60%'
-};
-class questionpage extends React.Component {
+
+class mainQuestionCard extends React.Component {
 
    constructor() {
        super();
@@ -25,7 +23,7 @@ class questionpage extends React.Component {
                     <Grid.Column width={2}/>
                     <Grid.Column width={10}>
                         <div>
-                            <Card fluid style ={cardStyle}>
+                            <Card fluid>
                                 <Card.Content>
                                     <Card.Header>
                                          {this.props.heading}
@@ -60,8 +58,8 @@ class questionpage extends React.Component {
        );
    }
 }
-module.exports = questionpage;
-questionpage.propTypes = {
+module.exports = mainQuestionCard;
+mainQuestionCard.propTypes = {
   heading: React.PropTypes.string,
   category: React.PropTypes.string,
   acceptedCount: React.PropTypes.number,

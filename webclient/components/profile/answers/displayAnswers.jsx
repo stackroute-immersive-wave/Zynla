@@ -1,11 +1,11 @@
 import React from 'react';
 import Cookie from 'react-cookie';
-import AnswersCard from './answerscard';
+import AnswersCard from './answersCard';
 import {
    Dimmer,
    Loader
 } from 'semantic-ui-react';
-class anspage extends React.Component {
+class displayAnswers extends React.Component {
 
   handleOpen = () => this.setState({ active: true })
   handleClose = () => this.setState({ active: false })
@@ -51,4 +51,4 @@ class anspage extends React.Component {
       );
     }
 }
-module.exports = anspage;
+module.exports = displayAnswers;
