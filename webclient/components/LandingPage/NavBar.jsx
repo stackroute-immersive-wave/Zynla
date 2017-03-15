@@ -17,7 +17,7 @@ import Cookie from 'react-cookie';
 import Textarea from 'react-textarea-autosize';
 import {Route, Router, hashHistory} from 'react-router';
 let Cards = require('./Home');
-let Invite = require('./../Invite');
+let Invite = require('./../invite');
 let Profile = require('./../profile/NavBarpro');
 let Questions = require('./../answerbutton/questions.jsx');
 let Answerpage = require('./../cardAnswerPage/answerPage.jsx');

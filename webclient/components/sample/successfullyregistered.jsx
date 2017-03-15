@@ -1,5 +1,5 @@
 import React from 'react';
-import CreateCards from './CreateCards';
+import CreateCards from './createCards';
 import Cookie from 'react-cookie';
 import $ from 'jquery';
 
