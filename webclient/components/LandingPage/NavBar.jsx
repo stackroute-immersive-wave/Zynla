@@ -17,7 +17,7 @@ import Cookie from 'react-cookie';
 import Textarea from 'react-textarea-autosize';
 import {Route, Router, hashHistory} from 'react-router';
 let Cards = require('./Home');
-let Invite = require('./../invite');
+let Invite = require('./../Invite');
 let Profile = require('./../profile/NavBarpro');
 let Questions = require('./../answerbutton/questions.jsx');
 let Answerpage = require('./../cardAnswerPage/answerPage.jsx');
@@ -316,8 +316,6 @@ class NavBar extends Component {
                                          <Menu.Item name='Answer' active={activeItem === 'Answer'}
                                        id='divStyle' onClick={this.handleItemClick}/>
                                      </Link>
-                                <Menu.Item name='chat' active={activeItem === 'chat'}
-                                   id='divStyle' onClick={this.togetherJS.bind(this)}/>
                                 <Link to='/invite'>
                                     <Menu.Item name='invite' active={activeItem === 'invite'}
                                        id='divStyle' onClick={this.handleItemClick}/>
@@ -354,8 +352,8 @@ class NavBar extends Component {
                     </Grid>
                 </Menu>
                 <Grid>
-                     <Grid.Column width={2}/>
-                     <Grid.Column width={13}>
+                     <Grid.Column width={1}/>
+                     <Grid.Column width={15}>
                          <Router history={hashHistory}>
                              <Route path='/home' component={Cards} />
                              <Route path='/invite' component={Invite} />
@@ -365,7 +363,6 @@ class NavBar extends Component {
                              <Route path='/search' component={Search} />
                          </Router>
                      </Grid.Column>
-                     <Grid.Column width={1}/>
                  </Grid>
             </div>
         );

@@ -29,7 +29,7 @@ class DisplayHomePageCard extends React.Component {
             );
         });
         return (
-          <Packery
+          <Packery className = {'my-gallary-class'}
             elementType={'div'} options={packeryOptions} className = 'packery'>
               {Data}
             </Packery>

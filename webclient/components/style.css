@@ -100,10 +100,13 @@ font-size: 100px;
  background-color: #be252a !important;
  color: white !important;
 }
+/*#spacingCategory{
+  margin-left: 40px;
+}*/
 .CardSegment{
 /*originLeft: false;
 originTop: false;*/
-width: 250px;
+width: 240px;
 border: 2px solid smokegrey;
 box-shadow: 5px 5px 5px rgba(34, 25, 25, 0.4);
 transition: opacity .4s ease-in-out;
@@ -154,12 +157,26 @@ width: 250px;
 .LinkColor {
   color: #be252a !important;
 }
-.arrowsize {
+.arrowsizeLeft{
+  height: 60px;
+  width: 60px;
+  margin-top: 35px;
+  margin-right: 20px;
+}
+.arrowsizeRight{
+  height: 60px;
+  width: 60px;
+  margin-top: 35px;
+}
+/*.arrowPosition{
+  margin-left: 50px;
+}*/
+/*.arrowsize {
   height: 60px;
   width: 60px;
   margin-top: 35px;
   margin-left: 20px;
-}
+}*/
 .item {
   /*z-index: 10;*/
   padding-top: 5px;
