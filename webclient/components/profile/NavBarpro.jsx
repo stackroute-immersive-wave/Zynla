@@ -1,30 +1,34 @@
 import React, {Component} from 'react';
-import {Menu, Button, Image, Grid} from 'semantic-ui-react';
+import {Button, Image, Grid, Statistic, Segment, Header, Icon} from 'semantic-ui-react';
 import Cookie from 'react-cookie';
 let DisplayQues = require('./questions/displayQuestions.jsx');
 let DisplayAns = require('./answers/displayAnswers.jsx');
 let BasicInfo = require('./basicInfo/basicInfo.jsx');
 let DisplayFollowing = require('./following/displayFollowing');
 let DisplayFollower = require('./followers/displayFollower');
+import InterestsCard from './basicInfo/interestedCategories/interestsCard';
 let picStyle = {
     marginTop: '3%'
 };
+let meterStyle = {
+    marginTop: '30%',
+    marginLeft: '60%',
+    color: '#B2242E'
+};
 let imageStyle = {
-  marginLeft: '45%'
+  marginLeft: '35%'
 };
 let nameStyle = {
     marginTop: '1%',
     fontSize: '20px',
     fontWeight: 'bold',
-    marginLeft: '46%',
-    color: '#b30000'
+    marginLeft: '40%',
+    color: '#B2242E'
 };
-let menuStyle = {
-    marginTop: '2%',
-    marginLeft: '-18%',
-    width: '120%'
+let buttonStyle = {
+  marginLeft: '10%',
+  marginTop: '-2%'
 };
-
 class NavBarPro extends Component {
 
     state = {
@@ -32,11 +36,14 @@ class NavBarPro extends Component {
         questionCount: 1,
         answerCount: 0,
         followerCount: 0,
+        followingCount: 0,
         foname: 0,
         primary: '',
         secondary: '',
         university: '',
         objArray: [],
+        status: 0,
+        interestsData: [],
           /*eslint-disable*/
         content: (
           <BasicInfo />
@@ -81,8 +88,22 @@ class NavBarPro extends Component {
       });
     }
 
-    onChange() {
-    // console.log('comes to change');
+    getInterestedTopics() {
+        $.ajax({
+            url: 'http://localhost:8080/userdoc/getInterestedTopics',
+            type: 'POST',
+            data: {
+                email: Cookie.load('email')
+            },
+            success: function(data) {
+                this.setState({interestsData: data,
+                content: <InterestsCard interestData={this.state.interestsData}/>
+                });
+            }.bind(this),
+            error: function() {
+                // console.error(err.toString());
+            }
+        });
     }
 
     onClick() {
@@ -117,6 +138,56 @@ class NavBarPro extends Component {
                     followerCount: data.followerCount,
                      followingCount: data.followingUser.length,
                      objArray: data});
+                     if(data.profile.gender.length > 0) {
+                       this.setState({
+                         status: parseInt(this.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.education.primary.length > 0) {
+                       this.setState({
+                         status: parseInt(this.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.education.highSchool.length > 0) {
+                       this.setState({
+                         status: parseInt(this.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.education.university.length > 0) {
+                       this.setState({
+                         status: parseInt(this.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.address.country.length > 0) {
+                       this.setState({
+                         status: parseInt(this.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.address.city.length > 0) {
+                       this.setState({
+                         status: parseInt(this.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.address.region.length > 0) {
+                       this.setState({
+                         status: parseInt(this.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.dob.length > 0) {
+                       this.setState({
+                         status: parseInt(this.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.phone.length > 0) {
+                       this.setState({
+                         status: parseInt(this.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.description.length > 0) {
+                       this.setState({
+                         status: parseInt(this.state.status, 10) + 10
+                       });
+                     }
             }.bind(this),
             error: function() {
               // console.log('error in logout' + err);
@@ -125,12 +196,13 @@ class NavBarPro extends Component {
     }
 
     render() {
-        const {activeItem} = this.state;
         const followerCount = this.state.followerCount;
         const followingCount = this.state.followingCount;
+        let profMeter = parseInt(this.state.status, 10) + '%';
         return (
             <div>
-                <Grid centered columns={1}>
+              <Segment>
+                <Grid centered columns={2}>
                     <Grid.Column style={picStyle}>
                       <Image style={imageStyle} src={Cookie.load('profilepicture')}
                         size='small' shape='circular' avatar bordered/>
@@ -138,76 +210,71 @@ class NavBarPro extends Component {
                             {Cookie.load('username')}
                         </div>
                     </Grid.Column>
-                </Grid>
-                <div style={menuStyle}>
-                    <Grid>
-                        <Grid.Column width={3}/>
-                        <Grid.Column centered width={10}>
-                            <Menu secondary onChange = {this.onChange.bind(this)}>
-                                    <Menu.Item name='info' active={activeItem === 'info'}
-                                      onClick={this.handleItemClick}>
-                                      <Button className='butstyle' content='Basic Info'
-                                        icon='info'/>
-                                    </Menu.Item>
-                                    <Menu.Item name='Questions' active={activeItem === 'Questions'}
-                                       onClick={this.handleItemClick.bind(this)}>
-                                       <Button className='butstyle' content='Questions Posted'
-                                         icon='question circle' label={{
-                                             basic: true,
-                                             color: '#B2242E',
-                                             pointing: 'left',
-                                             content: this.state.questionCount
-                                         }}/>
-                                    </Menu.Item>
-                                    <Menu.Item name='Answers' active={activeItem === 'Answers'}
-                                       onClick={this.handleItemClick}>
-                                       <Button className='butstyle' content='Answers Answered'
-                                         icon='question circle' label={{
-                                             basic: true,
-                                             color: '#B2242E',
-                                             pointing: 'left',
-                                             content: this.state.answerCount
-                                         }}/>
-                                    </Menu.Item>
-                                    <Menu.Item name='follower' active={activeItem === 'follower'}
-                                       onClick={this.handleItemClick}>
-                                       <Button className='butstyle' content='Followers'
-                                         icon='user plus' label={{
-                                           basic: true,
-                                           color: 'white',
-                                           pointing: 'left',
-                                           content: followerCount
-                                       }}/>
-                                     </Menu.Item>
-                                    <Menu.Item name='following' active={activeItem === 'following'}
-                                       onClick={this.handleItemClick}>
-                                       <Button className='butstyle' content='Following'
-                                         icon='fork' label={{
-                                           basic: true,
-                                           color: 'white',
-                                           pointing: 'left',
-                                           content: followingCount
-                                       }}/>
-                                     </Menu.Item>
-                                    <Menu.Item name='watchingtopic'
-                                      active={activeItem === 'watchingtopic'}
-                                       onClick={this.handleItemClick}>
-                                       <Button className='butstyle' content='Watching Topic'
-                                         icon='fork' label={{
-                                           basic: true,
-                                           color: 'white',
-                                           pointing: 'left',
-                                           content: '0'
-                                       }}/>
-                                     </Menu.Item>
-                            </Menu>
-                        </Grid.Column>
-                        <Grid.Column width={3}/>
-
-                    </Grid>
-                </div>
+                    <Grid.Column>
+                      <div style={meterStyle}>
+                        <Statistic>
+                          <Statistic.Label>Profile Meter</Statistic.Label>
+                          <Statistic.Value> {profMeter} </Statistic.Value>
+                          <Statistic.Label>completed</Statistic.Label>
+                        </Statistic>
+                        </div>
+                    </Grid.Column>
+                  </Grid>
+                    <div style = {buttonStyle}>
+                       <Button onClick={this.handleItemClick}
+                         className='butstyle'
+                         content='Followers'
+                         icon='user plus' label={{
+                           basic: true,
+                           color: 'white',
+                           pointing: 'left',
+                           content: followerCount
+                       }}/>
+                       <Button onClick={this.handleItemClick} className='butstyle'
+                         content='Following'
+                         icon='fork' label={{
+                           basic: true,
+                           color: 'white',
+                           pointing: 'left',
+                           content: followingCount
+                       }}/>
+                     </div>
+                     </Segment>
                 <div>
-                {this.state.content}
+                    <br/>
+                  <Grid>
+                    <Grid.Column width = {12}>
+                    {this.state.content}
+                  </Grid.Column>
+                  <Grid.Column width = {4}>
+                    <Segment>
+                      <Header as='h2' dividing>
+ <Header.Content>
+   {this.state.answerCount}
+   &nbsp;&nbsp;&nbsp;
+   Questions
+   <Icon name='question circle' />
+ </Header.Content>
+</Header>
+
+<Header as='h2' dividing>
+ <Header.Content>
+   {this.state.answerCount}
+   &nbsp;&nbsp;&nbsp;Answers
+  <Icon name='info circle' />
+ </Header.Content>
+
+</Header>
+<Header as='h2' dividing>
+ <Icon name='favorite' />
+ <Header.Content onClick={this.getInterestedTopics.bind(this)}>
+   Watching Topics
+ </Header.Content>
+</Header>
+</Segment>
+                  </Grid.Column>
+                  <Grid.Column width = {1}/>
+                </Grid>
               </div>
             </div>
         );

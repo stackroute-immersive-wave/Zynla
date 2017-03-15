@@ -8,13 +8,9 @@ import {
     Loader,
     Menu,
     Grid,
-    Segment,
-    Statistic
+    Segment
 } from 'semantic-ui-react';
 import Cookie from 'react-cookie';
-let infoStyle = {
-    marginLeft: '20%'
-};
 import Chat from './chatbot.jsx';
 import InterestsCard from './interestedCategories/interestsCard';
 class basicInfo extends React.Component {
@@ -25,7 +21,7 @@ class basicInfo extends React.Component {
         super();
         this.state = {
             loader: false,
-            activeItem: 'eduForm',
+            activeItem: 'Education',
             transparent: true,
             editEduIcon: '',
             editLocIcon: '',
@@ -61,15 +57,16 @@ class basicInfo extends React.Component {
 
     handleItemClick(e, {name}) {
         let data;
-        if (name === 'eduForm') {
+        if (name === 'Education') {
             data = (
                 <div>
-                      <h1>
-                          I completed my class X at <a onClick = {this.updateEducation}>
-                            {this.state.primary}</a>
-                           earned my degree from <a>{this.state.university}</a>.<br/>
-                          and completed the class XII  from <a>{this.state.secondary}</a>.
-                      </h1>
+                      <h2 style={{fontFamily: 'Georgia, serif'}}>
+                          I did my schooling from <a style={{cursor: 'pointer'}}
+                            onClick = {this.updateEducation}>
+                            {this.state.primary}</a> earned my degree from <a>
+                              {this.state.university}</a>.<br/>
+                          and completed the high schooling from <a>{this.state.secondary}</a>.
+                      </h2>
                             {
                             /* <label>Primary</label>
                             <Input inverted transparent={this.state.transparent} size='small'
@@ -88,10 +85,10 @@ class basicInfo extends React.Component {
 
                 </div>
             );
-        } else if (name === 'locForm') {
+        } else if (name === 'Location') {
             data = (
                 <div>
-                    <Form action='?#/profile' name='eduForm'>
+                    <Form action='?#/profile'>
                         <Form.Field>
                             <label>Line1</label>
                             <Input onChange={this.changeLine1.bind(this)}
@@ -127,7 +124,7 @@ class basicInfo extends React.Component {
                       <Icon name={this.state.editLocIcon}/> {this.state.but1}</Button>
                 </div>
             );
-        } else if (name === 'abtForm') {
+        } else if (name === 'Personal') {
             data = (
                 <div>
                     <Form action='?#/profile'>
@@ -158,7 +155,7 @@ class basicInfo extends React.Component {
                         <Icon name={this.state.editAbtIcon}/>{this.state.but2}</Button>
                 </div>
             );
-        } else if (name === 'interestTopic') {
+        } else if (name === 'Interested Topics') {
             data = (<InterestsCard interestData={this.state.interestsData}/>);
         }
         this.setState({activeItem: name, profileForm: data});
@@ -255,8 +252,7 @@ class basicInfo extends React.Component {
                         primary: data.profile.education.primary,
                         secondary: data.profile.education.highSchool,
                         university: data.profile.education.university,
-                        editEduIcon: 'write square',
-                        status: parseInt(this.state.status, 10) + 33
+                        editEduIcon: 'write square'
                     });
                 } else {
                     this.setState({but: 'Add', EduTitle: 'Add Education',
@@ -277,8 +273,7 @@ class basicInfo extends React.Component {
                         region: data.profile.address.region,
                         city: data.profile.address.city,
                         postalCode: data.profile.address.postalCode,
-                        editLocIcon: 'write square',
-                        status: parseInt(this.state.status, 10) + 33
+                        editLocIcon: 'write square'
                     });
                 } else {
                     this.setState({
@@ -302,8 +297,7 @@ class basicInfo extends React.Component {
                         dob: data.profile.dob,
                         gender: data.profile.gender,
                         phone: data.profile.phone,
-                        editAbtIcon: 'write square',
-                        status: parseInt(this.state.status, 10) + 33
+                        editAbtIcon: 'write square'
                     });
                 } else {
                     this.setState({
@@ -430,27 +424,27 @@ class basicInfo extends React.Component {
     render() {
         const {active} = this.state;
         const {activeItem} = this.state;
-        let profMeter = parseInt(this.state.status, 10);
+
         return (
 
-                      <div style={infoStyle}>
+                      <div>
 
-                        <Statistic value= {profMeter} label='Completed' />
                 <Dimmer active={active} page>
                     <Loader>Loading</Loader>
                 </Dimmer>
 
                 <Grid>
                     <Grid.Column width={4}>
-                        <Menu fluid vertical tabular>
+                        <Menu style={{fontFamily: 'Georgia, serif'}} fluid vertical tabular>
 
-                            <Menu.Item name='eduForm' active={activeItem === 'eduForm'}
+                            <Menu.Item name='Education' active={activeItem === 'Education'}
                               onClick={this.handleItemClick}/>
-                            <Menu.Item name='locForm' active={activeItem === 'locForm'}
+                            <Menu.Item name='Location' active={activeItem === 'Location'}
                               onClick={this.handleItemClick}/>
-                            <Menu.Item name='abtForm' active={activeItem === 'abtForm'}
+                            <Menu.Item name='Personal' active={activeItem === 'Personal'}
                               onClick={this.handleItemClick}/>
-                            <Menu.Item name='interestTopic' active={activeItem === 'interestTopic'}
+                            <Menu.Item name='Interested Topics'
+                              active={activeItem === 'Interested Topics'}
                               onClick={this.handleItemClick}/>
                         </Menu>
                     </Grid.Column>
