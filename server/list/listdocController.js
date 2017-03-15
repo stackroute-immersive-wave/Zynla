@@ -48,7 +48,44 @@ let listController = {
             res.send(err);
         });
     },
-
+    // router for accepting the answer by user (by sumit on 14/3/2017 )
+    UpdateAcceptans: function(req, res) {
+      //  console.log('inside update accept', req.body);
+       let id = req.body.id;
+       let qid = req.body.questionId;
+       let email = req.body.email;
+       let query = '';
+       /*eslint-disable*/
+       query = 'match(n:Answer),\
+                   (p:User {name:"' + email + '"}), \
+                   (q:Question) \
+                    where id(n)=' + id + ' and id(q)=' + qid + '\
+                   create (n)-[:accepted_by]->(p), \
+                   (q)-[:accept]->(n)';
+                   /*eslint-enable*/
+       session.run(query).then(function(result) {
+           if (result) {
+               // console.log('id', id);
+               List.update({
+                   id: qid,
+                   'topCards.id': id
+               }, {
+                   $set: {
+                       'topCards.$.isAccepted': true
+                   }
+               }, function(err) {
+                   if (err) {
+                       // console.log("Something wrong when updating data!");
+                   }
+                   res.send('success');
+                   // console.log(doc);
+               });
+           } else {
+               // console.log("error in updating the like");
+           }
+       });
+   },
+// Router for Getting question data from mongo db created by Aswini K
     getCardQuestion: function(req, res) {
         // console.log('Inside Ques get' + req.params.id);
         List.find({id: req.params.id}).then((docs) => {
@@ -216,6 +253,7 @@ let listController = {
             }
         });
     },
+    // Router for adding viwe count in mongo db created by Aswini K
     updateviews: function(req, res) {
         let id = req.body.id;
         // console.log("ID:" + id);
@@ -231,6 +269,7 @@ let listController = {
             res.send(err);
         });
     },
+    // Router for storing comments for question in mongo and neo4j created by Aswini K
     updatecomments: function(req, res) {
    let query = ' \
 match (n:Question),\
@@ -315,7 +354,7 @@ session.run(query).then(function(result) {
             }
         });
     },
-
+  //router for updating likes and dislikes for question by sumit(5/3/2017)
     likeStatus: function(req, res) {
         var id = req.body.id;
         var email = req.body.email;
@@ -343,6 +382,7 @@ session.run(query).then(function(result) {
             }
         });
     },
+    //router of updating like for question by sumit(3/3/2017)
     updateLike: function(req, res) {
         console.log('inside update like', req.body);
         var id = req.body.id;
@@ -377,6 +417,7 @@ session.run(query).then(function(result) {
             }
         });
     },
+      //router of updating unlike for question by sumit(4/3/2017)
     updateunlike: function(req, res) {
         var id = req.body.id;
         var email = req.body.email;

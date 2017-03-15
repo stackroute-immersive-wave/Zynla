@@ -16,4 +16,5 @@ router.post('/updateunlike', listCtrl.updateunlike);
 router.post('/likestatus', listCtrl.likeStatus);
 router.get('/getImages', listCtrl.getImages);
 router.put('/updatecomment', listCtrl.updatecomments);
+router.post('/UpdateAcceptans', listCtrl.UpdateAcceptans);
 module.exports = router;

@@ -7,15 +7,15 @@ class Cards extends React.Component {
 	}
 	// static defaultProps = {}
 
-
+// Getting top card answers from mongo db created by Aswini K
 	render () {
 		let arr = this.props.ansCollection;
 		let cards = arr[0].topCards.map(function(item) {
 				return (
 			<div>
-				<Answercard createdBy={item.createdBy} content={item.content}
+				<Answercard quesId={arr[0].id} createdBy={item.createdBy} content={item.content}
 				createdOn={item.createdOn} id={item.id} upvote={item.upVote}
-				downvote={item.downVote} isAccepted={item.isAccepted}/>
+				downvote={item.downVote} isAccepted={item.isAccepted} postedBy={arr[0].postedBy}/>
 			</div>
 			);
 		});

@@ -47,7 +47,9 @@ let ansstyle1 = {
     fontSize: 20
 };
 let followstyle = {
-    float: 'right'
+    float: 'right',
+    backgroundcolor: '#BE252A ',
+    color: '#FFFFFF '
 };
 let formstyle = {
     margin: '3% 3% 3% 3% '
@@ -71,6 +73,7 @@ class answerPage extends React.Component {
             downVotes: 0,
             colorName: 'green',
             colorNameUnlike: 'red',
+            iconName: 'add',
             objArray: [
                 {
                     id: 0,
@@ -125,8 +128,9 @@ class answerPage extends React.Component {
         this.setState({content: e.target.value});
     }
     comment(e) {
-           this.setState({comment: e.target.value});
-       }
+        this.setState({comment: e.target.value});
+    }
+    // Posting answer for question created by Aswini K
     postAnswer() {
         let id = window.location.hash.split('id=')[1];
         // console.log('inside post Answer');
@@ -150,7 +154,7 @@ class answerPage extends React.Component {
             }
         });
     }
-
+    // Getting views count created by Aswini K
     getviewscount() {
         // console.log('views before increment', this.state.views);
         let id = window.location.hash.split('id=')[1];
@@ -170,27 +174,28 @@ class answerPage extends React.Component {
             }.bind(this)
         });
     }
+    // Adding comments for question created by Aswini K
     addcomment() {
-       // console.log('views before increment');
-       let id = window.location.hash.split('id=')[1];
+        // console.log('views before increment');
+        let id = window.location.hash.split('id=')[1];
 
-       let commentdata = {
-           questionId: id,
-           mail: Cookie.load('email'),
-           content: this.state.comment
-       };
-       // console.log("comments:"+commentdata);
-       $.ajax({
-           url: '/list/updatecomment',
-           type: 'PUT',
-           data: commentdata,
-           success: function() {
-               // this.setState({comment: Comments});
-               // console.log('inside success', this.state.commentdata);
-             }
-       });
-   }
-
+        let commentdata = {
+            questionId: id,
+            mail: Cookie.load('email'),
+            content: this.state.comment
+        };
+        // console.log("comments:"+commentdata);
+        $.ajax({
+            url: '/list/updatecomment',
+            type: 'PUT',
+            data: commentdata,
+            success: function() {
+                // this.setState({comment: Comments});
+                // console.log('inside success', this.state.commentdata);
+            }
+        });
+    }
+    // Getting question data from mongo db created by Aswini K
     getData() {
         let id = window.location.hash.split('id=')[1];
         $.ajax({
@@ -207,26 +212,26 @@ class answerPage extends React.Component {
     componentWillMount() {
         this.getData();
         this.getLikeStatus();
+        this.CheckingId();
     }
-
+    // updating like for question by sumit(28/2/2017)
     updatelike() {
         let type = 'add';
         let color = 'blue';
         let upVotesTemp = parseInt(this.state.upVotes, 10) + 1;
-        if(this.state.colorName === 'green') {
+        if (this.state.colorName === 'green') {
             type = 'add';
             upVotesTemp = parseInt(this.state.upVotes, 10) + 1;
             color = 'blue';
-        }
-        else {
+        } else {
             type = 'delete';
             upVotesTemp = parseInt(this.state.upVotes, 10) - 1;
             color = 'green';
         }
-      let id = window.location.hash.split('id=')[1];
-      // console.log('upvotes before increment',this.state.upVotes);
-      // console.log('upvotes after increment',upVotesTemp);
-      $.ajax({
+        let id = window.location.hash.split('id=')[1];
+        // console.log('upvotes before increment',this.state.upVotes);
+        // console.log('upvotes after increment',upVotesTemp);
+        $.ajax({
             url: 'http://localhost:8080/list/updateLike',
             type: 'POST',
             data: {
@@ -237,30 +242,27 @@ class answerPage extends React.Component {
             },
             success: function() {
                 // console.log('comes');
-                this.setState({
-                    colorName: color,
-                    upVotes: upVotesTemp
-                });
+                this.setState({colorName: color, upVotes: upVotesTemp});
             }.bind(this)
-          });
+        });
     }
+    // updating unlike for question by sumit(1/3/2017)
     updateunlike() {
         // console.log("coming to update unlike");
         let type = 'add';
         let color = 'red';
         let downVotesTemp = parseInt(this.state.downVotes, 10) + 1;
-        if(this.state.colorNameUnlike === 'red') {
+        if (this.state.colorNameUnlike === 'red') {
             type = 'add';
             downVotesTemp = parseInt(this.state.downVotes, 10) + 1;
             color = 'black';
-        }
-        else {
+        } else {
             type = 'delete';
             downVotesTemp = parseInt(this.state.downVotes, 10) - 1;
             color = 'red';
         }
-      let id = window.location.hash.split('id=')[1];
-      $.ajax({
+        let id = window.location.hash.split('id=')[1];
+        $.ajax({
             url: 'http://localhost:8080/list/updateunlike',
             type: 'POST',
             data: {
@@ -270,17 +272,15 @@ class answerPage extends React.Component {
                 type: type
             },
             success: function() {
-                this.setState({
-                    colorNameUnlike: color,
-                    downVotes: downVotesTemp
-                });
+                this.setState({colorNameUnlike: color, downVotes: downVotesTemp});
             }.bind(this)
-          });
+        });
     }
+    // updating status of the button (color)for question by sumit(1/3/2017)
     getLikeStatus() {
         let id = window.location.hash.split('id=')[1];
         let email = Cookie.load('email');
-     $.ajax({
+        $.ajax({
             url: 'http://localhost:8080/list/likestatus',
             type: 'POST',
             data: {
@@ -289,28 +289,68 @@ class answerPage extends React.Component {
             },
             success: function(data) {
                 // console.log(data);
-                if(data.like) {
-                    this.setState({
-                        colorName: 'blue'
-                    });
+                if (data.like) {
+                    this.setState({colorName: 'blue'});
+                } else {
+                    this.setState({colorName: 'green'});
                 }
-                else {
-                    this.setState({
-                        colorName: 'green'
-                    });
-                }
-                if(data.unlike) {
-                    this.setState({
-                        colorNameUnlike: 'black'
-                    });
-                }
-                else {
-                    this.setState({
-                        colorNameUnlike: 'red'
-                    });
+                if (data.unlike) {
+                    this.setState({colorNameUnlike: 'black'});
+                } else {
+                    this.setState({colorNameUnlike: 'red'});
                 }
             }.bind(this)
-          });
+        });
+    }
+    // Following the question created by Aswini K
+    CheckingId() {
+        let emailId = Cookie.load('email');
+        let arr = [];
+        $.ajax({
+            url: `/users/viewFollowCard/${emailId}`,
+            type: 'GET',
+            success: function(data) {
+                data.map(function(item) {
+                    item.watchingList.map(function(items) {
+                        arr.push(items);
+                    });
+                });
+                for (let i = 0; i < arr.length; i = i + 1) {
+                    if (this.props.id === arr[i].id) {
+                        this.setState({iconName: 'minus'});
+                    }
+                }
+            }.bind(this)
+        });
+    }
+    /* To save the card which you follow in mongo db & Neo4j*/
+    saveToProfile() {
+        let id = window.location.hash.split('id=')[1];
+        let emailId = Cookie.load('email');
+        $.ajax({
+
+            url: '/users/saveToProfile',
+            type: 'PUT',
+            data: {
+                emailId: emailId,
+                id: id,
+                displayImage: this.props.displayImage,
+                heading: this.props.heading,
+                statement: this.props.question,
+                postedBy: this.props.postedBy,
+                profileImage: this.props.profileImage,
+                addedOn: this.props.addedOn,
+                views: this.props.views,
+                category: this.props.category,
+                upVotes: this.props.upVotes,
+                downVotes: this.props.downVotes,
+                answerCounts: this.props.answerCounts
+            },
+            success: function() {
+                this.setState({iconName: 'add', text: 'saved'});
+            }.bind(this),
+            error: function() {}
+        });
     }
 
     render() {
@@ -322,9 +362,12 @@ class answerPage extends React.Component {
                     <Grid.Column width={13}>
                         <div style={titlestyle}>
                             {quesObj[0].heading}
-                            <Icon circular style={followstyle} name='add' size='small' color='red'/>
+                            <Button circular style={followstyle}
+                              icon={this.state.iconName} size='small'
+                              color='red' onClick={this.saveToProfile.bind(this)}/>
                         </div>
-                        <div style={questionstyle}>{quesObj[0].question}</div>
+                        <div style={questionstyle}>
+                          {quesObj[0].question}</div>
                         <Breadcrumb>
                             <Breadcrumb.Section link>{quesObj[0].tags}</Breadcrumb.Section>
                         </Breadcrumb>
@@ -336,38 +379,28 @@ class answerPage extends React.Component {
                             </a>
                         </Segment>
                         <div style ={crumstyle}>
-                          <Button onClick={this.updatelike.bind(this)}>
-                            <Icon style={likestyle}
-                              name='thumbs up'
-                              size='large'
-                              color={this.state.colorName || 'green'} />
+
+                            <Icon style={likestyle} name='thumbs up' size='big'
+                              color={this.state.colorName || 'green'}
+                              onClick={this.updatelike.bind(this)}/>
                             {this.state.upVotes}
-                          </Button>
-                          <Button onClick={this.updateunlike.bind(this)}>
-                            <Icon style={unlikestyle}
-                              name='thumbs down'
-                              size='large'
-                              color={this.state.colorNameUnlike || 'red'} />
+                            <Icon style={unlikestyle} name='thumbs down' size='big'
+                              color={this.state.colorNameUnlike || 'red'}
+                              onClick={this.updateunlike.bind(this)}/>
                               {this.state.downVotes}
-                            </Button>
-                            <Button basic color='blue' content='Views' style={viewstyle} label={{
-                                as: 'a',
-                                basic: true,
-                                color: 'blue',
-                                pointing: 'left',
-                                content: quesObj[0].views + 1
-                            }}/>
-                            <Modal trigger={<Button positive style = {
-                                buttonfolstyle
-                            }
-                            size = 'mini' > Click to Answer </Button>} closeIcon='close'>
+
+                            <Icon name='eye' size='big' style={viewstyle}/>{quesObj[0].views + 1}
+                            <Modal trigger={<Button positive
+                              style = {buttonfolstyle}
+                            size = 'mini' > Click to Answer </Button>}
+                            closeIcon='close'>
                                 <Modal.Content>
                                     <div style={titlestyle1}>
                                         {quesObj[0].heading}
                                     </div>
                                     <Form>
                                         <TextArea placeholder='Write Your Answer Here.....'
-                                           onChange={this.textVal}/>
+                                          onChange={this.textVal}/>
                                     </Form>
                                 </Modal.Content>
                                 <Modal.Actions>
@@ -377,16 +410,17 @@ class answerPage extends React.Component {
                                     </Button>
                                 </Modal.Actions>
                             </Modal>
-                            <Button negative style ={buttonfolstyle} size='mini'>Report</Button>
-                            <Modal trigger={<Button basic color = 'black' size='mini'
-                             style={buttonfolstyle}>Add Comments</Button>}>
-                               <Form style={formstyle}>
-                                   <TextArea onChange={this.comment.bind(this)}
-                                     value={this.state.comment}/>
-                               </Form>
-                               <Button content='Submit' primary
-                                 onClick={this.addcomment.bind(this)}/>
-                           </Modal>
+                            <Button negative style ={buttonfolstyle}
+                              size='mini'>Report</Button>
+                            <Modal trigger={<Button basic color = 'black' size = 'mini'
+                              style = {buttonfolstyle} > Add Comments </Button>}>
+                                <Form style={formstyle}>
+                                    <TextArea onChange={this.comment.bind(this)}
+                                      value={this.state.comment}/>
+                                </Form>
+                                <Button content='Submit' primary
+                                  onClick={this.addcomment.bind(this)}/>
+                            </Modal>
 
                         </div>
                         <div style={ansstyle1}>{quesObj[0].answerCounts}
@@ -400,5 +434,20 @@ class answerPage extends React.Component {
         );
     }
 }
-
+answerPage.propTypes = {
+    displayImage: React.PropTypes.string.isRequired,
+    heading: React.PropTypes.string.isRequired,
+    question: React.PropTypes.string.isRequired,
+    postedBy: React.PropTypes.string.isRequired,
+    addedOn: React.PropTypes.number.isRequired,
+    category: React.PropTypes.string.isRequired,
+    upVotes: React.PropTypes.string.isRequired,
+    downVotes: React.PropTypes.string.isRequired,
+    answerCounts: React.PropTypes.string.isRequired,
+    profileImage: React.PropTypes.string.isRequired,
+    views: React.PropTypes.number.isRequired,
+    acceptedCounts: React.PropTypes.string.isRequired,
+    remove: React.PropTypes.func.isRequired,
+    id: React.PropTypes.number
+};
 module.exports = answerPage;
