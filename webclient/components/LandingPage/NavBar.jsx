@@ -249,7 +249,7 @@ class NavBar extends Component {
                             <Dropdown className = "navSearch" placeholder='Search...'
                               onChange = {this.updatesearchQuery.bind(this)}
                               onKeyUp={this.updateConcept.bind(this)}
-                              multiple search selection
+                              search selection
                               options={this.state.suggestedQuestions} />
                             <Link to = {'/search?question=' + this.state.searchQuery}>
                             <Button>Search</Button>

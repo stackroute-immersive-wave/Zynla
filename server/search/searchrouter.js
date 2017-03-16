@@ -8,4 +8,5 @@ router.post('/followuser', searchCtrl.followUser);
 router.post('/isfollow', searchCtrl.isFollow);
 router.post('/isfollowtopic', searchCtrl.isFollowTopic);
 router.post('/followtopic', searchCtrl.followTopic);
+router.post('/getuserprofile', searchCtrl.getuserprofile);
 module.exports = router;

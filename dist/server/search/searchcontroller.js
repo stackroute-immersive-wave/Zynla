@@ -1,4 +1,5 @@
 const List = require('../list/listdocEntity');
+const userList = require('../users/userProfileEntity').userModel;
 let driver = require('../config/neo4j');
 let searchController = {
 
@@ -18,6 +19,36 @@ let searchController = {
         }).catch(function() {
             res.send(['abc', 'def', 'xyz']);
         });
+    },
+
+    getuserprofile: function(req, res) {
+        let session = driver.session();
+        let query = 'match (n:Concept {name:"' + req.body.q + '"})<-[:follow]-(u:User) return u';
+        session.run(query).then(function(result) {
+            let arr = [];
+            for (let x = 0; x < result.records.length; x = x + 1) {
+                /* eslint-disable */
+                let y = result.records[x]._fields[0].identity.low;
+                /* eslint-enable */
+                arr.push(y);
+            }
+            const arrobj = [];
+           userList.find({
+                id: {
+                    $in: arr
+                }
+            }).then((docs) => {
+                arrobj.push(docs);
+                res.send(docs);
+                session.close();
+            });
+        }).catch(function() {
+            userList.find().then((docs) => {
+                res.send(docs);
+                session.close();
+            });
+        });
+        session.close();
     },
 
     getQuestions: function(req, res) {

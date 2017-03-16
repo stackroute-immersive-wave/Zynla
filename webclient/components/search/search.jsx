@@ -1,7 +1,7 @@
 import Categories from './categories.jsx';
-import QuestionPage from './questionpage';
+import QuestionPage from './questionPage';
 import Concepts from './concepts';
-import People from './People';
+import People from './people';
 import React from 'react';
 import $ from 'jquery';
 import Cookie from 'react-cookie';
@@ -9,12 +9,14 @@ import Cookie from 'react-cookie';
 class Search extends React.Component {
     constructor() {
         super();
+// defining the states
         this.state = {
             savedata: [],
             concept: [],
             component: '',
             people: '',
             isfollow: [],
+            profile: [],
             followtopic: 'Follow'
         };
     }
@@ -25,19 +27,19 @@ class Search extends React.Component {
       this.getConcept();
       this.isFollowTopic();
     }
-
+// this method will re render the component when the url is changed
     componentWillReceiveProps() {
       this.getSearchCards();
       this.getPeople();
       this.getConcept();
       this.isFollowTopic();
     }
-
+// function to change component basing in the seected option (people or questions) in search
     changeComponent(x) {
       if(x === 'people') {
         /* eslint-disable */
         let temp = (
-          <People people = {this.state.people} isfollow = {this.state.isfollow}/>
+          <People people = {this.state.people} isfollow = {this.state.isfollow} profile = {this.state.profile}/>
         );
         /* eslint-enable */
         this.setState({
@@ -82,7 +84,7 @@ class Search extends React.Component {
           }.bind(this)
         });
    }
-
+// get all people fallowing the particular topic
    getPeople() {
      let q = window.location.hash.split('question=')[1];
      let arr = [];
@@ -98,10 +100,26 @@ class Search extends React.Component {
            });
            this.setState({people: arr});
            this.isFollow();
+           this.getUserProfile();
          }.bind(this)
        });
    }
 
+   // get the profile object of users fallowing the topic
+   getUserProfile() {
+    let q = window.location.hash.split('question=')[1];
+     $.ajax({
+         url: '/search/getuserprofile',
+         type: 'POST',
+         data: {
+           q: q
+         },
+         success: function(data) {
+          this.setState({profile: data});
+         }.bind(this)
+       });
+   }
+// to check wether a loged in user is fallowing the particular topic
    isFollowTopic() {
      let id = Cookie.load('email');
      let q = window.location.hash.split('question=')[1];
@@ -126,7 +144,7 @@ class Search extends React.Component {
          }.bind(this)
        });
    }
-
+// method to find if user is fallowing other user in that particular topic
    isFollow() {
      if(this.state.followtopic === 'Following') {
        return 0;
@@ -150,7 +168,7 @@ class Search extends React.Component {
        });
        return 1;
    }
-
+// method to find out concepts in that particular topic
    getConcept() {
      let q = window.location.hash.split('question=')[1];
      $.ajax({
@@ -164,7 +182,7 @@ class Search extends React.Component {
          }.bind(this)
        });
    }
-
+// method to make user fallow a topic
    followTopic() {
      let q = window.location.hash.split('question=')[1];
      let id = Cookie.load('email');
@@ -176,7 +194,7 @@ class Search extends React.Component {
            concept: q
          },
          success: function() {
-           let temp = 'following ' + q;
+           let temp = 'Following';
            this.setState({followtopic: temp});
          }.bind(this)
       });
@@ -185,8 +203,9 @@ class Search extends React.Component {
    render() {
        return (
              <div className='search1' >
-                 <Concepts json = {this.state.concept} q = {this.state.followtopic}
-                  followTopic = {this.followTopic.bind(this)}/>
+                 <Concepts json = {this.state.concept} ques = {this.state.followtopic}
+                  followTopic = {this.followTopic.bind(this)}
+                  topic = {window.location.hash.split('question=')[1]} />
                  <Categories changeComponent = {this.changeComponent.bind(this)}/>
                  {this.state.component}
              </div>

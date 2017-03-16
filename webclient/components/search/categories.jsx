@@ -1,17 +1,17 @@
 import React from 'react';
-import {Grid, Icon, Button} from 'semantic-ui-react';
+import {Grid, Menu} from 'semantic-ui-react';
 
 class Category extends React.Component {
   constructor() {
     super();
   }
-
+// on click method to change the component using a parent function
   people() {
     /* eslint-disable */
     this.props.changeComponent('people');
     /* eslint-enable */
   }
-
+// on click method to change the component using a parent function
   questions() {
     /* eslint-disable */
     this.props.changeComponent('questions');
@@ -20,24 +20,14 @@ class Category extends React.Component {
 
   render() {
     return (
-      <div>
-        <Grid centered>
-            <Grid.Column width={2} className='arrowsize'>
-                <Icon name='chevron left'/>
-            </Grid.Column>
-            <Grid.Column width={6} centered>
-                <Grid centered columns={4}>
-                    <Grid.Column>
-                      <Button primary onClick = {this.questions.bind(this)}>Questions</Button>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Button primary onClick = {this.people.bind(this)}>People</Button>
-                    </Grid.Column>
-                </Grid>
-            </Grid.Column>
-            <Grid.Column width={2} className='arrowsize'>
-                <Icon name='chevron right'/>
-            </Grid.Column>
+      <div className = 'menudiv'>
+        <Grid centered className='arrowsize1' style={{marginLeft: -270 + 'px',
+         marginTop: 20 + 'px', marginBottom: 50 + 'px'}}>
+        <Menu color={'red'} centered inverted widths={2}
+         className='Menu' style={{width: 550 + 'px', fontSize: 15 + 'px'}}>
+        <Menu.Item name='Questions' onClick = {this.questions.bind(this)} />
+        <Menu.Item name='People' onClick = {this.people.bind(this)} />
+      </Menu>
         </Grid>
       </div>
     );

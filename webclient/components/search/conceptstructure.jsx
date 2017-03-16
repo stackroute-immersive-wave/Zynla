@@ -6,20 +6,18 @@ class ConceptStructure extends React.Component {
     constructor() {
         super();
     }
-
-    render() {
+ render() {
       return(
         /* eslint-disable */
         <div>
           <Link to = {'/search?question=' + this.props.conceptName}>
-            <Button secondary>{this.props.conceptName}</Button>
+            <Button basic color='red' style={{height: 51 + 'px', width: 105 + 'px'}} >{this.props.conceptName}</Button>
           </Link>
         </div>
         /* eslint-enable */
       );
     }
 }
-
 ConceptStructure.propTypes = {
    displayImage: React.PropTypes.string.isRequired
  };

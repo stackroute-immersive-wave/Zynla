@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, Button, Icon} from 'semantic-ui-react';
+import {Button, Image, Card} from 'semantic-ui-react';
 import $ from 'jquery';
 import Cookie from 'react-cookie';
 
@@ -10,7 +10,7 @@ class PeopleCard extends React.Component {
       follow: 'Follow'
     };
   }
-
+// before component is mounted this checks for the Fallow status of the user
   componentDidMount() {
     /* eslint-disable */
     if(this.props.follow) {
@@ -25,7 +25,7 @@ class PeopleCard extends React.Component {
     }
     /* eslint-enable */
   }
-
+// function to make user fallow to other user
   handleFollow() {
     let emailId = Cookie.load('email');
     if(this.state.follow === 'Following') {
@@ -50,21 +50,13 @@ class PeopleCard extends React.Component {
   render() {
       return (
         /* eslint-disable */
-        <Grid ceneterd>
-          <Grid.Column width={3} className='arrowsize'>
-
-          </Grid.Column>
-          <Grid.Column width={3} className='arrowsize'>
-            <Icon name = "user" size = "large"/>
-            {this.props.id}
-          </Grid.Column>
-          <Grid.Column width={4} centered>
-
-          </Grid.Column>
-          <Grid.Column width={3} className='arrowsize'>
-              <Button primary onClick = {this.handleFollow.bind(this)}>{this.state.follow}</Button>
-          </Grid.Column>
-        </Grid>
+        <Card>
+    <Image src={this.props.image} />
+    <Card.Content>{this.props.id}</Card.Content>
+    <Card.Content extra>
+    <Button fluid color = 'red' onClick = {this.handleFollow.bind(this)}>{this.state.follow}</Button>
+</Card.Content>
+  </Card>
         /* eslint-enable */
       );
   }
