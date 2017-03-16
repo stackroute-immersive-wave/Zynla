@@ -23,8 +23,12 @@ class Questions extends React.Component {
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
     }
-    handleOpen() {this.setState({ active: true })};
-    handleClose() {this.setState({ active: false })};
+    handleOpen() {
+      this.setState({ active: true });
+    }
+    handleClose() {
+      this.setState({ active: false });
+    }
 //     getInitialState(){
 //   return {
 //     objArray :[]

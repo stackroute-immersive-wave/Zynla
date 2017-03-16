@@ -8,9 +8,7 @@ import {
    Icon,
    Menu,
    Modal,
-   Form,
-   Dimmer,
-   Loader
+   Form
 } from 'semantic-ui-react';
 import {TextArea} from 'semantic-ui-react';
 import RichTextEditor from 'react-rte';
@@ -264,7 +262,7 @@ class QueCard extends React.Component {
     }
     // function to update like for queCards
     updatelike() {
-      console.log('inside update like');
+      // console.log('inside update like');
         let type = 'add';
         let color = 'blue';
         let upVotesTemp = parseInt(this.state.upVotes, 10) + 1;
@@ -291,7 +289,7 @@ class QueCard extends React.Component {
                 type: type
             },
             success: function() {
-                console.log('comes success update like');
+                // console.log('comes success update like');
                 this.setState({
                     colorName: color,
                     upVotes: upVotesTemp
@@ -301,7 +299,7 @@ class QueCard extends React.Component {
     }
     // function to update dislike for queCards
     updateunlike() {
-        console.log("coming to update unlike");
+        // console.log("coming to update unlike");
         let type = 'add';
         let color = 'red';
         let downVotesTemp = parseInt(this.state.downVotes, 10) + 1;
@@ -326,7 +324,7 @@ class QueCard extends React.Component {
                 type: type
             },
             success: function() {
-              console.log('success dislike');
+              // console.log('success dislike');
                 this.setState({
                     colorNameUnlike: color,
                     downVotes: downVotesTemp
@@ -336,17 +334,19 @@ class QueCard extends React.Component {
     }
     render() {
         const { open } = this.state;
-        const { active } = this.state;
-        let save = <Icon name={this.state.iconName} circular
-                    className='plusbtn' color='green' size='large'/>;
+        // const { active } = this.state;
+        let save = (<Icon name={this.state.iconName} circular
+                    className='plusbtn' color='green' size='large'/>);
         // let save = <Icon name='minus' circular
         //             className='plusbtn' color='green' size='large'/>;
         // card component which contains dynamic data
         return (
             <div>
-                {/* <Dimmer active={active} page>
+                {
+                  /* <Dimmer active={active} page>
                   <Loader>Fetching Related Questions</Loader>
-                </Dimmer> */}
+                </Dimmer> */
+              }
                 <Card fluid>
                     <Card.Content extra>
                         <Image className='imageAns' floated='left'
@@ -356,7 +356,7 @@ class QueCard extends React.Component {
                         </a>
                         <p>
                             questioned on {this.props.time}
-                            <span  className='plusbtnhover' onClick={this.saveToProfile.bind(this)}>
+                            <span className='plusbtnhover' onClick={this.saveToProfile.bind(this)}>
                               {save}
                             </span>
                         </p>
@@ -456,6 +456,9 @@ QueCard.propTypes = {
   content: React.PropTypes.string.isRequired,
   upvote: React.PropTypes.number.isRequired,
   downvote: React.PropTypes.number.isRequired,
-  anscount: React.PropTypes.number.isRequired
+  anscount: React.PropTypes.number.isRequired,
+  views: React.PropTypes.number.isRequired,
+  profileImage: React.PropTypes.string.isRequired,
+  category: React.PropTypes.string.isRequired
 };
 module.exports = QueCard;
