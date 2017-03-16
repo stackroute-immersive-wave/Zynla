@@ -372,11 +372,11 @@ class answerPage extends React.Component {
                             <Breadcrumb.Section link>{quesObj[0].tags}</Breadcrumb.Section>
                         </Breadcrumb>
                         <Segment floated='right'>
-                            <div>Asked on {quesObj[0].addedOn}</div>
-                            <Image floated='left' size='mini' src={quesObj[0].profileImage}/>
+                          <Image floated='left' size='mini' src={quesObj[0].profileImage}/>
                             <a>
                                 {quesObj[0].postedBy}
                             </a>
+                            <div>{quesObj[0].addedOn}</div>
                         </Segment>
                         <div style ={crumstyle}>
 

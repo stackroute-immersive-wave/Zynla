@@ -31,15 +31,24 @@ class DisplayFavouriteCategory extends React.Component {
     }
     /* Favourite category maximum 4 display by left side Click*/
     changeStartLeft() {
-        let start = 0;
-        if (this.state.start - 4 < 0) {
-            start = 0;
-        } else {
-            start = this.state.start - 4;
-        }
-        let end = this.state.end - 4;
-        this.setState({start: start, end: end});
-    }
+       let start;
+       let end;
+       if (this.state.start - 4 < 0) {
+           start = 0;
+           end = 0;
+       } else {
+           start = this.state.start - 4;
+       }
+       if (this.state.end - 4 < 3) {
+           end = 3;
+       } else {
+           end = this.state.end - 4;
+       }
+       if (start === 0) {
+           end = 3;
+         }
+       this.setState({start: start, end: end});
+   }
 
     render() {
         let displayImage = [];
