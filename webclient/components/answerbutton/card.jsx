@@ -8,7 +8,9 @@ import {
    Icon,
    Menu,
    Modal,
-   Form
+   Form,
+   Dimmer,
+   Loader
 } from 'semantic-ui-react';
 import {TextArea} from 'semantic-ui-react';
 import RichTextEditor from 'react-rte';
@@ -27,21 +29,33 @@ class QueCard extends React.Component {
             modalStatus: false,
             modalOpen: false,
             selectques: [],
-            questionLists: []
+            questionLists: [],
+            iconName: 'add',
+            upVotes: 0,
+            downVotes: 0,
+            colorName: 'green',
+            colorNameUnlike: 'red'
         };
         this.textVal = this.textVal.bind(this);
         this.postAnswer = this.postAnswer.bind(this);
-        // this.handleOpenLoader = this.handleOpenLoader.bind(this);
-        // this.handleCloseLoader = this.handleCloseLoader.bind(this);
+        this.handleOpenLoader = this.handleOpenLoader.bind(this);
+        this.handleCloseLoader = this.handleCloseLoader.bind(this);
     }
     // functions to maintain modal states
     open = () => this.setState({ open: true });
     close = () => this.setState({ open: false, modalStatus: false });
-    // handleOpenLoader() {this.setState({ active: true });}
-    // handleCloseLoader() {this.setState({ active: false });}
+    // function to open loader initially
+    handleOpenLoader() {
+      this.setState({ active: true });
+    }
+    // function to close loader after fetching data
+    handleCloseLoader() {
+      this.setState({ active: false });
+    }
+    // function to open modal
     modalOpen() {
        this.setState({ modalStatus: true });
-     }
+    }
     static propTypes = {
         onChange: PropTypes.func
     };
@@ -56,11 +70,33 @@ class QueCard extends React.Component {
             this.props.onChange(value.toString('html'));
         }
     };
+    // an ajax call inside to find whether a card is already followed or not
+    componentWillMount() {
+      this.getLikeStatus();
+      let emailId = Cookie.load('email');
+      let arr = [];
+      $.ajax({
+          url: `/users/viewFollowCard/${emailId}`,
+          type: 'GET',
+          success: function(data) {
+            data.map(function(item) {
+              item.watchingList.map(function(items) {
+                arr.push(items);
+              });
+            });
+            for(let i = 0; i < arr.length; i = i + 1) {
+              if(this.props.id === arr[i].id) {
+                this.setState({iconName: 'minus'});
+              }
+            }
+          }.bind(this)
+        });
+    }
     // function to store answer to mongo and neo4j
     postAnswer() {
       // console.log('inside post Answer');
       // answer data to be stored
-      // this.handleOpenLoader();
+      this.handleOpenLoader();
       let ansdata = {
           questionId: this.props.id,
           mail: Cookie.load('email'),
@@ -132,10 +168,11 @@ class QueCard extends React.Component {
 //    this.setState({questionLists: questions});
 //    // console.log('display states',this.state.follows);
 // }
+// to get array containing the user selected queIDs
     getSuggQueArray(arr) {
-      // this.handleCloseLoader();
       this.setState({questionLists: arr});
     }
+    // linking answers with all suggested queIDs
     linkAnswer() {
       let queArray = this.state.questionLists;
       for (let i = 0; i < queArray.length; i = i + 1) {
@@ -161,16 +198,155 @@ class QueCard extends React.Component {
       }
       this.close();
     }
+    // function to save card in profile
+    saveToProfile() {
+        let emailId = Cookie.load('email');
+        $.ajax({
+            url: '/users/saveToProfile',
+            type: 'PUT',
+            data: {
+                emailId: emailId,
+                id: this.props.id,
+                displayImage: this.props.dp,
+                heading: this.props.title,
+                statement: this.props.content,
+                postedBy: this.props.name,
+                views: this.props.views,
+                profileImage: this.props.profileImage,
+                addedOn: this.props.time,
+                category: this.props.category,
+                upVotes: this.props.upvote,
+                downVotes: this.props.downvote,
+                answerCounts: this.props.anscount
+            },
+            success: function() {
+                 this.setState({iconName: 'minus', text: 'saved'});
+            }.bind(this),
+            error: function() {}
+        });
+    }
+    // getting the initial like status to display
+    getLikeStatus() {
+        let id = this.props.id;
+        let email = Cookie.load('email');
+        this.setState({upVotes: this.props.upvote, downVotes: this.props.downvote});
+     $.ajax({
+            url: 'http://localhost:8080/list/likestatus',
+            type: 'POST',
+            data: {
+                id: id,
+                email: email
+            },
+            success: function(data) {
+                // console.log(data);
+                if(data.like) {
+                    this.setState({
+                        colorName: 'blue'
+                    });
+                }
+                else {
+                    this.setState({
+                        colorName: 'green'
+                    });
+                }
+                if(data.unlike) {
+                    this.setState({
+                        colorNameUnlike: 'black'
+                    });
+                }
+                else {
+                    this.setState({
+                        colorNameUnlike: 'red'
+                    });
+                }
+            }.bind(this)
+          });
+    }
+    // function to update like for queCards
+    updatelike() {
+      console.log('inside update like');
+        let type = 'add';
+        let color = 'blue';
+        let upVotesTemp = parseInt(this.state.upVotes, 10) + 1;
+        if(this.state.colorName === 'green') {
+            type = 'add';
+            upVotesTemp = parseInt(this.state.upVotes, 10) + 1;
+            color = 'blue';
+        }
+        else {
+            type = 'delete';
+            upVotesTemp = parseInt(this.state.upVotes, 10) - 1;
+            color = 'green';
+        }
+      let id = this.props.id;
+      // console.log('upvotes before increment',this.state.upVotes);
+      // console.log('upvotes after increment',upVotesTemp);
+      $.ajax({
+            url: 'http://localhost:8080/list/updateLike',
+            type: 'POST',
+            data: {
+                id: id,
+                upVotes: upVotesTemp,
+                email: Cookie.load('email'),
+                type: type
+            },
+            success: function() {
+                console.log('comes success update like');
+                this.setState({
+                    colorName: color,
+                    upVotes: upVotesTemp
+                });
+            }.bind(this)
+          });
+    }
+    // function to update dislike for queCards
+    updateunlike() {
+        console.log("coming to update unlike");
+        let type = 'add';
+        let color = 'red';
+        let downVotesTemp = parseInt(this.state.downVotes, 10) + 1;
+        if(this.state.colorNameUnlike === 'red') {
+            type = 'add';
+            downVotesTemp = parseInt(this.state.downVotes, 10) + 1;
+            color = 'black';
+        }
+        else {
+            type = 'delete';
+            downVotesTemp = parseInt(this.state.downVotes, 10) - 1;
+            color = 'red';
+        }
+      let id = this.props.id;
+      $.ajax({
+            url: 'http://localhost:8080/list/updateunlike',
+            type: 'POST',
+            data: {
+                id: id,
+                downVotes: downVotesTemp,
+                email: Cookie.load('email'),
+                type: type
+            },
+            success: function() {
+              console.log('success dislike');
+                this.setState({
+                    colorNameUnlike: color,
+                    downVotes: downVotesTemp
+                });
+            }.bind(this)
+          });
+    }
     render() {
         const { open } = this.state;
+        const { active } = this.state;
+        let save = <Icon name={this.state.iconName} circular
+                    className='plusbtn' color='green' size='large'/>;
+        // let save = <Icon name='minus' circular
+        //             className='plusbtn' color='green' size='large'/>;
         // card component which contains dynamic data
         return (
             <div>
-                {
-                  /* <Dimmer active={active} page>
+                {/* <Dimmer active={active} page>
                   <Loader>Fetching Related Questions</Loader>
-                </Dimmer> */
-              }
+                </Dimmer> */}
                 <Card fluid>
                     <Card.Content extra>
                         <Image className='imageAns' floated='left'
@@ -180,8 +356,9 @@ class QueCard extends React.Component {
                         </a>
                         <p>
                             questioned on {this.props.time}
-                            <Icon name='add' circular
-                              className='plusbtn' color='green' size='large'/>
+                            <span  className='plusbtnhover' onClick={this.saveToProfile.bind(this)}>
+                              {save}
+                            </span>
                         </p>
                     </Card.Content>
                     <Card.Content>
@@ -194,12 +371,18 @@ class QueCard extends React.Component {
                     </Card.Content>
                     <Menu>
                         <Menu.Item>
-                            <Icon name='thumbs up' color='green' size='large'/>
-                            {this.props.upvote}
+                          <span onClick={this.updatelike.bind(this)}>
+                            <Icon name='thumbs up'
+                              color={this.state.colorName || 'green'} size='large'/>
+                            {this.state.upVotes}
+                          </span>
                         </Menu.Item>
                         <Menu.Item>
-                            <Icon name='thumbs down' color='red' size='large'/>
-                            {this.props.downvote}
+                          <span onClick={this.updateunlike.bind(this)}>
+                            <Icon name='thumbs down'
+                              color={this.state.colorNameUnlike || 'red'} size='large'/>
+                            {this.state.downVotes}
+                          </span>
                         </Menu.Item>
                         <Menu.Item>
                             <Icon name='write' color='grey' size='large'/>
@@ -216,8 +399,8 @@ class QueCard extends React.Component {
                 </Card>
                 <br/>
                 {
-                /* modal for writing answers */
-              }
+                  /* modal for writing answers */
+                }
                 <Modal dimmer={true} open={this.state.modalStatus}>
                   <Modal.Header>{this.props.title}</Modal.Header>
                   <Modal.Content>
@@ -232,9 +415,9 @@ class QueCard extends React.Component {
                   <Button color='green' onClick={this.handleClose} inverted>
                     <Icon name='remove' /> Cancel
           </Button>
-        {
-          /* modal for showing suggested questions */
-        }
+                    {
+                      /* modal for showing suggested questions */
+                    }
                     <Modal
                       dimmer={true}
                       open={open}
@@ -246,7 +429,7 @@ class QueCard extends React.Component {
                         type='button'>Submit</Button>}>
                       <Modal.Header>does your answer matches with these questions..?</Modal.Header>
                       <Modal.Content>
-                        {
+                      {
                         /* <p>That's everything!</p> */
                       }
                         <SuggestedCards qid={this.props.id} quedata={this.state.queSuggest}
@@ -254,7 +437,7 @@ class QueCard extends React.Component {
                           suggArr={this.getSuggQueArray.bind(this)}/>
                       </Modal.Content>
                       <Modal.Actions>
-                        <Button icon='check' content='All Done'
+                        <Button icon='check' color='teal' content='All Done'
                           onClick={this.linkAnswer.bind(this)} />
                       </Modal.Actions>
                     </Modal>

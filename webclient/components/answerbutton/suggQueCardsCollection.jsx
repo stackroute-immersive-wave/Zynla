@@ -11,6 +11,7 @@ class SuggQueCards extends React.Component {
 		};
 		this.suggQuestionUpdate = this.suggQuestionUpdate.bind(this);
 	}
+	// function to put the marked queIDs in an array
 	suggQuestionUpdate(id) {
 		/* eslint-disable */
 		if(!(this.state.suggQueIds).includes(id)) {

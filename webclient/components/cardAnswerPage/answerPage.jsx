@@ -199,7 +199,7 @@ class answerPage extends React.Component {
     getData() {
         let id = window.location.hash.split('id=')[1];
         $.ajax({
-            url: 'http://localhost:8080/list/' + id,
+            url: 'http://localhost:8080/list/answer/' + id,
             type: 'GET',
             success: function(data) {
                 this.setState({objArray: data});

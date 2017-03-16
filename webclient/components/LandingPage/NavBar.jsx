@@ -166,10 +166,11 @@ class NavBar extends Component {
     submitStatement() {
         // ajax call after submitting the values which needed to be asked
         let conceptArr = {};
+        let email = Cookie.load('email');
         conceptArr = JSON.stringify(this.state.selectedConcepts);
         // console.log("Inside submit statement question intent is " + this.state.questionIntent);
         let data = {
-            email: Cookie.load('username'),
+            email: email,
             profilepicture: Cookie.load('profilepicture'),
             heading: this.state.heading,
             statement: this.state.statement,

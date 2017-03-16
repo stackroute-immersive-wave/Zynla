@@ -13,6 +13,7 @@ class SuggQueCard extends React.Component {
       status: true
     };
   }
+  // function to display checkmark in suggQuescard when user clicks it
   cardCheckmark() {
     if(this.state.status) {
         let checkmark = <Icon name='checkmark' color='green' size='large'/>;

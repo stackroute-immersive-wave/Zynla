@@ -1,9 +1,10 @@
 // written by Arun Mohan Raj
-// requiring necrssary files
+// requiring necessary files
 let driver = require('../config/neo4j');
 let session = driver.session();
 const Answer = require('./carddocEntity');
 const TopCards = require('../list/listdocEntity');
+const userProfile = require('../users/userProfileEntity').userModel;
 let cardController = {
   // function to add answer in neo4j and mongoDB
     addAnswer: function(req, res) {
@@ -55,13 +56,31 @@ let cardController = {
                       downVote: 0
                 }
             }
-        }, {new: true}).then((doc) => {
-            res.send(doc);
+        }, {new: true}).then(() => {
+            // res.send(doc);
         }, () => {
             // res.send(err);
         });
-        });
-    }
+        // adding answer data to userProfile
+        userProfile.findOneAndUpdate({
+              emailId: req.body.mail
+        }, {
+        $push: {
+              answers: {
+                    id: id,
+                    statement: req.body.content,
+                    addedOn: new Date().getTime(),
+                    upVote: 0,
+                    downVote: 0
+              }
+          }
+      }, {new: true}).then((doc) => {
+          res.send(doc);
+      }, () => {
+          // res.send(err);
+      });
+    });
+  }
 };
 
 module.exports = cardController;

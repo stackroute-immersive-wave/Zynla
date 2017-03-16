@@ -17,7 +17,8 @@ class QueCards extends React.Component {
 			<div>
 					<QueCard dp={item.profileImage} name={item.postedBy} time={item.addedOn} id={item.id}
 					title={item.heading} content={item.question} upvote={item.upVotes}
-					downvote={item.downVotes} anscount={item.answerCounts}/>
+					downvote={item.downVotes} anscount={item.answerCounts} profileImage={item.profileImage}
+					category={item.category}/>
 			</div>
 			);
 		});

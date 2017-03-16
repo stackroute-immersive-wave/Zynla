@@ -1,9 +1,8 @@
 const List = require('./listdocEntity');
+const userList = require('../users/userProfileEntity').userModel;
 // const logger = require('./../../applogger');
 const nodemailer = require('nodemailer');
 // let host = 'localhost:8080';
-const cookie = require('react-cookie');
-let em = cookie.load('username');
 let driver = require('../config/neo4j');
 let session = driver.session();
 let listController = {
@@ -202,7 +201,7 @@ let listController = {
                 // query to post a question at a particular base tag
                 /*eslint-disable*/
                 let query = 'match (c:Concept), \
-                            (u:User {name:"Arun"}) \
+                            (u:User {name:"' + req.body.email + '"}) \
                             where c.name = "' + arr[max] + '" \
                             create (n:Question {Content:"' + req.body.statement + '",name:"' + req.body.heading + '"}), \
                             (n)-[:question_of{intent:"' + req.body.intent + '"}]->(c), \
@@ -232,7 +231,7 @@ let listController = {
                             upVotes: '0',
                             downVotes: '0',
                             answerCounts: '0',
-                            postedBy: em,
+                            postedBy: req.body.email,
                             status: {
                                 open: true
                             },
@@ -241,10 +240,33 @@ let listController = {
                         });
                         db.save(function(err) {
                             if (err) {
-                                res.send('Error:' + err);
+                                // res.send('Error:' + err);
                             } else {
-                                res.send('successfully posted');
+                                // res.send('successfully posted');
                             }
+                        });
+                        userList.findOneAndUpdate({
+                              emailId: req.body.email
+                        }, {
+                          $push: {
+                              lists: {
+                                  id: id,
+                                  heading: req.body.heading,
+                                  category: req.body.Concept,
+                                  statement: req.body.statement,
+                                  image: '',
+                                  displayImage: imagesArray[randomNumber],
+                                  addedOn: new Date().getTime(),
+                                  upVote: '0',
+                                  postedBy: req.body.email,
+                                  acceptedCount: '0',
+                                  downVote: '0'
+                              }
+                          }
+                        }, {new: true}).then((doc) => {
+                            res.send(doc);
+                        }, () => {
+                            // res.send(err);
                         });
                     } else {
                         // logger.debug('error occurred');

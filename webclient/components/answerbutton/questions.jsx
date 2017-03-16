@@ -7,7 +7,8 @@ import {
     Icon,
     Breadcrumb,
     Dimmer,
-    Loader
+    Loader,
+    Link
 } from 'semantic-ui-react';
 import QueCards from './cardsCollection.jsx';
 // suggested questions display page
@@ -22,8 +23,8 @@ class Questions extends React.Component {
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
     }
-    handleOpen() {this.setState({ active: true });}
-    handleClose() {this.setState({ active: false });}
+    handleOpen() {this.setState({ active: true })};
+    handleClose() {this.setState({ active: false })};
 //     getInitialState(){
 //   return {
 //     objArray :[]
@@ -68,7 +69,8 @@ class Questions extends React.Component {
                         </h1>
                         <div>
                             <Breadcrumb>
-                                <Breadcrumb.Section link>Home</Breadcrumb.Section>
+                              <Link to='/home'>
+                                <Breadcrumb.Section link>Home</Breadcrumb.Section></Link>
                                 <Breadcrumb.Divider icon='right angle'/>
                                 <Breadcrumb.Section link>suggested questions</Breadcrumb.Section>
                             </Breadcrumb>
