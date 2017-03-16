@@ -41,6 +41,8 @@ class NavBar extends Component {
         suggestedQuestions: [],
         allQuestionIntentArr: [],
         questionIntent: '',
+        questionKey: '',
+        questionName: [],
         selectedConcepts: [],
         searchQuery: ''
     }
@@ -102,9 +104,62 @@ class NavBar extends Component {
             this.toggleVisibility();
         }
     }
-
+    inputofHeading() {
+      let val = document.getElementById('input').value;
+      let opts = document.getElementById('questionName').childNodes;
+      let questionName1 = this.state.questionName;
+      // console.log(questionName1);
+      for (let i = 0; i < opts.length; i = i + 1) {
+        if (opts[i].value === val) {
+          for(let j in questionName1) {
+            /*eslint-disable*/
+            if(questionName1[j].qName === opts[i].value) {
+              /*eslint-enable*/
+              // alert(questionName1[j].qId);
+              this.setState({active: false});
+              let id = questionName1[j].qId;
+              hashHistory.push('/answerPage?id=' + id);
+              break;
+            }
+          }
+        }
+      }
+    }
+    changeQuestionVal(e)
+    {
+      // let h = e.target.value;
+      let context;
+      /*eslint-disable*/
+      context = this;
+      /*eslint-enable*/
+      this.setState({questionKey: e});
+      // console.log('The event is ' + e);
+      // console.log('inside change question value function ' + this.state.questionKey);
+      $.ajax({
+          url: '/list/getIdWithQuestion',
+          type: 'get',
+          success: function(data) {
+            // console.log(JSON.stringify(data));
+              context.setState({questionName: data});
+          },
+          error: function() {}
+      });
+      let b = e.toLowerCase();
+      let option = '';
+      let questionNames = this.state.questionName;
+      // console.log(questionNames[0]);
+      for(let i = 0; i < questionNames.length; i = i + 1) {
+        if(questionNames[i].qName.toLowerCase().indexOf(b) === 0) {
+          option = option + '<option value="' + questionNames[i].qName + '"/>';
+        }
+      }
+    document.getElementById('questionName').innerHTML = option;
+    option = '';
+    this.setState({questionKey: ''});
+    }
     updateHeading(evt) {
       // gets the particular heading and gets the intent from that heading
+      this.changeQuestionVal(evt.target.value);
       this.setState({heading: evt.target.value});
       let question = evt.target.value.toLowerCase();
       let allQuestionIntents = this.state.allQuestionIntentArr;
@@ -186,9 +241,8 @@ class NavBar extends Component {
                 alert('Question posted successfully');
                 /*eslint-enable*/
                 this.setState({active: false});
-            }.bind(this),
+            },
             error: function() {
-
             }
         });
     }
@@ -272,12 +326,15 @@ class NavBar extends Component {
                                                       ASK QUESTION </h2>
                                                 </Form.Field>
                                                 <Form.Field>
-                                                  <Textarea
-                                                     onChange={this.updateHeading.bind(this)}
-                                                     rows='1'
-                                                     placeholder='Enter Description here...'
-                                                        style={{width: 700 + 'px'}}
+                                                  <input id='input'
+                                                      list="questionName"
+                                                      onInput={this.inputofHeading.bind(this)}
+                                                      onChange={this.updateHeading.bind(this)}
+                                                      rows='1'
+                                                      placeholder='Enter Description here...'
+                                                      style={{width: 700 + 'px'}}
                                                     />
+                                                    <datalist id="questionName" />
                                                 </Form.Field>
                                                 <Form.Field>
                                                   <Textarea

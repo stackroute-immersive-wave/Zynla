@@ -94,7 +94,28 @@ let listController = {
             res.send('Cant get the docs', err);
         });
     },
-
+    getIdWithQuestion: function(req, res) {
+      let query = 'match (q:Question) return q;';
+      let questionArray = [];
+      session.run(query).then(function(result) {
+        if(result) {
+          for(let i in result.records) {
+            if(i !== null) {
+              /*eslint-disable*/
+              if(result.records[i]._fields[0].properties.statement !== undefined) {
+                // console.log('The id is ' + result.records[i]._fields[0].identity.low);
+                questionArray.push({
+                  qId: result.records[i]._fields[0].identity.low,
+                  qName: result.records[i]._fields[0].properties.statement
+                  /*eslint-enable*/
+                });
+              }
+            }
+          }
+          res.send(questionArray);
+        }
+      });
+    },
     getQuestionIntent: function(req, res) {
      let questionIntentArr = [];
      let query = 'match (q:QuestionIntent) return q.value;';
@@ -265,6 +286,7 @@ let listController = {
                           }
                         }, {new: true}).then((doc) => {
                             res.send(doc);
+                            // res.redirect('/#/home');
                         }, () => {
                             // res.send(err);
                         });
