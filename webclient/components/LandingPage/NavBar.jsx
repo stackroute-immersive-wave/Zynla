@@ -7,12 +7,14 @@ import {
     Image,
     Button,
     Dropdown,
-    Dimmer,
+    Modal,
     Popup,
+    Icon,
     Form
 } from 'semantic-ui-react';
 import {Link} from 'react-router';
 import Cookie from 'react-cookie';
+import validator from 'validator';
 // const logger = require('./../../applogger');
 import Textarea from 'react-textarea-autosize';
 import {Route, Router, hashHistory} from 'react-router';
@@ -224,27 +226,43 @@ class NavBar extends Component {
         let email = Cookie.load('email');
         conceptArr = JSON.stringify(this.state.selectedConcepts);
         // console.log("Inside submit statement question intent is " + this.state.questionIntent);
-        let data = {
-            email: email,
-            profilepicture: Cookie.load('profilepicture'),
-            heading: this.state.heading,
-            statement: this.state.statement,
-            Concept: conceptArr,
-            intent: this.state.questionIntent
-        };
-        $.ajax({
-            url: 'http://localhost:8080/list/addquestion',
-            type: 'POST',
-            data: data,
-            success: function() {
-                /*eslint-disable*/
-                alert('Question posted successfully');
-                /*eslint-enable*/
-                this.setState({active: false});
-            },
-            error: function() {
-            }
-        });
+        if(validator.isEmpty(this.state.heading)) {
+          document.getElementById('errorMessage').innerHTML =
+          'Please enter the question name';
+        }
+        else if(validator.isEmpty(this.state.statement)) {
+          document.getElementById('errorMessage').innerHTML =
+          'Please enter the Description of that question';
+        }
+        else if(conceptArr.length <= 10) {
+          document.getElementById('errorMessage').innerHTML =
+          'Please select atleast one concept';
+        }
+        else {
+          document.getElementById('errorMessage').innerHTML =
+          '';
+          let data = {
+              email: email,
+              profilepicture: Cookie.load('profilepicture'),
+              heading: this.state.heading,
+              statement: this.state.statement,
+              Concept: conceptArr,
+              intent: this.state.questionIntent
+          };
+          $.ajax({
+              url: 'http://localhost:8080/list/addquestion',
+              type: 'POST',
+              data: data,
+              success: function() {
+                  /*eslint-disable*/
+                  alert('Question posted successfully');
+                  /*eslint-enable*/
+                  this.setState({active: false});
+              },
+              error: function() {
+              }
+          });
+        }
     }
 
     togetherJS() {
@@ -311,8 +329,10 @@ class NavBar extends Component {
                             </Link>
                         </Grid.Column>
                         <Grid.Column width={3}>
-                            <Dimmer active={active}
-                               onClickOutside={this.handleDimmerClose.bind(this)} page>
+                          <Modal open={this.state.active} dimmer={true} basic>
+                          <Icon inverted link name='remove'
+                             size='large' style={{marginLeft: 782 + 'px'}}
+                             onClick={this.handleDimmerClose.bind(this)} />
                                 <Header as='h2' icon>
                                     <Header.Subheader>
                                         <Container>
@@ -324,6 +344,10 @@ class NavBar extends Component {
                                                       color: 'white'
                                                   }}>
                                                       ASK QUESTION </h2>
+                                                      <div
+                                                        style={{color: 'white', textAlign: 'center',
+                                                         fontSize: 20 + 'px', fontWeight: 'bold'}}
+                                                        id='errorMessage'/>
                                                 </Form.Field>
                                                 <Form.Field>
                                                   <input id='input'
@@ -345,8 +369,9 @@ class NavBar extends Component {
                                                         height: 150 + 'px'}}
                                                     />
                                                 </Form.Field>
-                                                <Form.Field>
-                                                  <Dropdown placeholder='Enter concepte...'
+                                                <Form.Field style={{marginLeft: -72 + 'px',
+                                                   marginRight: -73 + 'px'}}>
+                                                  <Dropdown placeholder='Enter Concept here...'
                                                     onChange = {this.updateQuestionTags.bind(this)}
                                                     onKeyUp={this.updateConcept.bind(this)}
                                                     multiple search selection
@@ -354,10 +379,10 @@ class NavBar extends Component {
                                                 </Form.Field>
                                                 <Form.Field>
                                                   <div>
-                                                    <Button primary size='large' type='submit'
+                                                    <Button className='submitbutstyle'
+                                                      primary size='large' type='submit'
                                                       value='Submit'
-                                                      onClick={this.submitStatement.bind(this)}
-                                                      style={{width: 200 + 'px'}}>
+                                                      onClick={this.submitStatement.bind(this)}>
                                                       Submit Question</Button>
                                                    </div>
                                                 </Form.Field>
@@ -365,7 +390,7 @@ class NavBar extends Component {
                                         </Container>
                                     </Header.Subheader>
                                 </Header>
-                            </Dimmer>
+                            </Modal>
                             <Menu.Menu position='right' style={Style} id='divStyle'>
                                 <Menu.Item name='PostQuestion'
                                   active={activeItem === 'PostQuestion'}
