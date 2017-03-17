@@ -61,6 +61,10 @@ let titlestyle1 = {
     marginTop: '1%',
     marginBottom: '3%'
 };
+let date = {
+  marginTop: '1%',
+  fontSize: 15
+};
 class answerPage extends React.Component {
     constructor() {
         super();
@@ -123,7 +127,9 @@ class answerPage extends React.Component {
     //         this.props.onChange(value.toString('html'));
     //     }
     // };
-
+    modalOpen() {
+           this.setState({ modalStatus: true });
+         }
     textVal(e) {
         this.setState({content: e.target.value});
     }
@@ -132,6 +138,7 @@ class answerPage extends React.Component {
     }
     // Posting answer for question created by Aswini K
     postAnswer() {
+      this.close();
         let id = window.location.hash.split('id=')[1];
         // console.log('inside post Answer');
         let ansdata = {
@@ -352,7 +359,7 @@ class answerPage extends React.Component {
             error: function() {}
         });
     }
-
+close = () => this.setState({ modalStatus: false })
     render() {
         let quesObj = this.state.objArray;
         return (
@@ -371,12 +378,13 @@ class answerPage extends React.Component {
                         <Breadcrumb>
                             <Breadcrumb.Section link>{quesObj[0].tags}</Breadcrumb.Section>
                         </Breadcrumb>
-                        <Segment floated='right'>
-                          <Image floated='left' size='mini' src={quesObj[0].profileImage}/>
+                        <Segment floated='right' size='big'>
+                          <Image floated='left' size='mini'
+                            src='http://semantic-ui.com/images/avatar/large/steve.jpg'/>
                             <a>
                                 {quesObj[0].postedBy}
                             </a>
-                            <div>{quesObj[0].addedOn}</div>
+                            <div style={date}>{quesObj[0].addedOn}</div>
                         </Segment>
                         <div style ={crumstyle}>
 
@@ -390,26 +398,27 @@ class answerPage extends React.Component {
                               {this.state.downVotes}
 
                             <Icon name='eye' size='big' style={viewstyle}/>{quesObj[0].views + 1}
-                            <Modal trigger={<Button positive
-                              style = {buttonfolstyle}
-                            size = 'mini' > Click to Answer </Button>}
-                            closeIcon='close'>
-                                <Modal.Content>
-                                    <div style={titlestyle1}>
-                                        {quesObj[0].heading}
-                                    </div>
-                                    <Form>
-                                        <TextArea placeholder='Write Your Answer Here.....'
-                                          onChange={this.textVal}/>
-                                    </Form>
-                                </Modal.Content>
-                                <Modal.Actions>
-                                    <Button color='green' onClick={this.postAnswer.bind(this)}
-                                      type='button'>
-                                        Submit
-                                    </Button>
-                                </Modal.Actions>
-                            </Modal>
+                            <Button basic color='green'
+                              style = {buttonfolstyle} size = 'mini'
+                              onClick={this.modalOpen.bind(this)}> Click to Answer </Button>
+                              <Modal open={this.state.modalStatus}
+                              closeIcon='close'>
+                                  <Modal.Content>
+                                      <div style={titlestyle1}>
+                                          {quesObj[0].heading}
+                                      </div>
+                                      <Form>
+                                          <TextArea placeholder='Write Your Answer Here.....'
+                                            onChange={this.textVal}/>
+                                      </Form>
+                                  </Modal.Content>
+                                  <Modal.Actions>
+                                      <Button color='green' onClick={this.postAnswer.bind(this)}
+                                         type='button'>
+                                          Submit
+                                      </Button>
+                                  </Modal.Actions>
+                              </Modal>
                             <Button negative style ={buttonfolstyle}
                               size='mini'>Report</Button>
                             <Modal trigger={<Button basic color = 'black' size = 'mini'
@@ -435,19 +444,19 @@ class answerPage extends React.Component {
     }
 }
 answerPage.propTypes = {
-    displayImage: React.PropTypes.string.isRequired,
-    heading: React.PropTypes.string.isRequired,
-    question: React.PropTypes.string.isRequired,
-    postedBy: React.PropTypes.string.isRequired,
-    addedOn: React.PropTypes.number.isRequired,
-    category: React.PropTypes.string.isRequired,
-    upVotes: React.PropTypes.string.isRequired,
-    downVotes: React.PropTypes.string.isRequired,
-    answerCounts: React.PropTypes.string.isRequired,
-    profileImage: React.PropTypes.string.isRequired,
-    views: React.PropTypes.number.isRequired,
-    acceptedCounts: React.PropTypes.string.isRequired,
-    remove: React.PropTypes.func.isRequired,
+    displayImage: React.PropTypes.string,
+    heading: React.PropTypes.string,
+    question: React.PropTypes.string,
+    postedBy: React.PropTypes.string,
+    addedOn: React.PropTypes.number,
+    category: React.PropTypes.string,
+    upVotes: React.PropTypes.string,
+    downVotes: React.PropTypes.string,
+    answerCounts: React.PropTypes.string,
+    profileImage: React.PropTypes.string,
+    views: React.PropTypes.number,
+    acceptedCounts: React.PropTypes.string,
+    remove: React.PropTypes.func,
     id: React.PropTypes.number
 };
 module.exports = answerPage;

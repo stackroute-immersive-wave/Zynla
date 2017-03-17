@@ -5,9 +5,11 @@ import {
     Card,
     Icon,
     Menu,
-    Popup,
     Divider,
-    Button
+    Button,
+    Modal,
+    TextArea,
+    Form
 } from 'semantic-ui-react';
 let poststyle1 = {
     fontFamily: 'Georgia',
@@ -18,12 +20,12 @@ let ansstyle = {
     fontFamily: 'Cochin',
     fontWeight: 'serif'
 };
-let addicon = {
-    marginLeft: '70%'
-};
 let commentstyle = {
     fontFamily: 'Cochin',
     fontSize: 18
+};
+let formstyle = {
+    margin: '3% 3% 3% 3% '
 };
 class cardAnswer extends React.Component {
     constructor() {
@@ -32,7 +34,32 @@ class cardAnswer extends React.Component {
             isAccepted: false,
             btnValue: 'Accept'
         };
+        this.addAnswercomment = this.addAnswercomment.bind(this);
     }
+    comment(e) {
+       this.setState({comment: e.target.value});
+   }
+
+   addAnswercomment() {
+       // console.log('views before increment');
+         let id = this.props.id;
+
+       let commentdata = {
+           answerId: id,
+           mail: Cookie.load('email'),
+           content: this.state.comment
+       };
+       // console.log("comments:"+commentdata);
+       $.ajax({
+           url: '/list/addanswerComment',
+           type: 'PUT',
+           data: commentdata,
+           success: function() {
+               // this.setState({comment: Comments});
+               // console.log('inside success', this.state.commentdata);
+           }
+       });
+   }
     updateAcceptAns()
     // accepting the answer by user (by sumit on 11/3/2017 )
     {
@@ -80,8 +107,7 @@ class cardAnswer extends React.Component {
                         <a>
                             {this.props.createdBy}
                         </a>
-                        <div>Answered on {this.props.createdOn}
-                            <Icon name='add user' style={addicon} size='big' color='blue'/></div>
+                        <div>Answered on {this.props.createdOn}</div>
                     </Card.Content>
                     <Card.Content>
                         <Card.Header style={ansstyle}>
@@ -100,21 +126,18 @@ class cardAnswer extends React.Component {
                         <Menu.Item>
                             {accept}
                         </Menu.Item>
-                        <Menu.Item>Add Comment</Menu.Item>
-                        <Menu.Menu position='right'>
-                            <Menu.Item>
-                                <Popup on='click' trigger={<Icon name = 'ellipsis horizontal'
-                                  size = 'large' />} hideOnScroll>
-                                    <Menu vertical>
-                                        <Menu.Item>Comments</Menu.Item>
-                                        <Menu.Item>Save Answer</Menu.Item>
-                                    </Menu>
-
-                                </Popup>
-
-                            </Menu.Item>
-                        </Menu.Menu>
-                    </Menu>
+                        <Menu.Item>
+                          <Modal trigger={<Button basic color = 'black'>
+                            Add Comments </Button>}>
+                           <Form style={formstyle}>
+                               <TextArea onChange={this.comment.bind(this)}
+                                 value={this.state.comment}/>
+                           </Form>
+                           <Button content='Submit' primary
+                             onClick={this.addAnswercomment.bind(this)}/>
+                       </Modal>
+                        </Menu.Item>
+                      </Menu>
                 </Card>
                 <Divider clearing/>
             </div>
@@ -123,12 +146,12 @@ class cardAnswer extends React.Component {
 }
 cardAnswer.propTypes = {
     createdBy: React.PropTypes.string.isRequired,
-    createdOn: React.PropTypes.number.isRequired,
+    createdOn: React.PropTypes.string.isRequired,
     content: React.PropTypes.string.isRequired,
     upvote: React.PropTypes.number.isRequired,
     downvote: React.PropTypes.number.isRequired,
-    isAccepted: React.PropTypes.string.isRequired,
-    id: React.PropTypes.number.isRequired,
+    isAccepted: React.PropTypes.bool,
+    id: React.PropTypes.number,
     quesId: React.PropTypes.number.isRequired,
     postedBy: React.PropTypes.string.isRequired
 

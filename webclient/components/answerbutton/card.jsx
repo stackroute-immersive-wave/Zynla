@@ -10,7 +10,7 @@ import {
    Modal,
    Form
 } from 'semantic-ui-react';
-import {TextArea} from 'semantic-ui-react';
+// import {TextArea} from 'semantic-ui-react';
 import RichTextEditor from 'react-rte';
 import Cookie from 'react-cookie';
 import SuggestedCards from './suggQueCardsCollection.jsx';
@@ -98,7 +98,7 @@ class QueCard extends React.Component {
       let ansdata = {
           questionId: this.props.id,
           mail: Cookie.load('email'),
-          content: this.state.anscontent
+          content: this.state.value
       };
       /* eslint-disable */
       let context = this;
@@ -336,7 +336,7 @@ class QueCard extends React.Component {
         const { open } = this.state;
         // const { active } = this.state;
         let save = (<Icon name={this.state.iconName} circular
-                    className='plusbtn' color='green' size='large'/>);
+                    className='plusbtn' color='red' size='large'/>);
         // let save = <Icon name='minus' circular
         //             className='plusbtn' color='green' size='large'/>;
         // card component which contains dynamic data
@@ -385,14 +385,14 @@ class QueCard extends React.Component {
                           </span>
                         </Menu.Item>
                         <Menu.Item>
-                            <Icon name='write' color='grey' size='large'/>
-                            {this.props.anscount}
+                            <Icon name='write' color='black' size='large'/>
+                            {this.props.anscount} Answers
                         </Menu.Item>
-                        <Button className='anspad' color='teal'
+                        <Button className='anspad' color='green'
                           onClick={this.modalOpen.bind(this)}>Answer</Button>
                         <Menu.Menu position='right'>
                             <Menu.Item>
-                                <Icon name='flag' color='red'/>
+                                <Icon name='flag' />
                             </Menu.Item>
                         </Menu.Menu>
                     </Menu>
@@ -406,13 +406,19 @@ class QueCard extends React.Component {
                   <Modal.Content>
                     <Form>
                       <Form.Field>
-                        <TextArea className='areasize' placeholder='your answer here..'
+                        {
+                          /*
+                          <TextArea className='areasize' placeholder='your answer here..'
                            onChange={this.textVal}/>
+                            */
+                          }
+                           <RichTextEditor
+                             value={this.state.value} onChange={this.onChange} />
                            </Form.Field>
                            </Form>
                   </Modal.Content>
                   <Modal.Actions>
-                  <Button color='green' onClick={this.handleClose} inverted>
+                  <Button color='red' onClick={this.handleClose} inverted>
                     <Icon name='remove' /> Cancel
           </Button>
                     {
@@ -448,17 +454,17 @@ class QueCard extends React.Component {
     }
 }
 QueCard.propTypes = {
-  id: React.PropTypes.number.isRequired,
-  dp: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  time: React.PropTypes.number.isRequired,
-  title: React.PropTypes.string.isRequired,
-  content: React.PropTypes.string.isRequired,
-  upvote: React.PropTypes.number.isRequired,
-  downvote: React.PropTypes.number.isRequired,
-  anscount: React.PropTypes.number.isRequired,
-  views: React.PropTypes.number.isRequired,
-  profileImage: React.PropTypes.string.isRequired,
-  category: React.PropTypes.string.isRequired
+  id: React.PropTypes.number,
+  dp: React.PropTypes.string,
+  name: React.PropTypes.string,
+  time: React.PropTypes.number,
+  title: React.PropTypes.string,
+  content: React.PropTypes.string,
+  upvote: React.PropTypes.number,
+  downvote: React.PropTypes.number,
+  anscount: React.PropTypes.number,
+  views: React.PropTypes.number,
+  profileImage: React.PropTypes.number,
+  category: React.PropTypes.string
 };
 module.exports = QueCard;

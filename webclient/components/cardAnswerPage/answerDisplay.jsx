@@ -28,6 +28,6 @@ class Cards extends React.Component {
 	}
 }
 Cards.propTypes = {
-	ansCollection: React.PropTypes.Array
+	ansCollection: React.PropTypes.array.isRequired
 };
 module.exports = Cards;

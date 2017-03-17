@@ -26,3 +26,8 @@
    .ques {
      color: white !important;
    }
+.plusbtnhover{
+  background-color: : #BE252A ;
+  color: #FFFFFF;
+  cursor: pointer !important;
+}

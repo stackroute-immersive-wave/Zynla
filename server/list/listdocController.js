@@ -49,42 +49,42 @@ let listController = {
     },
     // router for accepting the answer by user (by sumit on 14/3/2017 )
     UpdateAcceptans: function(req, res) {
-      //  console.log('inside update accept', req.body);
-       let id = req.body.id;
-       let qid = req.body.questionId;
-       let email = req.body.email;
-       let query = '';
-       /*eslint-disable*/
-       query = 'match(n:Answer),\
+        //  console.log('inside update accept', req.body);
+        let id = req.body.id;
+        let qid = req.body.questionId;
+        let email = req.body.email;
+        let query = '';
+        /*eslint-disable*/
+        query = 'match(n:Answer),\
                    (p:User {name:"' + email + '"}), \
                    (q:Question) \
                     where id(n)=' + id + ' and id(q)=' + qid + '\
                    create (n)-[:accepted_by]->(p), \
                    (q)-[:accept]->(n)';
-                   /*eslint-enable*/
-       session.run(query).then(function(result) {
-           if (result) {
-               // console.log('id', id);
-               List.update({
-                   id: qid,
-                   'topCards.id': id
-               }, {
-                   $set: {
-                       'topCards.$.isAccepted': true
-                   }
-               }, function(err) {
-                   if (err) {
-                       // console.log("Something wrong when updating data!");
-                   }
-                   res.send('success');
-                   // console.log(doc);
-               });
-           } else {
-               // console.log("error in updating the like");
-           }
-       });
-   },
-// Router for Getting question data from mongo db created by Aswini K
+        /*eslint-enable*/
+        session.run(query).then(function(result) {
+            if (result) {
+                // console.log('id', id);
+                List.update({
+                    id: qid,
+                    'topCards.id': id
+                }, {
+                    $set: {
+                        'topCards.$.isAccepted': true
+                    }
+                }, function(err) {
+                    if (err) {
+                        // console.log("Something wrong when updating data!");
+                    }
+                    res.send('success');
+                    // console.log(doc);
+                });
+            } else {
+                // console.log("error in updating the like");
+            }
+        });
+    },
+    // Router for Getting question data from mongo db created by Aswini K
     getCardQuestion: function(req, res) {
         // console.log('Inside Ques get' + req.params.id);
         List.find({id: req.params.id}).then((docs) => {
@@ -95,43 +95,42 @@ let listController = {
         });
     },
     getIdWithQuestion: function(req, res) {
-      let query = 'match (q:Question) return q;';
-      let questionArray = [];
-      session.run(query).then(function(result) {
-        if(result) {
-          for(let i in result.records) {
-            if(i !== null) {
-              /*eslint-disable*/
-              if(result.records[i]._fields[0].properties.statement !== undefined) {
-                // console.log('The id is ' + result.records[i]._fields[0].identity.low);
-                questionArray.push({
-                  qId: result.records[i]._fields[0].identity.low,
-                  qName: result.records[i]._fields[0].properties.statement
-                  /*eslint-enable*/
-                });
-              }
+        let query = 'match (q:Question) return q;';
+        let questionArray = [];
+        session.run(query).then(function(result) {
+            if (result) {
+                for (let i in result.records) {
+                    if (i !== null) {
+                        /*eslint-disable*/
+                        if (result.records[i]._fields[0].properties.statement !== undefined) {
+                            // console.log('The id is ' + result.records[i]._fields[0].identity.low);
+                            questionArray.push({
+                                qId: result.records[i]._fields[0].identity.low, qName: result.records[i]._fields[0].properties.statement
+                                /*eslint-enable*/
+                            });
+                        }
+                    }
+                }
+                res.send(questionArray);
             }
-          }
-          res.send(questionArray);
-        }
-      });
+        });
     },
     getQuestionIntent: function(req, res) {
-     let questionIntentArr = [];
-     let query = 'match (q:QuestionIntent) return q.value;';
-     session.run(query).then(function(result) {
-       if(result) {
-         for(let x in result.records) {
-           if(x !== null) {
-            /* eslint-disable */
-              questionIntentArr.push(result.records[x]._fields[0]);
-              /* eslint-enable */
-           }
-         }
-       }
-       res.send(questionIntentArr);
-     });
-   },
+        let questionIntentArr = [];
+        let query = 'match (q:QuestionIntent) return q.value;';
+        session.run(query).then(function(result) {
+            if (result) {
+                for (let x in result.records) {
+                    if (x !== null) {
+                        /* eslint-disable */
+                        questionIntentArr.push(result.records[x]._fields[0]);
+                        /* eslint-enable */
+                    }
+                }
+            }
+            res.send(questionIntentArr);
+        });
+    },
 
     getconcepts: function(req, res) {
         let arr = [];
@@ -153,9 +152,9 @@ let listController = {
     // written by Arun Mohan Raj
     // function to display suggested questions
     suggestQues: function(req, res) {
-          // console.log('router suggest ques');
-          /* eslint-disable */
-          let query = 'match(n:Question)-[r:question_of]-> (m:Concept) \
+        // console.log('router suggest ques');
+        /* eslint-disable */
+        let query = 'match(n:Question)-[r:question_of]-> (m:Concept) \
                        where id(n)=970 \
                       match (b:QuestionIntent{value:r.intent})-[z:same_as]->(a:QuestionIntent) \
                        -[:same_as]->(l:QuestionIntent) \
@@ -163,18 +162,18 @@ let listController = {
                       match (m)<-[:question_of {intent:l.value}]-(u:Question) \
                       match q=(s)<-[:post]-(cv:User) \
                       return distinct q';
-          /* eslint-enable */
-                      session.run(query).then(function(result) {
-                          // console.log(result);
-                          if (result) {
-                            // console.log('before result');
-                            res.send(result);
-                            // console.log('after result');
-                          }
-                      }, function() {
-                        // console.log('error while connecting',err);
-                      });
-                    },
+        /* eslint-enable */
+        session.run(query).then(function(result) {
+            // console.log(result);
+            if (result) {
+                // console.log('before result');
+                res.send(result);
+                // console.log('after result');
+            }
+        }, function() {
+            // console.log('error while connecting',err);
+        });
+    },
 
     // router function to add a question
     addquestion: function(req, res) {
@@ -184,17 +183,17 @@ let listController = {
         let max = 0;
         /*eslint-disable*/
         let imagesArray = [
-         'http://www.phonefacts.co.uk/wp-content/uploads/2011/11/1-and-zeros.jpg',
-         'http://maxpixel.freegreatpicture.com/static/photo/1x/Online-Digital-Mobile-Smartphone-Data-Computer-1231889.jpg',
-         'http://maxpixel.freegreatpicture.com/static/photo/1x/Float-Hand-Keep-About-Ball-Binary-Ball-Binary-457334.jpg',
-         'http://maxpixel.freegreatpicture.com/static/photo/1x/Gloomy-Cohesion-Watch-Dark-Responsibility-Darkness-1156942.jpg',
-         'https://c1.staticflickr.com/9/8386/8493376660_8e17303a8d.jpg',
-         'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/IBM_Bluemix_logo.svg/1036px-IBM_Bluemix_logo.svg.png',
-         'http://www.oppo.nl/files/2012/03/hd-abstracte-wallpaper-met-felle-kleuren-hd-abstracte-achtergrond.jpg',
-         'https://c1.staticflickr.com/8/7570/15087405704_f571d14063_b.jpg',
-         'http://maxpixel.freegreatpicture.com/static/photo/1x/Shape-Simple-Hex-Hexagonal-Abstract-Modern-675576.jpg'
-       ];
-       /*eslint-enable*/
+            'http://www.phonefacts.co.uk/wp-content/uploads/2011/11/1-and-zeros.jpg',
+            'http://maxpixel.freegreatpicture.com/static/photo/1x/Online-Digital-Mobile-Smartphone-Data-Computer-1231889.jpg',
+            'http://maxpixel.freegreatpicture.com/static/photo/1x/Float-Hand-Keep-About-Ball-Binary-Ball-Binary-457334.jpg',
+            'http://maxpixel.freegreatpicture.com/static/photo/1x/Gloomy-Cohesion-Watch-Dark-Responsibility-Darkness-1156942.jpg',
+            'https://c1.staticflickr.com/9/8386/8493376660_8e17303a8d.jpg',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/IBM_Bluemix_logo.svg/1036px-IBM_Bluemix_logo.svg.png',
+            'http://www.oppo.nl/files/2012/03/hd-abstracte-wallpaper-met-felle-kleuren-hd-abstracte-achtergrond.jpg',
+            'https://c1.staticflickr.com/8/7570/15087405704_f571d14063_b.jpg',
+            'http://maxpixel.freegreatpicture.com/static/photo/1x/Shape-Simple-Hex-Hexagonal-Abstract-Modern-675576.jpg'
+        ];
+        /*eslint-enable*/
         let randomNumber = Math.floor(Math.random() * imagesArray.length);
         // query to get all the concepts and find the base concept from the input provided
         let query1 = 'match (c:Concept) return c.name;';
@@ -206,11 +205,11 @@ let listController = {
                         arr.push(result.records[x]._fields[0]);
                         /* eslint-enable */
                     }
-                    for(let i = 0; i < arr1.length; i = i + 1) {
-                      /* eslint-disable */
-                        for(let j = 0; j < arr.length; j = j + 1) {
-                            if(arr1[i] === arr[j]) {
-                              /* eslint-disable */
+                    for (let i = 0; i < arr1.length; i = i + 1) {
+                        /* eslint-disable */
+                        for (let j = 0; j < arr.length; j = j + 1) {
+                            if (arr1[i] === arr[j]) {
+                                /* eslint-disable */
                                 c = j;
                             }
                         }
@@ -267,23 +266,23 @@ let listController = {
                             }
                         });
                         userList.findOneAndUpdate({
-                              emailId: req.body.email
+                            emailId: req.body.email
                         }, {
-                          $push: {
-                              lists: {
-                                  id: id,
-                                  heading: req.body.heading,
-                                  category: req.body.Concept,
-                                  statement: req.body.statement,
-                                  image: '',
-                                  displayImage: imagesArray[randomNumber],
-                                  addedOn: new Date().getTime(),
-                                  upVote: '0',
-                                  postedBy: req.body.email,
-                                  acceptedCount: '0',
-                                  downVote: '0'
-                              }
-                          }
+                            $push: {
+                                lists: {
+                                    id: id,
+                                    heading: req.body.heading,
+                                    category: req.body.Concept,
+                                    statement: req.body.statement,
+                                    image: '',
+                                    displayImage: imagesArray[randomNumber],
+                                    addedOn: new Date().getTime(),
+                                    upVote: '0',
+                                    postedBy: req.body.email,
+                                    acceptedCount: '0',
+                                    downVote: '0'
+                                }
+                            }
                         }, {new: true}).then((doc) => {
                             res.send(doc);
                             // res.redirect('/#/home');
@@ -315,44 +314,60 @@ let listController = {
     },
     // Router for storing comments for question in mongo and neo4j created by Aswini K
     updatecomments: function(req, res) {
-   let query = ' \
+        let query = ' \
 match (n:Question),\
 (u:User {name:"' + req.body.mail + '" }) \
 where id(n) = ' + req.body.questionId + ' \
-create (m:Comment{name:"'+req.body.content+'"}), \
+create (m:Comment{name:"' + req.body.content + '"}), \
  (n)<-[:comment_of]-(m), \
 (m)-[:commented_by{on : timestamp()}]->(u) \
 return m';
 
-session.run(query).then(function(result) {
-    // logger.debug(result);result.records[0]._fields[0].identity.low;
-    console.log(result);
-    if (result) {
-      let id = result.records[0]._fields[0].identity.low;
-          console.log("ID:" + id);
-          List.findOneAndUpdate({
-              id: req.body.questionId
-          }, {
-              $set: {
-                  comment:{
-                    id: id,
-                    createdBy: req.body.createdBy,
-                    content: req.body.content,
-                    createdOn: new Date().getTime()
-                  }
-              }
-          }, {new: true}).then((doc) => {
-            console.log(doc);
-            res.send(doc);
-          });
-    } else {
-        // logger.debug('error occurred');
-        (err) => {
-            res.send(err);
-        }
-    }
-});
-},
+        session.run(query).then(function(result) {
+            // logger.debug(result);result.records[0]._fields[0].identity.low;
+            console.log(result);
+            if (result) {
+                let id = result.records[0]._fields[0].identity.low;
+                console.log("ID:" + id);
+                List.findOneAndUpdate({
+                    id: req.body.questionId
+                }, {
+                    $push: {
+                        comment: {
+                            id: id,
+                            createdBy: req.body.createdBy,
+                            content: req.body.content,
+                            createdOn: new Date().getTime()
+                        }
+                    }
+                }, {new: true}).then((doc) => {
+                    console.log(doc);
+                    res.send(doc);
+                });
+            } else {
+                // logger.debug('error occurred');
+                (err) => {
+                    res.send(err);
+                }
+            }
+        });
+    },
+    addanswerComment: function(req, res) {
+      console.log('inside addanswer');
+        let query = ' \
+match (n:Answer),\
+(u:User {name:"' + req.body.mail + '" }) \
+where id(n) = 1115 \
+create (m:Comment{name:"' + req.body.content + '"}), \
+(n)<-[:comment_of]-(m), \
+(m)-[:commented_by{on : timestamp()}]->(u) \
+return m';
+
+        session.run(query).then(function(result) {
+            // logger.debug(result);result.records[0]._fields[0].identity.low;
+            console.log(result);
+        });
+    },
     inviteFrnds: function(req, res) {
         // router.post('/send', function handleSayHello(req, res) {
         // logger.debug(req.body.data);
@@ -398,7 +413,7 @@ session.run(query).then(function(result) {
             }
         });
     },
-  //router for updating likes and dislikes for question by sumit(5/3/2017)
+    //router for updating likes and dislikes for question by sumit(5/3/2017)
     likeStatus: function(req, res) {
         var id = req.body.id;
         var email = req.body.email;
@@ -461,7 +476,7 @@ session.run(query).then(function(result) {
             }
         });
     },
-      //router of updating unlike for question by sumit(4/3/2017)
+    //router of updating unlike for question by sumit(4/3/2017)
     updateunlike: function(req, res) {
         var id = req.body.id;
         var email = req.body.email;
@@ -495,20 +510,20 @@ session.run(query).then(function(result) {
             }
         });
     },
-    getImages:function(req, res){
+    getImages: function(req, res) {
         let query = 'match(n:Domain) return n.name';
         let arr = [];
         session.run(query).then(function(result) {
-            console.log("result:"+result);
-            for(let i in result.records) {
-                if(i !== null) {
-                  arr.push(result.records[i]._fields[0]);
+            console.log("result:" + result);
+            for (let i in result.records) {
+                if (i !== null) {
+                    arr.push(result.records[i]._fields[0]);
                 }
             }
             res.send(arr);
         }, function() {
             // console.log('error while connecting',err);
         });
-      }
+    }
 };
 module.exports = listController;
