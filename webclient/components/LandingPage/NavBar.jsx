@@ -295,7 +295,6 @@ class NavBar extends Component {
     render() {
         // const {visible} = this.state;
         const {activeItem} = this.state;
-        const {active} = this.state;
         // const backImage = {
         //     image: Cookie.load('profilepicture')
         // };
