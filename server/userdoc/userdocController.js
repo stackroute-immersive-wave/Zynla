@@ -203,7 +203,8 @@ let userDocController = {
                 'profile.address.city': p.address.city,
                 'profile.description': p.description,
                 'profile.dob': p.dob,
-                'profile.gender': p.gender
+                'profile.gender': p.gender,
+                'profile.phone': p.phone
             }
         }, function(err) {
             if (err) {

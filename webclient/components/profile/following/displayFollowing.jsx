@@ -46,6 +46,7 @@ class displayFollowing extends React.Component {
          <Dimmer active={active} page>
          <Loader>Loading</Loader>
        </Dimmer>
+       <h1 style={{marginLeft: '10px'}}>Followings</h1>
          <FollowingCard followingData={this.state.followingObj}/>
        </div>
      );

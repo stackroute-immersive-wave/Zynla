@@ -21,7 +21,7 @@ class followingCard extends React.Component {
             );
         });
         return(
-          <Grid columns={3}>
+          <Grid columns={2}>
             {arr}
         </Grid>
         );

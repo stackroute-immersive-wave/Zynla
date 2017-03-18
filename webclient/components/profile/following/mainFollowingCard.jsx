@@ -45,7 +45,7 @@ class mainFollowingCard extends React.Component {
             </div>
           </Card.Content>
             <Card.Content extra>
-              <Button style = {{marginLeft: '20%'}} className='butstyle' content='Following'
+              <Button style = {{marginLeft: '10%'}} className='butstyle' content='Following'
                                              icon='fork' label={{
                                                basic: true,
                                                color: 'white',
@@ -79,7 +79,7 @@ class mainFollowingCard extends React.Component {
         return (
 
 
-                <Popup flowing trigger = {<div style = {{marginTop: '10%'}}>
+                <Popup flowing trigger = {<div>
                     <Segment>
                    <Image floated='left' size='tiny'
                      shape='circular' src={this.props.image}/>

@@ -5,11 +5,9 @@ import {
     Icon,
     Menu
 } from 'semantic-ui-react';
-let ansStyle = {
-  marginLeft: '5%'
-};
+
 let cardStyle = {
-  width: '60%'
+  width: '90%'
 };
 
 let commentStyle = {
@@ -24,11 +22,10 @@ class mainAnswerCard extends React.Component {
 
    render() {
        return (
-         <div style ={ansStyle}>
+         <div>
              <Grid divided='vertically'>
-                 <Grid.Row columns={3}>
-                     <Grid.Column width={2}/>
-                     <Grid.Column width={10}>
+                 <Grid.Row columns={2}>
+                     <Grid.Column width={14}>
                          <div>
                              <Card fluid style={cardStyle}>
                                  <Card.Content>

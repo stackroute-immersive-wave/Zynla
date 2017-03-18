@@ -11,10 +11,11 @@ class ProfileBot extends React.Component {
       userprofile: {},
       message: '',
       chat: [{
-        by: 'Bot', message: 'Hai,\nUpdate your profile data here.\n' +
+        by: 'bot', message: 'Hai,\nUpdate your profile data here.\n' +
         'Please enter skip if you not wish to update the question.'
       }],
-      updatepart: ''
+      updatepart: '',
+      close: false
     };
   }
 
@@ -75,6 +76,10 @@ class ProfileBot extends React.Component {
         this.state.userprofile.education.university = message;
         this.askQuestion();
       }
+      else if(this.state.updatepart === 'phone') {
+        this.state.userprofile.phone = message;
+        this.askQuestion();
+      }
     }
   }
 
@@ -114,7 +119,8 @@ class ProfileBot extends React.Component {
   }
 
   askQuestion() {
-    if(!this.state.userprofile.gender || this.state.userprofile.gender.length < 1) {
+    if(!this.state.userprofile.gender || this.state.userprofile.gender.length < 1
+      || this.state.userprofile.gender === 'gender') {
       this.state.chat.push({
         by: 'bot',
         message: 'Are you a male or female?'
@@ -123,7 +129,8 @@ class ProfileBot extends React.Component {
         updatepart: 'gender'
       });
     }
-    else if(!this.state.userprofile.dob || this.state.userprofile.dob.length < 1) {
+    else if(!this.state.userprofile.dob || this.state.userprofile.dob.length < 1 ||
+      this.state.userprofile.dob === 'dob' || this.state.userprofile.dob === ' ') {
       this.state.chat.push({
         by: 'bot',
         message: 'Please provide me with your date of birth(dd/mm/yyyy)?'
@@ -132,7 +139,9 @@ class ProfileBot extends React.Component {
         updatepart: 'dob'
       });
     }
-    else if(!this.state.userprofile.description || this.state.userprofile.description.length < 1) {
+    else if(!this.state.userprofile.description || this.state.userprofile.description.length < 1
+    || this.state.userprofile.description === 'Describe About Yorself'
+    || this.state.userprofile.description === ' ') {
       this.state.chat.push({
         by: 'bot',
         message: 'Say something about yourself?'
@@ -142,7 +151,9 @@ class ProfileBot extends React.Component {
       });
     }
     else if(!this.state.userprofile.address.country ||
-      this.state.userprofile.address.country.length < 1) {
+      this.state.userprofile.address.country.length < 1
+    || this.state.userprofile.address.country === 'Country'
+    || this.state.userprofile.address.country === ' ') {
         this.state.chat.push({
           by: 'bot',
           message: 'May I know your country?'
@@ -152,7 +163,9 @@ class ProfileBot extends React.Component {
         });
     }
     else if(!this.state.userprofile.address.region ||
-      this.state.userprofile.address.region.length < 1) {
+      this.state.userprofile.address.region.length < 1
+    || this.state.userprofile.address.region === 'State'
+    || this.state.userprofile.address.region === ' ') {
         this.state.chat.push({
           by: 'bot',
           message: 'May I know your state?'
@@ -162,7 +175,9 @@ class ProfileBot extends React.Component {
         });
     }
     else if(!this.state.userprofile.address.city ||
-      this.state.userprofile.address.city.length < 1) {
+      this.state.userprofile.address.city.length < 1
+    || this.state.userprofile.address.city === 'City'
+    || this.state.userprofile.address.city === ' ') {
         this.state.chat.push({
           by: 'bot',
           message: 'May I know your City?'
@@ -172,7 +187,9 @@ class ProfileBot extends React.Component {
         });
     }
     else if(!this.state.userprofile.education.primary ||
-      this.state.userprofile.education.primary.length < 1) {
+      this.state.userprofile.education.primary.length < 1
+    || this.state.userprofile.education.primary === 'Primary'
+    || this.state.userprofile.education.primary === ' ') {
         this.state.chat.push({
           by: 'bot',
           message: 'What about your schooling?'
@@ -182,7 +199,9 @@ class ProfileBot extends React.Component {
         });
     }
     else if(!this.state.userprofile.education.highSchool ||
-      this.state.userprofile.education.highSchool.length < 1) {
+      this.state.userprofile.education.highSchool.length < 1
+    || this.state.userprofile.education.highSchool === 'Secondary'
+    || this.state.userprofile.education.highSchool === ' ') {
         this.state.chat.push({
           by: 'bot',
           message: 'What about your higher schooling?'
@@ -192,7 +211,9 @@ class ProfileBot extends React.Component {
         });
     }
     else if(!this.state.userprofile.education.university ||
-      this.state.userprofile.education.university.length < 1) {
+      this.state.userprofile.education.university.length < 1
+    || this.state.userprofile.education.university === 'University'
+  || this.state.userprofile.education.university === ' ') {
         this.state.chat.push({
           by: 'bot',
           message: 'What about your university?'
@@ -201,10 +222,22 @@ class ProfileBot extends React.Component {
           updatepart: 'university'
         });
     }
+    else if(!this.state.userprofile.phone ||
+      this.state.userprofile.education.phone < 1
+    || this.state.userprofile.phone === 'Phone'
+  || this.state.userprofile.phone === ' ') {
+        this.state.chat.push({
+          by: 'bot',
+          message: 'Your Current Contact Number ?'
+        });
+        this.setState({
+          updatepart: 'phone'
+        });
+    }
     else {
       this.state.chat.push({
         by: 'bot',
-        message: 'Thanks dude. Bye...... Enjoy zynla'
+        message: 'Your Profile is Updated Completely.'
       });
     }
   }
@@ -213,17 +246,18 @@ class ProfileBot extends React.Component {
     Cookie.load('email');
     return (
       <div>
-        <Modal defaultOpen
+        <Modal trigger={<Button className='butstyle'
+          style = {{marginLeft: '10%'}}>Profile Bot</Button>}
           closeOnDocumentClick ={true}
           onClose = {this.updateProfile.bind(this)}>
-         <Modal.Header>Profile Bot</Modal.Header>
+         <Modal.Header><h1>Profile Bot</h1></Modal.Header>
          <Chat chat = {this.state.chat}/>
          <Input fluid placeholder = "Answer..."
            value = {this.state.message}
            className = "chatinput"
            onChange = {this.updateMessageState.bind(this)}
            onKeyPress = {this.handleKeyPress.bind(this)}/>
-         <Button primary onClick = {this.updateProfile.bind(this)}>Close</Button>
+         <Button className='butstyle' style={{float: 'right'}} primary>Skip</Button>
        </Modal>
       </div>
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 import Cookie from 'react-cookie';
-import QuestionsCard from './questionsCard';
+import QuestionsCard from './questionscard';
 
 import {
    Dimmer,
@@ -44,8 +44,9 @@ class displayQuestions extends React.Component {
        return (
          <div>
          <Dimmer active={active} page>
-         <Loader>Loading</Loader>
+         <Loader>Loading Questions</Loader>
        </Dimmer>
+       <h1 style={{marginLeft: '10px'}}>Questions Posted</h1>
          <QuestionsCard questionData={this.state.questionobj}/>
        </div>
      );

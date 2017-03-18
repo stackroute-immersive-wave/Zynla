@@ -6,9 +6,6 @@ import {
    Icon,
    Menu
 } from 'semantic-ui-react';
-let queStyle = {
-  marginLeft: '5%'
-};
 
 class mainQuestionCard extends React.Component {
 
@@ -17,11 +14,10 @@ class mainQuestionCard extends React.Component {
      }
    render() {
        return (
-         <div style = {queStyle}>
+         <div>
             <Grid divided='vertically'>
-                <Grid.Row columns={3}>
-                    <Grid.Column width={2}/>
-                    <Grid.Column width={10}>
+                <Grid.Row columns={2}>
+                    <Grid.Column width={14}>
                         <div>
                             <Card fluid>
                                 <Card.Content>

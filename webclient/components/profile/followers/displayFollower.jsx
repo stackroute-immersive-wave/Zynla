@@ -46,6 +46,7 @@ class displayFollower extends React.Component {
          <Dimmer active={active} page>
          <Loader>Your Followers on the way..</Loader>
        </Dimmer>
+       <h1>Followers</h1>
          <FollowerCard followerData={this.state.followerObj}/>
        </div>
      );

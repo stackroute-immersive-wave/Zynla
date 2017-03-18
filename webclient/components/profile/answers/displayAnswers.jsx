@@ -44,8 +44,9 @@ class displayAnswers extends React.Component {
         return (
           <div>
           <Dimmer active={active} page>
-          <Loader>Loading</Loader>
+          <Loader>Loading Answers</Loader>
         </Dimmer>
+         <h1 style={{marginLeft: '10px'}}>Answers Answered</h1>
           <AnswersCard answerData={this.state.answerobj}/>
         </div>
       );

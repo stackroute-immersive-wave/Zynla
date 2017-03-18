@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Image, Grid, Statistic, Segment, Header, Icon} from 'semantic-ui-react';
 import Cookie from 'react-cookie';
+import Chat from './basicInfo/chatbot.jsx';
 let DisplayQues = require('./questions/displayQuestions.jsx');
 let DisplayAns = require('./answers/displayAnswers.jsx');
 let BasicInfo = require('./basicInfo/basicInfo.jsx');
@@ -23,16 +24,16 @@ let nameStyle = {
     fontSize: '20px',
     fontWeight: 'bold',
     marginLeft: '40%',
-    color: '#B2242E'
+    color: '#B2242E',
+    cursor: 'pointer'
 };
 let buttonStyle = {
-  marginLeft: '10%',
-  marginTop: '-2%'
+  marginLeft: '20%',
+  marginTop: '5%'
 };
 class NavBarPro extends Component {
 
     state = {
-        activeItem: 'info',
         questionCount: 1,
         answerCount: 0,
         followerCount: 0,
@@ -44,50 +45,57 @@ class NavBarPro extends Component {
         objArray: [],
         status: 0,
         interestsData: [],
-          /*eslint-disable*/
-        content: (
-          <BasicInfo />
-        )
+        content: <BasicInfo />
     }
-
-    handleItemClick = (e, {name}) => {
-      // console.log('comes');
+// Fetch Basic Info page
+    viewInfo() {
       let temp = (
         <BasicInfo />
       );
-      // console.log('Name:' + name);
-      if(name === 'info') {
-        temp = (
-          <BasicInfo />
-        );
-      }
-      else if(name === 'Questions') {
-        temp = (
-          <DisplayQues />
-        );
-      }
-      else if(name === 'Answers') {
-        temp = (
-          <DisplayAns />
-        );
-      }
-      /*eslint-enable*/
-      else if(name === 'follower') {
-        temp = (
-          <DisplayFollower/>
-        );
-      }
-      else if(name === 'following') {
-        temp = (
-          <DisplayFollowing />
-        );
-      }
       this.setState({
-        activeItem: name,
         content: temp
       });
     }
-
+    // Fetch Questions page
+    getQuestions() {
+      // console.log('comes');
+      let temp = (
+        <DisplayQues/>
+      );
+      this.setState({
+        content: temp
+      });
+    }
+    // Fetch Answers page
+    getAnswers() {
+      let temp = (
+        <DisplayAns/>
+      );
+      this.setState({
+        content: temp
+      });
+    }
+    // Fetch Followers page
+    getFollowers() {
+      // console.log('comes');
+      let temp = (
+        <DisplayFollower/>
+      );
+      this.setState({
+        content: temp
+      });
+    }
+    // Fetch Following page
+    getFollowings() {
+      // console.log('comes');
+      let temp = (
+        <DisplayFollowing/>
+      );
+      this.setState({
+        content: temp
+      });
+    }
+    // Fetch Interested Topics from data base
     getInterestedTopics() {
         $.ajax({
             url: 'http://localhost:8080/userdoc/getInterestedTopics',
@@ -97,6 +105,7 @@ class NavBarPro extends Component {
             },
             success: function(data) {
                 this.setState({interestsData: data,
+                  // setting interestData to content
                 content: <InterestsCard interestData={this.state.interestsData}/>
                 });
             }.bind(this),
@@ -125,7 +134,7 @@ class NavBarPro extends Component {
     componentWillMount() {
         this.getProfile();
     }
-
+    // Fetch All Info from database
     getProfile() {
       let email = Cookie.load('email');
         $.ajax({
@@ -138,52 +147,70 @@ class NavBarPro extends Component {
                     followerCount: data.followerCount,
                      followingCount: data.followingUser.length,
                      objArray: data});
-                     if(data.profile.gender.length > 0) {
+                     if(data.profile.gender.length > 0 && data.profile.gender !== 'gender' &&
+                     data.profile.gender !== ' ') {
+                       this.setState({
+                         // setting conditions for profile meter
+                         status: parseInt(this.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.education.primary.length > 0 &&
+                       data.profile.education.primary !== 'Primary' &&
+                       data.profile.education.primary !== 'Primary') {
                        this.setState({
                          status: parseInt(this.state.status, 10) + 10
                        });
                      }
-                     if(data.profile.education.primary.length > 0) {
+                     if(data.profile.education.highSchool.length > 0 &&
+                       data.profile.education.highSchool !== 'Secondary' &&
+                       data.profile.education.highSchool !== ' ') {
                        this.setState({
                          status: parseInt(this.state.status, 10) + 10
                        });
                      }
-                     if(data.profile.education.highSchool.length > 0) {
+                     if(data.profile.education.university.length > 0 &&
+                       data.profile.education.university !== 'University' &&
+                         data.profile.education.university !== ' ') {
                        this.setState({
                          status: parseInt(this.state.status, 10) + 10
                        });
                      }
-                     if(data.profile.education.university.length > 0) {
+                     if(data.profile.address.country.length > 0
+                       && data.profile.address.country !== 'Country'
+                     && data.profile.address.country !== ' ') {
                        this.setState({
                          status: parseInt(this.state.status, 10) + 10
                        });
                      }
-                     if(data.profile.address.country.length > 0) {
+                     if(data.profile.address.city.length > 0
+                       && data.profile.address.city !== 'City'
+                     && data.profile.address.city !== ' ') {
                        this.setState({
                          status: parseInt(this.state.status, 10) + 10
                        });
                      }
-                     if(data.profile.address.city.length > 0) {
+                     if(data.profile.address.region.length > 0
+                       && data.profile.address.region !== 'State'
+                     && data.profile.address.region !== ' ') {
                        this.setState({
                          status: parseInt(this.state.status, 10) + 10
                        });
                      }
-                     if(data.profile.address.region.length > 0) {
+                     if(data.profile.dob.length > 0 && data.profile.dob !== 'dob'
+                   && data.profile.dob !== ' ') {
                        this.setState({
                          status: parseInt(this.state.status, 10) + 10
                        });
                      }
-                     if(data.profile.dob.length > 0) {
+                     if(data.profile.phone.length > 0 && data.profile.phone !== 'Phone'
+                   && data.profile.phone !== ' ') {
                        this.setState({
                          status: parseInt(this.state.status, 10) + 10
                        });
                      }
-                     if(data.profile.phone.length > 0) {
-                       this.setState({
-                         status: parseInt(this.state.status, 10) + 10
-                       });
-                     }
-                     if(data.profile.description.length > 0) {
+                     if(data.profile.description.length > 0
+                       && data.profile.description !== 'Describe About Yorself'
+                     && data.profile.description !== ' ') {
                        this.setState({
                          status: parseInt(this.state.status, 10) + 10
                        });
@@ -206,9 +233,28 @@ class NavBarPro extends Component {
                     <Grid.Column style={picStyle}>
                       <Image style={imageStyle} src={Cookie.load('profilepicture')}
                         size='small' shape='circular' avatar bordered/>
-                        <div style={nameStyle}>
+                        <div style={nameStyle} onClick={this.viewInfo.bind(this)}>
                             {Cookie.load('username')}
                         </div>
+                        <div style = {buttonStyle}>
+                           <Button onClick={this.getFollowers.bind(this)}
+                             className='butstyle'
+                             content='Followers'
+                             icon='user plus' label={{
+                               basic: true,
+                               color: 'white',
+                               pointing: 'left',
+                               content: followerCount
+                           }}/>
+                           <Button onClick={this.getFollowings.bind(this)} className='butstyle'
+                             content='Following'
+                             icon='fork' label={{
+                               basic: true,
+                               color: 'white',
+                               pointing: 'left',
+                               content: followingCount
+                           }}/>
+                         </div>
                     </Grid.Column>
                     <Grid.Column>
                       <div style={meterStyle}>
@@ -216,29 +262,11 @@ class NavBarPro extends Component {
                           <Statistic.Label>Profile Meter</Statistic.Label>
                           <Statistic.Value> {profMeter} </Statistic.Value>
                           <Statistic.Label>completed</Statistic.Label>
+                          <Chat />
                         </Statistic>
                         </div>
                     </Grid.Column>
                   </Grid>
-                    <div style = {buttonStyle}>
-                       <Button onClick={this.handleItemClick}
-                         className='butstyle'
-                         content='Followers'
-                         icon='user plus' label={{
-                           basic: true,
-                           color: 'white',
-                           pointing: 'left',
-                           content: followerCount
-                       }}/>
-                       <Button onClick={this.handleItemClick} className='butstyle'
-                         content='Following'
-                         icon='fork' label={{
-                           basic: true,
-                           color: 'white',
-                           pointing: 'left',
-                           content: followingCount
-                       }}/>
-                     </div>
                      </Segment>
                 <div>
                     <br/>
@@ -248,32 +276,32 @@ class NavBarPro extends Component {
                   </Grid.Column>
                   <Grid.Column width = {4}>
                     <Segment>
-                      <Header as='h2' dividing>
+                      <Header style ={{cursor: 'pointer'}} dividing
+                        onClick={this.getQuestions.bind(this)}>
  <Header.Content>
-   {this.state.answerCount}
-   &nbsp;&nbsp;&nbsp;
-   Questions
-   <Icon name='question circle' />
- </Header.Content>
-</Header>
-
-<Header as='h2' dividing>
- <Header.Content>
-   {this.state.answerCount}
-   &nbsp;&nbsp;&nbsp;Answers
-  <Icon name='info circle' />
+   Questions &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {this.state.questionCount}
  </Header.Content>
 
 </Header>
-<Header as='h2' dividing>
+
+<Header style ={{cursor: 'pointer'}} dividing onClick={this.getAnswers.bind(this)}>
+  <Header.Content>
+    Answers &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {this.state.answerCount}
+  </Header.Content>
+
+</Header>
+<Header dividing onClick={this.getInterestedTopics.bind(this)}>
  <Icon name='favorite' />
- <Header.Content onClick={this.getInterestedTopics.bind(this)}>
+ <Header.Content style ={{cursor: 'pointer'}}>
    Watching Topics
  </Header.Content>
 </Header>
 </Segment>
                   </Grid.Column>
-                  <Grid.Column width = {1}/>
                 </Grid>
               </div>
             </div>
