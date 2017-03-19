@@ -5,16 +5,16 @@ const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const users = require('../users/userEntity');
 const configAuth = require('../config/auth');
-passport.use(new LocalStrategy(function(username, password, cb) {
-/* eslint-disable*/
- users.findOne({'username': username}, function(err, user) {
- /* eslint-enable*/
-   if (err) { return cb(err); }
-   if (!user) {return cb(null, false); }
-   if (user.password !== password) {return cb(null, false); }
-   return cb(null, user);
- });
-}));
+// passport.use(new LocalStrategy(function(username, password, cb) {
+// /* eslint-disable*/
+//  users.findOne({'username': username}, function(err, user) {
+//  /* eslint-enable*/
+//    if (err) { return cb(err); }
+//    if (!user) {return cb(null, false); }
+//    if (user.password !== password) {return cb(null, false); }
+//    return cb(null, user);
+//  });
+// }));
 
 passport.serializeUser(function(user, done) {
  done(null, user);
@@ -101,6 +101,14 @@ function(req, token, refreshToken, profile, done) {
 
                 // if the user is found, then log them in
                 if (user) {
+                            user.loggedinStatus = true;
+                            user.save(function(err1)
+                            {
+                                if(err1)
+                                {
+                                    console.log(err1);
+                                }
+                            });
                     return done(null, user); // user found, return that user
                 } else {
                     // if there is no user found with that google email, create them
@@ -114,6 +122,7 @@ function(req, token, refreshToken, profile, done) {
                     newUser.photos = profile.photos[0].value;
                     newUser.authType = 'google';
                     newUser.isnew = 'Y';
+                    newUser.loggedinStatus = true;
                     newUser.save(function() {
                         if (err)
                         {
@@ -151,6 +160,14 @@ let fbStrategy = configAuth.facebookAuth;
                 }
                 // if the user is found, then log them in
                 if (user) {
+                            user.loggedinStatus = true;
+                            user.save(function(err1)
+                            {
+                                if(err1)
+                                {
+                                    // console.log(err1);
+                                }
+                            });
                     return done(null, user);
                     /*eslint-disable */
                 } else {
@@ -167,6 +184,7 @@ let fbStrategy = configAuth.facebookAuth;
                     newUser.photos = profile.photos[0].value;
                     newUser.authType = 'facebook';
                     newUser.isnew = 'Y';
+                    newUser.loggedinStatus = true;
                     newUser.save(function() {
                         if (err)
                         {
@@ -199,6 +217,14 @@ passport.use(new InstagramStrategy({
                 /*  eslint-disable */
                 // if the user is found, then log them in
                 if (user) {
+                            user.loggedinStatus = true;
+                            user.save(function(err1)
+                            {
+                                if(err1)
+                                {
+                                    console.log(err1);
+                                }
+                            });
                     return done(null, user);
                 } else {
                     // if there is no user found with that google id, create them
@@ -213,6 +239,7 @@ passport.use(new InstagramStrategy({
                     newUser.photos = profile.profile_picture;
                     newUser.authType = 'instagram';
                     newUser.isnew = 'Y';
+                    newUser.loggedinStatus = true;
                     newUser.save(function() {
                         if (err)
                         {

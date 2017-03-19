@@ -1,17 +1,18 @@
 const User = require('../users/userEntity');
 const nodemailer = require('nodemailer');
 
-let sentInviteMail = function(host, id, type, emailId, sender)
+let sentInviteMail = function(host, id, type, emailId, sender, lStatus, questionName)
 {
             User.find({
             email: emailId
-        }, function(err, res) {
+        }, function(err, docs) {
             if (err) {
-                res.send(err);
               //  console.log('error ocuured');
             } else {
                 /*eslint-disable */
                 // Create a Nodemailer transport object
+                console.log(docs);
+                let name = docs[0].name;
                 let transporter = nodemailer.createTransport({
                     /*eslint-disable */
                     service: 'Gmail',
@@ -24,23 +25,33 @@ let sentInviteMail = function(host, id, type, emailId, sender)
 
                 console.log('host', host);
                 let link = 'http://' + host + '/followinvite/followQuestion?id='
-                 + id + '&email='
-                  + emailId;
+                     + id + '&email='
+                      + emailId + '&lstatus='+lStatus;
                 let text = 'Hello from \n\n' + sender;
                 let mailOptions = {
                     from: 'zynla0001@gmail.com', // sender address
                     to: emailId, // reciever
-                    subject: sender + 'invite you to follow' + id, // Subject line
+                    subject: sender + ' invite you to follow:-' + questionName, // Subject line
                     text: text,
-                    html: '<center><h1>Welcome to Zynla</h1></center><br><br><br>'+
-                    'Hi, <br><br>To complete Signup Click on the button to verify yourself.'+
-                    '<br><br><br><a href=' + link + ' style=background-color:#44c767;'+
-                    '-moz-border-radius:28px;-webkit-border-radius:28px;border-radius:28px;'+
-                    'border:1px solid #18ab29;display:inline-block;padding:16px 31px;'+
-                    'color:#ffffff;text-shadow:0px 1px 0px #2f6627;'+
-                    'text-decoration:none;> Follow </a><br><br>'+
-                    '<i>This link is valid for an hour.This is an Auto-generated mail, '+
-                    'please do not reply</i></small>'
+                    html: '<h3 style="color: #2e6c80;">Dear '+name+',</h3>'+
+                    '<h3>This is an invitation mail from sender to follow'+ 
+                    'the following question and give your response.</h3>'+
+                    '<h4>Click &nbsp;<a href=' + link + '><span style="color: #ffffff;">'+
+                    '<span style="background-color: #2b2301;">'+
+                    '<strong>here</strong>'+
+                    '</span></span></a>&nbsp; to follow the question.</h4>'+
+                    '</blockquote>'+
+                    '<p>&nbsp;</p>'+
+                    '<h2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;'+
+                    '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;'+
+                    '&nbsp;<span style="text-decoration: underline;'+
+                    'background-color: #003366; color: #ffffff;">'+
+                    '<em><strong>'+ questionName +'</strong></em></span></h2>'+
+                    '<p>&nbsp;</p>'+
+                    '<p><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;'+
+                    'Note: This is an auto generated mail.'+
+                    'Please do not reply of this mail</strong></p>'+
+                    '<p><strong>&nbsp;</strong></p>'
                 };
                 console.log(mailOptions + host);
                 // Sent mail to recipient

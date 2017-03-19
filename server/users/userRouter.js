@@ -19,7 +19,7 @@ router.get('/verify', userController.verifyEmail);
 
 router.post('/checkuser', userController.checkUser);
 
-router.get('/logout', userController.logOut);
+router.post('/logOut', userController.logOut);
 // Update user watchingList
 router.put('/saveToProfile', userController.saveToProfile);
 

@@ -93,10 +93,11 @@ class DisplayFavouriteCategoryStructure extends React.Component {
             error: function() {}
         });
     }
-    sendInvite(mail)
+    sendInvite(mail, lStat)
     {
-        let sender = Cookie.load('email');
+        let sender = Cookie.load('username');
         let uMail = mail;
+        let ulStat = lStat;
         // console.log(uMail);
         // console.log(this.props.id);
         $.ajax({
@@ -104,9 +105,10 @@ class DisplayFavouriteCategoryStructure extends React.Component {
             type: 'post',
             data: {
                 id: this.props.id,
-                type: 'Google',
+                type: 'question',
                 emailId: uMail,
-                sender: sender
+                sender: sender,
+                lStatus: ulStat
             },
             success: function() {
                 // this.setState({iconName: 'add', text: 'saved'});
@@ -151,6 +153,7 @@ class DisplayFavouriteCategoryStructure extends React.Component {
     findMail()
     {
         let mail = '';
+        let lStat = '';
         let loginEmail = Cookie.load('email');
         let uname = document.getElementById('users');
         // let uname = '';
@@ -159,11 +162,12 @@ class DisplayFavouriteCategoryStructure extends React.Component {
         for (let i = 0; i < userNames.length; i = i + 1) {
             if (userNames[i].name === uname.value && userNames[i].email !== loginEmail) {
                 mail = userNames[i].email;
+                lStat = userNames[i].lStatus;
                 break;
             }
         }
         // console.log(mail);
-        this.sendInvite(mail);
+        this.sendInvite(mail, lStat);
     }
     openPopup() {
   this.setState({ isOpen: true });

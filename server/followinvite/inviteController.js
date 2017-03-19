@@ -1,21 +1,37 @@
 'use strict';
-// const User = require('../users/userEntity');
 const UserProfile = require('../users/userProfileEntity').userModel;
 const ListDoc = require('../list/listdocEntity');
 const sentInviteMail = require('../function/sentInviteMail');
-// let driver = require('../config/neo4j');
+let driver = require('../config/neo4j');
+let host;
+
 let inviteCtrl = {
-sendInviteEmail: function (req) {
-        // // console.log(req.body.data);
-        // // console.log(req.body.questionId);
-        // // console.log(req.body.emailId);
-        // // console.log(req.body.senderName);
-        let host = req.get('host');
-        sentInviteMail(host, req.body.id, req.body.type, req.body.emailId, req.body.sender);
+sendInviteEmail: function (req, res) {
+        // console.log(req.body.data);
+        // console.log(req.body.questionId);
+        // console.log(req.body.emailId);
+        // console.log(req.body.senderName);
+        let questionName;
+        ListDoc.find({
+            id: req.body.id
+        }, function(err, docs) {
+            if (err) {
+                res.send(err);
+              //  console.log('error ocuured');
+            } else {
+                // console.log('Question', docs[0].question);
+                questionName = docs[0].question;
+                host = req.get('host');
+        sentInviteMail(host, req.body.id, req.body.type,
+            req.body.emailId, req.body.sender, req.body.lStatus, questionName);
+        res.send('email send successfully');
+            }
+        });
     },
-    followQuestion: function(req, res) {
+followQuestion: function(req, res) {
         let questionId = req.query.id;
         let email = req.query.email;
+        let lStatus = req.query.lstatus;
         // console.log('emaillllllll',email);
         // console.log('questionIdddddd',questionId);
         UserProfile.find({
@@ -48,13 +64,15 @@ sendInviteEmail: function (req) {
                         if(!isQuesPresent)
                         {
                             // console.log('Question is not present');
-                        // let session = driver.session();
-                        // var query = 'match (n:User) where n.name='+email+''+
-                        //                 +'match (q:Question) where id(q)='+questionId+''+
-                        //                 +'create (n)-[:follow]->(q)'+
-                        //                 +'return n,q';
-                        // session.run(query);
-                        // session.close();
+                        let session = driver.session();
+                        let query = 'match (n:User {name:"' + email + '"})' +
+                                       ' match (q:Question) where id(q)=' + qId +
+                                    ' create (n)-[:follow]->(q)';
+                        // console.log(query);
+                        session.run(query).then(function() {
+            // console.log('updated to neo4j');
+        });
+                        session.close();
                         // console.log(question);
                         UserProfile.findOneAndUpdate({
                                 emailId: req.query.email
@@ -86,10 +104,19 @@ sendInviteEmail: function (req) {
                         }
                     });
                     });
-                        res.cookie('email', req.query.email);
-                        res.redirect('/#/successfullyregistered');
+                        // console.log('Logged in status',lStatus);
+                        if(lStatus === 'true')
+                        {
+                             res.redirect('/#/answerPage?id=' + qId);
+                        }
+                        else
+                        {
+                        res.cookie('quesId', qId);
+                        res.redirect('/#/');
+                        }
             }
         });
     }
 };
+
 module.exports = inviteCtrl;

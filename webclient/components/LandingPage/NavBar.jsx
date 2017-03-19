@@ -17,17 +17,14 @@ import Cookie from 'react-cookie';
 import validator from 'validator';
 // const logger = require('./../../applogger');
 import Textarea from 'react-textarea-autosize';
-import {Route, Router, hashHistory} from 'react-router';
-let Cards = require('./Home');
-let Invite = require('./../Invite');
-let Profile = require('./../profile/NavBarpro');
-let Questions = require('./../answerbutton/questions.jsx');
-let Answerpage = require('./../cardAnswerPage/answerPage.jsx');
-let Search = require('./../search/search.jsx');
+import {hashHistory} from 'react-router';
+// let Cards = require('./Home');
+// let Invite = require('./../Invite');
+// let Profile = require('./../profile/NavBarpro');
+// let Questions = require('./../answerbutton/questions.jsx');
+// let Answerpage = require('./../cardAnswerPage/answerPage.jsx');
+// let Search = require('./../search/search.jsx');
 
-let style = {
-    height: 0
-};
 let Style = {
     marginTop: '5px',
     marginBottom: '5px'
@@ -48,13 +45,14 @@ class NavBar extends Component {
         selectedConcepts: [],
         searchQuery: ''
     }
+    /*eslint-disable*/
 
-    componentWillMount() {
-        style = {
-            height: $(window).height()
-        };
-    }
-
+    // componentWillMount() {
+    //     style = {
+    //         height: $(window).height()
+    //     };
+    // }
+    /*eslint-enable*/
     toggleVisibility = () => {
         this.setState({
             visible: !this.state.visible
@@ -273,15 +271,16 @@ class NavBar extends Component {
     }
 
     logoutCall() {
+        let emailId = Cookie.load('email');
+      // console.log(Cookie.load('username'));
+      // console.log('email for logout',emailId);
         $.ajax({
-            url: 'http://localhost:8080/users/logout', type: 'GET',
-            // datatype: 'JSON',
-            // data:{username :this.state.username,password:this.state.password},
-            success: function(res) {
-                if (typeof res.redirect === 'string') {
-                    window.location.replace(window.location.protocol
-                      + '//' + window.location.host + res.redirect);
-                }
+            url: 'http://localhost:8080/users/logOut', type: 'POST',
+            datatype: 'JSON',
+             data: {email: emailId},
+            success: function() {
+                // console.log(Cookie.load('username'));
+                hashHistory.push('/');
                 // logger.debug(res.responseText);
                 // browserHistory.push('/');
             },
@@ -298,19 +297,12 @@ class NavBar extends Component {
         // const backImage = {
         //     image: Cookie.load('profilepicture')
         // };
-        if(!Cookie.load('email')) {
-          Answerpage = require('./../error.jsx');
-          Invite = require('./../error.jsx');
-          Questions = require('./../error.jsx');
-          Profile = require('./../error.jsx');
-        }
         // const {open, dimmer} = this.state;
         return (
-            <div style={style}>
+            <div>
                 <Menu secondary id='divStyle'>
                     <Grid>
                       <Grid.Column width={2}>
-
                          <Link to='/home'>
                              <Image src='./../../image/logo.png'
                              name='image' active= {activeItem === 'image'}
@@ -419,11 +411,12 @@ class NavBar extends Component {
                                        <p className='profileColor'>
                                            {Cookie.load('username')}</p>
                                            <div>
-                                           <Link to='/logout'>
+                                           <Button primary size='small'
+                                           onClick={this.logoutCall.bind(this)}>
                                                <Menu.Item name='Logout'
                                                  active={activeItem === 'Logout'}
-                                                  onClick={this.handleItemClick}/>
-                                           </Link>
+                                                  />
+                                           </Button>
                                            </div>
                                      </Grid.Column>
                                    </Grid>
@@ -433,19 +426,6 @@ class NavBar extends Component {
                         </Grid.Column>
                     </Grid>
                 </Menu>
-                <Grid>
-                     <Grid.Column width={1}/>
-                     <Grid.Column width={15}>
-                         <Router history={hashHistory}>
-                             <Route path='/home' component={Cards} />
-                             <Route path='/invite' component={Invite} />
-                             <Route path='/answer' component={Questions} />
-                             <Route path='/answerPage' component={Answerpage} />
-                             <Route path='/profile' component={Profile} />
-                             <Route path='/search' component={Search} />
-                         </Router>
-                     </Grid.Column>
-                 </Grid>
             </div>
         );
     }

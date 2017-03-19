@@ -157,7 +157,7 @@ sendEmail: function (req, res) {
                         res.cookie('email',req.query.email);
                         var query = 'create (n:User {name : "'+req.query.email+'"})';
                         session.run(query);
-                        res.redirect('/#/successfullyregistered');
+                        res.redirect('/#/selectCategory');
                     } else {
                         console.log('email is not verified');
                         //res.end('<h1>Link expired</h1>');
@@ -198,19 +198,18 @@ logOut: function(req,res){
         res.clearCookie('username');
         res.clearCookie('profilepicture');
         res.clearCookie('email');
+        console.log(res.clearCookie('quesId'));
         User.update({
             'email': req.body.email
         }, {
             $set: {
-                'local.loggedinStatus': false
+                'loggedinStatus': false
             }
         }, function(err) {
             if (err) {
                 console.log("status not updated");
             } else {
-                req.logout();
-
-                // res.send('Successfully Logged out');
+                res.send('Log out successfully');
             }
         });
 },
@@ -238,7 +237,7 @@ facebookCallBack: function(req, res) {
             console.log("comes");
         });
             console.log(query);
-            res.redirect('/#/successfullyregistered');
+            res.redirect('/#/selectCategory');
         }
     },
 // Instagram AUTHENTICATION
@@ -264,7 +263,7 @@ instagramCallBack: function(req, res) {
             console.log("comes");
         });
             console.log(query);
-            res.redirect('/#/successfullyregistered');
+            res.redirect('/#/selectCategory');
         }
     },
 
@@ -294,7 +293,7 @@ googleCallBack: function(req, res) {
             console.log("comes");
         });
         console.log(query);
-        res.redirect('/#/successfullyregistered');
+        res.redirect('/#/selectCategory');
         }
     },
     /* To save the following card in mongo db and neo4j*/
@@ -483,7 +482,7 @@ displayCatagory: function(req, res) {
 
               for(let i=0;i<len;i=i+1)
                 {
-              names.push({name:docs[i].name,email:docs[i].email});
+              names.push({name:docs[i].name,email:docs[i].email,lStatus: docs[i].loggedinStatus});
             }
                 res.send(names);
             }

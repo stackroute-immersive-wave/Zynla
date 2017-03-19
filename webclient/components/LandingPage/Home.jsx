@@ -2,6 +2,7 @@ import DisplayFavouriteCategory from './DisplayFavouriteCategory.jsx';
 import DisplayHomePageCard from './DisplayHomePageCard';
 import React from 'react';
 import Cookie from 'react-cookie';
+import {hashHistory} from 'react-router';
 import $ from 'jquery';
 
 class Cards extends React.Component {
@@ -65,12 +66,26 @@ class Cards extends React.Component {
     });
   }
   render() {
-      return (
-            <div className='search1' >
+          let homePage;
+          /* eslint-disable*/
+    if(Cookie.load('quesId') === undefined) {
+      /* eslint-enable*/
+      homePage = (
+      <div className='search1' >
                 <DisplayFavouriteCategory json={this.state.json} />
                 {this.state.savedata.length
                   > 0 ? <DisplayHomePageCard display = {this.state.savedata} /> : null}
             </div>
+            );
+    }
+    else {
+      let qId = Cookie.load('quesId');
+      Cookie.remove('quesId', { path: '/' });
+      // console.log(Cookie.load('quesId'))
+      hashHistory.push('/answerPage?id=' + qId);
+    }
+      return (
+            <div>{homePage}</div>
       );
   }
 }

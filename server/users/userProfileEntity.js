@@ -10,6 +10,7 @@ const schema = new mongoose.Schema({
       required: true
     },
     profile: {
+      name: String,
       picture: {
         type: String,
         default: ''
@@ -141,6 +142,9 @@ const schema = new mongoose.Schema({
     }
     }],
     watchingList: [{
+      id: Number,
+      displayImage: String,
+      profileImage: String,
       heading: String,
       category: String,
       statement: String,

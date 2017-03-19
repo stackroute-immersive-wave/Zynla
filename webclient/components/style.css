@@ -38,9 +38,6 @@
  margin-left: 750px;
  margin-top: 50px;
 }
-.tagline{
- margin-left: 655px;
-}
 .centerPosition{
    margin-left: 670px;
 
@@ -49,7 +46,8 @@
  padding-top: 30px;
 }
 .tagline{
- font-size: 19px;
+    font-size: 19px;
+    margin-left: -100px;
    font-weight: 400;
    font-family: Georgia,Times,"Times New Roman",serif;
    color: #999;
@@ -242,4 +240,85 @@ width: 250px;
 
 .chatinput {
   margin-top: 10px;
+}
+.overlay{
+  position: fixed;
+   background: url('../image/background.png');
+  -webkit-animation:100s scroll infinite linear;
+  -moz-animation:100s scroll infinite linear;
+  -o-animation:100s scroll infinite linear;
+  -ms-animation:100s scroll infinite linear;
+  animation:100s scroll infinite linear;
+  top:0;
+  left:0;
+  width:100%;
+ height:100%;
+}
+
+
+@-webkit-keyframes scroll{
+  100%{
+    background-position:0px -3000px;
+  }
+}
+
+@-moz-keyframes scroll{
+  100%{
+    background-position:0px -3000px;
+  }
+}
+
+@-o-keyframes scroll{
+  100%{
+    background-position:0px -3000px;
+  }
+}
+
+@-ms-keyframes scroll{
+  100%{
+    background-position:0px -3000px;
+  }
+}
+
+@keyframes scroll{
+  100%{
+    background-position:0px -3000px;
+  }
+}
+#loginButton
+{
+  width: 110px;
+  height: 50px;
+  margin-left: 159px;
+  margin-top: 20px;
+}
+.loginImage
+{
+  width: 400px;
+  height: 561px;
+  margin-top: 0px;
+  margin-bottom: -32px;
+}
+#userForm
+{
+    width: 300px;
+    margin-left: 86px;
+}
+#passForm
+{
+  width: 300px;
+  margin-left: 86px;
+}
+#loginFormButton
+{
+      margin-left: 181px;
+}
+#footer
+{
+  margin-left: 132px;
+}
+#buttonGroup
+{
+  margin-right: 20px;
+  margin-top: 28px;
 }
