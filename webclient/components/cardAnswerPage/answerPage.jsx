@@ -9,7 +9,9 @@ import {
     Segment,
     Form,
     Modal,
-    TextArea
+    TextArea,
+    Popup,
+    Checkbox
 } from 'semantic-ui-react';
 import Cookie from 'react-cookie';
 // import RichTextEditor from 'react-rte';
@@ -78,6 +80,9 @@ class answerPage extends React.Component {
             colorName: 'green',
             colorNameUnlike: 'red',
             iconName: 'add',
+            report: '',
+            reportResult: '',
+            popupResult: '',
             objArray: [
                 {
                     id: 0,
@@ -360,8 +365,103 @@ class answerPage extends React.Component {
         });
     }
 close = () => this.setState({ modalStatus: false })
+/* ajax call To create a report for question by the user created by Soundar*/
+state = {}
+handleChange = (e, { value }) => this.setState({ value })
+changeType()
+{
+    this.sendReport(this.state.value);
+}
+sendReport(value)
+{
+    let id = window.location.hash.split('id=')[1];
+    let email = Cookie.load('email');
+    $.ajax({
+        url: 'http://localhost:8080/list/createReport',
+        type: 'POST',
+        data: {
+            id: id,
+            email: email,
+            type: value
+        },
+        success: function(data) {
+            this.setState({reportResult: data});
+        }.bind(this),
+        error: function() {}
+    });
+}
+checkReport()
+{
+  let id = window.location.hash.split('id=')[1];
+  let email = Cookie.load('email');
+  $.ajax({
+      url: 'http://localhost:8080/list/changePopup',
+      type: 'POST',
+      data: {
+          id: id,
+          email: email
+      },
+      success: function(data) {
+          this.setState({popupResult: data});
+      }.bind(this),
+      error: function() {}
+  });
+}
+
     render() {
         let quesObj = this.state.objArray;
+        let pop = '';
+        if(this.state.popupResult !== 'First Report')
+            {
+              pop = (
+                <div>
+                <h4 id='h4'>Already Reported as ....</h4>
+                <h4>{this.state.popupResult}</h4>
+                </div>
+              );
+            }
+            else {
+              pop = (
+                <div>
+                <Form>
+<Form.Field>
+<Checkbox
+radio
+label='Violent or crude content'
+name='checkboxRadioGroup'
+value='Violent or crude content'
+checked={this.state.value === 'Violent or crude content'}
+onChange={this.handleChange}
+/>
+</Form.Field>
+<Form.Field>
+<Checkbox
+radio
+label='Spam or Promotion of regulated goods and services'
+name='checkboxRadioGroup'
+value='Spam or Promotion of regulated goods and services'
+checked={this.state.value === 'Spam or Promotion of regulated goods and services'}
+onChange={this.handleChange}
+/>
+</Form.Field>
+<Form.Field>
+<Checkbox
+radio
+label='Not relevant to the topic or category'
+name='checkboxRadioGroup'
+value='Not relevant to the topic or category'
+checked={this.state.value === 'Not relevant to the topic or category'}
+onChange={this.handleChange}
+/>
+</Form.Field>
+</Form>
+<div style={{'text-align': 'center'}}><Button content='Report' color='red'
+  onClick={this.changeType.bind(this)}/></div>
+<p style={{'text-align': 'center', color: 'black', fontWeight: 'bold'}}>
+  {this.state.reportResult}</p>
+</div>
+);
+            }
         return (
 
             <Grid divided='vertically'>
@@ -419,9 +519,14 @@ close = () => this.setState({ modalStatus: false })
                                       </Button>
                                   </Modal.Actions>
                               </Modal>
-                            <Button negative style ={buttonfolstyle}
-                              size='mini'>Report</Button>
-                            <Modal trigger={<Button basic color = 'black' size = 'mini'
+                              <Popup wide trigger={<Button negative style = {buttonfolstyle}
+                    size='mini' onClick={this.checkReport.bind(this)}> Report </Button>}
+                  on='click'
+                  position='bottom right'
+                  hideOnScroll>
+                        {pop}
+                  </Popup>
+                <Modal trigger={<Button basic color = 'black' size = 'mini'
                               style = {buttonfolstyle} > Add Comments </Button>}>
                                 <Form style={formstyle}>
                                     <TextArea onChange={this.comment.bind(this)}

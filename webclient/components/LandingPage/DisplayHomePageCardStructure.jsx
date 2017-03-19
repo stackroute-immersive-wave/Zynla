@@ -9,7 +9,7 @@ import {
 } from 'semantic-ui-react';
 import {Link} from 'react-router';
 import Cookie from 'react-cookie';
-import Modal from './inviteModal';
+// import Modal from './inviteModal';
 class DisplayFavouriteCategoryStructure extends React.Component {
     constructor() {
         super();
@@ -165,6 +165,18 @@ class DisplayFavouriteCategoryStructure extends React.Component {
         // console.log(mail);
         this.sendInvite(mail);
     }
+    openPopup() {
+  this.setState({ isOpen: true });
+  this.getusers();
+}
+closePopup() {
+  this.setState({ isOpen: false });
+}
+handleClose = () => {
+    this.setState({ isOpen: false });
+    clearTimeout(this.timeout);
+  }
+/*eslint-disable*/
     render() {
         const {active} = this.state;
         const content = (
@@ -172,44 +184,38 @@ class DisplayFavouriteCategoryStructure extends React.Component {
               icon={this.state.iconName} className='spacing' id='iconColor' size='tiny' style={{
                 'font-size': 13 + 'px'
             }}/>
-                <Button circular onClick={() => this.openModal()} icon='google plus circle'
-                  id='iconColor' size='tiny' style={{
-                    'font-size': 13 + 'px'
-                }}/>
+            <Popup wide open={this.state.isOpen} onClose={() => this.closePopup()}
+        trigger={<Button circular onClick={() => this.openPopup()}
+        icon='google plus circle' id='iconColor'
+        size='tiny' style={{'font-size': 13 + 'px'}}/>} on='click' position='bottom right'>
+<p style={{background: '#be252a', height:'35px', 'text-align': 'center', color:'white', 'font-family': 'Arial, sans-serif'}}
+          className='butstyle'>Invite to follow
+          <Button floated='right' onClick={() => this.closePopup()} color='red' icon='remove' className='butstyle'/>
+      </p>
+        <p style={{'text-align': 'center','padding-right': '10px','margin-top': '0px'}}>
+        <div class="ui fluid icon input">
+          <input style={{'resize': 'horizontal','width': '250px','height':'25px'}} id="users" placeholder="Search friends Here" list="usernames" onKeyDown={this.changeval.bind(this)} />
+   <datalist id="usernames"></datalist></div>
+   <br/><br/>
+<Button fluid animated='fade' onClick={this.findMail.bind(this)} color='red' className='butstyle'>
+  <Button.Content visible >
+    <p style={{'text-align': 'center','color': 'white','font-family': 'Arial, Helvetica, sans-serif'}}>  Invite</p>
+  </Button.Content>
+  <Button.Content hidden >
+  <p style={{'text-align': 'center','color': 'white','font-family': 'Arial, Helvetica, sans-serif'}}>  Invite a friend</p>
+  </Button.Content>
+</Button>
+</p>
+ </Popup>
             </div>
         );
-        const heading = {
-            color: 'white',
-            float: 'left'
-        };
-        const hDiv = {
-            background: 'teal'
-        };
-        const Question = {
-            color: 'teal'
-        };
         const input = {
             align: 'center'
         };
-        /*eslint-disable*/
+
         return (
             <div className='CardSegment'>
                 <Card raised='true' className='item' onClick={this.handleChange}>
-                    <Modal isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}>
-                        <p style={hDiv}>
-                            <h1 style={heading}>Invite Friends to follow</h1>
-                            <Button circular onClick={() => this.closeModal()} color='teal' icon='remove'/>
-                        </p>
-                        <h2 style={Question}>Question:<br/>{this.props.heading}</h2>
-                        <div style={input}>
-                            <input id="users" list="usernames" onKeyDown={this.changeval.bind(this)}/>
-                            <datalist id="usernames"></datalist><br/><br/>
-                            <br/><br/><br/><br/>
-                            <br/><br/></div>
-                        <Button fluid onClick={this.findMail.bind(this)} color='teal'>
-                            Invite
-                        </Button>
-                    </Modal>
                     <div className="PaddingCards">
                         <Image src={this.props.displayImage} className="imgsize" onMouseEnter={this.handleShow} dimmer={{
                             active,

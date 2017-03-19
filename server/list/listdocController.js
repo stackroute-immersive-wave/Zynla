@@ -524,6 +524,69 @@ return m';
         }, function() {
             // console.log('error while connecting',err);
         });
-    }
+    },
+    // router for creating report created by Soundar
+      createReport:function(req, res){
+        let session = driver.session();
+  let id = req.body.id;
+  let email = req.body.email;
+  let type = req.body.type;
+  let query1 = 'match (n:User {name:"'+email+'"}),\
+(q:Question),\
+(n)-[x:report]->(q) where id(q)=' + id + ' \
+return x;';
+//         let query = 'match (n:User {name:"'+email+'"}), \
+// (q:Question) where id(q)=' + id + ' \
+// create (n)-[:reports {type:"'+type+'",on:timestamp()}]->(q) \
+// return q;';
+
+session.run(query1).then(function(result) {
+   // logger.debug(result);result.records[0]._fields[0].identity.low;
+   if(result.records.length > 0)
+   {
+     session.close();
+     res.send("Already Reported");
+   }
+   else {
+     let query = 'match (n:User {name:"'+email+'"}), \
+     (q:Question) where id(q)=' + id + ' \
+     create (n)-[:report {type:"'+type+'",on:timestamp()}]->(q) \
+     return q;';
+          session.run(query).then(function(result) {
+            session.close();
+            res.send("Reported...");
+          });
+   }
+
+});
+},
+// router for checking whether the report is done created by Soundar
+changePopup: function(req, res){
+  let session = driver.session();
+let id = req.body.id;
+let email = req.body.email;
+let query1 = 'match (n:User {name:"'+email+'"}),\
+(q:Question),\
+(n)-[x:report]->(q) where id(q)=' + id + ' \
+return x;';
+//         let query = 'match (n:User {name:"'+email+'"}), \
+// (q:Question) where id(q)=' + id + ' \
+// create (n)-[:reports {type:"'+type+'",on:timestamp()}]->(q) \
+// return q;';
+
+session.run(query1).then(function(result) {
+// logger.debug(result);result.records[0]._fields[0].identity.low;
+if(result.records.length > 0)
+{
+session.close();
+res.send(result.records[0]._fields[0].properties.type);
+}
+else {
+  {
+    res.send("First Report");
+  }
+}
+});
+}
 };
 module.exports = listController;

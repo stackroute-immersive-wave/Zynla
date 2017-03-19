@@ -8,7 +8,9 @@ import {
    Icon,
    Menu,
    Modal,
-   Form
+   Form,
+   Popup,
+   Checkbox
 } from 'semantic-ui-react';
 // import {TextArea} from 'semantic-ui-react';
 import RichTextEditor from 'react-rte';
@@ -32,7 +34,8 @@ class QueCard extends React.Component {
             upVotes: 0,
             downVotes: 0,
             colorName: 'green',
-            colorNameUnlike: 'red'
+            colorNameUnlike: 'red',
+            popupResult: ''
         };
         this.textVal = this.textVal.bind(this);
         this.postAnswer = this.postAnswer.bind(this);
@@ -332,9 +335,104 @@ class QueCard extends React.Component {
             }.bind(this)
           });
     }
+    /* ajax call To create a report for question by the user created by Soundar*/
+  state = {}
+handleChange = (e, { value }) => this.setState({ value })
+
+  changeType()
+  {
+      this.sendReport(this.state.value);
+  }
+  sendReport(value)
+  {
+      let id = this.props.id;
+      let email = Cookie.load('email');
+      $.ajax({
+          url: 'http://localhost:8080/list/createReport',
+          type: 'POST',
+          data: {
+              id: id,
+              email: email,
+              type: value
+          },
+          success: function(data) {
+              this.setState({reportResult: data});
+          }.bind(this),
+          error: function() {}
+      });
+  }
+  checkReport()
+  {
+    let id = this.props.id;
+    let email = Cookie.load('email');
+    $.ajax({
+        url: 'http://localhost:8080/list/changePopup',
+        type: 'POST',
+        data: {
+            id: id,
+            email: email
+        },
+        success: function(data) {
+            this.setState({popupResult: data});
+        }.bind(this),
+        error: function() {}
+    });
+  }
     render() {
         const { open } = this.state;
-        // const { active } = this.state;
+        let pop = '';
+      if(this.state.popupResult !== 'First Report')
+          {
+            pop = (
+                <div>
+                <h4 id='h4'>Already Reported as ....</h4>
+                <h4>{this.state.popupResult}</h4>
+                </div>
+            );
+          }
+          else {
+            pop = (
+              <div>
+              <Form>
+<Form.Field>
+<Checkbox
+radio
+label='Violent or crude content'
+name='checkboxRadioGroup'
+value='Violent or crude content'
+checked={this.state.value === 'Violent or crude content'}
+onChange={this.handleChange}
+/>
+</Form.Field>
+<Form.Field>
+<Checkbox
+radio
+label='Spam or Promotion of regulated goods and services'
+name='checkboxRadioGroup'
+value='Spam or Promotion of regulated goods and services'
+checked={this.state.value === 'Spam or Promotion of regulated goods and services'}
+onChange={this.handleChange}
+/>
+</Form.Field>
+<Form.Field>
+<Checkbox
+radio
+label='Not relevant to the topic or category'
+name='checkboxRadioGroup'
+value='Not relevant to the topic or category'
+checked={this.state.value === 'Not relevant to the topic or category'}
+onChange={this.handleChange}
+/>
+</Form.Field>
+</Form>
+<div style={{'text-align': 'center'}}><Button content='Report' color='red'
+onClick={this.changeType.bind(this)}/></div>
+<p style={{'text-align': 'center', color: 'black', fontWeight: 'bold'}}>{this.state.reportResult}
+</p>
+</div>
+);
+          }
+      // const { active } = this.state;
         let save = (<Icon name={this.state.iconName} circular
                     className='plusbtn' color='red' size='large'/>);
         // let save = <Icon name='minus' circular
@@ -392,7 +490,14 @@ class QueCard extends React.Component {
                           onClick={this.modalOpen.bind(this)}>Answer</Button>
                         <Menu.Menu position='right'>
                             <Menu.Item>
-                                <Icon name='flag' />
+                              <Popup wide
+                              trigger={<Icon name='flag' color='red'
+                              onClick={this.checkReport.bind(this)}/>}
+                              on='click'
+                              position='bottom right'
+                              hideOnScroll>
+                                      {pop}
+                              </Popup>
                             </Menu.Item>
                         </Menu.Menu>
                     </Menu>

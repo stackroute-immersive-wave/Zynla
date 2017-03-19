@@ -19,4 +19,7 @@ router.get('/getImages', listCtrl.getImages);
 router.put('/updatecomment', listCtrl.updatecomments);
 router.post('/UpdateAcceptans', listCtrl.UpdateAcceptans);
 router.put('/addanswerComment', listCtrl.addanswerComment);
+router.post('/createReport', listCtrl.createReport);
+router.post('/changePopup', listCtrl.changePopup);
+
 module.exports = router;

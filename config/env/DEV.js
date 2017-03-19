@@ -1,4 +1,4 @@
-const masterMongoDBName = process.env.APP_DB || 'ZynlaAocial';
+const masterMongoDBName = process.env.APP_DB || 'zynla';
 
 const mongo = {
   host: process.env.MONGO_HOST || '127.0.0.1',
