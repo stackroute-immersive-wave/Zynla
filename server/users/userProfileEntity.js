@@ -6,67 +6,71 @@ const schema = new mongoose.Schema({
         required: true
     },
     profile: {
-        name: String,
-        picture: {
-            type: String,
-            default: ''
+      name: {
+        type: String,
+        default: 'name'
+      },
+      picture: {
+        type: String,
+        default:
+        'http://emblemsbattlefield.com/uploads/posts/2014/10/facebook-default-photo-male_1.jpg'
+      },
+      description: {
+        type: String,
+        default: 'Describe About Yourself'
+      },
+      dob: {
+        type: String,
+        default: 'dob'
+      },
+      gender: {
+        type: String,
+        default: 'gender'
+      },
+      address: {
+        Line1: {
+          type: String,
+          default: 'H.No.'
         },
-        description: {
-            type: String,
-            default: ''
+        Line2: {
+          type: String,
+          default: 'Street'
         },
-        dob: {
-            type: String,
-            default: ''
+        country: {
+          type: String,
+          default: 'Country'
         },
-        gender: {
-            type: String,
-            default: ''
+        region: {
+          type: String,
+          default: 'State'
         },
-        address: {
-            Line1: {
-                type: String,
-                default: ''
-            },
-            Line2: {
-                type: String,
-                default: ''
-            },
-            country: {
-                type: String,
-                default: ''
-            },
-            region: {
-                type: String,
-                default: ''
-            },
-            city: {
-                type: String,
-                default: ''
-            },
-            postalCode: {
-                type: String,
-                default: ''
-            }
+        city: {
+          type: String,
+          default: 'City'
         },
-        education: {
-            primary: {
-                type: String,
-                default: ''
-            },
-            highSchool: {
-                type: String,
-                default: ''
-            },
-            university: {
-                type: String,
-                default: ''
-            }
-        },
-        phone: {
-            type: String,
-            default: ''
+        postalCode: {
+          type: String,
+          default: 'postal Code'
         }
+        },
+      education: {
+        primary: {
+          type: String,
+          default: 'Primary'
+        },
+        highSchool: {
+          type: String,
+          default: 'Secondary'
+        },
+        university: {
+          type: String,
+          default: 'University'
+        }
+      },
+      phone: {
+        type: String,
+        default: 'Phone'
+      }
     },
     lists: [
         {
@@ -75,43 +79,43 @@ const schema = new mongoose.Schema({
             },
             heading: {
                 type: String,
-                dafault: ''
+                default: 'heading'
             },
             category: {
                 type: String,
-                dafault: ''
+                default: ''
             },
             statement: {
                 type: String,
-                dafault: ''
+                default: ''
             },
             image: {
                 type: String,
-                dafault: ''
+                default: ''
             },
             displayImage: {
                 type: String,
-                dafault: ''
+                default: ''
             },
             addedOn: {
                 type: String,
-                dafault: ''
+                default: ''
             },
             upVote: {
                 type: String,
-                dafault: 0
+                default: 0
             },
             postedBy: {
                 type: String,
-                dafault: ''
+                default: ''
             },
             acceptedCount: {
                 type: String,
-                dafault: 0
+                default: 0
             },
             downVote: {
                 type: String,
-                dafault: 0
+                default: 0
             }
         }
     ],
@@ -122,31 +126,30 @@ const schema = new mongoose.Schema({
             },
             statement: {
                 type: String,
-                dafault: ''
+                default: 'statement'
             },
             addedOn: {
                 type: String,
-                dafault: ''
+                default: ''
             },
             image: {
                 type: String,
-                dafault: ''
+                default: ''
             },
             upVote: {
                 type: Number,
-                dafault: 0
+                default: 0
             },
             downVote: {
                 type: Number,
-                dafault: 0
+                default: 0
             }
         }
     ],
     watchingList: [
         {
             id: {
-              type: Number,
-              unique: true
+              type: Number
             },
             displayImage: String,
             profileImage: String,
@@ -186,7 +189,7 @@ const schema = new mongoose.Schema({
     ],
     reputation: {
         type: Number,
-        dafault: 0
+        default: 0
     },
     followingUser: [
         {
@@ -195,7 +198,7 @@ const schema = new mongoose.Schema({
     ],
     followerCount: {
         type: Number,
-        dafault: 0
+        default: 0
     }
 });
 const model = mongoose.model('userDoc', schema);

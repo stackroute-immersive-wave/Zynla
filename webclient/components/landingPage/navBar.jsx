@@ -253,7 +253,7 @@ class NavBar extends Component {
           document.getElementById('errorMessage').innerHTML =
           'Please enter the Description of that question';
         }
-        else if(conceptArr.length <= 10) {
+        else if(conceptArr.length <= 0) {
           document.getElementById('errorMessage').innerHTML =
           'Please select atleast one concept';
         }

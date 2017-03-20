@@ -1,5 +1,5 @@
 import React from 'react';
-import QuestionCard from './questioncard.jsx';
+import QuestionCard from './questionCard.jsx';
 import {Grid} from 'semantic-ui-react';
 const Packery = require('react-packery-component')(React);
 

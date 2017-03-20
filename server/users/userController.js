@@ -474,6 +474,9 @@ let userCtrl = {
         }
         newUser.emailId = req.body.email;
         newUser.interestCategory = arr;
+        newUser.profile.dob = 'dob';
+        newUser.profile.gender = 'gender';
+        newUser.profile.address.country = 'Country';
         res.cookie('email', newUser.emailId);
         res.cookie('catagories', newUser.interestCategory);
         console.log(arr);

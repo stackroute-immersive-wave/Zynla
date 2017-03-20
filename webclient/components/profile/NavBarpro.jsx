@@ -8,6 +8,7 @@ let BasicInfo = require('./basicInfo/basicInfo.jsx');
 let DisplayFollowing = require('./following/displayFollowing');
 let DisplayFollower = require('./followers/displayFollower');
 import InterestsCard from './basicInfo/interestedCategories/interestsCard';
+
 let picStyle = {
     marginTop: '3%'
 };
@@ -131,7 +132,7 @@ class NavBarPro extends Component {
         });
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.getProfile();
     }
     // Fetch All Info from database
@@ -156,7 +157,7 @@ class NavBarPro extends Component {
                      }
                      if(data.profile.education.primary.length > 0 &&
                        data.profile.education.primary !== 'Primary' &&
-                       data.profile.education.primary !== 'Primary') {
+                       data.profile.education.primary !== ' ') {
                        this.setState({
                          status: parseInt(this.state.status, 10) + 10
                        });
@@ -209,7 +210,7 @@ class NavBarPro extends Component {
                        });
                      }
                      if(data.profile.description.length > 0
-                       && data.profile.description !== 'Describe About Yorself'
+                       && data.profile.description !== 'Describe About Yourself'
                      && data.profile.description !== ' ') {
                        this.setState({
                          status: parseInt(this.state.status, 10) + 10

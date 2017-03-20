@@ -21,18 +21,18 @@ class basicInfo extends React.Component {
         this.state = {
             loader: false,
             activeItem: '',
-            primary: 'Primary School',
-            secondary: 'High School',
-            university: 'University',
-            line1: 'H.No.',
-            line2: 'Street',
-            region: 'State',
-            country: 'Country',
-            postalCode: 'Pin Code',
-            city: 'City',
+            primary: '',
+            secondary: '',
+            university: '',
+            line1: '',
+            line2: '',
+            region: '',
+            country: '',
+            postalCode: '',
+            city: '',
             picture: '',
-            description: 'About Yorself',
-            dob: 'date',
+            description: '',
+            dob: '',
             gender: '',
             phone: 'Phone',
             interestsData: [],
@@ -57,14 +57,14 @@ class basicInfo extends React.Component {
                     </Popup> . earned my degree <br/> from <Popup on = 'click'
                         trigger={<a style={{cursor: 'pointer'}}>{this.state.university}</a>}
                        flowing hoverable>
-                       <Input onChange={this.changeSecondary.bind(this)} onKeyPress =
-                       {this.changeSecondary.bind(this)}/>
+                       <Input onChange={this.changeUniversity.bind(this)} onKeyPress =
+                       {this.changeUniversity.bind(this)}/>
                        <Button onClick = {this.updateEducation} content='Update'/>
                        </Popup> . and completed the high schooling from <Popup on = 'click' trigger=
                       {<a style={{cursor: 'pointer'}}>{this.state.secondary}</a>}
                     flowing hoverable>
-                    <Input onChange={this.changeUniversity.bind(this)} onKeyPress =
-                    {this.changeUniversity.bind(this)}/>
+                    <Input onChange={this.changeSecondary.bind(this)} onKeyPress =
+                    {this.changeSecondary.bind(this)}/>
                     <Button onClick = {this.updateEducation} content='Update'/>
                     </Popup>
                     </div>
@@ -320,15 +320,11 @@ class basicInfo extends React.Component {
         }
     }
     handleChange = (e, {value}) => this.setState({value})
-    componentWillMount() {
+    componentDidMount() {
         // console.log("comes");
         this.handleOpen();
         this.getProfile();
         this.getInterestedTopics();
-        let tmp = (<h1>Welcome to Zynla Profile.<br/> Choose an option from menu </h1>);
-        this.setState({
-          profileForm: tmp
-        });
     }
     getProfile() {
             $.ajax({
@@ -339,59 +335,22 @@ class basicInfo extends React.Component {
             },
             success: function(data) {
                 this.handleClose();
-                if (data.profile.education.primary || data.profile.education.highschool ||
-                  data.profile.education.university) {
                     this.setState({
                         primary: data.profile.education.primary,
                         secondary: data.profile.education.highSchool,
-                        university: data.profile.education.university
-                    });
-                } else {
-                    this.setState({
-                    primary: data.profile.education.primary,
-                    secondary: data.profile.education.highSchool,
-                    university: data.profile.education.university});
-                }
-
-                if (data.profile.address.Line1 || data.profile.address.Line2 ||
-                  data.profile.address.country || data.profile.address.region ||
-                  data.profile.address.city || data.profile.address.postalCode) {
-                    this.setState({
+                        university: data.profile.education.university,
                         line1: data.profile.address.Line1,
                         line2: data.profile.address.Line2,
                         country: data.profile.address.country,
                         region: data.profile.address.region,
                         city: data.profile.address.city,
-                        postalCode: data.profile.address.postalCode
-                        });
-                } else {
-                    this.setState({
-                        line1: data.profile.address.Line1,
-                        line2: data.profile.address.Line2,
-                        country: data.profile.address.country,
-                        region: data.profile.address.region,
-                        city: data.profile.address.city,
-                        postalCode: data.profile.address.postalCode
-                    });
-                }
-                if (data.profile.picture || data.profile.description ||
-                  data.profile.dob || data.profile.gender || data.profile.phone) {
-                    this.setState({
-                        picture: data.profile.picture,
-                        description: data.profile.description,
-                        dob: data.profile.dob,
-                        gender: data.profile.gender,
-                        phone: data.profile.phone
-                        });
-                } else {
-                    this.setState({
+                        postalCode: data.profile.address.postalCode,
                         picture: data.profile.picture,
                         description: data.profile.description,
                         dob: data.profile.dob,
                         gender: data.profile.gender,
                         phone: data.profile.phone
                     });
-                }
             }.bind(this),
             error: function() {
 
@@ -410,13 +369,10 @@ class basicInfo extends React.Component {
             type: 'POST',
             data: eduData,
             success: function() {
-              this.handleItemClick(this, 'Education');
-                this.setState({loader: false});
                 /*eslint-disable*/
-                alert("Education Details Updated Successfully");
                 /*eslint-enable*/
                 // console.log(data);
-            }.bind(this),
+            },
             error: function() {
                 // console.error(err.toString());
             }
@@ -439,6 +395,10 @@ class basicInfo extends React.Component {
             type: 'POST',
             data: locData,
             success: function() {
+              this.setState({
+
+                line1: this.state.line1
+              });
                           /*eslint-disable*/
                 // alert("Location Details Updated Successfully");
                 /*eslint-enable*/

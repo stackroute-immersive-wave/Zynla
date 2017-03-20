@@ -17,8 +17,8 @@ class ChatCard extends React.Component {
       render = (
 
         <div className = "chatcardhuman">
-          <Segment>
-          <h2>{this.props.data.message}</h2>
+          <Segment className = 'inputMessage'>
+          <h2 className='message'>{this.props.data.message}</h2>
         </Segment>
         </div>
 

@@ -99,19 +99,29 @@ let searchController = {
     },
 
     followUser: function(req, res) {
-        let session = driver.session();
-        /* eslint-disable */
-        let query = 'match(n:User {name:"' + req.body.id + '"}),\
-                 (m:User {name:"' + req.body.emailId + '"})\
-                 create (n)-[:follow]->(m)\
-                 return n,m;';
-        /* eslint-enable */
-        session.run(query).then(function() {
-            session.close();
-            res.send('success');
-        });
-    },
-
+       let session = driver.session();
+       /* eslint-disable */
+       let query = 'match(n:User {name:"' + req.body.id + '"}),\
+                (m:User {name:"' + req.body.emailId + '"})\
+                create (n)-[:follow]->(m)\
+                return n,m;';
+       /* eslint-enable */
+       session.run(query).then(function() {
+           userList.findOneAndUpdate({
+           emailId: req.body.id
+       }, {
+           $push: {
+               followingUser: req.body.emailId
+           }
+       }, {new: true}).then((doc) => {
+           res.send(doc);
+       }, (err) => {
+           res.send(err);
+       });
+           session.close();
+           res.send('success');
+       });
+   },
     isFollow: function(req, res) {
         let query = 'match (n:User {name:"' + req.body.name + '"})-[:follow]->(m:User) return m';
         let session = driver.session();

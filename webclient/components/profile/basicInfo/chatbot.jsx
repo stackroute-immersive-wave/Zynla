@@ -140,7 +140,7 @@ class ProfileBot extends React.Component {
       });
     }
     else if(!this.state.userprofile.description || this.state.userprofile.description.length < 1
-    || this.state.userprofile.description === 'Describe About Yorself'
+    || this.state.userprofile.description === 'Describe About Yourself'
     || this.state.userprofile.description === ' ') {
       this.state.chat.push({
         by: 'bot',
@@ -251,7 +251,7 @@ class ProfileBot extends React.Component {
           closeOnDocumentClick ={true}
           onClose = {this.updateProfile.bind(this)}>
          <Modal.Header><h1>Profile Bot</h1></Modal.Header>
-         <Chat chat = {this.state.chat}/>
+         <Chat className = 'message' chat = {this.state.chat}/>
          <Input fluid placeholder = "Answer..."
            value = {this.state.message}
            className = "chatinput"
