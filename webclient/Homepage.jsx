@@ -13,7 +13,7 @@ import UserProfile from './components/users/userprofile';
 let Cards = require('./components/landingPage/home');
 let Invite = require('./components/invite');
 let Profile = require('./components/profile/NavBarpro');
-let Questions = require('./components/answerbutton/questions.jsx');
+let Questions = require('./components/answerButton/questions.jsx');
 let Answerpage = require('./components/cardAnswerPage/answerPage.jsx');
 let Search = require('./components/search/search.jsx');
 // let {browserHistory, Route, Router, IndexRoute} = require('react-router');

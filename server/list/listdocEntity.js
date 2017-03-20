@@ -37,7 +37,7 @@ const schema = new mongoose.Schema({
         type: String
     },
     answerCounts: {
-        type: String
+        type: Number
     },
     postedBy: {
         type: String

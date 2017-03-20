@@ -22,7 +22,7 @@ let ansstyle = {
 };
 let commentstyle = {
     fontFamily: 'Cochin',
-    fontSize: 18
+    fontSize: 14
 };
 let formstyle = {
     margin: '3% 3% 3% 3% '
@@ -96,6 +96,7 @@ class cardAnswer extends React.Component {
         } else if (Cookie.load('email') === this.props.postedBy) {
             accept = btn;
         }
+        let ansHtmlContent = this.props.content;
         // displaying answer in answerpage created by Aswini K
         return (
             <div>
@@ -111,7 +112,8 @@ class cardAnswer extends React.Component {
                     </Card.Content>
                     <Card.Content>
                         <Card.Header style={ansstyle}>
-                            {this.props.content}
+                            <div className='content'
+                              dangerouslySetInnerHTML={{__html: ansHtmlContent}} />
                         </Card.Header>
                     </Card.Content>
                     <Menu style={commentstyle}>

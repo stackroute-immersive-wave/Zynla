@@ -16,8 +16,9 @@
      float:left
    }
    .plusbtn {
-     position: relative;
-     margin-left: 65% !important;
+     /*position: relative;
+     margin-left: 55% !important;*/
+     float: right;
    }
    .checkmarkbtn {
      position: relative;
@@ -30,4 +31,21 @@
   background-color: : #BE252A ;
   color: #FFFFFF;
   cursor: pointer !important;
+}
+.btnfont{
+  font-size: 16px !important;
+}
+.rteEditor{
+  height: 230px !important;
+  overflow: scroll;
+}
+.errorCss{
+  margin: 10px 0px;
+padding:12px;
+color: #D8000C;
+background-color: #FFBABA;
+}
+.snackbarMsg{
+  margin-left: 320px!important;
+  z-index: 5!important;
 }
