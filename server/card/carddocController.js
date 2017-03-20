@@ -18,7 +18,7 @@ let cardController = {
         let query = ' \
                     match (q:Question), \
                    (u:User {name:"' + req.body.mail + '"}) \
-                   where id(q) = 973 \
+                   where id(q) = ' + req.body.questionId + ' \
                    create (n:Answer {Content:"' + req.body.content + '"}), \
                    (l:Like {count:0}), \
                    (dl:Unlike {Count:0}), \

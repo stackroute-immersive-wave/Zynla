@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const schema = new mongoose.Schema({
-    id: {
-        type: Number,
-        required: true
-    },
     emailId: {
         type: String,
         required: true

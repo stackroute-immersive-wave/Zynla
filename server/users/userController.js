@@ -472,7 +472,6 @@ let userCtrl = {
         for (let y of arr1) {
             arr.push(y);
         }
-        newUser.id = rand;
         newUser.emailId = req.body.email;
         newUser.interestCategory = arr;
         res.cookie('email', newUser.emailId);

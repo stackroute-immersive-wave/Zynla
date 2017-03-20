@@ -156,7 +156,7 @@ let listController = {
         // console.log('router suggest ques');
         /* eslint-disable */
         let query = 'match(n:Question)-[r:question_of]-> (m:Concept) \
-                       where id(n)=970 \
+                       where id(n)=' + req.params.id + ' \
                       match (b:QuestionIntent{value:r.intent})-[z:same_as]->(a:QuestionIntent) \
                        -[:same_as]->(l:QuestionIntent) \
                       match (m)<-[:question_of {intent:a.value}]-(s:Question) \
