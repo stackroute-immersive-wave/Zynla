@@ -239,6 +239,7 @@ let listController = {
                     if (result) {
                         /*eslint-disable*/
                         let id = result.records[0]._fields[0].identity.low;
+                        let date = new Date().getTime();
                         /*eslint-enable*/
                         let db = new List({
                             id: id,
@@ -248,7 +249,7 @@ let listController = {
                             question: req.body.statement,
                             displayImage: imagesArray[randomNumber],
                             profileImage: req.body.profilepicture,
-                            addedOn: new Date().getTime(),
+                            addedOn: date,
                             upVotes: '0',
                             downVotes: '0',
                             answerCounts: '0',

@@ -239,7 +239,7 @@ handleClose = () => {
                             <a href='' className='LinkColor'>{this.props.postedBy}</a>
                         </Card.Meta>
                         <Card.Meta>
-                            {this.props.addedOn}
+                            {new Date(parseInt(this.props.addedOn, 10)).toString().substring(0, 15)}
                         </Card.Meta>
                     </div>
                     <div className="PaddingCardsBottom">

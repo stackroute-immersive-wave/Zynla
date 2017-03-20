@@ -1,3 +1,5 @@
+import {PropTypes} from 'react';
+import RichTextEditor from 'react-rte';
 import React from 'react';
 import {
     Grid,
@@ -11,7 +13,9 @@ import {
     Modal,
     TextArea,
     Popup,
-    Checkbox
+    Checkbox,
+    Dimmer,
+    Loader
 } from 'semantic-ui-react';
 import Cookie from 'react-cookie';
 // import RichTextEditor from 'react-rte';
@@ -64,15 +68,15 @@ let titlestyle1 = {
     marginBottom: '3%'
 };
 let date = {
-  marginTop: '1%',
-  fontSize: 15
+    marginTop: '1%',
+    fontSize: 15
 };
 class answerPage extends React.Component {
     constructor() {
         super();
         this.state = {
             active: false,
-            // value: RichTextEditor.createEmptyValue(),
+            value: RichTextEditor.createEmptyValue(),
             id: '',
             views: 0,
             upVotes: 0,
@@ -123,18 +127,18 @@ class answerPage extends React.Component {
         this.postAnswer = this.postAnswer.bind(this);
         this.addcomment = this.addcomment.bind(this);
     }
-    // static propTypes = {
-    //     onChange: PropTypes.func
-    // };
-    // onChange = (value) => {
-    //     this.setState({value});
-    //     if (this.props.onChange) {
-    //         this.props.onChange(value.toString('html'));
-    //     }
-    // };
+    static propTypes = {
+        onChange: PropTypes.func
+    };
+    onChange = (value) => {
+        this.setState({value});
+        if (this.props.onChange) {
+            this.props.onChange(value.toString('html'));
+        }
+    };
     modalOpen() {
-           this.setState({ modalStatus: true });
-         }
+        this.setState({modalStatus: true});
+    }
     textVal(e) {
         this.setState({content: e.target.value});
     }
@@ -143,15 +147,17 @@ class answerPage extends React.Component {
     }
     // Posting answer for question created by Aswini K
     postAnswer() {
-      this.close();
+        this.close();
         let id = window.location.hash.split('id=')[1];
         // console.log('inside post Answer');
         let ansdata = {
             questionId: id,
             mail: Cookie.load('email'),
-            content: this.state.content
+            content: this.state.value.toString('html')
         };
-        // let context = this;
+        /* eslint-disable */
+        let context = this;
+        /* eslint-enable */
         // console.log(JSON.stringify(ansdata));
         $.ajax({
             url: 'http://localhost:8080/answers/add',
@@ -159,7 +165,8 @@ class answerPage extends React.Component {
             data: ansdata,
             success: function() {
                 // console.log('success', data);
-                this.setState({active: false});
+                context.setState({active: false});
+                context.getData();
             },
             error: function() {
                 // console.log(this.props.url, status, err.toString());
@@ -210,6 +217,7 @@ class answerPage extends React.Component {
     // Getting question data from mongo db created by Aswini K
     getData() {
         let id = window.location.hash.split('id=')[1];
+        this.handleOpen();
         $.ajax({
             url: 'http://localhost:8080/list/answer/' + id,
             type: 'GET',
@@ -217,6 +225,7 @@ class answerPage extends React.Component {
                 this.setState({objArray: data});
                 this.setState({views: data[0].views});
                 this.getviewscount();
+                this.handleClose();
                 // console.log(this.state.objArray);
             }.bind(this)
         });
@@ -339,212 +348,236 @@ class answerPage extends React.Component {
     saveToProfile() {
         let id = window.location.hash.split('id=')[1];
         let emailId = Cookie.load('email');
+        let quesObj = this.state.objArray;
         $.ajax({
 
-            url: '/users/saveToProfile',
+           url: '/users/saveToProfile',
             type: 'PUT',
             data: {
                 emailId: emailId,
                 id: id,
                 displayImage: this.props.displayImage,
-                heading: this.props.heading,
-                statement: this.props.question,
-                postedBy: this.props.postedBy,
-                profileImage: this.props.profileImage,
-                addedOn: this.props.addedOn,
-                views: this.props.views,
-                category: this.props.category,
-                upVotes: this.props.upVotes,
-                downVotes: this.props.downVotes,
-                answerCounts: this.props.answerCounts
+                heading: quesObj[0].heading,
+                statement: quesObj[0].question,
+                postedBy: quesObj[0].postedBy,
+                profileImage: quesObj[0].profileImage,
+                addedOn: quesObj[0].addedOn,
+                views: quesObj[0].views,
+                category: quesObj[0].category,
+                upVotes: quesObj[0].upVotes,
+                downVotes: quesObj[0].downVotes,
+                answerCounts: quesObj[0].answerCounts
             },
             success: function() {
-                this.setState({iconName: 'add', text: 'saved'});
+                this.setState({iconName: 'minus'});
             }.bind(this),
             error: function() {}
         });
     }
-close = () => this.setState({ modalStatus: false })
-/* ajax call To create a report for question by the user created by Soundar*/
-state = {}
-handleChange = (e, { value }) => this.setState({ value })
-changeType()
-{
-    this.sendReport(this.state.value);
-}
-sendReport(value)
-{
-    let id = window.location.hash.split('id=')[1];
-    let email = Cookie.load('email');
-    $.ajax({
-        url: 'http://localhost:8080/list/createReport',
-        type: 'POST',
-        data: {
-            id: id,
-            email: email,
-            type: value
-        },
-        success: function(data) {
-            this.setState({reportResult: data});
-        }.bind(this),
-        error: function() {}
-    });
-}
-checkReport()
-{
-  let id = window.location.hash.split('id=')[1];
-  let email = Cookie.load('email');
-  $.ajax({
-      url: 'http://localhost:8080/list/changePopup',
-      type: 'POST',
-      data: {
-          id: id,
-          email: email
-      },
-      success: function(data) {
-          this.setState({popupResult: data});
-      }.bind(this),
-      error: function() {}
-  });
-}
+    close = () => this.setState({modalStatus: false})
+    /* ajax call To create a report for question by the user created by Soundar*/
+    state = {}
+    handleChange = (e, {value}) => this.setState({value})
+    handleOpen() {this.setState({ active: true });}
+    handleClose() {this.setState({ active: false });}
+    changeType()
+    {
+        this.sendReport(this.state.value);
+    }
+    sendReport(value)
+    {
+        let id = window.location.hash.split('id=')[1];
+        let email = Cookie.load('email');
+        $.ajax({
+            url: 'http://localhost:8080/list/createReport',
+            type: 'POST',
+            data: {
+                id: id,
+                email: email,
+                type: value
+            },
+            success: function(data) {
+                this.setState({reportResult: data});
+            }.bind(this),
+            error: function() {}
+        });
+    }
+    checkReport()
+    {
+        let id = window.location.hash.split('id=')[1];
+        let email = Cookie.load('email');
+        $.ajax({
+            url: 'http://localhost:8080/list/changePopup',
+            type: 'POST',
+            data: {
+                id: id,
+                email: email
+            },
+            success: function(data) {
+                this.setState({popupResult: data});
+            }.bind(this),
+            error: function() {}
+        });
+    }
 
     render() {
         let quesObj = this.state.objArray;
+        const {active} = this.state;
         let pop = '';
-        if(this.state.popupResult !== 'First Report')
-            {
-              pop = (
+            let dateData = new Date(parseInt(quesObj[0].addedOn, 10)).toString().substring(0, 15);
+        if (this.state.popupResult !== 'First Report') {
+            pop = (
                 <div>
-                <h4 id='h4'>Already Reported as ....</h4>
-                <h4>{this.state.popupResult}</h4>
+                    <h4 id='h4'>Already Reported as ....</h4>
+                    <h4>{this.state.popupResult}</h4>
                 </div>
-              );
-            }
-            else {
-              pop = (
+            );
+        } else {
+            pop = (
                 <div>
-                <Form>
-<Form.Field>
-<Checkbox
-radio
-label='Violent or crude content'
-name='checkboxRadioGroup'
-value='Violent or crude content'
-checked={this.state.value === 'Violent or crude content'}
-onChange={this.handleChange}
-/>
-</Form.Field>
-<Form.Field>
-<Checkbox
-radio
-label='Spam or Promotion of regulated goods and services'
-name='checkboxRadioGroup'
-value='Spam or Promotion of regulated goods and services'
-checked={this.state.value === 'Spam or Promotion of regulated goods and services'}
-onChange={this.handleChange}
-/>
-</Form.Field>
-<Form.Field>
-<Checkbox
-radio
-label='Not relevant to the topic or category'
-name='checkboxRadioGroup'
-value='Not relevant to the topic or category'
-checked={this.state.value === 'Not relevant to the topic or category'}
-onChange={this.handleChange}
-/>
-</Form.Field>
-</Form>
-<div style={{'text-align': 'center'}}><Button content='Report' color='red'
-  onClick={this.changeType.bind(this)}/></div>
-<p style={{'text-align': 'center', color: 'black', fontWeight: 'bold'}}>
-  {this.state.reportResult}</p>
-</div>
-);
-            }
+                    <Form>
+                        <Form.Field>
+                            <Checkbox radio label='Violent or crude content'
+                               name='checkboxRadioGroup'
+                                value='Violent or crude content'
+                                 checked={this.state.value === 'Violent or crude content'}
+                                  onChange={this.handleChange}/>
+                        </Form.Field>
+                        <Form.Field>
+                            <Checkbox
+                               radio label='Spam or Promotion of regulated goods and services'
+                                name='checkboxRadioGroup'
+                                 value='Spam or Promotion of regulated goods and services'
+                                 checked={
+                                   this.state.value
+                                   === 'Spam or Promotion of regulated goods and services'
+                                 }
+                                   onChange={this.handleChange}/>
+                        </Form.Field>
+                        <Form.Field>
+                            <Checkbox radio
+                               label='Not relevant to the topic or category'
+                                name='checkboxRadioGroup'
+                                 value='Not relevant to the topic or category'
+                                  checked={this.state.value
+                                     ===
+                                      'Not relevant to the topic or category'}
+                                       onChange={this.handleChange}/>
+                        </Form.Field>
+                    </Form>
+                    <div style={{
+                        'text-align': 'center'
+                    }}><Button
+                       content='Report' color='red' onClick={this.changeType.bind(this)}/></div>
+                    <p style={{
+                        'text-align': 'center',
+                        color: 'black',
+                        fontWeight: 'bold'
+                    }}>
+                        {this.state.reportResult}</p>
+                </div>
+            );
+        }
         return (
-
+            <div>
+              <Dimmer active={active} page>
+                <Loader>Loading</Loader>
+              </Dimmer>
             <Grid divided='vertically'>
                 <Grid.Row columns={3}>
                     <Grid.Column width={13}>
                         <div style={titlestyle}>
                             {quesObj[0].heading}
-                            <Button circular style={followstyle}
-                              icon={this.state.iconName} size='small'
-                              color='red' onClick={this.saveToProfile.bind(this)}/>
+                            <Button
+                               circular style={followstyle}
+                                icon={this.state.iconName}
+                                 size='small' color='red' onClick={this.saveToProfile.bind(this)}/>
                         </div>
                         <div style={questionstyle}>
-                          {quesObj[0].question}</div>
+                            {quesObj[0].question}</div>
                         <Breadcrumb>
                             <Breadcrumb.Section link>{quesObj[0].tags}</Breadcrumb.Section>
                         </Breadcrumb>
                         <Segment floated='right' size='big'>
-                          <Image floated='left' size='mini'
-                            src='http://semantic-ui.com/images/avatar/large/steve.jpg'/>
+                            <Image
+                               floated='left'
+                                size='mini'
+                                 src='http://semantic-ui.com/images/avatar/large/steve.jpg'/>
                             <a>
                                 {quesObj[0].postedBy}
                             </a>
-                            <div style={date}>{quesObj[0].addedOn}</div>
+                            <div
+                              style={date}>
+                              {dateData}
+                            </div>
                         </Segment>
                         <div style ={crumstyle}>
 
-                            <Icon style={likestyle} name='thumbs up' size='big'
-                              color={this.state.colorName || 'green'}
-                              onClick={this.updatelike.bind(this)}/>
-                            {this.state.upVotes}
-                            <Icon style={unlikestyle} name='thumbs down' size='big'
-                              color={this.state.colorNameUnlike || 'red'}
-                              onClick={this.updateunlike.bind(this)}/>
-                              {this.state.downVotes}
+                            <Icon
+                               style={likestyle}
+                                name='thumbs up'
+                                size='big' color={this.state.colorName || 'green'}
+                                 onClick={this.updatelike.bind(this)}/> {this.state.upVotes}
+                            <Icon style={unlikestyle} name='thumbs down'
+                               size='big' color={this.state.colorNameUnlike || 'red'}
+                                onClick={this.updateunlike.bind(this)}/> {this.state.downVotes}
 
-                            <Icon name='eye' size='big' style={viewstyle}/>{quesObj[0].views + 1}
+                                <Popup
+                                      trigger={<Icon name='eye' size='big' style={viewstyle}/>}
+                                      content='Views'
+                                    /> {quesObj[0].views + 1}
                             <Button basic color='green'
-                              style = {buttonfolstyle} size = 'mini'
-                              onClick={this.modalOpen.bind(this)}> Click to Answer </Button>
-                              <Modal open={this.state.modalStatus}
-                              closeIcon='close'>
-                                  <Modal.Content>
-                                      <div style={titlestyle1}>
-                                          {quesObj[0].heading}
-                                      </div>
-                                      <Form>
-                                          <TextArea placeholder='Write Your Answer Here.....'
-                                            onChange={this.textVal}/>
-                                      </Form>
-                                  </Modal.Content>
-                                  <Modal.Actions>
-                                      <Button color='green' onClick={this.postAnswer.bind(this)}
-                                         type='button'>
-                                          Submit
-                                      </Button>
-                                  </Modal.Actions>
-                              </Modal>
-                              <Popup wide trigger={<Button negative style = {buttonfolstyle}
-                    size='mini' onClick={this.checkReport.bind(this)}> Report </Button>}
-                  on='click'
-                  position='bottom right'
-                  hideOnScroll>
-                        {pop}
-                  </Popup>
-                <Modal trigger={<Button basic color = 'black' size = 'mini'
-                              style = {buttonfolstyle} > Add Comments </Button>}>
+                               style={buttonfolstyle} size='mini'
+                                onClick={this.modalOpen.bind(this)}>
+                                Click to Answer
+                            </Button>
+                            <Modal open={this.state.modalStatus} closeIcon='close'>
+                                <Modal.Content>
+                                    <div style={titlestyle1}>
+                                        {quesObj[0].heading}
+                                    </div>
+                                    <Form>
+                                      <RichTextEditor
+                                            value={this.state.value}
+                                            onChange={this.onChange}/>
+                                    </Form>
+                                </Modal.Content>
+                                <Modal.Actions>
+                                    <Button color='green'
+                                       onClick={this.postAnswer.bind(this)} type='button'>
+                                        Submit
+                                    </Button>
+                                </Modal.Actions>
+                            </Modal>
+                            <Popup wide trigger={< Button negative style = {
+                                buttonfolstyle
+                            }
+                            size = 'mini' onClick = {
+                                this.checkReport.bind(this)
+                            } > Report < /Button>} on='click' position='bottom right' hideOnScroll>
+                                {pop}
+                            </Popup>
+                            <Modal trigger={< Button basic color = 'black' size = 'mini' style = {
+                                buttonfolstyle
+                            } > Add Comments < /Button>}>
                                 <Form style={formstyle}>
                                     <TextArea onChange={this.comment.bind(this)}
-                                      value={this.state.comment}/>
+                                       value={this.state.comment}/>
                                 </Form>
                                 <Button content='Submit' primary
-                                  onClick={this.addcomment.bind(this)}/>
+                                   onClick={this.addcomment.bind(this)}/>
                             </Modal>
 
                         </div>
-                        <div style={ansstyle1}>{quesObj[0].answerCounts}
+                        <div
+                           style={ansstyle1}>{quesObj[0].answerCounts}&nbsp;
                             Answers</div>
                         <Divider clearing/>
                         <DisplayAnswer ansCollection={this.state.objArray}/>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
-
+          </div>
         );
     }
 }

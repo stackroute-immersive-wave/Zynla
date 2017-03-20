@@ -11,6 +11,9 @@ import {
     TextArea,
     Form
 } from 'semantic-ui-react';
+let menucommentstyle = {
+  fontSize: 14
+};
 let poststyle1 = {
     fontFamily: 'Georgia',
     fontSize: 15,
@@ -108,7 +111,9 @@ class cardAnswer extends React.Component {
                         <a>
                             {this.props.createdBy}
                         </a>
-                        <div>Answered on {this.props.createdOn}</div>
+                        <div>Answered on
+                          {new Date(parseInt(this.props.createdOn, 10))
+                            .toString().substring(0, 15)}</div>
                     </Card.Content>
                     <Card.Content>
                         <Card.Header style={ansstyle}>
@@ -129,7 +134,8 @@ class cardAnswer extends React.Component {
                             {accept}
                         </Menu.Item>
                         <Menu.Item>
-                          <Modal trigger={<Button basic color = 'black'>
+                          <Modal trigger={<Button basic color = 'black'
+                            style = {menucommentstyle}>
                             Add Comments </Button>}>
                            <Form style={formstyle}>
                                <TextArea onChange={this.comment.bind(this)}
