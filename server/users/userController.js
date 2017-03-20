@@ -1,25 +1,24 @@
-
 'use strict';
 const logger = require('./../../applogger');
 
 const User = require('./userEntity');
 const UserProfile = require('./userProfileEntity').userModel;
+const ListEntity = require('../list/listdocEntity');
 const nodemailer = require('nodemailer');
 let driver = require('../config/neo4j');
 let session = driver.session();
 /*eslint-disable */
 var rand,
-        mailOptions,
-        host,
-        link,
-        VIDcheck;
+    mailOptions,
+    host,
+    link,
+    VIDcheck;
 /*eslint-enable */
 
 let userCtrl = {
 
-
-// Login
-logIn: function (req, res) {
+    // Login
+    logIn: function(req, res) {
         res.cookie('username', req.user.name);
         res.cookie('authType', req.user.authType);
         res.cookie('profilepicture', req.user.photos);
@@ -27,8 +26,8 @@ logIn: function (req, res) {
         res.send(req.user);
     },
 
-// SEND EMAIL
-sendEmail: function (req, res) {
+    // SEND EMAIL
+    sendEmail: function(req, res) {
         // console.log(req.body.data);
         // console.log(req.body.data);
         User.find({
@@ -36,7 +35,7 @@ sendEmail: function (req, res) {
         }, function(err, profile) {
             if (err) {
                 res.send(err);
-              //  console.log('error ocuured');
+                //  console.log('error ocuured');
             } else {
                 /*eslint-disable */
                 // Create a Nodemailer transport object
@@ -65,15 +64,7 @@ sendEmail: function (req, res) {
                     to: profile[0].email, // reciever
                     subject: 'Verify your Email with Zynla', // Subject line
                     text: text,
-                    html: '<center><h1>Welcome to Zynla</h1></center><br><br><br>'+
-                    'Hi,<br><br>To complete Signup Click on the button to verify yourself.'+
-                    '<br><br><br><a href=' + link + ' style=background-color:#44c767;'+
-                    '-moz-border-radius:28px;-webkit-border-radius:28px;border-radius:28px;'+
-                    'border:1px solid #18ab29;display:inline-block;padding:16px 31px;'+
-                    'color:#ffffff;text-shadow:0px 1px 0px #2f6627;'+
-                    'text-decoration:none;> Verify </a><br><br>'+
-                    '<i>This link is valid for an hour.This is an Auto-generated mail,'+
-                    'please do not reply</i></small>'
+                    html: '<center><h1>Welcome to Zynla</h1></center><br><br><br>' + 'Hi,<br><br>To complete Signup Click on the button to verify yourself.' + '<br><br><br><a href=' + link + ' style=background-color:#44c767;' + '-moz-border-radius:28px;-webkit-border-radius:28px;border-radius:28px;' + 'border:1px solid #18ab29;display:inline-block;padding:16px 31px;' + 'color:#ffffff;text-shadow:0px 1px 0px #2f6627;' + 'text-decoration:none;> Verify </a><br><br>' + '<i>This link is valid for an hour.This is an Auto-generated mail,' + 'please do not reply</i></small>'
                 };
                 console.log(mailOptions + host);
                 // Sent mail to recipient
@@ -91,8 +82,7 @@ sendEmail: function (req, res) {
 
     },
 
-
-// LOCAL SIGN UP
+    // LOCAL SIGN UP
     signUp: function(req, res) {
         let newUser = new User();
         String.prototype.capitalizeFirstLetter = function() {
@@ -122,8 +112,7 @@ sendEmail: function (req, res) {
         });
     },
 
-
-// VIRIFY EMAIL ID
+    // VIRIFY EMAIL ID
     verifyEmail: function(req, res) {
         let checkID = req.query.id;
         let checkMail = req.query.email;
@@ -154,8 +143,8 @@ sendEmail: function (req, res) {
                                 console.log('Account Verified and Changed to true');
                             }
                         });
-                        res.cookie('email',req.query.email);
-                        var query = 'create (n:User {name : "'+req.query.email+'"})';
+                        res.cookie('email', req.query.email);
+                        var query = 'create (n:User {name : "' + req.query.email + '"})';
                         session.run(query);
                         res.redirect('/#/selectCategory');
                     } else {
@@ -172,7 +161,7 @@ sendEmail: function (req, res) {
         });
     },
 
-// Check whether user is already exist or not
+    // Check whether user is already exist or not
     checkUser: function(req, res) {
         let authType;
         User.find({
@@ -182,11 +171,11 @@ sendEmail: function (req, res) {
                 console.log(profile[0].authType);
                 console.log(profile.length);
                 authType = profile.authType;
-                res.json({'userexists': true,'authType':profile[0].authType});
+                res.json({'userexists': true, 'authType': profile[0].authType});
             } else {
                 console.log(req.body.email);
                 console.log(profile.length);
-                res.json({'userexists': false,'authType':authType});
+                res.json({'userexists': false, 'authType': authType});
             }
             if (err) {
                 res.send(err);
@@ -194,7 +183,7 @@ sendEmail: function (req, res) {
         });
     },
 
-logOut: function(req,res){
+    logOut: function(req, res) {
         res.clearCookie('username');
         res.clearCookie('profilepicture');
         res.clearCookie('email');
@@ -212,139 +201,129 @@ logOut: function(req,res){
                 res.send('Log out successfully');
             }
         });
-},
+    },
 
-// FACEBOOK AUTHENTICATION
-facebook: function(req, res) {
+    // FACEBOOK AUTHENTICATION
+    facebook: function(req, res) {
         res.json(req.user);
     },
 
     // handle the callback after facebook has authenticated the user
-facebookCallBack: function(req, res) {
+    facebookCallBack: function(req, res) {
         res.cookie('token', req.user.token);
         res.cookie('authType', req.user.authType);
         res.cookie('username', req.user.name);
         res.cookie('profilepicture', req.user.photos);
-        res.cookie('email',req.user.email);
-        if(req.user.isnew ==='N')
-        {
+        res.cookie('email', req.user.email);
+        if (req.user.isnew === 'N') {
             res.redirect('/#/home');
-        }
-        else
-        {
-        var query = 'create (n:User {name : "'+req.user.email+'"})';
-        session.run(query).then(function(){
-            console.log("comes");
-        });
+        } else {
+            var query = 'create (n:User {name : "' + req.user.email + '"})';
+            session.run(query).then(function() {
+                console.log("comes");
+            });
             console.log(query);
             res.redirect('/#/selectCategory');
         }
     },
-// Instagram AUTHENTICATION
-instagram: function(req, res) {
+    // Instagram AUTHENTICATION
+    instagram: function(req, res) {
         res.json(req.user);
     },
 
     // handle the callback after instagram has authenticated the user
-instagramCallBack: function(req, res) {
+    instagramCallBack: function(req, res) {
         res.cookie('token', req.user.token);
         res.cookie('authType', req.user.authType);
         res.cookie('username', req.user.name);
         res.cookie('profilepicture', req.user.photos);
-        res.cookie('email',req.user.email);
-        if(req.user.isnew ==='N')
-        {
+        res.cookie('email', req.user.email);
+        if (req.user.isnew === 'N') {
             res.redirect('/#/home');
-        }
-        else
-        {
-        var query = 'create (n:User {name : "'+req.user.email+'"})';
-        session.run(query).then(function(){
-            console.log("comes");
-        });
+        } else {
+            var query = 'create (n:User {name : "' + req.user.email + '"})';
+            session.run(query).then(function() {
+                console.log("comes");
+            });
             console.log(query);
             res.redirect('/#/selectCategory');
         }
     },
 
-
-// GOOGLE AUTHENTICATION
-google: function(req, res) {
+    // GOOGLE AUTHENTICATION
+    google: function(req, res) {
         res.json(req.user);
     },
 
     // the callback after google has authorized the user
-googleCallBack: function(req, res) {
+    googleCallBack: function(req, res) {
         let user = new User();
         res.cookie('token', req.user.token);
         res.cookie('username', req.user.name);
         res.cookie('authType', req.user.authType);
         res.cookie('profilepicture', req.user.photos);
-        res.cookie('email',req.user.email);
-        if(req.user.isnew ==='N')
-        {
+        res.cookie('email', req.user.email);
+        if (req.user.isnew === 'N') {
             res.redirect('/#/home');
-        }
-        else
-        {
+        } else {
             console.log(req.user.email);
-        var query = 'create (n:User {name : "'+req.user.email+'"})';
-        session.run(query).then(function(){
-            console.log("comes");
-        });
-        console.log(query);
-        res.redirect('/#/selectCategory');
+            var query = 'create (n:User {name : "' + req.user.email + '"})';
+            session.run(query).then(function() {
+                console.log("comes");
+            });
+            console.log(query);
+            res.redirect('/#/selectCategory');
         }
     },
     /* To save the following card in mongo db and neo4j*/
     saveToProfile: function(req, res) {
-      logger.debug("inside saveToProfile");
-      let id = req.body.id;
-      let emailId = req.body.emailId;
+        logger.debug("inside saveToProfile");
+        let id = req.body.id;
+        let emailId = req.body.emailId;
         /*eslint-disable*/
-        let query ="match (q:Question), (u:User) where id(q)="+id +" and u.name='"+emailId+"' create (q)<-[:follow {on:timestamp()}]-(u) return q";
+        let query = "match (q:Question), (u:User) where id(q)=" + id + " and u.name='" + emailId + "' create (q)<-[:follow {on:timestamp()}]-(u) return q";
         /*eslint-enable*/
         session.run(query).then(function(result) {
-          /*eslint-disable*/
-          let id = result.records[0]._fields[0].identity.low;
+            /*eslint-disable*/
+            let id = result.records[0]._fields[0].identity.low;
             /*eslint-enable*/
-        let emailId = req.body.emailId;
-        logger.debug('Inside get');
-        UserProfile.findOneAndUpdate({
-            emailId: emailId
-        }, {
-            $push: {
-                watchingList: {
-                    id: id,
-                    displayImage: req.body.displayImage,
-                    heading: req.body.heading,
-                    statement: req.body.statement,
-                    postedBy: req.body.postedBy,
-                    profileImage: req.body.profileImage,
-                    addedOn: req.body.addedOn,
-                    category: req.body.category,
-                    upVotes: req.body.upVotes,
-                    downVotes: req.body.downVotes,
-                    noofans: req.body.noofans
+            let emailId = req.body.emailId;
+            logger.debug('Inside get');
+            UserProfile.findOneAndUpdate({
+                emailId: emailId
+            }, {
+                $push: {
+                    watchingList: {
+                        id: id,
+                        displayImage: req.body.displayImage,
+                        heading: req.body.heading,
+                        statement: req.body.statement,
+                        postedBy: req.body.postedBy,
+                        profileImage: req.body.profileImage,
+                        addedOn: req.body.addedOn,
+                        category: req.body.category,
+                        upVotes: req.body.upVotes,
+                        downVotes: req.body.downVotes,
+                        noofans: req.body.noofans
+                    }
                 }
-            }
-        }, {new: true}).then((doc) => {
-            res.send(doc);
-        }, (err) => {
-            res.send(err);
+            }, {new: true}).then((doc) => {
+                res.send(doc);
+            }, (err) => {
+                res.send(err);
+            });
         });
-      });
     },
     /* To view the following card*/
     viewFollowCard: function(req, res) {
-         let emailId = req.params.emailId;
-         console.log(emailId);
-       UserProfile.find({"emailId":emailId}).then((docs) => {
-           res.send(docs);
-       }, (err) => {
-           res.send(err);
-       });
-     },
+        let emailId = req.params.emailId;
+        console.log(emailId);
+        UserProfile.find({"emailId": emailId}).then((docs) => {
+            res.send(docs);
+        }, (err) => {
+            res.send(err);
+        });
+    },
     /* Getting all the following category cards*/
     viewFav: function(req, res) {
         UserProfile.find().then((docs) => {
@@ -353,41 +332,147 @@ googleCallBack: function(req, res) {
             res.send(err);
         });
     },
-/* display category image from neo4j */
-displayCatagory: function(req, res) {
-    var result1 = [];
-    logger.debug('Inside display catagory');
-    var query = 'match (n:Domain) return n';
-    session.run(query)
-        .then(function(result){
-            for(var x of result.records){
+    /* get all cards for landing page */
+    getAllCards: function(req, res) {
+        let emailId = req.params.emailId;
+        console.log(emailId);
+        let arr = [];
+        UserProfile.find({"emailId": emailId}).then((docs) => {
+            for(let pref of docs[0].preferenceList) {
+              arr.push(pref);
+            }
+            for (let i = 0; i < docs[0].watchingList.length; i = i + 1) {
+                docs[0].watchingList[i].tag = 'following';
+                console.log(docs[0].watchingList[i].tag);
+                if(distinctFunc(arr, docs[0].watchingList[i]))
+                  arr.push(docs[0].watchingList[i]);
+                if (i == 4) {
+                    break;
+                }
+            }
+            for (let i = 0; i < docs[0].lists.length; i = i + 1) {
+                docs[0].lists[i].tag = 'posted';
+                if(arr, docs[0].lists[i])
+                  arr.push(docs[0].lists[i]);
+                if (i == 4) {
+                    break;
+                }
+            }
+            let query = 'match (n:User {name:"' + emailId + '"}) - \
+            [:follow]->(m:User) return distinct m';
+            session.run(query).then(function(result) {
+                let mongoMail = [];
+                let following = [];
+                for (let record of result.records) {
+                    following.push(record._fields[0].properties.name);
+                    mongoMail.push({"emailId": record._fields[0].properties.name});
+                }
+                if(following.length < 1) {
+                  ListEntity.find().then(function(docsAll) {
+                      for (let ques of docsAll) {
+                          if (distinctFunc(arr, ques))
+                              arr.push(ques);
+                          }
+                      res.send(arr);
+                  });
+                }
+                UserProfile.find({$or: mongoMail}).then(function(docs2) {
+                    docs2.map(function(doc) {
+                        doc.watchingList.map(function(watchingList) {
+                            watchingList.tag = 'friendsfollow';
+                            if (distinctFunc(arr, watchingList))
+                                arr.push(watchingList);
+                            }
+                        );
+                        doc.lists.map(function(lists) {
+                            lists.tag = 'friendsposted';
+                            if (distinctFunc(arr, lists))
+                                arr.push(lists);
+                            }
+                        );
+                    });
+                    console.log(arr.length);
+                    let queryfof = 'match (n:User),(n)-[:follow]->(m:User) where n.name="' + following[0] + '"';
+                    for (let qi = 1; qi < following.length; qi = qi + 1) {
+                        queryfof = queryfof + ' or n.name="' + following[qi] + '"';
+                    }
+                    queryfof = queryfof + ' return distinct m';
+                    session.run(queryfof).then(function(result) {
+                        let mongoMailFof = [];
+                        for (let record of result.records) {
+                            mongoMailFof.push({"emailId": record._fields[0].properties.name});
+                        }
+                        if(mongoMailFof.length < 1) {
+                          ListEntity.find().then(function(docsAll) {
+                              for (let ques of docsAll) {
+                                  if (distinctFunc(arr, ques))
+                                      arr.push(ques);
+                                  }
+                              res.send(arr);
+                          });
+                        }
+                        UserProfile.find({$or: mongoMailFof}).then(function(docsFof) {
+                            docsFof.map(function(doc) {
+                                doc.watchingList.map(function(watchingList) {
+                                    watchingList.tag = 'foffollow';
+                                    if (distinctFunc(arr, watchingList))
+                                        arr.push(watchingList);
+                                    }
+                                );
+                                doc.lists.map(function(lists) {
+                                    lists.tag = 'fofposted';
+                                    if (distinctFunc(arr, lists))
+                                        arr.push(lists);
+                                    }
+                                );
+                            });
+                            ListEntity.find().then(function(docsAll) {
+                                for (let ques of docsAll) {
+                                    if (distinctFunc(arr, ques))
+                                        arr.push(ques);
+                                    }
+                                res.send(arr);
+                            });
+                        });
+                    });
+                });
+            });
+        }, (err) => {
+            res.send(err);
+        });
+    },
+    /* display category image from neo4j */
+    displayCatagory: function(req, res) {
+        var result1 = [];
+        logger.debug('Inside display catagory');
+        var query = 'match (n:Domain) return n';
+        session.run(query).then(function(result) {
+            for (var x of result.records) {
                 result1.push({
-                    "name":(x._fields[0].properties.name),
-                    "image":(x._fields[0].properties.Image)
+                    "name": (x._fields[0].properties.name),
+                    "image": (x._fields[0].properties.Image)
                 });
             }
             console.log(result1);
             res.send(result1);
-        })
-        .catch(function(error) {
+        }).catch(function(error) {
             console.log('promise error: ', error);
         });
-},
-/* Add category to mongodb as well as in neo4j */
+    },
+    /* Add category to mongodb as well as in neo4j */
     addCategory: function(req, res) {
         console.log("dddddddddddddd");
         console.log(req.body);
         let arr1 = JSON.parse(req.body.catagory);
         console.log(typeof(arr1));
-        console.log('got the         ',arr1);
+        console.log('got the         ', arr1);
         let newUser = new UserProfile();
         let arr = [];
         rand = Math.floor((Math.random() * 100) + 54);
-        for(let y of arr1)
-        {
+        for (let y of arr1) {
             arr.push(y);
         }
-        newUser.id=rand;
+        newUser.id = rand;
         newUser.emailId = req.body.email;
         newUser.interestCategory = arr;
         res.cookie('email', newUser.emailId);
@@ -399,95 +484,130 @@ displayCatagory: function(req, res) {
                 res.send('Error in registration');
             } else {
                 let id = req.body.email;
-                console.log('email in addcategory',req.body.email);
+                console.log('email in addcategory', req.body.email);
                 /* Add category to neo4j */
-                let query = 'match (n:User {name:"'+id+'"})';
-                for(var i = 0; i < arr.length; i++) {
-                    query+=',(d' + i + ': Domain {name:"'+arr[i]+'"}) ';
+                let query = 'match (n:User {name:"' + id + '"})';
+                for (var i = 0; i < arr.length; i++) {
+                    query += ',(d' + i + ': Domain {name:"' + arr[i] + '"}) ';
                 }
-                console.log('node 1',query);
+                console.log('node 1', query);
                 query += 'create (n)-[:follows]->(d0)';
-                for(let i = 1; i< arr.length; i++) {
-                    query+=',(n)-[:follows]->(d'+ i +')';
+                for (let i = 1; i < arr.length; i++) {
+                    query += ',(n)-[:follows]->(d' + i + ')';
                 }
-                console.log('node 2',query);
-                session.run(query).then(function(){
-            console.log('updated to neo4j');
-        });
-            res.send('Successfully registered');
+                console.log('node 2', query);
+                session.run(query).then(function() {
+                    console.log('updated to neo4j');
+                });
+                res.send('Successfully registered');
             }
         });
     },
-/* After selecting category chage user type fro 'Y' to 'N' */
-    updateIsNew: function(req,res)
-    {
+    /* After selecting category chage user type fro 'Y' to 'N' */
+    updateIsNew: function(req, res) {
         let isNew = req.body.isNew;
-            console.log(typeof(isNew));
-            console.log('email',req.params.emails);
-            User.findOne({'email':req.params.emails}, function(err,users){
-              users.isnew = isNew;
-              users.save(function(){
-                if(err) {
+        console.log(typeof(isNew));
+        console.log('email', req.params.emails);
+        User.findOne({
+            'email': req.params.emails
+        }, function(err, users) {
+            users.isnew = isNew;
+            users.save(function() {
+                if (err) {
                     console.log("error occured in update")
                 }
                 res.cookie('email', req.params.emails);
                 res.send('Successfully registered');
                 // console.log("updated successfully");
                 // res.redirect('/#/userprofile');
-              });
             });
+        });
     },
     /* Update basic information to profile*/
-        updateProfile: function(req, res) {
-            console.log(req.params.emails);
-            // console.log(req.body.data1[dateofbirth]);
-            let username = '';
-            let data = JSON.parse(req.body.data1);
-            console.log(JSON.parse(req.body.data1));
-            User.findOne({email: req.params.emails},function(err, user)
-            {
-                username = user.name;
-            })
+    updateProfile: function(req, res) {
+        console.log(req.params.emails);
+        // console.log(req.body.data1[dateofbirth]);
+        let username = '';
+        let data = JSON.parse(req.body.data1);
+        console.log(JSON.parse(req.body.data1));
+        User.findOne({
+            email: req.params.emails
+        }, function(err, user) {
+            username = user.name;
+        })
         UserProfile.findOne({
             'emailId': req.params.emails
         }, function(err, userProfile) {
             if (err) {
                 res.send(err);
-            }
-            else
-            {
+            } else {
                 console.log(req.body.country);
                 userProfile.profile.dob = data.dateofbirth;
                 userProfile.profile.gender = data.gender;
                 userProfile.profile.address.country = req.body.country;
                 userProfile.profile.name = username;
-                userProfile.save(function(){
-                if(err) {
-                    console.log("error occured in update")
-                }
-                console.log(userProfile.profile.dob);
-                res.cookie('email', req.params.emails);
-                res.send('Profile updaed successfully');
-              });
+                userProfile.save(function() {
+                    if (err) {
+                        console.log("error occured in update")
+                    }
+                    console.log(userProfile.profile.dob);
+                    res.cookie('email', req.params.emails);
+                    res.send('Profile updaed successfully');
+                });
             }
         });
     },
     getAllUserName: function(req, res) {
         User.find(function(err, docs) {
-          let names=[];
-          let len=docs.length;
+            let names = [];
+            let len = docs.length;
             if (err) {
                 res.send('Error:' + err);
             } else {
 
-              for(let i=0;i<len;i=i+1)
-                {
-              names.push({name:docs[i].name,email:docs[i].email,lStatus: docs[i].loggedinStatus});
-            }
+                for (let i = 0; i < len; i = i + 1) {
+                    names.push({name: docs[i].name, email: docs[i].email, lStatus: docs[i].loggedinStatus});
+                }
                 res.send(names);
             }
         });
+    },
+    // updates the user preference data inside mongo
+    addPreference: function(req, res) {
+        let emailId = req.body.emailId;
+        UserProfile.findOneAndUpdate({
+            emailId: emailId
+        }, {
+            $push: {
+                preferenceList: {
+                    id: req.body.id,
+                    displayImage: req.body.displayImage,
+                    profileImage: req.body.profileImage,
+                    heading: req.body.heading,
+                    postedBy: req.body.postedBy,
+                    addedOn: req.body.addedOn,
+                    answerCount: req.body.noofans,
+                    upVotes: req.body.upVotes,
+                    downVotes: req.body.downVotes,
+                    views: req.body.views,
+                    position: req.body.preferedPos
+                }
+            }
+        }, {new: true}).then((doc) => {
+            res.send(req.body.heading);
+        }, (err) => {
+            res.send(err);
+        });
     }
+}
+
+function distinctFunc(arr, ques) {
+    for (let q of arr) {
+        if (q.id === ques.id) {
+            return false;
+        }
+    }
+    return true;
 }
 
 module.exports = userCtrl;

@@ -140,9 +140,9 @@ function setupMongooseConnections() {
 }
 function setupRedisStore() {
   let redisData = require('./redis/redisData.js');
-redisData.getConceptFromNeo4j();
-redisData.getIntentFromNeo4j();
-redisData.getQuestionFromNeo4j();
+  redisData.getConceptFromNeo4j();
+  redisData.getIntentFromNeo4j();
+  redisData.getQuestionFromNeo4j();
 }
 
 // App Constructor function is exported

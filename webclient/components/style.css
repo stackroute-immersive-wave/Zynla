@@ -2,7 +2,6 @@
    background-color:   #B2242E ;
    color: white !important;
    font-family: Arial, Helvetica, sans-serif;
-   text-align: left !important;
 }
 .submitbutstyle{
   background-color: #16ab39 !important;
@@ -205,11 +204,17 @@ width: 250px;
 .logosize {
    height: 30px;
    width: 30px;
-   margin-top: 13%;
-   margin-left: 60%;
+   margin-top: 40%;
+   margin-left: 70%;
+   margin-right: 60%;
    float: left;
 }
-
+.searchIconPosition{
+  margin-top: 11px;
+margin-bottom: 5px;
+margin-left: -3%;
+color:white;
+}
 #footer {
    font-size: 15px;
    font-family: Georgia, serif;
@@ -229,8 +234,10 @@ width: 250px;
    width: 70% !important;
 }
 .navSearch {
- margin-top: 8px;
- margin-left: 30px;
+ margin-top: 6px;
+ margin-left: 5%;
+ width:55% !important;
+ margin-bottom: 5px;
 }
 
 .chatcard {
