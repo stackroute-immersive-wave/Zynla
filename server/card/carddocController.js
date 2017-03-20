@@ -69,11 +69,11 @@ let cardController = {
         TopCards.findOneAndUpdate({
             id: queId
         }, { $inc: { answerCounts: 1} }).then(() => {
-          console.log('ans count update success');
+          // console.log('ans count update success');
             // res.send(doc);
         }, () => {
             // res.send(err);
-            console.log('fail to update answer count');
+            // console.log('fail to update answer count');
         });
 
         // adding answer data to userProfile

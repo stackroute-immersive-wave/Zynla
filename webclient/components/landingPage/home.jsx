@@ -70,7 +70,7 @@ class Cards extends React.Component {
       let newArr = [];
       let k = 0;
       for(let x of temp) {
-        console.log(newArr);
+        // console.log(newArr);
         if(x.position) {
           newArr[x.position] = x;
         }
@@ -92,7 +92,7 @@ class Cards extends React.Component {
       if(arr && temp) {
         for(let x of arr) {
           if(x.id === temp.id) {
-            console.log('x:' + x.id + '\ttemp:' + temp.id);
+            // console.log('x:' + x.id + '\ttemp:' + temp.id);
             return false;
           }
         }
