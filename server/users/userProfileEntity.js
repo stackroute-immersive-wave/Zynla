@@ -193,7 +193,7 @@ const schema = new mongoose.Schema({
     },
     followingUser: [
         {
-            type: Number
+            type: String
         }
     ],
     followerCount: {

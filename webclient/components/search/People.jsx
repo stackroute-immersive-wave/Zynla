@@ -1,5 +1,5 @@
 import React from 'react';
-import PeopleCard from './peopleCard';
+import PeopleCard from './peoplecard';
 import {Card, Grid} from 'semantic-ui-react';
 class People extends React.Component {
   constructor() {
@@ -23,7 +23,7 @@ class People extends React.Component {
         console.log(item3);
         let image = item3.profile.picture;
       });
-  
+
       return (
        <PeopleCard id = {item} follow = {temp} image = {image}/>
       );

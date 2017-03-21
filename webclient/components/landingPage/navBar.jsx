@@ -323,7 +323,7 @@ class NavBar extends Component {
           <div className='ui top fixed menu' id='divStyle'>
                      <Link to='/home'>
                          <Image src='./../../image/logo.png'
-                         name='image' active= {activeItem === 'image'}
+                         name='image'
                          onClick={this.handleItemClick} className='logosize'/>
                      </Link>
 

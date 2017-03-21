@@ -31,6 +31,7 @@ class Cards extends React.Component {
             success: function(data) {
                 data.map(function(item) {
                     arr.push(item);
+                    // console.log(item.tag);
                 });
 
                 this.setState({savedata: arr});

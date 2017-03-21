@@ -335,25 +335,23 @@ let userCtrl = {
     /* get all cards for landing page */
     getAllCards: function(req, res) {
         let emailId = req.params.emailId;
-        console.log(emailId);
+        console.log('coming'+emailId);
         let arr = [];
         UserProfile.find({"emailId": emailId}).then((docs) => {
             for(let pref of docs[0].preferenceList) {
-              arr.push(pref);
+              arr.push(storeTag(pref, 'You preferred'));
             }
             for (let i = 0; i < docs[0].watchingList.length; i = i + 1) {
-                docs[0].watchingList[i].tag = 'following';
-                console.log(docs[0].watchingList[i].tag);
-                if(distinctFunc(arr, docs[0].watchingList[i]))
-                  arr.push(docs[0].watchingList[i]);
+                if(distinctFunc(arr, docs[0].watchingList[i])) {
+                  arr.push(storeTag(docs[0].watchingList[i], 'Following'));
+                }
                 if (i == 4) {
                     break;
                 }
             }
             for (let i = 0; i < docs[0].lists.length; i = i + 1) {
-                docs[0].lists[i].tag = 'posted';
                 if(arr, docs[0].lists[i])
-                  arr.push(docs[0].lists[i]);
+                  arr.push(storeTag(docs[0].lists[i], 'Posted by you'));
                 if (i == 4) {
                     break;
                 }
@@ -371,7 +369,7 @@ let userCtrl = {
                   ListEntity.find().then(function(docsAll) {
                       for (let ques of docsAll) {
                           if (distinctFunc(arr, ques))
-                              arr.push(ques);
+                              arr.push(storeTag(ques, 'Recommended'));
                           }
                       res.send(arr);
                   });
@@ -379,15 +377,13 @@ let userCtrl = {
                 UserProfile.find({$or: mongoMail}).then(function(docs2) {
                     docs2.map(function(doc) {
                         doc.watchingList.map(function(watchingList) {
-                            watchingList.tag = 'friendsfollow';
                             if (distinctFunc(arr, watchingList))
-                                arr.push(watchingList);
+                                arr.push(storeTag(watchingList, 'Friend\'s following'));
                             }
                         );
                         doc.lists.map(function(lists) {
-                            lists.tag = 'friendsposted';
                             if (distinctFunc(arr, lists))
-                                arr.push(lists);
+                                arr.push(storeTag(lists, 'Friend\'s posted'));
                             }
                         );
                     });
@@ -406,7 +402,7 @@ let userCtrl = {
                           ListEntity.find().then(function(docsAll) {
                               for (let ques of docsAll) {
                                   if (distinctFunc(arr, ques))
-                                      arr.push(ques);
+                                      arr.push(storeTag(ques, 'Recommended'));
                                   }
                               res.send(arr);
                           });
@@ -414,22 +410,20 @@ let userCtrl = {
                         UserProfile.find({$or: mongoMailFof}).then(function(docsFof) {
                             docsFof.map(function(doc) {
                                 doc.watchingList.map(function(watchingList) {
-                                    watchingList.tag = 'foffollow';
                                     if (distinctFunc(arr, watchingList))
-                                        arr.push(watchingList);
+                                        arr.push(storeTag(watchingList, 'FoF follow'));
                                     }
                                 );
                                 doc.lists.map(function(lists) {
-                                    lists.tag = 'fofposted';
                                     if (distinctFunc(arr, lists))
-                                        arr.push(lists);
+                                        arr.push(storeTag(lists, 'FoF posted'));
                                     }
                                 );
                             });
                             ListEntity.find().then(function(docsAll) {
                                 for (let ques of docsAll) {
                                     if (distinctFunc(arr, ques))
-                                        arr.push(ques);
+                                        arr.push(storeTag(ques, 'Recommended'));
                                     }
                                 res.send(arr);
                             });
@@ -610,6 +604,14 @@ function distinctFunc(arr, ques) {
         }
     }
     return true;
+}
+
+function storeTag(obj, val) {
+  let temp = JSON.stringify(obj);
+  temp = temp.substring(0, temp.length-1);
+  obj = JSON.parse(temp + ', "tag":"' + val + '"}');
+  console.log(obj);
+  return obj;
 }
 
 module.exports = userCtrl;

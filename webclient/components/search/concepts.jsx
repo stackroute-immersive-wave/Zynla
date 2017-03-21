@@ -1,5 +1,5 @@
 import React from 'react';
-import ConceptStructure from './conceptStructure.jsx';
+import ConceptStructure from './conceptstructure.jsx';
 import {Grid, Icon} from 'semantic-ui-react';
 class Concepts extends React.Component {
     constructor() {

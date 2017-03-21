@@ -99,6 +99,9 @@ class cardAnswer extends React.Component {
         } else if (Cookie.load('email') === this.props.postedBy) {
             accept = btn;
         }
+        else {
+          accept = (<Icon name='checkmark' size='large' color='grey'/>);
+        }
         let ansHtmlContent = this.props.content;
         // displaying answer in answerpage created by Aswini K
         return (

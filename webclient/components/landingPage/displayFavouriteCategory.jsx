@@ -67,12 +67,12 @@ class DisplayFavouriteCategory extends React.Component {
         });
         return (
           <div>
-            <Grid centered >
+            <Grid>
                 <Grid.Column width={1} className='arrowsizeLeft'>
                     <Icon name='chevron left' onClick={this.changeStartLeft.bind(this)}/>
                 </Grid.Column>
-                <Grid.Column width={10} centered >
-                    <Grid centered columns={4} >
+                <Grid.Column width={10} >
+                    <Grid columns={4} >
                         {Data}
                     </Grid>
                 </Grid.Column>
@@ -85,6 +85,6 @@ class DisplayFavouriteCategory extends React.Component {
     }
   }
   DisplayFavouriteCategory .propTypes = {
-   json: React.PropTypes.func
+   json: React.PropTypes.array
  };
   module.exports = DisplayFavouriteCategory;

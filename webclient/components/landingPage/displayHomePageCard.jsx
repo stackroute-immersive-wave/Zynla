@@ -76,6 +76,6 @@ class DisplayHomePageCard extends React.Component {
 }
 
 DisplayHomePageCard.propTypes = {
-    display: React.PropTypes.func
+    display: React.PropTypes.array
 };
 export default DragDropContext(HTML5Backend)(DisplayHomePageCard);

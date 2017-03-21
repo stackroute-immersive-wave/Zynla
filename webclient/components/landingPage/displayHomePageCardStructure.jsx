@@ -5,7 +5,8 @@ import {
     Card,
     Button,
     Segment,
-    Popup
+    Popup,
+    Label
 } from 'semantic-ui-react';
 import {Link} from 'react-router';
 import Cookie from 'react-cookie';
@@ -182,16 +183,42 @@ handleClose = () => {
   }
 /*eslint-disable*/
     render() {
+        let label = '';
+        let tag = this.props.tag;
+        if(tag === 'You preferred') {
+          label = <Label as='a' color='pink' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+        }
+        else if(tag === 'Following') {
+          label = <Label as='a' color='orange' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+        }
+        else if(tag === 'Posted by you') {
+          label = <Label as='a' color='yellow' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+        }
+        else if(tag === 'Recommended') {
+          label = <Label as='a' color='violet' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+        }
+        else if(tag === 'Friend\'s following') {
+          label = <Label as='a' color='blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+        }
+        else if(tag === 'Friend\'s posted') {
+          label = <Label as='a' color='green' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+        }
+        else if(tag === 'FoF follow') {
+          label = <Label as='a' color='light blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+        }
+        else {
+          label = <Label as='a' color='teal' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+        }
         const {active} = this.state;
         const content = (
             <div><Button circular onClick={this.saveToProfile.bind(this)}
               icon={this.state.iconName || 'plus'} className='spacing' id='iconColor' size='tiny' style={{
-                'font-size': 13 + 'px'
+                'fontSize': 13 + 'px'
             }}/>
             <Popup wide open={this.state.isOpen} onClose={() => this.closePopup()}
         trigger={<Button circular onClick={() => this.openPopup()}
         icon='google plus circle' id='iconColor'
-        size='tiny' style={{'font-size': 13 + 'px'}}/>} on='click' position='bottom right'>
+        size='tiny' style={{'fonSize': 13 + 'px'}}/>} on='click' position='bottom right'>
 <p style={{background: '#be252a', height:'35px', 'text-align': 'center', color:'white', 'font-family': 'Arial, sans-serif'}}
           className='butstyle'>Invite to follow
           <Button floated='right' onClick={() => this.closePopup()} color='red' icon='remove' className='butstyle'/>
@@ -219,7 +246,8 @@ handleClose = () => {
 
         return (
             <div className='CardSegment'>
-                <Card raised='true' className='item' onClick={this.handleChange}>
+                <Card raised={true} className='item' onClick={this.handleChange}>
+                    {label}
                     <div className="PaddingCards">
                         <Image src={this.props.displayImage} className="imgsize" onMouseEnter={this.handleShow} dimmer={{
                             active,
@@ -265,19 +293,19 @@ handleClose = () => {
     }
 }
 DisplayFavouriteCategoryStructure.propTypes = {
-    displayImage: React.PropTypes.string.isRequired,
-    heading: React.PropTypes.string.isRequired,
-    question: React.PropTypes.string.isRequired,
-    postedBy: React.PropTypes.string.isRequired,
-    addedOn: React.PropTypes.number.isRequired,
-    category: React.PropTypes.string.isRequired,
-    upVotes: React.PropTypes.string.isRequired,
-    downVotes: React.PropTypes.string.isRequired,
-    answerCounts: React.PropTypes.string.isRequired,
-    profileImage: React.PropTypes.string.isRequired,
-    views: React.PropTypes.number.isRequired,
-    acceptedCounts: React.PropTypes.string.isRequired,
-    remove: React.PropTypes.func.isRequired,
+    displayImage: React.PropTypes.string,
+    heading: React.PropTypes.string,
+    question: React.PropTypes.string,
+    postedBy: React.PropTypes.string,
+    addedOn: React.PropTypes.string,
+    category: React.PropTypes.string,
+    upVotes: React.PropTypes.number,
+    downVotes: React.PropTypes.number,
+    answerCounts: React.PropTypes.number,
+    profileImage: React.PropTypes.string,
+    views: React.PropTypes.number,
+    acceptedCounts: React.PropTypes.number,
+    remove: React.PropTypes.func,
     id: React.PropTypes.number
 };
 module.exports = DisplayFavouriteCategoryStructure;
