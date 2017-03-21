@@ -2,7 +2,7 @@ import DisplayFavouriteCategory from './displayFavouriteCategory.jsx';
 import DisplayHomePageCard from './displayHomePageCard';
 import React from 'react';
 import Cookie from 'react-cookie';
-import hashHistory from 'react-router';
+import {hashHistory} from 'react-router';
 import $ from 'jquery';
 
 class Cards extends React.Component {

@@ -5,6 +5,8 @@ const nodemailer = require('nodemailer');
 // let host = 'localhost:8080';
 let driver = require('../config/neo4j');
 let session = driver.session();
+let redis = require('redis');
+let client = redis.createClient();
 let listController = {
 
     addList: function(req, res) {
@@ -117,38 +119,29 @@ let listController = {
        });
    },
     getQuestionIntent: function(req, res) {
-        let questionIntentArr = [];
-        let query = 'match (q:QuestionIntent) return q.value;';
-        session.run(query).then(function(result) {
-            if (result) {
-                for (let x in result.records) {
-                    if (x !== null) {
-                        /* eslint-disable */
-                        questionIntentArr.push(result.records[x]._fields[0]);
-                        /* eslint-enable */
-                    }
-                }
-            }
-            res.send(questionIntentArr);
-        });
+      client.smembers('intents', function(error, reply) {
+        if(error) {
+          throw error;
+     // console.log(error);
+        }
+        else {
+          // console.log(reply);
+          res.send(reply);
+        }
+      });
     },
 
     getconcepts: function(req, res) {
-        let arr = [];
-        let query = 'match (n:Concept) where n.name=~".*' + req.body.q + '.*" return n; ';
-        session.run(query).then(function(result) {
-            // console.log(result.records[0]);
-            if (result) {
-                for (let x in result.records) {
-                    if (x !== null) {
-                        /* eslint-disable */
-                        arr.push(result.records[x]._fields[0].properties.name);
-                        /* eslint-enable */
-                    }
-                }
-                res.send(arr);
-            }
-        });
+      client.smembers('concepts', function(error, reply) {
+              if (error) {
+                  throw error;
+              //  console.log(error);
+              }
+              else {
+                res.send(reply);
+                // resCallback(reply);
+              }
+          });
     },
     // written by Arun Mohan Raj
     // function to display suggested questions
@@ -178,6 +171,10 @@ let listController = {
 
     // router function to add a question
     addquestion: function(req, res) {
+        req.body.heading = req.body.heading.charAt(0).toUpperCase() +
+        req.body.heading.substring(1, req.body.heading.length);
+        req.body.statement = req.body.statement.charAt(0).toUpperCase() +
+        req.body.heading.substring(1, req.body.statement.length);
         let arr1 = JSON.parse(req.body.Concept);
         let arr = [];
         let c = 0;
@@ -235,7 +232,7 @@ let listController = {
                             ';
                 /*eslint-enable*/
                 session.run(query).then(function(result) {
-                    console.log(result.records);
+                    // console.log(result.records);
                     if (result) {
                         /*eslint-disable*/
                         let id = result.records[0]._fields[0].identity.low;

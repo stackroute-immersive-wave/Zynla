@@ -43,7 +43,8 @@ export default class SuccessfullyRegistered extends React.Component {
   render() {
     return(
         <CreateCards categories={this.state.catagories} email={Cookie.load('email')}
-        itemss={this.state.follows} addCategories={this.addCategories.bind(this)}/>
+        itemss={this.state.follows} addCategories={this.addCategories.bind(this)}
+      profilePic={Cookie.load('profilepicture')} userName={Cookie.load('username')}/>
       );
 }
 }

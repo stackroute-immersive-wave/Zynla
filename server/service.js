@@ -7,6 +7,7 @@ const config = require('../config/');
 const logger = require('../applogger');
 const passport = require('./passport/passport');
 const connectflash = require('connect-flash');
+const redisData = require('./redis/redisData.js');
 
 function createApp() {
   const app = express();
@@ -139,10 +140,8 @@ function setupMongooseConnections() {
   });
 }
 function setupRedisStore() {
-  let redisData = require('./redis/redisData.js');
   redisData.getConceptFromNeo4j();
   redisData.getIntentFromNeo4j();
-  redisData.getQuestionFromNeo4j();
 }
 
 // App Constructor function is exported

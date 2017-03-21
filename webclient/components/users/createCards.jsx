@@ -81,7 +81,9 @@ class CreateCards extends React.Component
             type: 'post',
             data: {
                 catagory: jObject,
-                email: this.props.email
+                email: this.props.email,
+                profilePicture: this.props.profilePic,
+                name: this.props.userName
             },
             success: function() {
                 // console.log('Successfully got JSON Catagory' + JSON.stringify(data));
@@ -164,6 +166,8 @@ cardButton = <Image src='https://8biticon.com/static/images/tick.png' style={{he
 CreateCards.propTypes = {
     email: React.PropTypes.string.isRequired,
     categories: React.PropTypes.array.isRequired,
-    addCategories: React.PropTypes.func.isRequired
+    addCategories: React.PropTypes.func.isRequired,
+    profilePic: React.PropTypes.string,
+    userName: React.PropTypes.string
 };
 export default CreateCards;

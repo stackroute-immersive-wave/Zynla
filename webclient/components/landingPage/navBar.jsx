@@ -292,23 +292,24 @@ class NavBar extends Component {
     }
 
     logoutCall() {
-        $.ajax({
-            url: 'http://localhost:8080/users/logout', type: 'GET',
-            // datatype: 'JSON',
-            // data:{username :this.state.username,password:this.state.password},
-            success: function(res) {
-                if (typeof res.redirect === 'string') {
-                    window.location.replace(window.location.protocol
-                      + '//' + window.location.host + res.redirect);
-                }
-                // logger.debug(res.responseText);
-                // browserHistory.push('/');
-            },
-            error: function() {
-                // alert("error occurred while logging out");
-                // logger.debug(err.responseText);
-            }
-        });
+      let emailId = Cookie.load('email');
+   // console.log(Cookie.load('username'));
+   // console.log('email for logout',emailId);
+     $.ajax({
+         url: 'http://localhost:8080/users/logOut', type: 'POST',
+         datatype: 'JSON',
+          data: {email: emailId},
+         success: function() {
+             // console.log(Cookie.load('username'));
+             hashHistory.push('/');
+             // logger.debug(res.responseText);
+             // browserHistory.push('/');
+         },
+         error: function() {
+             // alert("error occurred while logging out");
+             // logger.debug(err.responseText);
+         }
+     });
     }
 
     render() {
@@ -350,7 +351,7 @@ class NavBar extends Component {
                                                     fontSize: 30 + 'px',
                                                     color: 'white'
                                                 }}>
-                                                    ASK QUESTION </h2>
+                                                    Ask Question </h2>
                                                     <div
                                                       style={{color: 'white', textAlign: 'center',
                                                        fontSize: 20 + 'px', fontWeight: 'bold'}}
@@ -460,11 +461,12 @@ class NavBar extends Component {
                                        <p className='profileColor'>
                                            {Cookie.load('username')}</p>
                                            <div>
-                                           <Link to='/logout'>
-                                               <Menu.Item name='Logout'
-                                                 active={activeItem === 'Logout'}
-                                                  onClick={this.handleItemClick}/>
-                                           </Link>
+                                             <Button primary size='small'
+                                            onClick={this.logoutCall.bind(this)}>
+                                                <Menu.Item name='Logout'
+                                                  active={activeItem === 'Logout'}
+                                                   />
+                                            </Button>
                                            </div>
                                      </Grid.Column>
                                    </Grid>

@@ -13,7 +13,7 @@ class followerCard extends React.Component {
         let arr = this.props.followerData.map(function(item) {
                 return (
               <Grid.Column>
-                <MainFollowerCard heading={item.emailId} reputation={item.reputation}
+                <MainFollowerCard heading={item.profile.name} reputation={item.reputation}
                   city={item.profile.address.city}
                 image={item.profile.picture} description= {item.profile.description} followerCount=
               {item.followerCount} followingCount = {item.followingUser.length}/>

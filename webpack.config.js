@@ -45,5 +45,10 @@ module.exports = {
        new webpack.NoErrorsPlugin(),
        new ExtractTextPlugin('style.css')
       // new HtmlWebpackPlugin({ template: path.resolve('./webclient/index.html') })
-      ]
+      ],
+    node: {
+           fs: 'empty',
+           net: 'empty',
+           tls: 'empty'
+         }
 };

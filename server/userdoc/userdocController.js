@@ -174,7 +174,7 @@ let userDocController = {
                 for (let i = 0; i < len; i = i + 1) {
                     // console.log(data.followingUser[i]);
                     UserModel.findOne({
-                        id: data.followingUser[i]
+                        emailId: data.followingUser[i]
                         //   id: 2
                         /*eslint-disable*/
                     }, function(err,result) {/*eslint-enable*/

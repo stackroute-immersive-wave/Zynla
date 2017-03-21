@@ -1,6 +1,6 @@
 import React from 'react';
 import Cookie from 'react-cookie';
-import QuestionsCard from './questionsCard';
+import QuestionsCard from './questionscard';
 
 import {
    Dimmer,

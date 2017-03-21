@@ -100,7 +100,8 @@ let userCtrl = {
         newUser.authType = 'local';
         newUser.loggedinStatus = false;
         newUser.isEmailVerified = false;
-        newUser.photos = 'defultImage.jpg';
+        newUser.photos = 
+        'https://cdn.petri.com/forums/core/image.php?userid=8422&thumb=1&dateline=1180704063';
         newUser.isnew = 'Y';
         res.cookie('profilepicture', newUser.photos);
         newUser.save(function(err) {
@@ -455,49 +456,51 @@ let userCtrl = {
     },
     /* Add category to mongodb as well as in neo4j */
     addCategory: function(req, res) {
-        console.log("dddddddddddddd");
-        console.log(req.body);
-        let arr1 = JSON.parse(req.body.catagory);
-        console.log(typeof(arr1));
-        console.log('got the         ', arr1);
-        let newUser = new UserProfile();
-        let arr = [];
-        rand = Math.floor((Math.random() * 100) + 54);
-        for (let y of arr1) {
-            arr.push(y);
-        }
-        newUser.emailId = req.body.email;
-        newUser.interestCategory = arr;
-        newUser.profile.dob = 'dob';
-        newUser.profile.gender = 'gender';
-        newUser.profile.address.country = 'Country';
-        res.cookie('email', newUser.emailId);
-        res.cookie('catagories', newUser.interestCategory);
-        console.log(arr);
-        let i = 1;
-        newUser.save(function(err) {
-            if (err) {
-                res.send('Error in registration');
-            } else {
-                let id = req.body.email;
-                console.log('email in addcategory', req.body.email);
-                /* Add category to neo4j */
-                let query = 'match (n:User {name:"' + id + '"})';
-                for (var i = 0; i < arr.length; i++) {
-                    query += ',(d' + i + ': Domain {name:"' + arr[i] + '"}) ';
-                }
-                console.log('node 1', query);
-                query += 'create (n)-[:follows]->(d0)';
-                for (let i = 1; i < arr.length; i++) {
-                    query += ',(n)-[:follows]->(d' + i + ')';
-                }
-                console.log('node 2', query);
-                session.run(query).then(function() {
-                    console.log('updated to neo4j');
-                });
-                res.send('Successfully registered');
-            }
-        });
+      console.log("dddddddddddddd");
+      console.log(req.body);
+      let arr1 = JSON.parse(req.body.catagory);
+      console.log(typeof(arr1));
+      console.log('got the         ', arr1);
+      let newUser = new UserProfile();
+      let arr = [];
+      // rand = Math.floor((Math.random() * 100) + 54);
+      for (let y of arr1) {
+          arr.push(y);
+      }
+      newUser.profile.name = req.body.name;
+      newUser.emailId = req.body.email;
+      newUser.profile.picture = req.body.profilePicture;
+      newUser.interestCategory = arr;
+      newUser.profile.dob = 'dob';
+      newUser.profile.gender = 'gender';
+      newUser.profile.address.country = 'Country';
+      res.cookie('email', newUser.emailId);
+      res.cookie('catagories', newUser.interestCategory);
+      console.log(arr);
+      let i = 1;
+      newUser.save(function(err) {
+          if (err) {
+              res.send('Error in registration');
+          } else {
+              let id = req.body.email;
+              console.log('email in addcategory', req.body.email);
+              /* Add category to neo4j */
+              let query = 'match (n:User {name:"' + id + '"})';
+              for (var i = 0; i < arr.length; i++) {
+                  query += ',(d' + i + ': Domain {name:"' + arr[i] + '"}) ';
+              }
+              console.log('node 1', query);
+              query += 'create (n)-[:follows]->(d0)';
+              for (let i = 1; i < arr.length; i++) {
+                  query += ',(n)-[:follows]->(d' + i + ')';
+              }
+              console.log('node 2', query);
+              session.run(query).then(function() {
+                  console.log('updated to neo4j');
+              });
+              res.send('Successfully updated');
+          }
+      });
     },
     /* After selecting category chage user type fro 'Y' to 'N' */
     updateIsNew: function(req, res) {

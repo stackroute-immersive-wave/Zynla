@@ -113,11 +113,6 @@ render() {
             <CountrySelect multi={false} name='country' flagImagePath="../../image/flags/"
             onSelect={this.onSelect}/>
         </Form.Field>
-
-        <a href='https://localhost:8080/#/home'>
-        <Button
-        circular>Skip</Button>
-        </a>
         {this.state.opendimmer ? < Dimmer
                  active = {active}
                  page/>
@@ -127,6 +122,10 @@ render() {
         circular disabled={!this.state.errordatecheck}
         style = {{float: 'right', marginTop: -4 + 'px'}}> SUBMIT</Button>
         </Form>
+        <a href='http://localhost:8080/#/home'>
+        <Button
+        circular>Skip</Button>
+        </a>
         </Modal.Content>
         </Modal>
         </div>
