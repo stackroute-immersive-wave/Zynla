@@ -3,7 +3,9 @@ import Cookie from 'react-cookie';
 import { Button, Modal, Input } from 'semantic-ui-react';
 import Chat from './chat';
 import $ from 'jquery';
-
+const ReactToastr = require('react-toastr');
+const {ToastContainer} = ReactToastr;
+const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 class ProfileBot extends React.Component {
   constructor() {
     super();
@@ -15,8 +17,10 @@ class ProfileBot extends React.Component {
         'Please enter skip if you not wish to update the question.'
       }],
       updatepart: '',
-      close: false
+      close: false,
+      skipQues: []
     };
+    this.proAlert = this.proAlert.bind(this);
   }
 
   componentDidMount() {
@@ -82,9 +86,19 @@ class ProfileBot extends React.Component {
       }
     }
   }
-
+  proAlert () {
+     this.refs.container.success(
+       'Profile Updated Successfully',
+       '', {
+       timeOut: 1000,
+       extendedTimeOut: 10000
+     });
+   }
   updateProfile() {
     let email = Cookie.load('email');
+    /*eslint-disable*/
+    let context = this;
+    /*eslint-enable*/
     // let userProfile = this.state.userprofile
     $.ajax({
         url: '/userdoc/addProfile',
@@ -94,6 +108,7 @@ class ProfileBot extends React.Component {
           userProfile: JSON.stringify(this.state.userprofile)
         },
         success: function() {
+          context.proAlert();
         }
       });
   }
@@ -116,6 +131,10 @@ class ProfileBot extends React.Component {
           context.askQuestion();
         }.bind(this)
       });
+  }
+
+  skip() {
+    this.askQuestion();
   }
 
   askQuestion() {
@@ -246,8 +265,7 @@ class ProfileBot extends React.Component {
     Cookie.load('email');
     return (
       <div>
-        <Modal trigger={<Button className='butstyle'
-          style = {{marginLeft: '10%'}}>Profile Bot</Button>}
+        <Modal trigger={<Button className='butstyle'>Profile Bot</Button>}
           closeOnDocumentClick ={true}
           onClose = {this.updateProfile.bind(this)}>
          <Modal.Header><h1>Profile Bot</h1></Modal.Header>
@@ -257,8 +275,13 @@ class ProfileBot extends React.Component {
            className = "chatinput"
            onChange = {this.updateMessageState.bind(this)}
            onKeyPress = {this.handleKeyPress.bind(this)}/>
-         <Button className='butstyle' style={{float: 'right'}} primary>Skip</Button>
+         <Button
+            className='butstyle'
+             style={{float: 'right'}} onClick={this.skip.bind(this)} primary>Skip</Button>
        </Modal>
+       <ToastContainer ref='container' style ={{backgroundColor: '#B2242E'}}
+              toastMessageFactory={ToastMessageFactory}
+              className='toast-top-center' />
       </div>
     );
   }

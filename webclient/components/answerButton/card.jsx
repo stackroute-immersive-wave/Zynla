@@ -125,7 +125,7 @@ class QueCard extends React.Component {
       // console.log(JSON.stringify(ansdata));
       // ajax call to add answer in neo4j and mongoDB
       $.ajax({
-        url: 'http://localhost:8080/answers/add',
+        url: '/answers/add',
         type: 'POST',
         data: ansdata,
         success: function() {
@@ -154,7 +154,7 @@ class QueCard extends React.Component {
       /* eslint-enable */
       // ajax call to get related questions
       $.ajax({
-          url: 'http://localhost:8080/list/suggestQues/' + this.props.id,
+          url: '/list/suggestQues/' + this.props.id,
           type: 'GET',
           success: function(data) {
             // console.log('inside success show related questions',data);
@@ -224,7 +224,7 @@ warningModalCancel = () => {
         let context = this;
         /* eslint-enable */
         $.ajax({
-          url: 'http://localhost:8080/answers/add',
+          url: '/answers/add',
           type: 'POST',
           data: ansdata,
           success: function() {
@@ -270,7 +270,7 @@ warningModalCancel = () => {
         let email = Cookie.load('email');
         this.setState({upVotes: this.props.upvote, downVotes: this.props.downvote});
      $.ajax({
-            url: 'http://localhost:8080/list/likestatus',
+            url: '/list/likestatus',
             type: 'POST',
             data: {
                 id: id,
@@ -321,7 +321,7 @@ warningModalCancel = () => {
       // console.log('upvotes before increment',this.state.upVotes);
       // console.log('upvotes after increment',upVotesTemp);
       $.ajax({
-            url: 'http://localhost:8080/list/updateLike',
+            url: '/list/updateLike',
             type: 'POST',
             data: {
                 id: id,
@@ -356,7 +356,7 @@ warningModalCancel = () => {
         }
       let id = this.props.id;
       $.ajax({
-            url: 'http://localhost:8080/list/updateunlike',
+            url: '/list/updateunlike',
             type: 'POST',
             data: {
                 id: id,
@@ -386,7 +386,7 @@ sendReport(value)
   let id = this.props.id;
   let email = Cookie.load('email');
   $.ajax({
-      url: 'http://localhost:8080/list/createReport',
+      url: '/list/createReport',
       type: 'POST',
       data: {
           id: id,
@@ -404,7 +404,7 @@ checkReport()
 let id = this.props.id;
 let email = Cookie.load('email');
 $.ajax({
-    url: 'http://localhost:8080/list/changePopup',
+    url: '/list/changePopup',
     type: 'POST',
     data: {
         id: id,

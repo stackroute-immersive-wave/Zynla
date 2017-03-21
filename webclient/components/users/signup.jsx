@@ -48,12 +48,12 @@ export default class Signup extends React.Component {
         {
           this.setState({opendimmer: true});
           $.ajax({
-            url: 'http://localhost:8080/users/signup',
+            url: '/users/signup',
             method: 'post',
             data: value.formData,
             success: function(dataEmail) {
                 $.ajax({
-                url: ' http://localhost:8080/users/send',
+                url: ' /users/send',
                 method: 'post',
                 data: {
                     data: dataEmail.email
@@ -112,7 +112,7 @@ export default class Signup extends React.Component {
           let self = this;
           /*eslint-enable*/
             Axios({
-                url: ' http://localhost:8080/users/checkuser',
+                url: ' /users/checkuser',
                 method: 'POST',
                 data: {
                     email: event.target.value

@@ -100,7 +100,7 @@ let userCtrl = {
         newUser.authType = 'local';
         newUser.loggedinStatus = false;
         newUser.isEmailVerified = false;
-        newUser.photos = 
+        newUser.photos =
         'https://cdn.petri.com/forums/core/image.php?userid=8422&thumb=1&dateline=1180704063';
         newUser.isnew = 'Y';
         res.cookie('profilepicture', newUser.photos);
@@ -338,12 +338,15 @@ let userCtrl = {
         let emailId = req.params.emailId;
         console.log('coming'+emailId);
         let arr = [];
+        let qid = [];
         UserProfile.find({"emailId": emailId}).then((docs) => {
             for(let pref of docs[0].preferenceList) {
+              qid.push(pref.id);
               arr.push(storeTag(pref, 'You preferred'));
             }
             for (let i = 0; i < docs[0].watchingList.length; i = i + 1) {
                 if(distinctFunc(arr, docs[0].watchingList[i])) {
+                  qid.push(docs[0].watchingList[i].id);
                   arr.push(storeTag(docs[0].watchingList[i], 'Following'));
                 }
                 if (i == 4) {
@@ -351,8 +354,10 @@ let userCtrl = {
                 }
             }
             for (let i = 0; i < docs[0].lists.length; i = i + 1) {
-                if(arr, docs[0].lists[i])
+                if(arr, docs[0].lists[i]) {
+                  qid.push(docs[0].lists[i].id);
                   arr.push(storeTag(docs[0].lists[i], 'Posted by you'));
+                }
                 if (i == 4) {
                     break;
                 }
@@ -372,23 +377,41 @@ let userCtrl = {
                           if (distinctFunc(arr, ques))
                               arr.push(storeTag(ques, 'Recommended'));
                           }
-                      res.send(arr);
+                      let mongoQuery = [];
+                      for(let qTemp of qid) {
+                        mongoQuery.push({id: qid});
+                      }
+                      ListEntity.find({$or: mongoQuery}).then(function(newDocs) {
+                        for(let qTemp of newDocs) {
+                          for(let qArr in arr) {
+                            if(arr[qArr].id === qTemp.id) {
+                              arr[qArr].upVotes = qTemp.upVotes;
+                              arr[qArr].answerCounts = qTemp.answerCounts;
+                              arr[qArr].views = qTemp.views;
+                            }
+                          }
+                        }
+                        res.send(arr);
+                      });
                   });
                 }
                 UserProfile.find({$or: mongoMail}).then(function(docs2) {
                     docs2.map(function(doc) {
                         doc.watchingList.map(function(watchingList) {
-                            if (distinctFunc(arr, watchingList))
+                              if (distinctFunc(arr, watchingList)) {
+                                qid.push(watchingList.id);
                                 arr.push(storeTag(watchingList, 'Friend\'s following'));
+                              }
                             }
                         );
                         doc.lists.map(function(lists) {
-                            if (distinctFunc(arr, lists))
-                                arr.push(storeTag(lists, 'Friend\'s posted'));
+                            if(distinctFunc(arr, lists)) {
+                              qid.push(lists.id);
+                              arr.push(storeTag(lists, 'Friend\'s posted'));
+                            }
                             }
                         );
                     });
-                    console.log(arr.length);
                     let queryfof = 'match (n:User),(n)-[:follow]->(m:User) where n.name="' + following[0] + '"';
                     for (let qi = 1; qi < following.length; qi = qi + 1) {
                         queryfof = queryfof + ' or n.name="' + following[qi] + '"';
@@ -405,19 +428,38 @@ let userCtrl = {
                                   if (distinctFunc(arr, ques))
                                       arr.push(storeTag(ques, 'Recommended'));
                                   }
-                              res.send(arr);
+                                  let mongoQuery = [];
+                                  for(let qTemp of qid) {
+                                    mongoQuery.push({id: qid});
+                                  }
+                                  ListEntity.find({$or: mongoQuery}).then(function(newDocs) {
+                                    for(let qTemp of newDocs) {
+                                      for(let qArr in arr) {
+                                        if(arr[qArr].id === qTemp.id) {
+                                          arr[qArr].upVotes = qTemp.upVotes;
+                                          arr[qArr].answerCounts = qTemp.answerCounts;
+                                          arr[qArr].views = qTemp.views;
+                                        }
+                                      }
+                                    }
+                                    res.send(arr);
+                                  });
                           });
                         }
                         UserProfile.find({$or: mongoMailFof}).then(function(docsFof) {
                             docsFof.map(function(doc) {
                                 doc.watchingList.map(function(watchingList) {
-                                    if (distinctFunc(arr, watchingList))
+                                    if (distinctFunc(arr, watchingList)){
+                                        qid.push(watchingList.id);
                                         arr.push(storeTag(watchingList, 'FoF follow'));
+                                      }
                                     }
                                 );
                                 doc.lists.map(function(lists) {
-                                    if (distinctFunc(arr, lists))
+                                    if (distinctFunc(arr, lists)){
+                                        qid.push(lists.id);
                                         arr.push(storeTag(lists, 'FoF posted'));
+                                      }
                                     }
                                 );
                             });
@@ -426,7 +468,22 @@ let userCtrl = {
                                     if (distinctFunc(arr, ques))
                                         arr.push(storeTag(ques, 'Recommended'));
                                     }
-                                res.send(arr);
+                                    let mongoQuery = [];
+                                    for(let qTemp of qid) {
+                                      mongoQuery.push({id: qid});
+                                    }
+                                    ListEntity.find({$or: mongoQuery}).then(function(newDocs) {
+                                      for(let qTemp of newDocs) {
+                                        for(let qArr in arr) {
+                                          if(arr[qArr].id === qTemp.id) {
+                                            arr[qArr].upVotes = qTemp.upVotes;
+                                            arr[qArr].answerCounts = qTemp.answerCounts;
+                                            arr[qArr].views = qTemp.views;
+                                          }
+                                        }
+                                      }
+                                      res.send(arr);
+                                    });
                             });
                         });
                     });
@@ -613,7 +670,6 @@ function storeTag(obj, val) {
   let temp = JSON.stringify(obj);
   temp = temp.substring(0, temp.length-1);
   obj = JSON.parse(temp + ', "tag":"' + val + '"}');
-  console.log(obj);
   return obj;
 }
 

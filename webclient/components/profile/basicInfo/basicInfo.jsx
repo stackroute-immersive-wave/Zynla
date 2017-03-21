@@ -12,6 +12,9 @@ import {
 } from 'semantic-ui-react';
 import Cookie from 'react-cookie';
 import InterestsCard from './interestedCategories/interestsCard';
+const ReactToastr = require('react-toastr');
+const {ToastContainer} = ReactToastr;
+const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 class basicInfo extends React.Component {
 
     handleOpen = () => this.setState({active: true})
@@ -42,6 +45,10 @@ class basicInfo extends React.Component {
 
         this.handleItemClick = this.handleItemClick.bind(this);
         this.updateEducation = this.updateEducation.bind(this);
+        this.eduAlert = this.eduAlert.bind(this);
+        this.locAlert = this.locAlert.bind(this);
+        this.abtAlert = this.abtAlert.bind(this);
+        this.getProfile = this.getProfile.bind(this);
     }
     handleItemClick(e, {name}) {
         let data;
@@ -321,14 +328,14 @@ class basicInfo extends React.Component {
     }
     handleChange = (e, {value}) => this.setState({value})
     componentDidMount() {
-        // console.log("comes");
+        // console.log('comes');
         this.handleOpen();
         this.getProfile();
         this.getInterestedTopics();
     }
     getProfile() {
             $.ajax({
-            url: 'http://localhost:8080/userdoc/getuserprofile',
+            url: '/userdoc/getuserprofile',
             type: 'post',
             data: {
                 email: Cookie.load('email')
@@ -364,11 +371,15 @@ class basicInfo extends React.Component {
             university: this.state.university,
             emailId: Cookie.load('email')
           };
+          /*eslint-disable*/
+          let context = this;
+          /*eslint-enable*/
             $.ajax({
-            url: 'http://localhost:8080/userdoc/updateEdu',
+            url: '/userdoc/updateEdu',
             type: 'POST',
             data: eduData,
             success: function() {
+              context.eduAlert();
                 /*eslint-disable*/
                 /*eslint-enable*/
                 // console.log(data);
@@ -388,19 +399,18 @@ class basicInfo extends React.Component {
             postalCode: this.state.postalCode,
             email: Cookie.load('email')
         };
-        // let context = this;
+        /*eslint-disable*/
+        let context = this;
+        /*eslint-enable*/
         //   // console.log(JSON.stringify(locData);
         $.ajax({
-            url: 'http://localhost:8080/userdoc/updateLoc',
+            url: '/userdoc/updateLoc',
             type: 'POST',
             data: locData,
             success: function() {
-              this.setState({
-
-                line1: this.state.line1
-              });
+            context.locAlert();
                           /*eslint-disable*/
-                // alert("Location Details Updated Successfully");
+                // alert('Location Details Updated Successfully');
                 /*eslint-enable*/
                 // console.log(data);
             },
@@ -421,18 +431,15 @@ class basicInfo extends React.Component {
             email: Cookie.load('email')
         };
         //   // console.log(JSON.stringify(proData);
+        /*eslint-disable*/
+        let context = this;
+        /*eslint-enable*/
         $.ajax({
-            url: 'http://localhost:8080/userdoc/updatePro',
+            url: '/userdoc/updatePro',
             type: 'POST',
             data: proData,
             success: function() {
-              // console.log(this.state.description);
-                // this.setState({but2: 'Edit', AbtTitle: 'Edit Profile',
-                // description: this.state.description});
-                /*eslint-disable*/
-                // alert("Personal Details Updated Successfully");
-                /*eslint-enable*/
-                // console.log(data);
+              context.abtAlert();
             },
             error: function() {
                 // console.error(err.toString());
@@ -441,7 +448,7 @@ class basicInfo extends React.Component {
     }
     getInterestedTopics() {
         $.ajax({
-            url: 'http://localhost:8080/userdoc/getInterestedTopics',
+            url: '/userdoc/getInterestedTopics',
             type: 'POST',
             data: {
                 email: Cookie.load('email')
@@ -454,7 +461,30 @@ class basicInfo extends React.Component {
             }
         });
     }
-
+    eduAlert () {
+       this.refs.container.success(
+         'Updated Education Successfully',
+         '', {
+         timeOut: 1000,
+         extendedTimeOut: 10000
+       });
+     }
+     locAlert () {
+        this.refs.container.success(
+          'Location Updated Successfully',
+          '', {
+          timeOut: 1000,
+          extendedTimeOut: 10000
+        });
+      }
+      abtAlert () {
+         this.refs.container.success(
+           'Personal Details updated Successfully',
+           '', {
+           timeOut: 1000,
+           extendedTimeOut: 10000
+         });
+       }
     render() {
         const {active} = this.state;
         const {activeItem} = this.state;
@@ -490,6 +520,9 @@ class basicInfo extends React.Component {
                         </Segment>
                     </Grid.Column>
                 </Grid>
+                <ToastContainer ref='container' style ={{backgroundColor: '#B2242E'}}
+                       toastMessageFactory={ToastMessageFactory}
+                       className='toast-top-center' />
             </div>
         );
     }

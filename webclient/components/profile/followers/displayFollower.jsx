@@ -25,7 +25,7 @@ class displayFollower extends React.Component {
        let email = Cookie.load('email');
        // console.log(email);
          $.ajax({
-             url: 'http://localhost:8080/userdoc/getFollowers',
+             url: '/userdoc/getFollowers',
              type: 'POST',
              data: {email: email, skip: 0, limit: 10},
              success: function(data) {

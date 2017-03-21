@@ -1,6 +1,6 @@
 import React from 'react';
 import Cookie from 'react-cookie';
-import QuestionsCard from './questionscard';
+import QuestionsCard from './questionsCard';
 
 import {
    Dimmer,
@@ -25,7 +25,7 @@ class displayQuestions extends React.Component {
        let email = Cookie.load('email');
        // console.log(email);
          $.ajax({
-             url: 'http://localhost:8080/userdoc/getQuestions',
+             url: '/userdoc/getQuestions',
              type: 'POST',
              data: {email: email},
              success: function(data) {

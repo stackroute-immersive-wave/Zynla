@@ -81,7 +81,7 @@ class NavBar extends Component {
         if(Cookie.load('email')) {
           this.setState({active: true});
           $.ajax({
-            url: 'http://localhost:8080/list/getQuestionIntent/',
+            url: '/list/getQuestionIntent/',
             type: 'GET',
             success: function(res) {
                 context.setState({allQuestionIntentArr: res});
@@ -207,7 +207,7 @@ class NavBar extends Component {
         this.setState({Concept: evt.target.value});
         // ajax call to get the concepts from the neo4j based on particular keywoard
         $.ajax({
-            url: 'http://localhost:8080/list/getconcepts/',
+            url: '/list/getconcepts/',
             type: 'POST',
             data: {
               q: evt.target.value
@@ -269,7 +269,7 @@ class NavBar extends Component {
               intent: this.state.questionIntent
           };
           $.ajax({
-              url: 'http://localhost:8080/list/addquestion',
+              url: '/list/addquestion',
               type: 'POST',
               data: data,
               success: function() {
@@ -296,7 +296,7 @@ class NavBar extends Component {
    // console.log(Cookie.load('username'));
    // console.log('email for logout',emailId);
      $.ajax({
-         url: 'http://localhost:8080/users/logOut', type: 'POST',
+         url: '/users/logOut', type: 'POST',
          datatype: 'JSON',
           data: {email: emailId},
          success: function() {

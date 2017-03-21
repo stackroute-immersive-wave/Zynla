@@ -34,7 +34,9 @@ let buttonStyle = {
 };
 class NavBarPro extends Component {
 
-    state = {
+  constructor() {
+    super();
+    this.state = {
         questionCount: 1,
         answerCount: 0,
         followerCount: 0,
@@ -47,7 +49,9 @@ class NavBarPro extends Component {
         status: 0,
         interestsData: [],
         content: <BasicInfo />
-    }
+    };
+    this.getProfile = this.getProfile.bind(this);
+  }
 // Fetch Basic Info page
     viewInfo() {
       let temp = (
@@ -99,7 +103,7 @@ class NavBarPro extends Component {
     // Fetch Interested Topics from data base
     getInterestedTopics() {
         $.ajax({
-            url: 'http://localhost:8080/userdoc/getInterestedTopics',
+            url: '/userdoc/getInterestedTopics',
             type: 'POST',
             data: {
                 email: Cookie.load('email')
@@ -139,7 +143,7 @@ class NavBarPro extends Component {
     getProfile() {
       let email = Cookie.load('email');
         $.ajax({
-            url: 'http://localhost:8080/userdoc/getuserprofile',
+            url: '/userdoc/getuserprofile',
             type: 'POST',
             data: {email: email},
             success: function(data) {

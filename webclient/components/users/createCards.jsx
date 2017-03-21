@@ -77,7 +77,7 @@ class CreateCards extends React.Component
         let jObject = {};
         jObject = JSON.stringify(this.state.follow);
         $.ajax({
-            url: 'http://localhost:8080/users/addCatagory',
+            url: '/users/addCatagory',
             type: 'post',
             data: {
                 catagory: jObject,
@@ -88,7 +88,7 @@ class CreateCards extends React.Component
             success: function() {
                 // console.log('Successfully got JSON Catagory' + JSON.stringify(data));
                 $.ajax({
-                    url: 'http://localhost:8080/users/updateIsNew/' + this.props.email,
+                    url: '/users/updateIsNew/' + this.props.email,
                     type: 'put',
                     data: {
                         isNew: 'N'

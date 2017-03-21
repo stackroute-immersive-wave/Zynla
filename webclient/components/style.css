@@ -3,6 +3,13 @@
    color: white !important;
    font-family: Arial, Helvetica, sans-serif;
 }
+.search3 {
+  padding-left: 200px;
+}
+.search2 {
+  padding-top: 20px;
+  padding-left: 60px;
+}
 .submitbutstyle{
   background-color: #16ab39 !important;
   width: 200px !important;

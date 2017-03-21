@@ -160,7 +160,7 @@ class answerPage extends React.Component {
         /* eslint-enable */
         // console.log(JSON.stringify(ansdata));
         $.ajax({
-            url: 'http://localhost:8080/answers/add',
+            url: '/answers/add',
             type: 'POST',
             data: ansdata,
             success: function() {
@@ -219,7 +219,7 @@ class answerPage extends React.Component {
         let id = window.location.hash.split('id=')[1];
         this.handleOpen();
         $.ajax({
-            url: 'http://localhost:8080/list/answer/' + id,
+            url: '/list/answer/' + id,
             type: 'GET',
             success: function(data) {
                 this.setState({objArray: data});
@@ -253,7 +253,7 @@ class answerPage extends React.Component {
         // console.log('upvotes before increment',this.state.upVotes);
         // console.log('upvotes after increment',upVotesTemp);
         $.ajax({
-            url: 'http://localhost:8080/list/updateLike',
+            url: '/list/updateLike',
             type: 'POST',
             data: {
                 id: id,
@@ -284,7 +284,7 @@ class answerPage extends React.Component {
         }
         let id = window.location.hash.split('id=')[1];
         $.ajax({
-            url: 'http://localhost:8080/list/updateunlike',
+            url: '/list/updateunlike',
             type: 'POST',
             data: {
                 id: id,
@@ -302,7 +302,7 @@ class answerPage extends React.Component {
         let id = window.location.hash.split('id=')[1];
         let email = Cookie.load('email');
         $.ajax({
-            url: 'http://localhost:8080/list/likestatus',
+            url: '/list/likestatus',
             type: 'POST',
             data: {
                 id: id,
@@ -389,7 +389,7 @@ class answerPage extends React.Component {
         let id = window.location.hash.split('id=')[1];
         let email = Cookie.load('email');
         $.ajax({
-            url: 'http://localhost:8080/list/createReport',
+            url: '/list/createReport',
             type: 'POST',
             data: {
                 id: id,
@@ -407,7 +407,7 @@ class answerPage extends React.Component {
         let id = window.location.hash.split('id=')[1];
         let email = Cookie.load('email');
         $.ajax({
-            url: 'http://localhost:8080/list/changePopup',
+            url: '/list/changePopup',
             type: 'POST',
             data: {
                 id: id,

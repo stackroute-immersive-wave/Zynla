@@ -79,7 +79,7 @@ class cardAnswer extends React.Component {
         let context = this;
         /*eslint-enable*/
         $.ajax({
-            url: 'http://localhost:8080/list/UpdateAcceptans',
+            url: '/list/UpdateAcceptans',
             type: 'POST',
             data: ansdata,
             success: function() {

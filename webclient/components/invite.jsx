@@ -20,7 +20,7 @@ class invite extends React.Component {
     }
     invite() {
         $.ajax({
-            url: 'http://localhost:8080/list/invite',
+            url: '/list/invite',
             type: 'POST',
             data: {
                 mail: this.state.value

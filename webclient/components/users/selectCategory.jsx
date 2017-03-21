@@ -17,7 +17,7 @@ export default class SuccessfullyRegistered extends React.Component {
   //  }
    componentDidMount() {
     $.ajax({
-      url: 'http://localhost:8080/users/displayCatagory',
+      url: '/users/displayCatagory',
       type: 'GET',
       success: function(data) {
         // console.log('Successfully got JSON Catagory' + JSON.stringify(data));

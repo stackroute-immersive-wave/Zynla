@@ -33,7 +33,7 @@ class Questions extends React.Component {
      // console.log('inside getquestions');
      this.handleOpen();
        $.ajax({
-           url: 'http://localhost:8080/list/',
+           url: '/list/',
            type: 'GET',
            success: function(data) {
                // console.log(JSON.stringify(data, undefined, 2));

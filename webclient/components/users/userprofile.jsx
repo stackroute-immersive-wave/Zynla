@@ -63,7 +63,7 @@ export default class UserProfileData extends React.Component {
       // console.log(typeof(Date.parse(value.formData.dateofbirth)));
       // console.log(Cookie.load('email'));
       $.ajax({
-            url: 'http://localhost:8080/users/updateProfile/' + Cookie.load('email'),
+            url: '/users/updateProfile/' + Cookie.load('email'),
             type: 'put',
             data: {
                 data1: profileObject,
@@ -122,7 +122,7 @@ render() {
         circular disabled={!this.state.errordatecheck}
         style = {{float: 'right', marginTop: -4 + 'px'}}> SUBMIT</Button>
         </Form>
-        <a href='http://localhost:8080/#/home'>
+        <a href='/#/home'>
         <Button
         circular>Skip</Button>
         </a>

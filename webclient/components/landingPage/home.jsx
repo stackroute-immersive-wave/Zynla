@@ -118,12 +118,17 @@ class Cards extends React.Component {
         if (Cookie.load('quesId') === undefined) {
             /* eslint-enable*/
             homePage = (
-                <div className='search1'>
+                <div>
+                  <div className='search3'>
                     <DisplayFavouriteCategory
-                       json={this.state.json}/> {this.state.savedata.length > 0
+                       json={this.state.json}/>
+                     </div>
+                     <div className='search2'>
+                        {this.state.savedata.length > 0
                         ? <DisplayHomePageCard display={this.state.savedata}
                           follow={this.state.followCard}/>
                         : null}
+                    </div>
                 </div>
             );
         } else {

@@ -25,7 +25,7 @@ class displayAnswers extends React.Component {
        let email = Cookie.load('email');
        // console.log(email);
          $.ajax({
-             url: 'http://localhost:8080/userdoc/getAnswers',
+             url: '/userdoc/getAnswers',
              type: 'POST',
              data: {email: email},
              success: function(data) {

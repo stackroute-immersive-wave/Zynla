@@ -43,7 +43,7 @@ class Login extends React.Component {
     onSubmitLoginData(e, value) {
         // console.log(value.formData);
         $.ajax({
-                url: 'http://localhost:8080/users/login',
+                url: '/users/login',
                 type: 'POST',
                 data: {
                     email: value.formData.userName,
