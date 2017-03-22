@@ -1,6 +1,9 @@
 import React from 'react';
 import Cookie from 'react-cookie';
 import AnswersCard from './answersCard';
+const ReactToastr = require('react-toastr');
+const {ToastContainer} = ReactToastr;
+const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 import {
    Dimmer,
    Loader
@@ -14,26 +17,41 @@ class displayAnswers extends React.Component {
        this.state = {
          answerobj: []
        };
+       this.noAnswersAlert = this.noAnswersAlert.bind(this);
      }
 
      componentWillMount() {
           this.handleOpen();
           this.getAnswers();
      }
-
+     noAnswersAlert () {
+        this.refs.container.success(
+          'No Answers yet!!',
+          '', {
+          timeOut: 2000,
+          extendedTimeOut: 10000
+        });
+      }
      getAnswers() {
        let email = Cookie.load('email');
+       /*eslint-disable*/
+       let context = this;
+       /*eslint-enable*/
        // console.log(email);
          $.ajax({
              url: '/userdoc/getAnswers',
              type: 'POST',
              data: {email: email},
              success: function(data) {
-               this.handleClose();
-               // console.log(data[0].heading);
-               // console.log(data.length);
-                 this.setState({answerobj: data});
-             }.bind(this),
+               context.handleClose();
+               if(data === 'No Answers')
+               {
+                 context.noAnswersAlert();
+               }
+               else{
+                 context.setState({answerobj: data});
+               }
+             },
              error: function() {
               // console.log('error in logout' + err);
              }
@@ -48,6 +66,9 @@ class displayAnswers extends React.Component {
         </Dimmer>
          <h1 style={{marginLeft: '10px'}}>Answers Answered</h1>
           <AnswersCard answerData={this.state.answerobj}/>
+          <ToastContainer ref='container' style ={{backgroundColor: '#B2242E'}}
+                 toastMessageFactory={ToastMessageFactory}
+                 className='toast-top-center' />
         </div>
       );
     }

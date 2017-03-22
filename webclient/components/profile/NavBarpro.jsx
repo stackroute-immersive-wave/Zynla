@@ -7,7 +7,7 @@ let DisplayAns = require('./answers/displayAnswers.jsx');
 let BasicInfo = require('./basicInfo/basicInfo.jsx');
 let DisplayFollowing = require('./following/displayFollowing');
 let DisplayFollower = require('./followers/displayFollower');
-import InterestsCard from './basicInfo/interestedCategories/interestsCard';
+import WatchingCard from './basicInfo/watchingCategories/watchingCard.jsx';
 
 let picStyle = {
     marginTop: '3%'
@@ -47,7 +47,7 @@ class NavBarPro extends Component {
         university: '',
         objArray: [],
         status: 0,
-        interestsData: [],
+        watchingData: [],
         content: <BasicInfo />
     };
     this.getProfile = this.getProfile.bind(this);
@@ -101,17 +101,17 @@ class NavBarPro extends Component {
       });
     }
     // Fetch Interested Topics from data base
-    getInterestedTopics() {
+    getWatching() {
         $.ajax({
-            url: '/userdoc/getInterestedTopics',
+            url: '/userdoc/getWatching',
             type: 'POST',
             data: {
                 email: Cookie.load('email')
             },
             success: function(data) {
-                this.setState({interestsData: data,
+                this.setState({watchingData: data,
                   // setting interestData to content
-                content: <InterestsCard interestData={this.state.interestsData}/>
+                content: <WatchingCard watchingData={this.state.watchingData}/>
                 });
             }.bind(this),
             error: function() {
@@ -247,7 +247,6 @@ class NavBarPro extends Component {
                              content='Followers'
                              icon='user plus' label={{
                                basic: true,
-                               color: 'white',
                                pointing: 'left',
                                content: followerCount
                            }}/>
@@ -255,7 +254,6 @@ class NavBarPro extends Component {
                              content='Following'
                              icon='fork' label={{
                                basic: true,
-                               color: 'white',
                                pointing: 'left',
                                content: followingCount
                            }}/>
@@ -299,7 +297,7 @@ class NavBarPro extends Component {
   </Header.Content>
 
 </Header>
-<Header dividing onClick={this.getInterestedTopics.bind(this)}>
+<Header dividing onClick={this.getWatching.bind(this)}>
  <Icon name='favorite' />
  <Header.Content style ={{cursor: 'pointer'}}>
    Watching Topics

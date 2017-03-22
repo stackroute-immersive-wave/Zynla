@@ -631,28 +631,38 @@ let userCtrl = {
     // updates the user preference data inside mongo
     addPreference: function(req, res) {
         let emailId = req.body.emailId;
-        UserProfile.findOneAndUpdate({
-            emailId: emailId
-        }, {
-            $push: {
-                preferenceList: {
-                    id: req.body.id,
-                    displayImage: req.body.displayImage,
-                    profileImage: req.body.profileImage,
-                    heading: req.body.heading,
-                    postedBy: req.body.postedBy,
-                    addedOn: req.body.addedOn,
-                    answerCount: req.body.noofans,
-                    upVotes: req.body.upVotes,
-                    downVotes: req.body.downVotes,
-                    views: req.body.views,
-                    position: req.body.preferedPos
-                }
+        UserProfile.find({emailId: emailId}).then(function(docs){
+          let preference = docs[0].preferenceList;
+          if(preference) {
+            if(checkPreference(req.body.id, preference)) {
+              UserProfile.update({emailId: emailId},{$pull: {preferenceList: {id: req.body.id}}}).then(function(obj){
+                console.log(obj);
+              });
             }
-        }, {new: true}).then((doc) => {
-            res.send(req.body.heading);
-        }, (err) => {
-            res.send(err);
+          }
+          UserProfile.findOneAndUpdate({
+              emailId: emailId
+          }, {
+              $push: {
+                  preferenceList: {
+                      id: req.body.id,
+                      displayImage: req.body.displayImage,
+                      profileImage: req.body.profileImage,
+                      heading: req.body.heading,
+                      postedBy: req.body.postedBy,
+                      addedOn: req.body.addedOn,
+                      answerCount: req.body.noofans,
+                      upVotes: req.body.upVotes,
+                      downVotes: req.body.downVotes,
+                      views: req.body.views,
+                      position: req.body.preferedPos
+                  }
+              }
+          }).then((doc) => {
+              res.send(req.body.heading);
+          }, (err) => {
+              res.send(err);
+          });
         });
     }
 }
@@ -671,6 +681,16 @@ function storeTag(obj, val) {
   temp = temp.substring(0, temp.length-1);
   obj = JSON.parse(temp + ', "tag":"' + val + '"}');
   return obj;
+}
+
+function checkPreference(id, arr) {
+  for(let temp of arr) {
+    if(temp.id == id) {
+      console.log('comes:'+id);
+      return true;
+    }
+  }
+  return false;
 }
 
 module.exports = userCtrl;

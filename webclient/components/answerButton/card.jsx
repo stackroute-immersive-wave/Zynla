@@ -488,7 +488,7 @@ class QueCard extends React.Component {
                         </Menu.Item>
                         <Menu.Item className='queTitle' onClick={this.redirectToAnswer.bind(this)}>
                             <Icon name='book' color='black' size='large'/> {this.props.anscount}
-                            Answers
+                            &nbsp;Answers
                         </Menu.Item>
                         <Button className='anspad' color='green'
                           onClick={this.modalOpen.bind(this)}>Answer</Button>

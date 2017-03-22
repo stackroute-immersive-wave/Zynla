@@ -28,11 +28,9 @@ function setupRestRoutes(app) {
   app.use('/invite', require(path.join(__dirname, './invite')));
   app.use('/followinvite', require(path.join(__dirname, './followinvite')));
   app.use('/search', require(path.join(__dirname, './search')));
-  // app.use('/resturant', require(path.join(__dirname, './resturant')));
-  //  MOUNT YOUR REST ROUTE HERE
-  //  Eg:
-
-
+  app.use('*', function(req, res) {
+    res.sendFile(path.join(__dirname, './pnf.html'), 404);
+  });
   app.use(function(req, res) {
     let err = new Error('Resource not found');
     err.status = 404;

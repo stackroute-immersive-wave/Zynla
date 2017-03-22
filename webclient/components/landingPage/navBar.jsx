@@ -10,7 +10,8 @@ import {
     Modal,
     Popup,
     Icon,
-    Form
+    Form,
+    Segment
 } from 'semantic-ui-react';
 import {Link} from 'react-router';
 import Cookie from 'react-cookie';
@@ -421,19 +422,21 @@ constructor() {
                             <Header icon='find'
                               content='Do you want to proceed with the question' />
                             <Modal.Content>
-                              <h4 style={{fontSize: 30 + 'px'}}>
+                              <h4 style={{fontSize: 25 + 'px'}}>
                                 {this.state.ModalQuestionName}
                               </h4>
-                              <p style={{fontSize: 18 + 'px', marginLeft: 20 + 'px'}}>
+                              <p style={{fontSize: 16 + 'px', marginLeft: 20 + 'px'}}>
                                 {this.state.ModalQuestionDescription}
                               </p>
-                              <p style={{fontWeight: 'bold', fontSize: 15 + 'px'}}>
-                                Posted by {this.state.ModalQuestionPostedBy}
-                                <span style={{marginLeft: 218 + 'px'}}>
-                                  <Icon size='big' name='eye' />
-                                  {this.state.ModalQuestionViews}
-                              </span>
-                              </p>
+                              <Segment float='left' compact>
+                                  <Image
+                                     floated='left'
+                                      size='mini'
+                                       src='http://semantic-ui.com/images/avatar/large/steve.jpg'/>
+                                  <a>
+                                      {this.state.ModalQuestionPostedBy}
+                                  </a>
+                              </Segment>
                             </Modal.Content>
                             <Modal.Actions>
                               <Button color='red' onClick={this.handleNoClick.bind(this)}>
@@ -452,38 +455,52 @@ constructor() {
                                          <Menu.Item name='Answer' active={activeItem === 'Answer'}
                                        id='divStyle' onClick={this.handleItemClick}/>
                                      </Link>
-                                <Link to='/invite'>
-                                    <Menu.Item name='invite' active={activeItem === 'invite'}
-                                       id='divStyle' onClick={this.handleItemClick}/>
-                                </Link>
                                 <Link to='/profile'>
                                     <Menu.Item name='Profile' active={activeItem === 'Profile'}
                                        id='divStyle' onClick={this.handleItemClick}/>
                                 </Link>
                                 <Popup wide trigger={< Button icon='user' id='divStyle'
-                                  />} on='click' position='bottom left'
-                                  hideOnScroll>
-                                  <div>
-                                   <Grid >
-                                     <Grid.Column width={5}>
-                                       <Image src={Cookie.load('profilepicture')}
-                                       className='profileImageSize' alt='img'/>
-                                     </Grid.Column>
-                                     <Grid.Column >
-                                       <p className='profileColor'>
-                                           {Cookie.load('username')}</p>
-                                           <div>
-                                             <Button primary size='small'
-                                            onClick={this.logoutCall.bind(this)}>
-                                                <Menu.Item name='Logout'
-                                                  active={activeItem === 'Logout'}
-                                                   />
-                                            </Button>
-                                           </div>
-                                     </Grid.Column>
-                                   </Grid>
+                                 />} on='click' position='bottom left'
+                                 hideOnScroll>
+                                 <div>
+                                  <Grid >
+                                    <Grid.Column width={5}>
+                                      <Image src={Cookie.load('profilepicture')}
+                                      className='profileImageSize' alt='img'/>
+                                    </Grid.Column>
+                                    <Grid.Column >
+                                      <p className='profileColor'>
+                                          {Cookie.load('username')}</p>
+                                    </Grid.Column>
+                                  </Grid>
+                                <div>
+                                  <Link to='/invite'>
+                                  <Menu secondary>
+                                      <Menu.Item name='invite' active={activeItem === 'invite'}
+                                          onClick={this.handleItemClick}/>
+                                       </Menu>
+                                  </Link>
                                  </div>
-                               </Popup>
+                                 <div>
+                                   <Link to=''>
+                                   <Menu secondary>
+                                       <Menu.Item
+                                          name='Terms and Conditions'
+                                           active={activeItem === 'terms'}
+                                           onClick={this.handleItemClick}/>
+                                        </Menu>
+                                   </Link>
+                                  </div>
+                                  <div>
+                                    <Link to='/'>
+                                    <Menu secondary>
+                                        <Menu.Item name='Logout' active={activeItem === 'Logout'}
+                                            onClick={this.logoutCall.bind(this)}/>
+                                         </Menu>
+                                    </Link>
+                                   </div>
+                                </div>
+                              </Popup>
                               <Menu.Item />
                          </Menu.Menu>
                            </div>

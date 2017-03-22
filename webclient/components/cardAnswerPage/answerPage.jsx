@@ -525,7 +525,7 @@ class answerPage extends React.Component {
                             <Image
                                floated='left'
                                 size='mini'
-                                 src='http://localhost:8080semantic-ui.com/images/avatar/large/steve.jpg'/>
+                        src='http://localhost:8080semantic-ui.com/images/avatar/large/steve.jpg'/>
                             <a>
                                 {quesObj[0].postedBy}
                             </a>

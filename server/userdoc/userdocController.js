@@ -97,9 +97,15 @@ let userDocController = {
         }, function() {
             //  // console.log('comes');
         }).then((docs) => {
+          if(docs.lists.length === 0)
+          {
+            res.send('No Questions');
+          }
+          else{
             res.send(docs.lists);
+          }
         }, (err) => {
-            res.send('Cant get the docs', err);
+            res.send('No Questions', err);
         });
     },
     getAnswers: function(req, res) {
@@ -109,9 +115,14 @@ let userDocController = {
         }, function() {
             // console.log('comes');
         }).then((docs) => {
+          if(docs.answers.length === 0) {
+            res.send('No Answers');
+          }
+          else{
             res.send(docs.answers);
+          }
         }, (err) => {
-            res.send('Cant get the docs', err);
+            res.send('No Answers', err);
         });
     },
     getInterestedTopics: function(req, res) {
@@ -136,6 +147,10 @@ let userDocController = {
                 let temp = 0;
                 let folldet = [];
                 let len = result.records.length;
+                if (len === 0) {
+                  res.send('No Followers');
+                }
+                  else{
                 for (let i = 0; i < len; i = i + 1) {
                   /*eslint-disable*/
                     foll.push({'name': result.records[i]._fields[0].properties.name, 'id': result.records[i]._fields[0].identity.low});
@@ -158,6 +173,7 @@ let userDocController = {
                         }
                     });
                 }
+            }
             });
         },
           getFollowings: function(req, res) {
@@ -165,7 +181,7 @@ let userDocController = {
             emailId: req.body.email
         }, function(err, data) {
             if (err) {
-                // console.log(err);
+                res.send('No Followings');
             } else {
                 let followings = [];
                 let temp = 0;
@@ -204,7 +220,8 @@ let userDocController = {
                 'profile.description': p.description,
                 'profile.dob': p.dob,
                 'profile.gender': p.gender,
-                'profile.phone': p.phone
+                'profile.phone': p.phone,
+                'profile.name': p.name
             }
         }, function(err) {
             if (err) {
@@ -212,6 +229,28 @@ let userDocController = {
             }
             res.send('Updated Profile successfully');
         });
-    }
+    },
+    getWatchingTopics: function(req, res) {
+      let session = driver.session();
+      /*eslint-disable*/
+      console.log(req.body);
+            let query = 'match (n:User {name:"' + req.body.email + '"})-[:follow]->(u:Concept) return u;';
+            /*eslint-enable*/
+            let watch = [];
+            session.run(query).then(function(result) {
+                // let id = result.records[0]._fields[0].identity.low;
+                  // console.log(result.records);
+                  let len = result.records.length;
+                  for (let i = 0; i < len; i = i + 1) {
+                    /*eslint-disable*/
+                      watch.push(result.records[i]._fields[0].properties.name);
+                      console.log(watch[i]);
+                      /*eslint-enable*/
+                  }
+                  session.close();
+                  res.send(watch);
+            });
+        }
 };
+
 module.exports = userDocController;

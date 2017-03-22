@@ -174,7 +174,7 @@ let listController = {
         req.body.heading = req.body.heading.charAt(0).toUpperCase() +
         req.body.heading.substring(1, req.body.heading.length);
         req.body.statement = req.body.statement.charAt(0).toUpperCase() +
-        req.body.heading.substring(1, req.body.statement.length);
+        req.body.statement.substring(1, req.body.statement.length);
         let arr1 = JSON.parse(req.body.Concept);
         let arr = [];
         let c = 0;

@@ -66,27 +66,37 @@ class Cards extends React.Component {
         this.setState({savedata: aa});
     }
 
-    rankingCardssecond() {
-      let temp = this.state.savedata;
-      let newArr = [];
-      let k = 0;
-      for(let x of temp) {
-        // console.log(newArr);
-        if(x.position) {
-          newArr[x.position] = x;
+    rankingCards1() {
+      let arr = [];
+      for(let temp of this.state.savedata) {
+        if(temp.tag === 'You preferred') {
+          arr[temp.position] = temp;
         }
       }
-      for(let x of temp) {
-        if(this.check(newArr, x)) {
-          if(newArr[k]) {
-            k = k + 1;
+      for(let temp of this.state.savedata) {
+        if(temp.tag !== 'You preferred' && this.check(this.state.savedata, temp)) {
+          /* eslint-disable */
+          let temp2 = true;
+          for(let k = 0; k < arr.length; k = k + 1) {
+            if(arr[k] === undefined) {
+              continue;
+            }
+            else {
+              console.log('comes');
+              arr[k] = temp;
+              temp2 = false;
+            }
           }
-          else {
-            newArr[k] = x;
-            k = k + 1;
+          if(temp2) {
+            arr.push(temp);
           }
+          /* eslint-enable */
         }
       }
+      this.setState({
+        savedata: arr
+      });
+      // console.log(this.state.savedata);
     }
 
     check(arr, temp) {

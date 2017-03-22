@@ -1,6 +1,9 @@
 import React from 'react';
 import Cookie from 'react-cookie';
 import FollowerCard from './followercard';
+const ReactToastr = require('react-toastr');
+const {ToastContainer} = ReactToastr;
+const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 
 import {
    Dimmer,
@@ -15,25 +18,42 @@ class displayFollower extends React.Component {
        this.state = {
          followerObj: []
        };
+       this.noFollowersAlert = this.noFollowersAlert.bind(this);
      }
 
      componentWillMount() {
           this.handleOpen();
           this.getFollower();
      }
+     noFollowersAlert () {
+        this.refs.container.success(
+          'No Followers',
+          '', {
+          timeOut: 1000,
+          extendedTimeOut: 10000
+        });
+      }
      getFollower() {
        let email = Cookie.load('email');
        // console.log(email);
+       /* eslint-disable */
+       let context = this;
+       /* eslint-enable*/
          $.ajax({
              url: '/userdoc/getFollowers',
              type: 'POST',
              data: {email: email, skip: 0, limit: 10},
              success: function(data) {
-               this.handleClose();
+               context.handleClose();
+               if(data === 'No Followers') {
+                 context.noFollowersAlert();
+               }
+               else {
                // console.log(data[0].header);
                // console.log(data.length);
-                 this.setState({followerObj: data});
-             }.bind(this),
+                 context.setState({followerObj: data});
+               }
+             },
              error: function() {
               // console.log('error in logout' + err);
              }
@@ -48,6 +68,9 @@ class displayFollower extends React.Component {
        </Dimmer>
        <h1>Followers</h1>
          <FollowerCard followerData={this.state.followerObj}/>
+         <ToastContainer ref='container' style ={{backgroundColor: '#B2242E'}}
+                toastMessageFactory={ToastMessageFactory}
+                className='toast-top-center' />
        </div>
      );
    }

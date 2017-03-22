@@ -115,11 +115,22 @@ let searchController = {
            $push: {
                followingUser: req.body.emailId
            }
-       }, {new: true}).then((doc) => {
-           res.send(doc);
+       }, {new: true}).then(() => {
+           res.send('following user added');
        }, (err) => {
            res.send(err);
        });
+       userList.findOneAndUpdate({
+       emailId: req.body.emailId
+   }, {
+       $inc: {
+           followerCount: 1
+       }
+   }, {new: true}).then(() => {
+       res.send('followerCount Incremented');
+   }, (err) => {
+       res.send(err);
+   });
            session.close();
            res.send('success');
        });

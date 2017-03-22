@@ -49,6 +49,8 @@ class basicInfo extends React.Component {
         this.locAlert = this.locAlert.bind(this);
         this.abtAlert = this.abtAlert.bind(this);
         this.getProfile = this.getProfile.bind(this);
+        this.updateLocation = this.updateLocation.bind(this);
+        this.updateAbout = this.updateAbout.bind(this);
     }
     handleItemClick(e, {name}) {
         let data;
@@ -334,6 +336,9 @@ class basicInfo extends React.Component {
         this.getInterestedTopics();
     }
     getProfile() {
+      /*eslint-disable*/
+      let context = this;
+      /*eslint-enable*/
             $.ajax({
             url: '/userdoc/getuserprofile',
             type: 'post',
@@ -341,8 +346,8 @@ class basicInfo extends React.Component {
                 email: Cookie.load('email')
             },
             success: function(data) {
-                this.handleClose();
-                    this.setState({
+                context.handleClose();
+                    context.setState({
                         primary: data.profile.education.primary,
                         secondary: data.profile.education.highSchool,
                         university: data.profile.education.university,
@@ -358,7 +363,7 @@ class basicInfo extends React.Component {
                         gender: data.profile.gender,
                         phone: data.profile.phone
                     });
-            }.bind(this),
+            },
             error: function() {
 
             }
@@ -375,7 +380,7 @@ class basicInfo extends React.Component {
           let context = this;
           /*eslint-enable*/
             $.ajax({
-            url: '/userdoc/updateEdu',
+            url: 'http://localhost:8080/userdoc/updateEdu',
             type: 'POST',
             data: eduData,
             success: function() {
@@ -404,7 +409,7 @@ class basicInfo extends React.Component {
         /*eslint-enable*/
         //   // console.log(JSON.stringify(locData);
         $.ajax({
-            url: '/userdoc/updateLoc',
+            url: 'http://localhost:8080/userdoc/updateLoc',
             type: 'POST',
             data: locData,
             success: function() {
@@ -435,7 +440,7 @@ class basicInfo extends React.Component {
         let context = this;
         /*eslint-enable*/
         $.ajax({
-            url: '/userdoc/updatePro',
+            url: 'http://localhost:8080/userdoc/updatePro',
             type: 'POST',
             data: proData,
             success: function() {
@@ -448,7 +453,7 @@ class basicInfo extends React.Component {
     }
     getInterestedTopics() {
         $.ajax({
-            url: '/userdoc/getInterestedTopics',
+            url: 'http://localhost:8080/userdoc/getInterestedTopics',
             type: 'POST',
             data: {
                 email: Cookie.load('email')

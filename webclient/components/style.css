@@ -212,7 +212,7 @@ width: 250px;
    height: 30px;
    width: 30px;
    margin-top: 40%;
-   margin-left: 70%;
+   margin-left: 90%;
    margin-right: 60%;
    float: left;
 }
@@ -335,4 +335,8 @@ color:white;
 {
   margin-right: 20px;
   margin-top: 28px;
+}
+.peopleimage {
+      height: 250px !important;
+    width: 350px !important;
 }

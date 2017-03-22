@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {hashHistory, Route, Router} from 'react-router';
+import {hashHistory, Route, Router, Redirect} from 'react-router';
 import Cookie from 'react-cookie';
 import {Grid} from 'semantic-ui-react';
 import NavBar from './components/landingPage/navBar';
@@ -9,6 +9,7 @@ import Signup from './components/users/signup.jsx';
 import SentMailPage from './components/users/SentMailPage';
 import SelectCategory from './components/users/selectCategory';
 import UserProfile from './components/users/userprofile';
+import {PageNotFound} from './pageNotFound.jsx';
 // import AnswerPage from './components/cardAnswerPage/answerPage';
 let Cards = require('./components/landingPage/home');
 let Invite = require('./components/invite');
@@ -54,6 +55,8 @@ ReactDOM.render(
     <Route path='/mail' component={SentMailPage} />
     <Route path='/selectCategory' component={SelectCategory}/>
     <Route path='/userProfile' component={UserProfile}/>
+    <Route path='/404' component={PageNotFound}/>
+            <Redirect from='*' to='/404' />
   </Router>, document.getElementById('mountapp'));
 MainComp.propTypes = {
     children: React.PropTypes.object.isRequired

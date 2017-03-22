@@ -75,7 +75,7 @@ class questionCard extends React.Component {
                             </Link>
                             <div className='spacing' id='PaddingCards1'>
                                 <Image className="border" floated='left' size='mini'
-                                  src='http://localhost:8080semantic-ui.com/images/avatar/large/steve.jpg'
+                          src='http://localhost:8080semantic-ui.com/images/avatar/large/steve.jpg'
                                 />
                                 <Card.Meta>
                                     <a href='' className='LinkColor'>{this.props.postedBy}</a>
