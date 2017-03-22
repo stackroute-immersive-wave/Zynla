@@ -1,5 +1,5 @@
 const List = require('../list/listdocEntity');
-const userList = require('../users/userProfileEntity').userModel;
+const userList = require('../users/userEntity');
 let driver = require('../config/neo4j');
 let searchController = {
 
@@ -28,18 +28,17 @@ let searchController = {
             let arr = [];
             for (let x = 0; x < result.records.length; x = x + 1) {
                 /* eslint-disable */
-                let y = result.records[x]._fields[0].identity.low;
+                let y = result.records[x]._fields[0].properties.name;
                 /* eslint-enable */
                 arr.push(y);
             }
-            const arrobj = [];
+            // console.log(arr);
            userList.find({
-                id: {
+                email: {
                     $in: arr
                 }
             }).then((docs) => {
-                arrobj.push(docs);
-                res.send(docs);
+               res.send(docs);
                 session.close();
             });
         }).catch(function() {
@@ -53,7 +52,10 @@ let searchController = {
 
     getQuestions: function(req, res) {
         let session = driver.session();
-        let query = 'match (n)<-[r]-(m:Question) where n.name=~"(?i)' + req.body.q + '" return m';
+        /* eslint-disable */
+        let query = 'match (n:Concept)<-[r:question_of]-(m:Question) \
+         where n.name=~"(?i)' + req.body.q + '" return m';
+         /* eslint-enable */
         session.run(query).then(function(result) {
             let arr = [];
             for (let x = 0; x < result.records.length; x = x + 1) {
@@ -129,7 +131,7 @@ let searchController = {
             let namearr = [];
             for (let x = 0; x < result.records.length; x = x + 1) {
                 /* eslint-disable */
-                console.log(result.records[x]._fields[0].properties.name);
+                // console.log(result.records[x]._fields[0].properties.name);
                 let name = result.records[x]._fields[0].properties.name;
                 /* eslint-enable */
                 namearr.push(name);

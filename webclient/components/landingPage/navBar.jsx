@@ -15,6 +15,9 @@ import {
 import {Link} from 'react-router';
 import Cookie from 'react-cookie';
 import validator from 'validator';
+const ReactToastr = require('react-toastr');
+const {ToastContainer} = ReactToastr;
+const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 // const logger = require('./../../applogger');
 import Textarea from 'react-textarea-autosize';
 import {hashHistory} from 'react-router';
@@ -31,28 +34,32 @@ let Style = {
 };
 
 class NavBar extends Component {
-    state = {
-        visible: false,
-        open: false,
-        heading: '',
-        statement: '',
-        Concept: '',
-        suggestedQuestions: [],
-        allQuestionIntentArr: [],
-        questionIntent: '',
-        questionKey: '',
-        questionName: [],
-        selectedConcepts: [],
-        searchQuery: '',
-        openNewModal: false,
-        ModalQuestionId: 0,
-        ModalQuestionName: '',
-        ModalQuestionDescription: '',
-        ModalQuestionPostedBy: '',
-        ModalQuestionViews: '',
-        someContent: '',
-        onClickId: 0
-    }
+constructor() {
+  super();
+  this.state = {
+      visible: false,
+      open: false,
+      heading: '',
+      statement: '',
+      Concept: '',
+      suggestedQuestions: [],
+      allQuestionIntentArr: [],
+      questionIntent: '',
+      questionKey: '',
+      questionName: [],
+      selectedConcepts: [],
+      searchQuery: '',
+      openNewModal: false,
+      ModalQuestionId: 0,
+      ModalQuestionName: '',
+      ModalQuestionDescription: '',
+      ModalQuestionPostedBy: '',
+      ModalQuestionViews: '',
+      someContent: '',
+      onClickId: 0
+  };
+  this.submitQuestionAlert = this.submitQuestionAlert.bind(this);
+}
 
     toggleVisibility = () => {
         this.setState({
@@ -72,6 +79,14 @@ class NavBar extends Component {
       /*eslint-disable*/
       alert('please login or signup to con');
       /*eslint-enable*/
+    }
+    submitQuestionAlert() {
+      this.refs.container.success(
+        'Question Posted Successfully',
+        '', {
+        timeOut: 3000,
+        extendedTimeOut: 10000
+      });
     }
 
     handlePostQuestionClick() {
@@ -242,6 +257,9 @@ class NavBar extends Component {
     submitStatement() {
         // ajax call after submitting the values which needed to be asked
         let conceptArr = {};
+        /* eslint-disable */
+        let context = this;
+        /* eslint-enable */
         let email = Cookie.load('email');
         conceptArr = JSON.stringify(this.state.selectedConcepts);
         // console.log("Inside submit statement question intent is " + this.state.questionIntent);
@@ -273,10 +291,8 @@ class NavBar extends Component {
               type: 'POST',
               data: data,
               success: function() {
-                  /*eslint-disable*/
-                  alert('Question posted successfully');
-                  /*eslint-enable*/
-                  this.setState({active: false});
+                  context.setState({active: false});
+                  context.submitQuestionAlert();
               },
               error: function() {
               }
@@ -391,16 +407,12 @@ class NavBar extends Component {
                                                   multiple search selection
                                                   options={this.state.suggestedQuestions} />
                                               </Form.Field>
-                                              <Form.Field>
-                                                <div>
+                                              </Form>
                                                   <Button className='submitbutstyle'
                                                     primary size='large' type='submit'
                                                     value='Submit'
                                                     onClick={this.submitStatement.bind(this)}>
                                                     Submit Question</Button>
-                                                 </div>
-                                              </Form.Field>
-                                          </Form>
                                       </Container>
                                   </Header.Subheader>
                               </Header>
@@ -475,6 +487,9 @@ class NavBar extends Component {
                               <Menu.Item />
                          </Menu.Menu>
                            </div>
+                           <ToastContainer ref='container'
+                              toastMessageFactory={ToastMessageFactory}
+                              className='toast-top-center' />
                          </div>
 
         );

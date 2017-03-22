@@ -2,7 +2,6 @@
 // importing require files
 import React from 'react';
 import { Card, Icon} from 'semantic-ui-react';
-// const logger = require('./../../applogger');
 // suggested question card component
 class SuggQueCard extends React.Component {
   constructor() {
@@ -34,7 +33,6 @@ class SuggQueCard extends React.Component {
                     posted by {this.props.name}
                 </a>
                 <p>
-                    questioned on {this.props.time}
                       <div className='checkmarkbtn'>
                         {this.state.checkmark}
                       </div>

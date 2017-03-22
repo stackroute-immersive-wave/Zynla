@@ -7,6 +7,11 @@
    }
    .ansWidth {
      width:98%;
+     cursor: pointer;
+
+   }
+   .queTitle{
+     cursor: pointer;
    }
    .anspad {
      margin: 5px 10px 5px 20px !important;
@@ -20,6 +25,13 @@
      margin-left: 55% !important;*/
      float: right;
    }
+   .heading{
+  line-height: 1.6em;
+  font-family: 'q_serif',Georgia,Times,"Times New Roman",serif;
+  }
+  .question{
+  font-family: 'q_serif',Georgia,Times,"Times New Roman",serif;
+  }
    .checkmarkbtn {
      position: relative;
      margin-left: 90% !important;

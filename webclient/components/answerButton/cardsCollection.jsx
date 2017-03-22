@@ -15,7 +15,7 @@ class QueCards extends React.Component {
 				return (
 					// sending data to child card
 			<div>
-					<QueCard dp={item.profileImage}
+					<QueCard dp={item.displayImage}
 						name={item.postedBy}
 						time={new Date(parseInt(item.addedOn, 10)).toString().substring(0, 15)} id={item.id}
 					title={item.heading} content={item.question} upvote={item.upVotes}

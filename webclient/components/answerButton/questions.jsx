@@ -21,28 +21,20 @@ class Questions extends React.Component {
        this.handleOpen = this.handleOpen.bind(this);
        this.handleClose = this.handleClose.bind(this);
    }
+   // functions to start and stop loader
    handleOpen() {this.setState({ active: true });}
    handleClose() {this.setState({ active: false });}
-//     getInitialState(){
-//   return {
-//     objArray :[]
-//     }
-// }
    // function to get questions from database
    getQuestions() {
-     // console.log('inside getquestions');
      this.handleOpen();
        $.ajax({
            url: '/list/',
            type: 'GET',
            success: function(data) {
-               // console.log(JSON.stringify(data, undefined, 2));
                this.setState({objArray: data});
                this.handleClose();
            }.bind(this),
            error: function() {
-               // console.log('error occurred on AJAX');
-               // console.log(err);
            }
        });
    }

@@ -8,13 +8,7 @@ const userProfile = require('../users/userProfileEntity').userModel;
 let cardController = {
   // function to add answer in neo4j and mongoDB
     addAnswer: function(req, res) {
-        // console.log('inside add router');
         /*eslint-disable*/
-        String.prototype.capitalizeFirstLetter = function() {
-            return this.charAt(0).toUpperCase() + this.slice(1);
-        }
-        // let a = (req.body.content).capitalizeFirstLetter();
-        console.log(req.body.content);
         let query = ' \
                     match (q:Question), \
                    (u:User {name:"' + req.body.mail + '"}) \
@@ -32,7 +26,6 @@ let cardController = {
                     ';
         /*eslint-enable*/
         session.run(query).then(function(result) {
-            // console.log('query run :', result);
             /*eslint-disable*/
             let id = result.records[0]._fields[0].identity.low;
             let queId = req.body.questionId;
@@ -69,11 +62,9 @@ let cardController = {
         TopCards.findOneAndUpdate({
             id: queId
         }, { $inc: { answerCounts: 1} }).then(() => {
-          // console.log('ans count update success');
             // res.send(doc);
         }, () => {
             // res.send(err);
-            // console.log('fail to update answer count');
         });
 
         // adding answer data to userProfile

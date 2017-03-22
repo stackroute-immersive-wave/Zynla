@@ -21,7 +21,8 @@ let poststyle1 = {
 };
 let ansstyle = {
     fontFamily: 'Cochin',
-    fontWeight: 'serif'
+    fontWeight: 'serif',
+    fontSize: 21
 };
 let commentstyle = {
     fontFamily: 'Cochin',
@@ -110,7 +111,7 @@ class cardAnswer extends React.Component {
                 <Card fluid>
                     <Card.Content style={poststyle1}>
                         <Image floated='left' size='mini'
-                          src='http://semantic-ui.com/images/avatar/large/steve.jpg'/>
+                          src='http://localhost:8080semantic-ui.com/images/avatar/large/steve.jpg'/>
                         <a>
                             {this.props.createdBy}
                         </a>
@@ -138,14 +139,14 @@ class cardAnswer extends React.Component {
                         </Menu.Item>
                         <Menu.Item>
                           <Modal trigger={<Button basic color = 'black'
-                            style = {menucommentstyle}>
-                            Add Comments </Button>}>
+                            style = {menucommentstyle} >
+                            Add Comments </Button>} closeIcon = 'close'>
                            <Form style={formstyle}>
                                <TextArea onChange={this.comment.bind(this)}
                                  value={this.state.comment}/>
                            </Form>
                            <Button content='Submit' primary
-                             onClick={this.addAnswercomment.bind(this)}/>
+                             onClick={this.addAnswercomment.bind(this)} floated = 'right'/>
                        </Modal>
                         </Menu.Item>
                       </Menu>

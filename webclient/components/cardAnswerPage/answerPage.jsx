@@ -15,38 +15,36 @@ import {
     Popup,
     Checkbox,
     Dimmer,
-    Loader
+    Loader,
+    Header
 } from 'semantic-ui-react';
 import Cookie from 'react-cookie';
 // import RichTextEditor from 'react-rte';
 const DisplayAnswer = require('./answerDisplay');
 let titlestyle = {
-    fontFamily: 'Georgia',
     fontSize: 30,
     fontWeight: 'bold',
     marginTop: '5%'
 };
 let questionstyle = {
-    fontFamily: 'Georgia',
     fontSize: 18,
-    fontWeight: 'serif',
     marginTop: '3%',
     lineHeight: '30px'
 };
 let buttonfolstyle = {
-    marginLeft: '5%'
+    marginLeft: '3%'
 };
 let crumstyle = {
     marginTop: '2%'
 };
 let viewstyle = {
-    marginLeft: '4%'
+    marginLeft: '3%'
 };
 let likestyle = {
-    marginLeft: '4%'
+    marginLeft: '3%'
 };
 let unlikestyle = {
-    marginLeft: '4%'
+    marginLeft: '3%'
 };
 let ansstyle1 = {
     marginTop: '3%',
@@ -54,8 +52,8 @@ let ansstyle1 = {
 };
 let followstyle = {
     float: 'right',
-    backgroundcolor: '#BE252A ',
-    color: '#FFFFFF '
+    backgroundcolor: '#BE252A  ',
+    color: '#FFFFFF  '
 };
 let formstyle = {
     margin: '3% 3% 3% 3% '
@@ -78,6 +76,7 @@ class answerPage extends React.Component {
             active: false,
             value: RichTextEditor.createEmptyValue(),
             id: '',
+            warnModalStatus: false,
             views: 0,
             upVotes: 0,
             downVotes: 0,
@@ -136,6 +135,13 @@ class answerPage extends React.Component {
             this.props.onChange(value.toString('html'));
         }
     };
+
+    handleCloseAnswer = () => {
+      this.setState({
+      warnModalStatus: false,
+      modalStatus: false
+  });
+}
     modalOpen() {
         this.setState({modalStatus: true});
     }
@@ -356,7 +362,7 @@ class answerPage extends React.Component {
             data: {
                 emailId: emailId,
                 id: id,
-                displayImage: this.props.displayImage,
+                displayImage: quesObj[0].displayImage,
                 heading: quesObj[0].heading,
                 statement: quesObj[0].question,
                 postedBy: quesObj[0].postedBy,
@@ -375,6 +381,12 @@ class answerPage extends React.Component {
         });
     }
     close = () => this.setState({modalStatus: false})
+    warningModal = () => {
+      this.setState({warnModalStatus: true});
+    }
+    warningModalCancel = () => {
+      this.setState({warnModalStatus: false});
+    }
     /* ajax call To create a report for question by the user created by Soundar*/
     state = {}
     handleChange = (e, {value}) => this.setState({value})
@@ -421,7 +433,12 @@ class answerPage extends React.Component {
     }
 
     render() {
+      let errorMessage;
         let quesObj = this.state.objArray;
+        let arr = quesObj[0].tags;
+        let arr1 = arr.replace('["', ' ');
+        let arr2 = arr1.replace('"]', ' ');
+        let tags = arr2.replace('","', ' >> ');
         const {active} = this.state;
         let pop = '';
             let dateData = new Date(parseInt(quesObj[0].addedOn, 10)).toString().substring(0, 15);
@@ -478,6 +495,11 @@ class answerPage extends React.Component {
                 </div>
             );
         }
+        if(this.state.errormsg) {
+          errorMessage = (<div className='errorCss'>Please give your answer </div>);
+        }else {
+          errorMessage = '';
+        }
         return (
             <div>
               <Dimmer active={active} page>
@@ -485,24 +507,25 @@ class answerPage extends React.Component {
               </Dimmer>
             <Grid divided='vertically'>
                 <Grid.Row columns={3}>
-                    <Grid.Column width={13}>
-                        <div style={titlestyle}>
+                  <Grid.Column width={1}/>
+                    <Grid.Column width={12}>
+                        <div style={titlestyle} className='heading'>
                             {quesObj[0].heading}
                             <Button
                                circular style={followstyle}
                                 icon={this.state.iconName}
                                  size='small' color='red' onClick={this.saveToProfile.bind(this)}/>
                         </div>
-                        <div style={questionstyle}>
+                        <div style={questionstyle} className='question'>
                             {quesObj[0].question}</div>
                         <Breadcrumb>
-                            <Breadcrumb.Section link>{quesObj[0].tags}</Breadcrumb.Section>
+                            <Breadcrumb.Section link>{tags}</Breadcrumb.Section>
                         </Breadcrumb>
                         <Segment floated='right' size='big'>
                             <Image
                                floated='left'
                                 size='mini'
-                                 src='http://semantic-ui.com/images/avatar/large/steve.jpg'/>
+                                 src='http://localhost:8080semantic-ui.com/images/avatar/large/steve.jpg'/>
                             <a>
                                 {quesObj[0].postedBy}
                             </a>
@@ -531,13 +554,13 @@ class answerPage extends React.Component {
                                 onClick={this.modalOpen.bind(this)}>
                                 Click to Answer
                             </Button>
-                            <Modal open={this.state.modalStatus} closeIcon='close'>
+                            <Modal open={this.state.modalStatus}>
                                 <Modal.Content>
                                     <div style={titlestyle1}>
                                         {quesObj[0].heading}
                                     </div>
-                                    <Form>
-                                      <RichTextEditor
+                                    <Form>{errorMessage}
+                                      <RichTextEditor className='rteEditor'
                                             value={this.state.value}
                                             onChange={this.onChange}/>
                                     </Form>
@@ -547,8 +570,24 @@ class answerPage extends React.Component {
                                        onClick={this.postAnswer.bind(this)} type='button'>
                                         Submit
                                     </Button>
+                                    <Button color='red' onClick={this.warningModal} >
+                                      <Icon name='remove' /> Cancel</Button>
                                 </Modal.Actions>
                             </Modal>
+                            <Modal basic size='small' open={this.state.warnModalStatus}>
+                            <Header icon='archive' content='Discard Answer' />
+                            <Modal.Content>
+                              <p>Are you sure to discard this Answer?</p>
+                            </Modal.Content>
+                            <Modal.Actions>
+                            <Button color='green' inverted onClick={this.handleCloseAnswer}>
+                              <Icon name='checkmark'/> Yes
+                            </Button>
+                              <Button basic color='red' inverted onClick={this.warningModalCancel}>
+                                <Icon name='remove'/> No
+                              </Button>
+                            </Modal.Actions>
+                          </Modal>
                             <Popup wide trigger={< Button negative style = {
                                 buttonfolstyle
                             }
@@ -557,9 +596,9 @@ class answerPage extends React.Component {
                             } > Report < /Button>} on='click' position='bottom right' hideOnScroll>
                                 {pop}
                             </Popup>
-                            <Modal trigger={< Button basic color = 'black' size = 'mini' style = {
+                            <Modal trigger={<Button basic color = 'black' size = 'mini' style = {
                                 buttonfolstyle
-                            } > Add Comments < /Button>}>
+                            } > Add Comments </Button>} closeIcon = 'close'>
                                 <Form style={formstyle}>
                                     <TextArea onChange={this.comment.bind(this)}
                                        value={this.state.comment}/>

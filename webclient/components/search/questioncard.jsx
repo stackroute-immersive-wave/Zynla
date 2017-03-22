@@ -53,8 +53,10 @@ class questionCard extends React.Component {
         const content = (
                 <Button circular onClick={this.saveToProfile.bind(this)}
                   icon='plus' className='spacing' id='iconColor'
-                  size='tiny' style={{'font-size': 20 + 'px'}}/>
+                  size='tiny' style={{fontSize: 20 + 'px'}}/>
           );
+          let addedOn = parseInt(this.props.addedOn, 10);
+       addedOn = new Date(addedOn).toString().substring(0, 10);
 
         return (
             <div className='CardSegment'>
@@ -73,13 +75,13 @@ class questionCard extends React.Component {
                             </Link>
                             <div className='spacing' id='PaddingCards1'>
                                 <Image className="border" floated='left' size='mini'
-                                  src='http://semantic-ui.com/images/avatar/large/steve.jpg'
+                                  src='http://localhost:8080semantic-ui.com/images/avatar/large/steve.jpg'
                                 />
                                 <Card.Meta>
                                     <a href='' className='LinkColor'>{this.props.postedBy}</a>
                                 </Card.Meta>
                                 <Card.Meta>
-                                    {this.props.addedOn}
+                                    {addedOn}
                                 </Card.Meta>
                             </div>
 
@@ -109,11 +111,11 @@ questionCard.propTypes = {
     category: React.PropTypes.string.isRequired,
     upVotes: React.PropTypes.string.isRequired,
     downVotes: React.PropTypes.string.isRequired,
-    answerCounts: React.PropTypes.string.isRequired,
-    profileImage: React.PropTypes.string.isRequired,
+    answerCounts: React.PropTypes.number.isRequired,
+    profileImage: React.PropTypes.string,
     views: React.PropTypes.number.isRequired,
-    acceptedCounts: React.PropTypes.string.isRequired,
-    remove: React.PropTypes.func.isRequired,
+    acceptedCounts: React.PropTypes.string,
+    remove: React.PropTypes.func,
     id: React.PropTypes.number
 };
 

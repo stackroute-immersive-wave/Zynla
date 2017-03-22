@@ -5,7 +5,10 @@ import People from './People';
 import React from 'react';
 import $ from 'jquery';
 import Cookie from 'react-cookie';
-
+import {
+    Dimmer,
+    Loader
+} from 'semantic-ui-react';
 class Search extends React.Component {
     constructor() {
         super();
@@ -17,10 +20,10 @@ class Search extends React.Component {
             people: '',
             isfollow: [],
             profile: [],
-            followtopic: 'Follow'
+            followtopic: 'Follow',
+             active: false
         };
     }
-
     componentDidMount() {
       this.getSearchCards();
       this.getPeople();
@@ -34,6 +37,8 @@ class Search extends React.Component {
       this.getConcept();
       this.isFollowTopic();
     }
+     handleOpen() {this.setState({ active: true });}
+    handleClose() {this.setState({ active: false });}
 // function to change component basing in the seected option (people or questions) in search
     changeComponent(x) {
       if(x === 'people') {
@@ -57,9 +62,9 @@ class Search extends React.Component {
         });
       }
     }
-
     /* Get the search cards*/
     getSearchCards() {
+       this.handleOpen();
       let q = window.location.hash.split('question=')[1];
       let arr = [];
       $.ajax({
@@ -81,6 +86,7 @@ class Search extends React.Component {
             this.setState({
               component: temp
             });
+            this.handleClose();
           }.bind(this)
         });
    }
@@ -104,7 +110,6 @@ class Search extends React.Component {
          }.bind(this)
        });
    }
-
    // get the profile object of users fallowing the topic
    getUserProfile() {
     let q = window.location.hash.split('question=')[1];
@@ -116,6 +121,7 @@ class Search extends React.Component {
          },
          success: function(data) {
           this.setState({profile: data});
+          // console.log(this.state.profile);
          }.bind(this)
        });
    }
@@ -199,10 +205,13 @@ class Search extends React.Component {
          }.bind(this)
       });
    }
-
    render() {
+    const { active } = this.state;
        return (
              <div className='search1' >
+                  <Dimmer active = {active} page>
+                  <Loader>Searching Questions</Loader>
+                 </Dimmer>
                  <Concepts json = {this.state.concept} ques = {this.state.followtopic}
                   followTopic = {this.followTopic.bind(this)}
                   topic = {window.location.hash.split('question=')[1]} />
@@ -212,5 +221,4 @@ class Search extends React.Component {
        );
    }
 }
-
 module.exports = Search;

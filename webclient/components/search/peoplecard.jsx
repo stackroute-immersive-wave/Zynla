@@ -47,11 +47,15 @@ class PeopleCard extends React.Component {
       return 1;
   }
 
-  render() {
-      return (
-        /* eslint-disable */
+ render() {
+          //  console.log('image from peoplecard '+this.props.photo);
+          //  console.log((this.props.photo))
+     return (
+
+       /* eslint-disable */
         <Card>
-    <Image src={this.props.image} />
+    <Image className = 'peopleimage' src= {this.props.photo} />
+
     <Card.Content>{this.props.id}</Card.Content>
     <Card.Content extra>
     <Button fluid color = 'red' onClick = {this.handleFollow.bind(this)}>{this.state.follow}</Button>

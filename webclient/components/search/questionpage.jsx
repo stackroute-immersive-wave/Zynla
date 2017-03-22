@@ -36,6 +36,6 @@ class QuestionPage extends React.Component {
     }
 }
 QuestionPage.propTypes = {
-   display: React.PropTypes.func
+   display: React.PropTypes.array
  };
 module.exports = QuestionPage;

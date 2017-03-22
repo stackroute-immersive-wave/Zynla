@@ -1,5 +1,5 @@
 import React from 'react';
-import ConceptStructure from './conceptstructure.jsx';
+import ConceptStructure from './conceptStructure.jsx';
 import {Grid, Icon} from 'semantic-ui-react';
 class Concepts extends React.Component {
     constructor() {
@@ -10,7 +10,7 @@ class Concepts extends React.Component {
         };
     }
 
-    /* Favourite category maximum 4 display by right side Click*/
+   /* Favourite category maximum 4 display by right side Click*/
     changeStartRight() {
         let start;
         let end;
@@ -42,7 +42,7 @@ class Concepts extends React.Component {
         this.setState({start: start, end: end});
     }
 
-    render() {
+   render() {
         let conceptName = [];
         for (let i = this.state.start; i <= this.state.end; i = i + 1) {
             if (typeof this.props.json[i] !== 'undefined') {
@@ -59,28 +59,26 @@ class Concepts extends React.Component {
         });
         return (
           <div className = 'favbg'>
-            <Grid centered style={{marginLeft: -250 + 'px'}}>
-            <h1 className = 'conceptheading' style={{fontSize: 50 + 'px'}}>{this.props.topic}</h1>
-            </Grid>
-            <Grid centered style = {{marginTop: -30 + 'px'}}>
-                <Grid.Column width={2} style={{marginTop: 56 + 'px',
+            <Grid centered stackable style = {{marginTop: -30 + 'px', marginLeft: 75 + 'px'}}>
+                <Grid.Column stackable width={2} style={{marginTop: 56 + 'px',
                  marginRight: -35 + 'px' }} className='arrowsize'>
+
                     <Icon name='chevron left' onClick={this.changeStartLeft.bind(this)}/>
                 </Grid.Column>
-                <Grid.Column width={6} centered style={{marginLeft: -70 + 'px',
+                <Grid.Column stackable width={6} stackable centered style={{marginLeft: -70 + 'px',
                  marginTop: 40 + 'px', marginBottom: -70 + 'px', marginRight: -50 + 'px'}} >
                     <Grid centered columns={4}>
                         {Data}
                     </Grid>
                 </Grid.Column>
-                <Grid.Column width={2} style={{marginTop: 56 + 'px',
+                <Grid.Column stackable width={2} style={{marginTop: 56 + 'px',
                  marginLeft: 70 + 'px'}} className='arrowsize'>
                     <Icon name='chevron right' onClick={this.changeStartRight.bind(this)}/>
                 </Grid.Column>
-             <Grid.Column width={2} className='arrowsize' style={{paddingTop: 80 + 'px'}}>
+             <Grid.Column width={3} stackable className='arrowsize' style={{paddingTop: 80 + 'px'}}>
             <Icon name = "plus circle" color={'red'} size = "huge"
              onClick = {this.props.followTopic.bind(this)}/>
-                      {this.props.ques}
+                         {this.props.ques} {this.props.topic}
                 </Grid.Column>
             </Grid>
           </div>
@@ -89,7 +87,7 @@ class Concepts extends React.Component {
   }
   // type that props will accept coming from the parent
   Concepts.propTypes = {
-   json: React.PropTypes.func,
+   json: React.PropTypes.array,
    topic: React.PropTypes.string,
    ques: React.PropTypes.string,
    followTopic: React.PropTypes.func
