@@ -22,12 +22,6 @@ const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animati
 // const logger = require('./../../applogger');
 import Textarea from 'react-textarea-autosize';
 import {hashHistory} from 'react-router';
-// let Cards = require('./Home');
-// let Invite = require('./../Invite');
-// let Profile = require('./../profile/NavBarpro');
-// let Questions = require('./../answerbutton/questions.jsx');
-// let Answerpage = require('./../cardAnswerPage/answerPage.jsx');
-// let Search = require('./../search/search.jsx');
 
 let Style = {
     marginTop: '5px',
@@ -61,6 +55,10 @@ constructor() {
   };
   this.submitQuestionAlert = this.submitQuestionAlert.bind(this);
 }
+
+    componentDidMount() {
+      this.updateConcept();
+    }
 
     toggleVisibility = () => {
         this.setState({
@@ -218,16 +216,13 @@ constructor() {
         this.setState({statement: evt.target.value});
     }
 
-    updateConcept(evt) {
+    updateConcept() {
         let arr = [];
-        this.setState({Concept: evt.target.value});
+        // this.setState({Concept: evt.target.value});
         // ajax call to get the concepts from the neo4j based on particular keywoard
         $.ajax({
             url: '/list/getconcepts/',
-            type: 'POST',
-            data: {
-              q: evt.target.value
-            },
+            type: 'GET',
             success: function(data) {
                for(let i in data) {
                  if(i !== null) {
@@ -347,7 +342,6 @@ constructor() {
 
                         <Dropdown className = "navSearch" placeholder='Search...'
                           onChange = {this.updatesearchQuery.bind(this)}
-                          onKeyUp={this.updateConcept.bind(this)}
                           search selection
                           options={this.state.suggestedQuestions} />
                         <Link to = {'/search?question=' + this.state.searchQuery}
@@ -404,7 +398,6 @@ constructor() {
                                                  marginRight: -73 + 'px'}}>
                                                 <Dropdown placeholder='Enter Concept here...'
                                                   onChange = {this.updateQuestionTags.bind(this)}
-                                                  onKeyUp={this.updateConcept.bind(this)}
                                                   multiple search selection
                                                   options={this.state.suggestedQuestions} />
                                               </Form.Field>

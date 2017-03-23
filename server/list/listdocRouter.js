@@ -10,7 +10,7 @@ router.put('/updateviews', listCtrl.updateviews);
 router.get('/answer/:id', listCtrl.getCardQuestion);
 router.get('/getIdWithQuestion', listCtrl.getIdWithQuestion);
 router.get('/getQuestionIntent', listCtrl.getQuestionIntent);
-router.post('/getconcepts', listCtrl.getconcepts);
+router.get('/getconcepts', listCtrl.getconcepts);
 router.get('/suggestQues/:id', listCtrl.suggestQues);
 router.post('/updateLike', listCtrl.updateLike);
 router.post('/updateunlike', listCtrl.updateunlike);
