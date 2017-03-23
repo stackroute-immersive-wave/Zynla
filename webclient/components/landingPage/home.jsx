@@ -82,7 +82,7 @@ class Cards extends React.Component {
               continue;
             }
             else {
-              if(checkforundefined(temp.heading)) {
+              if(this.checkforundefined(temp.heading)) {
                 arr[k] = temp;
               }
               break;
@@ -90,7 +90,7 @@ class Cards extends React.Component {
             }
           }
           if(temp2 && this.check(arr, temp)) {
-            if(checkforundefined(temp.heading)) {
+            if(this.checkforundefined(temp.heading)) {
               arr.push(temp);
             }
           }
@@ -143,27 +143,32 @@ class Cards extends React.Component {
     render() {
         let homePage;
         /* eslint-disable*/
-        if (Cookie.load('quesId') === undefined) {
-            /* eslint-enable*/
-            homePage = (
-                <div>
-                  <div className='search3'>
-                    <DisplayFavouriteCategory
-                       json={this.state.json}/>
-                     </div>
-                     <div className='search2'>
-                        {this.state.savedata.length > 0
-                        ? <DisplayHomePageCard display={this.state.savedata}
-                          follow={this.state.followCard}/>
-                        : null}
-                    </div>
-                </div>
-            );
-        } else {
-            let qId = Cookie.load('quesId');
-            Cookie.remove('quesId', {path: '/'});
-            // console.log(Cookie.load('quesId'))
-            hashHistory.push('/answerPage?id=' + qId);
+        if(Cookie.load('email')){
+          if (Cookie.load('quesId') === undefined) {
+              /* eslint-enable*/
+              homePage = (
+                  <div>
+                    <div className='search3'>
+                      <DisplayFavouriteCategory
+                         json={this.state.json}/>
+                       </div>
+                       <div className='search2'>
+                          {this.state.savedata.length > 0
+                          ? <DisplayHomePageCard display={this.state.savedata}
+                            follow={this.state.followCard}/>
+                          : null}
+                      </div>
+                  </div>
+              );
+          } else {
+              let qId = Cookie.load('quesId');
+              Cookie.remove('quesId', {path: '/'});
+              // console.log(Cookie.load('quesId'))
+              hashHistory.push('/answerPage?id=' + qId);
+          }
+        }
+        else {
+          hashHistory.push('/');
         }
         return (
             <div>{homePage}</div>

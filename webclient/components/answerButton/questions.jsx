@@ -30,7 +30,7 @@ class Questions extends React.Component {
    getQuestions() {
      this.handleOpen();
        $.ajax({
-           url: 'http://localhost:8080/list/',
+           url: '/list/',
            type: 'GET',
            success: function(data) {
                this.setState({objArray: data});

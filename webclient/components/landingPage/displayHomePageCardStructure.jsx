@@ -217,31 +217,31 @@ inviteAlert (result) {
         let label = '';
         let tag = this.props.tag;
         if(tag === 'You preferred') {
-          label = <Label as='a' color='pink' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+          label = <Label as='a' color='pink' ribbon='left' style={{marginLeft: 13 + 'px'}} >You Preferred</Label>;
         }
         else if(tag === 'Following') {
-          label = <Label as='a' color='orange' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+          label = <Label as='a' color='orange' ribbon='left' style={{marginLeft: 13 + 'px'}} >Following Card</Label>;
         }
         else if(tag === 'Posted by you') {
-          label = <Label as='a' color='yellow' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+          label = <Label as='a' color='yellow' ribbon='left' style={{marginLeft: 13 + 'px'}} >Posted Card</Label>;
         }
         else if(tag === 'Recommended') {
           label = <Label as='a' color='violet' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
         }
         else if(tag === 'Friend\'s following') {
-          label = <Label as='a' color='blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+          label = <Label as='a' color='blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >Followed by Friend</Label>;
         }
         else if(tag === 'Friend\'s posted') {
-          label = <Label as='a' color='green' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+          label = <Label as='a' color='green' ribbon='left' style={{marginLeft: 13 + 'px'}} >Posted by Friend</Label>;
         }
         else if(tag === 'FoF follow') {
-          label = <Label as='a' color='light blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+          label = <Label as='a' color='light blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >Followed by Mutual Friend</Label>;
         }
         else if(tag === 'Preferred Topic') {
-          label = <Label as='a' color='brown' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+          label = <Label as='a' color='brown' ribbon='left' style={{marginLeft: 13 + 'px'}} >Following Topic</Label>;
         }
         else {
-          label = <Label as='a' color='teal' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+          label = <Label as='a' color='teal' ribbon='left' style={{marginLeft: 13 + 'px'}} >Posted by Mutual Friend</Label>;
         }
         const {active} = this.state;
         const content = (

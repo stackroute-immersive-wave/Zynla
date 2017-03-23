@@ -167,7 +167,7 @@ class answerPage extends React.Component {
         /* eslint-enable */
         // console.log(JSON.stringify(ansdata));
         $.ajax({
-            url: 'http://localhost:8080/answers/add',
+            url: '/answers/add',
             type: 'POST',
             data: ansdata,
             success: function() {
