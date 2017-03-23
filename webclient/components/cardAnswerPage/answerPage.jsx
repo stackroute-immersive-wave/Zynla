@@ -153,6 +153,7 @@ class answerPage extends React.Component {
     }
     // Posting answer for question created by Aswini K
     postAnswer() {
+      if((this.state.value.toString('html')).length > 11) {
         this.close();
         let id = window.location.hash.split('id=')[1];
         // console.log('inside post Answer');
@@ -166,7 +167,7 @@ class answerPage extends React.Component {
         /* eslint-enable */
         // console.log(JSON.stringify(ansdata));
         $.ajax({
-            url: '/answers/add',
+            url: 'http://localhost:8080/answers/add',
             type: 'POST',
             data: ansdata,
             success: function() {
@@ -179,6 +180,10 @@ class answerPage extends React.Component {
             }
         });
     }
+    else {
+      this.setState({errormsg: true});
+    }
+  }
     // Getting views count created by Aswini K
     getviewscount() {
         // console.log('views before increment', this.state.views);
