@@ -40,7 +40,7 @@ class Cards extends React.Component {
         });
     }
     // To display cards in the correct position(Drag and Drop)
-    rankingCards() {
+    rankingCards1() {
         let temp = [];
         let aa = [];
         temp = this.state.savedata;
@@ -66,7 +66,7 @@ class Cards extends React.Component {
         this.setState({savedata: aa});
     }
 
-    rankingCards1() {
+    rankingCards() {
       let arr = [];
       for(let temp of this.state.savedata) {
         if(temp.tag === 'You preferred') {
@@ -74,21 +74,25 @@ class Cards extends React.Component {
         }
       }
       for(let temp of this.state.savedata) {
-        if(temp.tag !== 'You preferred' && this.check(this.state.savedata, temp)) {
+        if(temp.tag !== 'You preferred') {
           /* eslint-disable */
           let temp2 = true;
           for(let k = 0; k < arr.length; k = k + 1) {
-            if(arr[k] === undefined) {
+            if(arr[k] !== undefined) {
               continue;
             }
             else {
-              console.log('comes');
-              arr[k] = temp;
+              if(checkforundefined(temp.heading)) {
+                arr[k] = temp;
+              }
+              break;
               temp2 = false;
             }
           }
-          if(temp2) {
-            arr.push(temp);
+          if(temp2 && this.check(arr, temp)) {
+            if(checkforundefined(temp.heading)) {
+              arr.push(temp);
+            }
           }
           /* eslint-enable */
         }
@@ -96,10 +100,21 @@ class Cards extends React.Component {
       this.setState({
         savedata: arr
       });
-      // console.log(this.state.savedata);
+    }
+
+    checkforundefined(temp) {
+      let check = true;
+      if(temp) {
+        check = true;
+      }
+      else {
+        check = false;
+      }
+      return check;
     }
 
     check(arr, temp) {
+      let checkTemp = true;
       if(arr && temp) {
         for(let x of arr) {
           if(x.id === temp.id) {
@@ -108,7 +123,10 @@ class Cards extends React.Component {
           }
         }
       }
-      return true;
+      else {
+        checkTemp = false;
+      }
+      return checkTemp;
     }
     // Display your all the category
     displayAllCategory() {

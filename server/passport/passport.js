@@ -181,7 +181,8 @@ let fbStrategy = configAuth.facebookAuth;
                     newUser.email = (profile.emails[0].value || '').toLowerCase();
                     newUser.name =
                     profile.displayName.toLowerCase().capitalize();
-                    newUser.photos = profile.photos[0].value;
+                    newUser.photos =
+                     'https://graph.facebook.com/' + profile.id + '/picture?width=9999';
                     newUser.authType = 'facebook';
                     newUser.isnew = 'Y';
                     newUser.loggedinStatus = true;

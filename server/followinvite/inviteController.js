@@ -24,7 +24,7 @@ sendInviteEmail: function (req, res) {
                 host = req.get('host');
         sentInviteMail(host, req.body.id, req.body.type,
             req.body.emailId, req.body.sender, req.body.lStatus, questionName);
-        res.send('email send successfully');
+        res.send('Invite send successfully');
             }
         });
     },

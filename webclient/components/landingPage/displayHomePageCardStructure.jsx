@@ -11,6 +11,9 @@ import {
 import {Link} from 'react-router';
 import Cookie from 'react-cookie';
 // import Modal from './inviteModal';
+const ReactToastr = require('react-toastr');
+const {ToastContainer} = ReactToastr;
+const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 class DisplayFavouriteCategoryStructure extends React.Component {
     constructor() {
         super();
@@ -23,7 +26,8 @@ class DisplayFavouriteCategoryStructure extends React.Component {
             Qid: '',
             userNames: [],
             name: '',
-            s: ''
+            s: '',
+            result: ''
         };
         this.state = {
             isModalOpen: false
@@ -83,81 +87,89 @@ class DisplayFavouriteCategoryStructure extends React.Component {
         this.getusers();
     }
     getusers()
-    {
-        $.ajax({
-            url: '/users/getAllUserName',
-            type: 'get',
-            success: function(data) {
-                // console.log(JSON.stringify(data));
-                this.setState({userNames: data});
-            }.bind(this),
-            error: function() {}
-        });
-    }
-    sendInvite(mail, lStat)
-    {
-        let sender = Cookie.load('username');
-        let uMail = mail;
-        let ulStat = lStat;
-        // console.log(uMail);
-        // console.log(this.props.id);
-        $.ajax({
-            url: '/followinvite/sendInviteEmail',
-            type: 'post',
-            data: {
-                id: this.props.id,
-                type: 'question',
-                emailId: uMail,
-                sender: sender,
-                lStatus: ulStat
-            },
-            success: function() {
-                // this.setState({iconName: 'add', text: 'saved'});
-                this.setState({inviteName: 'Invited', inviteColor: 'red'});
-                // console.log("mail sent");
-            }.bind(this),
-            error: function() {}
-        });
-    }
-    closeModal() {
-        this.setState({isModalOpen: false});
-    }
-    /* fetching the textbox value Createdon 10/3/2017 by Soundar*/
-    changeval(e)
-    {
-        this.setState({s: e.target.value});
-        this.findAllUsers(this.state.s);
-    }
-    /* fetching all usernames and emailid from mongo DB Createdon 10/3/2017 by Soundar*/
-    findAllUsers(s)
-    {
-        let userNames = this.state.userNames;
-        //  let loginUser = Cookie.load('username');
-        let loginEmail = Cookie.load('email');
-        //  // console.log(loginUser);
-        let b = s.toLowerCase();
-        // console.log(b);
-        let option = '';
-        for (let i = 0; i < userNames.length; i = i + 1) {
-            // console.log(userNames[i].name);
-            if (userNames[i].name.toLowerCase().indexOf(b) === 0 &&
-            userNames[i].email !== loginEmail) {
-                option = option + '<option value= "' + userNames[i].name + '"/>';
-            }
-        }
-        document.getElementById('usernames').innerHTML = option;
-        // React.render(<ReactDatalist list="countries" options={option} />, document.body)
-        option = '';
-        this.setState({s: ''});
-    }
-    /* fetch the mailId of the particular user selected in textbox Createdon 10/3/2017 by Soundar**/
-    findMail()
-    {
-        let mail = '';
-        let lStat = '';
-        let loginEmail = Cookie.load('email');
-        let uname = document.getElementById('users');
-        // let uname = '';
+  {
+      $.ajax({
+          url: '/users/getAllUserName',
+          type: 'get',
+          success: function(data) {
+              // console.log(JSON.stringify(data));
+              this.setState({userNames: data});
+          }.bind(this),
+          error: function() {}
+      });
+  }
+  sendInvite(mail, lStat)
+  {
+      let sender = Cookie.load('username');
+      let uMail = mail;
+      let ulStat = lStat;
+      /* eslint-disable */
+      let context = this;
+      /* eslint-enable */
+      $.ajax({
+          url: '/followinvite/sendInviteEmail',
+          type: 'post',
+          data: {
+              id: this.props.id,
+              type: 'question',
+              emailId: uMail,
+              sender: sender,
+              lStatus: ulStat
+          },
+          success: function(data) {
+              // this.setState({iconName: 'add', text: 'saved'});
+              context.setState({result: data});
+               context.inviteAlert(context.state.result);
+              // // this.setState({inviteName: 'Invited', inviteColor: 'red'});
+              // console.log("mail sent");
+          },
+          error: function() {}
+      });
+  }
+  closeModal() {
+      this.setState({isModalOpen: false});
+  }
+  /* fetching the textbox value Createdon 10/3/2017 by Soundar*/
+  changeval(e)
+  {
+      this.setState({s: e.target.value});
+      this.findAllUsers(this.state.s);
+  }
+  /* fetching all usernames and emailid from mongo DB Createdon 10/3/2017 by Soundar*/
+  findAllUsers(s)
+  {
+      let userNames = this.state.userNames;
+      //  let loginUser = Cookie.load('username');
+      let loginEmail = Cookie.load('email');
+      //  // console.log(loginUser);
+      let b = s.toLowerCase();
+      // console.log(b);
+      let option = '';
+      for (let i = 0; i < userNames.length; i = i + 1) {
+          // console.log(userNames[i].name);
+          if (userNames[i].name.toLowerCase().indexOf(b) === 0 &&
+          userNames[i].email !== loginEmail) {
+              option = option + '<option value= "' + userNames[i].name + '"/>';
+          }
+      }
+      document.getElementById('usernames').innerHTML = option;
+      // React.render(<ReactDatalist list="countries" options={option} />, document.body)
+      option = '';
+      this.setState({s: ''});
+  }
+  /* fetch the mailId of the particular user selected in textbox Createdon 10/3/2017 by Soundar**/
+  findMail()
+  {
+      let mail = '';
+      let lStat = '';
+      let loginEmail = Cookie.load('email');
+      let uname = document.getElementById('users');
+      // let uname = '';
+      if(uname.value === '')
+      {
+        this.inviteAlert(uname.value);
+      }
+      else {
         let userNames = this.state.userNames;
         // console.log(userNames.length);
         for (let i = 0; i < userNames.length; i = i + 1) {
@@ -169,18 +181,37 @@ class DisplayFavouriteCategoryStructure extends React.Component {
         }
         // console.log(mail);
         this.sendInvite(mail, lStat);
-    }
-    openPopup() {
-  this.setState({ isOpen: true });
-  this.getusers();
+      }
+        }
+  openPopup() {
+this.setState({ isOpen: true });
+this.getusers();
 }
 closePopup() {
-  this.setState({ isOpen: false });
+this.setState({ isOpen: false });
 }
-handleClose = () => {
-    this.setState({ isOpen: false });
-    clearTimeout(this.timeout);
-  }
+inviteAlert (result) {
+  if(result !== '')
+  {
+   this.refs.container.success(
+      '"' + result + '"',
+     '', {
+     timeOut: 2000,
+     extendedTimeOut: 10000
+   });
+   this.closePopup();
+ }
+ else {
+   this.refs.container.error(
+      'select username to invite',
+     '', {
+     timeOut: 2000,
+     extendedTimeOut: 10000
+   });
+   this.closePopup();
+ }
+ }
+
 /*eslint-disable*/
     render() {
         let label = '';
@@ -206,6 +237,9 @@ handleClose = () => {
         else if(tag === 'FoF follow') {
           label = <Label as='a' color='light blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
         }
+        else if(tag === 'Preferred Topic') {
+          label = <Label as='a' color='brown' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
+        }
         else {
           label = <Label as='a' color='teal' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
         }
@@ -217,17 +251,14 @@ handleClose = () => {
             }}/>
             <Popup wide open={this.state.isOpen} onClose={() => this.closePopup()}
         trigger={<Button circular onClick={() => this.openPopup()}
-        icon='google plus circle' id='iconColor'
-        size='tiny' style={{'fonSize': 13 + 'px'}}/>} on='click' position='bottom right'>
-<p style={{background: '#be252a', height:'35px', 'text-align': 'center', color:'white', 'font-family': 'Arial, sans-serif'}}
-          className='butstyle'>Invite to follow
-          <Button floated='right' onClick={() => this.closePopup()} color='red' icon='remove' className='butstyle'/>
-      </p>
+        icon='google plus' id='iconColor'
+        size='tiny' style={{'fonSize': 15 + 'px'}}/>} on='click' position='bottom right'>
+          <Icon name='remove' onClick={() => this.closePopup()}
+           style={{marginTop: 3 + 'px', marginBottom: 10 + 'px', marginLeft: 10 + 'px', float:'right'}}/>
         <p style={{'text-align': 'center','padding-right': '10px','margin-top': '0px'}}>
         <div class="ui fluid icon input">
-          <input style={{'resize': 'horizontal','width': '250px','height':'25px'}} id="users" placeholder="Search friends Here" list="usernames" onKeyDown={this.changeval.bind(this)} />
-   <datalist id="usernames"></datalist></div>
-   <br/><br/>
+          <input style={{'resize': 'horizontal','width': '250px','height':'30px'}} id="users" placeholder="Search friends Here" list="usernames" onKeyDown={this.changeval.bind(this)} />
+   <datalist id="usernames"></datalist></div><br />
 <Button fluid animated='fade' onClick={this.findMail.bind(this)} color='red' className='butstyle'>
   <Button.Content visible >
     <p style={{'text-align': 'center','color': 'white','font-family': 'Arial, Helvetica, sans-serif'}}>  Invite</p>
@@ -288,6 +319,10 @@ handleClose = () => {
                         </Segment.Group>
                     </div>
                 </Card>
+                <ToastContainer ref='container' style ={{backgroundColor: '#B2242E '}}
+                                    toastMessageFactory={ToastMessageFactory}
+                                    className='toast-top-center' />
+
             </div>
         );/*eslint-enable*/
     }
