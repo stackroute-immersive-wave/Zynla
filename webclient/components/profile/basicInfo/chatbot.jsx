@@ -13,14 +13,24 @@ class ProfileBot extends React.Component {
       userprofile: {},
       message: '',
       chat: [{
-        by: 'bot', message: 'Hai,\nUpdate your profile data here.\n' +
-        'Please enter skip if you not wish to update the question.'
+        by: 'bot',
+        message: <div style ={{color: 'black'}}>
+                  <div>
+                    Please update your profile data here.</div>
+                  <div>
+                    Please click the <strong>Skip</strong> button to skip a question.</div>
+                  <div>
+                    <i>You can later answer that by clicking on Profile Bot on
+                    your <strong>Profile </strong>page.</i></div>
+                </div>
       }],
       updatepart: '',
       close: false,
       skipques: []
     };
     this.proAlert = this.proAlert.bind(this);
+    this.getUserprofile = this.getUserprofile.bind(this);
+    this.updateProfile = this.updateProfile.bind(this);
   }
 
   componentDidMount() {
@@ -108,7 +118,7 @@ class ProfileBot extends React.Component {
     /*eslint-disable*/
     let context = this;
     /*eslint-enable*/
-    let profile = context.state.userProfile;
+    let profile = this.state.userprofile;
     // let userProfile = this.state.userprofile
     $.ajax({
         url: '/userdoc/addProfile',
@@ -117,6 +127,7 @@ class ProfileBot extends React.Component {
           emailId: email,
           userProfile: JSON.stringify(profile)
         },
+
         success: function() {
           context.proAlert();
         }
@@ -155,10 +166,10 @@ class ProfileBot extends React.Component {
   askQuestion() {
     if((!this.state.userprofile.name || this.state.userprofile.name.length < 1
       || this.state.userprofile.name === 'name')
-       && this.checkSkip('May I know your Name?')) {
+       && this.checkSkip('Please let me know your full name.')) {
       this.state.chat.push({
         by: 'bot',
-        message: 'May I know your Name?'
+        message: 'Please let me know your full name.'
       });
       this.setState({
         updatepart: 'name'
@@ -166,10 +177,10 @@ class ProfileBot extends React.Component {
     }
     else if((!this.state.userprofile.gender || this.state.userprofile.gender.length < 1
       || this.state.userprofile.gender === 'gender')
-       && this.checkSkip('Are you a male or female?')) {
+       && this.checkSkip('What is your gender? (Male/Female)')) {
       this.state.chat.push({
         by: 'bot',
-        message: 'Are you a male or female?'
+        message: 'What is your gender? (Male/Female)'
       });
       this.setState({
         updatepart: 'gender'
@@ -177,10 +188,10 @@ class ProfileBot extends React.Component {
     }
     else if((!this.state.userprofile.dob || this.state.userprofile.dob.length < 1 ||
       this.state.userprofile.dob === 'dob' || this.state.userprofile.dob === ' ')
-    && this.checkSkip('Please provide me with your date of birth(dd/mm/yyyy)?')) {
+    && this.checkSkip('Pease type your Date of Birth in DD/MM/YYYY.')) {
       this.state.chat.push({
         by: 'bot',
-        message: 'Please provide me with your date of birth(dd/mm/yyyy)?'
+        message: 'Pease type your Date of Birth in DD/MM/YYYY.'
       });
       this.setState({
         updatepart: 'dob'
@@ -189,23 +200,23 @@ class ProfileBot extends React.Component {
     else if((!this.state.userprofile.description || this.state.userprofile.description.length < 1
     || this.state.userprofile.description === 'Describe About Yourself'
     || this.state.userprofile.description === ' ')
-    && this.checkSkip('Say something about yourself?')) {
+    && this.checkSkip('Please write few lines about yourself.')) {
       this.state.chat.push({
         by: 'bot',
-        message: 'Say something about yourself?'
+        message: 'Please write few lines about yourself.'
       });
       this.setState({
         updatepart: 'description'
-      });
+    });
     }
     else if((!this.state.userprofile.address.country ||
       this.state.userprofile.address.country.length < 1
     || this.state.userprofile.address.country === 'Country'
     || this.state.userprofile.address.country === ' ')
-  && this.checkSkip('May I know your country?')) {
+  && this.checkSkip('Type your country name.')) {
         this.state.chat.push({
           by: 'bot',
-          message: 'May I know your country?'
+          message: 'Type your country name.'
         });
         this.setState({
           updatepart: 'country'
@@ -215,10 +226,10 @@ class ProfileBot extends React.Component {
       this.state.userprofile.address.region.length < 1
     || this.state.userprofile.address.region === 'State'
     || this.state.userprofile.address.region === ' ')
-  && this.checkSkip('May I know your state?')) {
+  && this.checkSkip('Which state are you from?')) {
         this.state.chat.push({
           by: 'bot',
-          message: 'May I know your state?'
+          message: 'Which state are you from?'
         });
         this.setState({
           updatepart: 'region'
@@ -228,10 +239,10 @@ class ProfileBot extends React.Component {
       this.state.userprofile.address.city.length < 1
     || this.state.userprofile.address.city === 'City'
     || this.state.userprofile.address.city === ' ')
-  && this.checkSkip('May I know your City?')) {
+  && this.checkSkip('What is your city name?')) {
         this.state.chat.push({
           by: 'bot',
-          message: 'May I know your City?'
+          message: 'What is your city name?'
         });
         this.setState({
           updatepart: 'city'
@@ -254,10 +265,10 @@ class ProfileBot extends React.Component {
       this.state.userprofile.education.highSchool.length < 1
     || this.state.userprofile.education.highSchool === 'Secondary'
     || this.state.userprofile.education.highSchool === ' ')
-  && this.checkSkip('What about your higher schooling?')) {
+  && this.checkSkip('Please type your high school name.')) {
         this.state.chat.push({
           by: 'bot',
-          message: 'What about your higher schooling?'
+          message: 'Please type your high school name.'
         });
         this.setState({
           updatepart: 'highschool'
@@ -267,10 +278,10 @@ class ProfileBot extends React.Component {
       this.state.userprofile.education.university.length < 1
     || this.state.userprofile.education.university === 'University'
   || this.state.userprofile.education.university === ' ')
-&& this.checkSkip('What about your university?')) {
+&& this.checkSkip('Which University did you last attend?')) {
         this.state.chat.push({
           by: 'bot',
-          message: 'What about your university?'
+          message: 'Which University did you last attend?'
         });
         this.setState({
           updatepart: 'university'
@@ -292,7 +303,7 @@ class ProfileBot extends React.Component {
     else {
       this.state.chat.push({
         by: 'bot',
-        message: 'Your Profile is Updated Completely.'
+        message: 'Your Profile is Updated Completely. ThankYou!'
       });
     }
   }
@@ -302,10 +313,9 @@ class ProfileBot extends React.Component {
     return (
       <div>
         <Modal trigger={<Button className='butstyle'
-          style = {{marginLeft: '10%'}}>Profile Bot</Button>}
-          closeOnDocumentClick ={true}
+          content = 'Profile Bot'/>}
           onClose = {this.updateProfile.bind(this)} closeIcon='close'>
-         <Modal.Header><h1>Profile Bot</h1></Modal.Header>
+         <Modal.Header><h1 style={{color: '#B2242E'}}>Profile Bot</h1></Modal.Header>
          <Chat className = 'message' chat = {this.state.chat}/>
          <Input fluid placeholder = "Answer..."
            value = {this.state.message}

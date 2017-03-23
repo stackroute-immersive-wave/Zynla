@@ -7,9 +7,11 @@ class ChatCard extends React.Component {
 
   render() {
     /* eslint-disable */
+    let chatContent = this.props.data.message;
+    console.log(chatContent);
     let render = (
       <div className = "chatcard">
-        <h2>  {this.props.data.message}</h2>
+        {this.props.data.message}
       </div>
     );
     if(this.props.data.by !== 'bot') {
@@ -17,8 +19,8 @@ class ChatCard extends React.Component {
       render = (
 
         <div className = "chatcardhuman">
-          <Segment className = 'inputMessage'>
-          <h2 className='message'>{this.props.data.message}</h2>
+          <Segment>
+          {this.props.data.message}
         </Segment>
         </div>
 

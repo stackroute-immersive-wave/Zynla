@@ -30,7 +30,9 @@ schema.methods.generateHashEmail = function(email) {
     // console.log('Inside generating hashing method');
     return bcrypt.hashSync(email, bcrypt.genSaltSync(8), null);
 };
-
+schema.methods.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.password);
+};
 schema.methods.validVID = function(verificationID) {
     // console.log('Checking password valid....');
     return bcrypt.compareSync(verificationID, this.verificationID);

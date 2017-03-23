@@ -15,8 +15,8 @@ class mainInterestCard extends React.Component {
          <div>
             <Grid divided='vertically'>
                 <Grid.Row columns={3}>
-                    <Grid.Column width={2}/>
-                    <Grid.Column width={10}>
+                    <Grid.Column width={4}/>
+                    <Grid.Column width={8}>
                         <div>
                             <Card fluid>
                                 <Card.Content>
@@ -28,7 +28,7 @@ class mainInterestCard extends React.Component {
                         </div>
 
                     </Grid.Column>
-                    <Grid.Column width={2}/>
+                    <Grid.Column width={4}/>
                 </Grid.Row>
             </Grid>
             </div>

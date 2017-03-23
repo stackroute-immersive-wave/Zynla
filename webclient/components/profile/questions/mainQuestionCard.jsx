@@ -13,6 +13,7 @@ class mainQuestionCard extends React.Component {
        super();
      }
    render() {
+     let dateData = new Date(parseInt(this.props.addedOn, 10)).toString().substring(0, 15);
        return (
          <div>
             <Grid divided='vertically'>
@@ -41,6 +42,9 @@ class mainQuestionCard extends React.Component {
                                                 <Icon name='checkmark' color='green' size='large'/>
                                                 {this.props.acceptedCount} Accepted
                                                 </Menu.Item>
+                                                <Menu.Item>
+                                                    Added On: {dateData}
+                                                </Menu.Item>
                                     </Menu>
                                </Card>
                         </div>
@@ -60,5 +64,6 @@ mainQuestionCard.propTypes = {
   category: React.PropTypes.string,
   acceptedCount: React.PropTypes.number,
   upVote: React.PropTypes.number,
-  downVote: React.PropTypes.number
+  downVote: React.PropTypes.number,
+  addedOn: React.PropTypes.string
 };

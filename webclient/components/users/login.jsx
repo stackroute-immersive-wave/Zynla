@@ -14,7 +14,8 @@ class Login extends React.Component {
         errormessageemail: '',
         email: '',
         validemail: '',
-        open: false
+        open: true,
+        snackbarMsg: ''
         };
       this.onSubmitLoginData = this.onSubmitLoginData.bind(this);
    }
@@ -36,7 +37,11 @@ class Login extends React.Component {
       }
     }
     onSubmitLoginData(e, value) {
+      e.preventDefault();
         // console.log(value.formData);
+        /* eslint-disable */
+        let context = this;
+        /* eslint-enable */
         $.ajax({
                 url: '/users/login',
                 type: 'POST',
@@ -59,6 +64,7 @@ class Login extends React.Component {
                   }
                 },
                 error: function() {
+                  context.setState({snackbarMsg: 'Username or Password is Invalid'});
                   // console.log(err);
                     // this.setState({openSnackbar: true, snackbarMsg: err.responseText});
                 }
@@ -73,89 +79,98 @@ render() {
   }
   else {
     login = (<div className='overlay'>
-      <Grid container={true} centered={true}>
-      <Grid.Row>
-      <Grid.Column width={6}/>
-      <Grid.Column width={6}>
-        <img src="./../../image/Zynla.png" />
-        <p className="tagline">A place to share knowledge and better understand the world</p>
-      </Grid.Column>
-      <Grid.Column width={4}>
-        <Button id='loginButton' circular
-        secondary onClick={this.show('blurring').bind(this)}>Login</Button>
+    <Grid container={true} centered={true}>
+    <Grid.Row>
+    <Grid.Column width={6}/>
+    <Grid.Column width={6}>
+      <img src="./../../image/Zynla.png" />
+      <p className="tagline">A place to share knowledge and better understand the world</p>
     </Grid.Column>
-    </Grid.Row>
-    </Grid>
-    <Modal dimmer={dimmer} open={open} onClose={this.close} closeIcon="close">
-        <Grid>
-            <Grid.Row>
-              <Grid.Column width={7}>
-                <img src = '../../image/loginBackground.jpg' className='loginImage'/>
-              </Grid.Column>
-              <Grid.Column width={9}>
-                <Grid.Row />
-                <Grid.Row>
-                  <img src = '../../image/logo.png' style={{marginLeft: 170 + 'px',
-                  backgroundColor: 'darkred'}}/>
-                </Grid.Row>
-                <Grid.Row>
-                  <p className="tagline" style={{marginLeft: -19 + 'px', marginTop: 14 + 'px'}}>
-                  A place to share knowledge and better understand the world
-                  </p>
-                </Grid.Row>
-                <Grid.Row>
-                  <Form onSubmit={this.onSubmitLoginData} className="contentCenter">
-                      <Form.Field>
-                      <Form.Input name= "userName" placeholder= 'Email-ID' icon='user'
-                      iconPosition='left' id="formstyle" onChange={this.ChangeEmail.bind(this)}
-                      error={this.state.erroremail} id='userForm'
-                       placeholder = 'Enter Email Id' required />
-                      <p style={{color: '#a54f4f'}}>{this.state.errormessageemail}</p>
-                      </Form.Field>
-                      <Form.Field><br/>
-                      <Form.Input type='password' name="password" placeholder='Password'
-                      icon='lock' iconPosition='left' id="formstyle"
-                      placeholder = 'Enter Password' id='passForm' required/>
-                      </Form.Field><br/>
-                      <Button color='teal' circular disabled=
-                      {!this.state.email || !this.state.validemail} id='loginFormButton'>
-                      <Button.Content type='submit' ><Icon name='sign in'/>Login</Button.Content>
-                      </Button><br/><br/>
-                      <p id="footer">Not yet registered?&nbsp;
-                      <a href="#/signup">Create Now</a>
-                      </p>
-                </Form>
-                </Grid.Row>
-                <Grid.Row>
-                <Button.Group id='buttonGroup'>
-                    <a href='users/auth/facebook'>
-                    <Button color='blue' circular>
-                    <Button.Content visible><Icon name='facebook'/>
-                    Login With Facebook</Button.Content>
+    <Grid.Column width={4}>
+      <Button id='loginButton' circular
+      secondary onClick={this.show('blurring').bind(this)}>Login</Button>
+  </Grid.Column>
+  </Grid.Row>
+  </Grid>
+
+  <Modal dimmer={dimmer} open={open} onClose={this.close} closeIcon="close">
+      <Grid>
+          <Grid.Row>
+            <Grid.Column width={7}>
+              <img src = '../../image/loginBackground.jpg' className='loginImage'/>
+            </Grid.Column>
+            <Grid.Column width={9}>
+              <Grid.Row />
+              <Grid.Row>
+                <img src = '../../image/logo.png' style={{marginLeft: 170 + 'px',
+                backgroundColor: 'darkred'}}/>
+              </Grid.Row>
+              <Grid.Row>
+                <p className="tagline" style={{marginLeft: -19 + 'px', marginTop: 14 + 'px'}}>
+                A place to share knowledge and better understand the world
+                </p>
+              </Grid.Row>
+              <Grid.Row>
+                <Form onSubmit={this.onSubmitLoginData} className="contentCenter">
+                    <Form.Field>
+                    <Form.Input name= "userName" placeholder= 'Email-ID' icon = 'user'
+                    iconPosition='left' id="formstyle" onChange={this.ChangeEmail.bind(this)}
+                    error={this.state.erroremail} id='userForm'
+                     placeholder = 'Enter Email Id' required />
+                    <p style={{color: '#a54f4f'}}>{this.state.errormessageemail}</p>
+                    <p style={{color: '#a54f4f'}}>{this.state.userexists}</p>
+                    </Form.Field>
+
+                    <Form.Field><br/>
+                    <Form.Input type='password' name="password" placeholder='Password'
+                     iconPosition='left' id="formstyle" icon = 'lock'
+                    placeholder = 'Enter Password' id='passForm' required/>
+                    </Form.Field><br/>
+                    <div>
+                    <a href="#/forgetPassword" style =
+                     {{marginLeft: 273 + 'px'}}>Forgot Password?</a>
+                    </div>
+                    <Button color='teal' circular disabled=
+                    {!this.state.email || !this.state.validemail} id='loginFormButton'>
+                    <Button.Content type='submit' ><Icon name='sign in'/>Login</Button.Content>
+                    </Button><br/><br/>
+                    <div>
+                    <p style={{color: '#a54f4f'}}>{this.state.snackbarMsg}</p>
+                    </div>
+                    <p id="footer">Not yet registered?&nbsp;
+                    <a href="#/signup">Create Now</a>
+                    </p>
+              </Form>
+              </Grid.Row>
+              <Grid.Row>
+              <Button.Group id='buttonGroup'>
+                  <a href='users/auth/facebook'>
+                  <Button color='blue' circular>
+                  <Button.Content visible><Icon name='facebook'/>
+                  Login With Facebook</Button.Content>
+                  </Button>
+                  </a>
+                  <Button.Or />
+                  <a href = '/users/auth/google'>
+                    <Button color='red' circular>
+                    <Button.Content visible><Icon name='google'/>Login With Google</Button.Content>
                     </Button>
-                    </a>
-                    <Button.Or />
-                    <a href = '/users/auth/google'>
-                      <Button color='red' circular>
-                      <Button.Content visible>
-                        <Icon name='google'/>Login With Google</Button.Content>
-                      </Button>
-                    </a>
-                    <Button.Or />
-                    <a href='users/auth/instagram'>
-                    <Button color='green' circular>
-                    <Button.Content visible><Icon name='instagram'/>
-                    Login With Instagram</Button.Content>
-                    </Button>
-                    </a>
-              </Button.Group>
-                </Grid.Row>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row />
-          </Grid>
-          </Modal>
-  </div>);
+                  </a>
+                  <Button.Or />
+                  <a href='users/auth/instagram'>
+                  <Button color='green' circular>
+                  <Button.Content visible>
+                  Login With Instagram</Button.Content>
+                  </Button>
+                  </a>
+            </Button.Group>
+              </Grid.Row>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row />
+        </Grid>
+        </Modal>
+</div>);
   }
 return (
   <div>

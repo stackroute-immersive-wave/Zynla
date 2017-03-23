@@ -47,6 +47,12 @@ passport.use(new LocalStrategy({
                     error.name = 'Please verify your registered mail!';
                     /* eslint-disable */
                     return done(error.name);
+                }
+                else if (!user.validPassword(password)) {
+                    console.log(user);
+                    const error = new Error('Incorrect password');
+                    error.name = 'Please enter correct password!';
+                    return done(error.name);
                 } else {
                     let userData = {};
                     userData._id = user._id;

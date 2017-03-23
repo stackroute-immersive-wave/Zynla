@@ -1,5 +1,6 @@
 import React from 'react';
 import MainWatchingCard from './mainWatchingCard.jsx';
+import { Grid } from 'semantic-ui-react';
 class interestsCard extends React.Component {
     constructor () {
         super();
@@ -10,15 +11,15 @@ class interestsCard extends React.Component {
     render () {
         let arr = this.props.watchingData.map(function(item) {
                 return (
-            <div>
+            <Grid.Column>
                 <MainWatchingCard heading={item}/>
-            </div>
+            </Grid.Column>
             );
         });
         return(
-          <div>
+          <Grid columns = {3}>
             {arr}
-          </div>
+          </Grid>
         );
       }
 }

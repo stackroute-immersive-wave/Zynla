@@ -9,6 +9,8 @@ import Signup from './components/users/signup.jsx';
 import SentMailPage from './components/users/SentMailPage';
 import SelectCategory from './components/users/selectCategory';
 import UserProfile from './components/users/userprofile';
+import ForgetPassword from './components/users/forgetPassword.jsx';
+import ChangePassword from './components/users/changePassword.jsx';
 import {PageNotFound} from './pageNotFound.jsx';
 // import AnswerPage from './components/cardAnswerPage/answerPage';
 let Cards = require('./components/landingPage/home');
@@ -53,6 +55,8 @@ ReactDOM.render(
     </Route>
     <Route path='/signup' component={Signup}/>
     <Route path='/mail' component={SentMailPage} />
+    <Route path='/forgetPassword' component={ForgetPassword}/>
+<Route path='/changePasswordPage' component={ChangePassword}/>
     <Route path='/selectCategory' component={SelectCategory}/>
     <Route path='/userProfile' component={UserProfile}/>
     <Route path='/404' component={PageNotFound}/>

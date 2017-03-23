@@ -23,7 +23,7 @@ export default class UserProfileData extends React.Component {
     handleOpen = () => this.setState({ active: true })
     handleClose = () => this.setState({ active: false })
 
-    close = () => hashHistory.push('/successfullyregistered');
+    close = () => hashHistory.push('/selectCategory');
 
     onSelect(val) {
       // console.log("values selected are:", val);

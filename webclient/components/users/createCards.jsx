@@ -2,7 +2,9 @@ import React from 'react';
 import {Grid, Dimmer, Button, Image} from 'semantic-ui-react';
 import {hashHistory} from 'react-router';
 import $ from 'jquery';
-
+const ReactToastr = require('react-toastr');
+const {ToastContainer} = ReactToastr;
+const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 class CreateCards extends React.Component
 {
     constructor()
@@ -11,8 +13,16 @@ class CreateCards extends React.Component
         this.state = {
             follow: []
         };
+        this.locAlert = this.locAlert.bind(this);
     }
-
+    locAlert () {
+        this.refs.container.error(
+          'Please Select Atleast One Category',
+          '', {
+          timeOut: 1000,
+          extendedTimeOut: 10000
+        });
+      }
     setSelected(item)
     {
         // console.log(item);
@@ -69,7 +79,7 @@ class CreateCards extends React.Component
         if(this.state.follow.length === 0)
         {
             /* eslint-disable*/
-            alert('Please select atleast one category');
+            this.locAlert();
             /* eslint-enable*/
         }
         else
@@ -114,6 +124,7 @@ class CreateCards extends React.Component
         /* eslint-disable */
         let context = this;
         let cardButton;
+        let show;
         /* eslint-enable */
         let data = this.props.categories.map(function(item) {
             let tempButtom = true;
@@ -128,25 +139,29 @@ class CreateCards extends React.Component
             {
                 // console.log('in if');
                 cardButton = null;
+                show = true;
             }
             else
             {
                 // console.log('in else');
 cardButton = <Image src='https://8biticon.com/static/images/tick.png' style={{height: 50 + 'px'}}/>;
+            show = false;
             }
             // console.log('card Buttton: ', cardButton)
             return (
                 // eslint-disable
-                <Grid.Column>
+                <Grid.Column style = {{marginBottom: 30 + 'px'}}>
                   {/* eslint-enable */}
         <Image src = {item.image} style = {{height: 300 + 'px'}} shape = 'circular'
-        onClick={() => context.setSelected(item.name)}/>
-          <div style={{marginLeft: 134 + 'px', marginTop: 22 + 'px'}}>{cardButton}</div>
+        onClick={() => context.setSelected(item.name)} disabled = {show}/>
+          <div style={{marginLeft: 134 + 'px', marginTop: -22 + 'px'}}>{cardButton}</div>
 
-                </Grid.Column>
+               </Grid.Column>
             );
         });
         return (
+            <div>
+            <Grid>
          <Dimmer active style={{height: 800 + 'px'}}>
                 <Grid.Row>
                     <Grid.Column width = {12} style = {{width: 800 + 'px'}}>
@@ -160,6 +175,10 @@ cardButton = <Image src='https://8biticon.com/static/images/tick.png' style={{he
                     </Grid.Column>
                 </Grid.Row>
         </Dimmer>
+        </Grid>
+        <ToastContainer ref='container' toastMessageFactory={ToastMessageFactory}
+                       className='toast-top-center' />
+        </div>
         );
     }
 }

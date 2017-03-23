@@ -21,6 +21,8 @@ class mainAnswerCard extends React.Component {
      }
 
    render() {
+     let ansHtmlContent = this.props.answer;
+     let dateData = new Date(parseInt(this.props.addedOn, 10)).toString().substring(0, 15);
        return (
          <div>
              <Grid divided='vertically'>
@@ -30,7 +32,7 @@ class mainAnswerCard extends React.Component {
                              <Card fluid style={cardStyle}>
                                  <Card.Content>
                                      <Card.Header>
-                                        {this.props.answer}
+                                        <div dangerouslySetInnerHTML={{__html: ansHtmlContent}}/>
                                      </Card.Header>
                                  </Card.Content>
                                  <Menu style={commentStyle}>
@@ -44,7 +46,7 @@ class mainAnswerCard extends React.Component {
                                      </Menu.Item>
                                      <Menu.Item>
                                          <Icon name='checkmark' size='large' color='green'/>
-                                         Added On: {this.props.addedOn}
+                                         Added On: {dateData}
                                      </Menu.Item>
 
                                  </Menu>

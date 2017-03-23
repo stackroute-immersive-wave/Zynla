@@ -184,6 +184,91 @@ let userCtrl = {
         });
     },
 
+    forgetPassword: function(req, res) {
+            let emailId = req.body.email;
+            User.find({
+                email: req.body.data
+            }, function(err, profile) {
+                if (err) {
+                    res.send('err occured');
+                    //  console.log('error ocuured');
+                } else {
+                    if(!profile)
+                    {
+                        res.send('Profile is not present');
+                    }
+                    /*eslint-disable */
+                    // Create a Nodemailer transport object
+                    else
+                    {
+                    var transporter = nodemailer.createTransport({
+                        /*eslint-disable */
+                        service: 'Gmail',
+                        secure: true,
+                        auth: {
+                            user: 'zynla0001@gmail.com', // Your email id
+                            pass: 'Zynla@123' // Your password
+                        }
+                    });
+
+                   host = req.get('host');
+                    console.log(profile);
+                    /*eslint-disable */
+                    // var VID = User.generateHashVID(profile[0].verificationID);
+                    /*eslint-enable */
+                    link = 'http://' + req.get('host') + '/users/redirectForgetPassword?email=' + req.body.email;
+                    var text = 'Hello from \n\n' + req.body.email;
+                    mailOptions = {
+                        from: 'zynla0001@gmail.com', // sender address
+                        to: emailId, // reciever
+                        subject: 'Change your Password with Zynla', // Subject line
+                        text: text,
+                        html: '<center><h1>Welcome to Zynla</h1></center><br><br><br>' + 'Hi,<br><br>To Reset password Click on the below button.' + '<br><br><br><a href=' + link + ' style=background-color:#44c767 ;' + '-moz-border-radius:28px;-webkit-border-radius:28px;border-radius:28px;' + 'border:1px solid #18ab29 ;display:inline-block;padding:16px 31px;' + 'color:#ffffff ;text-shadow:0px 1px 0px #2f6627 ;' + 'text-decoration:none;> Click Here </a><br><br>' + '<i>This link is valid for an hour.This is an Auto-generated mail,' + 'please do not reply</i></small>'
+                    };
+                    console.log(mailOptions + host);
+                    // Sent mail to recipient
+                    transporter.sendMail(mailOptions, function(error, info) {
+                        if (error) {
+                            console.log(error);
+                            console.log('Error')
+                        } else {
+                            console.log('Message sent: ' + info.response);
+                            res.json('Mail Sent Successfully');
+                        }
+                    });
+                }
+                }
+            });
+        },
+
+       redirectForgetPassword: function(req, res) {
+            let checkMail = req.query.email;
+            if(checkMail)
+            {
+            res.redirect('/#/changePasswordPage?emailId=' + checkMail);
+            }
+            else
+            {
+                res.redirect('');
+            }
+        },
+        changePassword: function(req, res) {
+            let newPassword = req.body.newPass;
+            User.findOne({'email': req.body.email}, function(err, docs)
+            {
+                docs.password = User.generateHash(newPassword);
+                docs.save(function(err) {
+                    if(err)
+                    {
+                        console.log(err);
+                    }
+                    else
+                    {
+                        res.send('Password Changed Successfully');
+                    }
+                })
+            });
+        },
     logOut: function(req, res) {
         res.clearCookie('username');
         res.clearCookie('profilepicture');

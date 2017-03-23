@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Image, Grid, Statistic, Segment, Header, Icon} from 'semantic-ui-react';
+import {Button, Image, Grid, Statistic, Segment, Header} from 'semantic-ui-react';
 import Cookie from 'react-cookie';
 import Chat from './basicInfo/chatbot.jsx';
 let DisplayQues = require('./questions/displayQuestions.jsx');
@@ -14,7 +14,7 @@ let picStyle = {
 };
 let meterStyle = {
     marginTop: '30%',
-    marginLeft: '60%',
+    marginLeft: '57.5%',
     color: '#B2242E'
 };
 let imageStyle = {
@@ -24,7 +24,7 @@ let nameStyle = {
     marginTop: '1%',
     fontSize: '20px',
     fontWeight: 'bold',
-    marginLeft: '40%',
+    marginLeft: '37.5%',
     color: '#B2242E',
     cursor: 'pointer'
 };
@@ -37,7 +37,7 @@ class NavBarPro extends Component {
   constructor() {
     super();
     this.state = {
-        questionCount: 1,
+        questionCount: 0,
         answerCount: 0,
         followerCount: 0,
         followingCount: 0,
@@ -48,7 +48,8 @@ class NavBarPro extends Component {
         objArray: [],
         status: 0,
         watchingData: [],
-        content: <BasicInfo />
+        content: <BasicInfo />,
+        watchingCount: 0
     };
     this.getProfile = this.getProfile.bind(this);
   }
@@ -102,6 +103,102 @@ class NavBarPro extends Component {
     }
     // Fetch Interested Topics from data base
     getWatching() {
+                  this.setState({
+                content: <WatchingCard watchingData={this.state.watchingData}/>
+              });
+    }
+    componentDidMount() {
+        this.getProfile();
+    }
+    // Fetch All Info from database
+    getProfile() {
+      /*eslint-disable*/
+      let context = this;
+      /*eslint-enable*/
+      let email = Cookie.load('email');
+        $.ajax({
+            url: '/userdoc/getuserprofile',
+            type: 'POST',
+            data: {email: email},
+            success: function(data) {
+                context.setState({questionCount: data.lists.length,
+                   answerCount: data.answers.length,
+                    followerCount: data.followerCount,
+                     followingCount: data.followingUser.length,
+                     objArray: data});
+                     if(data.profile.gender.length > 0 && data.profile.gender !== 'gender' &&
+                     data.profile.gender !== ' ') {
+                       context.setState({
+                         // setting conditions for profile meter
+                         status: parseInt(context.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.name.length > 0 &&
+                       data.profile.name !== 'name' &&
+                       data.profile.name !== ' ') {
+                       context.setState({
+                         status: parseInt(context.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.education.highSchool.length > 0 &&
+                       data.profile.education.highSchool !== 'Secondary' &&
+                       data.profile.education.highSchool !== ' ') {
+                       context.setState({
+                         status: parseInt(context.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.education.university.length > 0 &&
+                       data.profile.education.university !== 'University' &&
+                         data.profile.education.university !== ' ') {
+                       context.setState({
+                         status: parseInt(context.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.address.country.length > 0
+                       && data.profile.address.country !== 'Country'
+                     && data.profile.address.country !== ' ') {
+                       context.setState({
+                         status: parseInt(context.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.address.city.length > 0
+                       && data.profile.address.city !== 'City'
+                     && data.profile.address.city !== ' ') {
+                       context.setState({
+                         status: parseInt(context.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.address.region.length > 0
+                       && data.profile.address.region !== 'State'
+                     && data.profile.address.region !== ' ') {
+                       context.setState({
+                         status: parseInt(context.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.dob.length > 0 && data.profile.dob !== 'dob'
+                   && data.profile.dob !== ' ') {
+                       context.setState({
+                         status: parseInt(context.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.phone.length > 0 && data.profile.phone !== 'Phone'
+                   && data.profile.phone !== ' ') {
+                       context.setState({
+                         status: parseInt(context.state.status, 10) + 10
+                       });
+                     }
+                     if(data.profile.description.length > 0
+                       && data.profile.description !== 'Describe About Yourself'
+                     && data.profile.description !== ' ') {
+                       context.setState({
+                         status: parseInt(context.state.status, 10) + 10
+                       });
+                     }
+            },
+            error: function() {
+              // console.log('error in logout' + err);
+            }
+        });
         $.ajax({
             url: '/userdoc/getWatching',
             type: 'POST',
@@ -109,120 +206,14 @@ class NavBarPro extends Component {
                 email: Cookie.load('email')
             },
             success: function(data) {
-                this.setState({watchingData: data,
+                // console.log(data);
+                context.setState({watchingData: data,
+                  watchingCount: data.length
                   // setting interestData to content
-                content: <WatchingCard watchingData={this.state.watchingData}/>
                 });
-            }.bind(this),
-            error: function() {
-                // console.error(err.toString());
-            }
-        });
-    }
-
-    onClick() {
-        $.ajax({
-            url: '/users/logout',
-            type: 'GET',
-            success: function(data) {
-                if (typeof data.redirect === 'string') {
-                    window.location.replace(window.location.protocol +
-                       '//' + window.location.host + data.redirect);
-                }
             },
             error: function() {
-                // console.log('error in logout' + err);
-            }
-        });
-    }
-
-    componentDidMount() {
-        this.getProfile();
-    }
-    // Fetch All Info from database
-    getProfile() {
-      let email = Cookie.load('email');
-        $.ajax({
-            url: '/userdoc/getuserprofile',
-            type: 'POST',
-            data: {email: email},
-            success: function(data) {
-                this.setState({questionCount: data.lists.length,
-                   answerCount: data.answers.length,
-                    followerCount: data.followerCount,
-                     followingCount: data.followingUser.length,
-                     objArray: data});
-                     if(data.profile.gender.length > 0 && data.profile.gender !== 'gender' &&
-                     data.profile.gender !== ' ') {
-                       this.setState({
-                         // setting conditions for profile meter
-                         status: parseInt(this.state.status, 10) + 10
-                       });
-                     }
-                     if(data.profile.education.primary.length > 0 &&
-                       data.profile.education.primary !== 'Primary' &&
-                       data.profile.education.primary !== ' ') {
-                       this.setState({
-                         status: parseInt(this.state.status, 10) + 10
-                       });
-                     }
-                     if(data.profile.education.highSchool.length > 0 &&
-                       data.profile.education.highSchool !== 'Secondary' &&
-                       data.profile.education.highSchool !== ' ') {
-                       this.setState({
-                         status: parseInt(this.state.status, 10) + 10
-                       });
-                     }
-                     if(data.profile.education.university.length > 0 &&
-                       data.profile.education.university !== 'University' &&
-                         data.profile.education.university !== ' ') {
-                       this.setState({
-                         status: parseInt(this.state.status, 10) + 10
-                       });
-                     }
-                     if(data.profile.address.country.length > 0
-                       && data.profile.address.country !== 'Country'
-                     && data.profile.address.country !== ' ') {
-                       this.setState({
-                         status: parseInt(this.state.status, 10) + 10
-                       });
-                     }
-                     if(data.profile.address.city.length > 0
-                       && data.profile.address.city !== 'City'
-                     && data.profile.address.city !== ' ') {
-                       this.setState({
-                         status: parseInt(this.state.status, 10) + 10
-                       });
-                     }
-                     if(data.profile.address.region.length > 0
-                       && data.profile.address.region !== 'State'
-                     && data.profile.address.region !== ' ') {
-                       this.setState({
-                         status: parseInt(this.state.status, 10) + 10
-                       });
-                     }
-                     if(data.profile.dob.length > 0 && data.profile.dob !== 'dob'
-                   && data.profile.dob !== ' ') {
-                       this.setState({
-                         status: parseInt(this.state.status, 10) + 10
-                       });
-                     }
-                     if(data.profile.phone.length > 0 && data.profile.phone !== 'Phone'
-                   && data.profile.phone !== ' ') {
-                       this.setState({
-                         status: parseInt(this.state.status, 10) + 10
-                       });
-                     }
-                     if(data.profile.description.length > 0
-                       && data.profile.description !== 'Describe About Yourself'
-                     && data.profile.description !== ' ') {
-                       this.setState({
-                         status: parseInt(this.state.status, 10) + 10
-                       });
-                     }
-            }.bind(this),
-            error: function() {
-              // console.log('error in logout' + err);
+                // console.error(err.toString());
             }
         });
     }
@@ -233,11 +224,11 @@ class NavBarPro extends Component {
         let profMeter = parseInt(this.state.status, 10) + '%';
         return (
             <div>
-              <Segment>
+              <Segment style={{marginRight: '6.70%'}}>
                 <Grid centered columns={2}>
                     <Grid.Column style={picStyle}>
                       <Image style={imageStyle} src={Cookie.load('profilepicture')}
-                        size='small' shape='circular' avatar bordered/>
+                        size = 'small' shape='circular'/>
                         <div style={nameStyle} onClick={this.viewInfo.bind(this)}>
                             {Cookie.load('username')}
                         </div>
@@ -268,13 +259,13 @@ class NavBarPro extends Component {
                           <Chat />
                         </Statistic>
                         </div>
-                    </Grid.Column>
+                    </Grid.Column>>
                   </Grid>
                      </Segment>
                 <div>
                     <br/>
                   <Grid>
-                    <Grid.Column width = {12}>
+                    <Grid.Column width = {11}>
                     {this.state.content}
                   </Grid.Column>
                   <Grid.Column width = {4}>
@@ -297,14 +288,16 @@ class NavBarPro extends Component {
   </Header.Content>
 
 </Header>
-<Header dividing onClick={this.getWatching.bind(this)}>
- <Icon name='favorite' />
- <Header.Content style ={{cursor: 'pointer'}}>
-   Watching Topics
- </Header.Content>
+<Header style ={{cursor: 'pointer'}} dividing onClick={this.getWatching.bind(this)}>
+  <Header.Content>
+    Watching Topics &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;{this.state.watchingCount}
+  </Header.Content>
+
 </Header>
 </Segment>
                   </Grid.Column>
+                  <Grid.Column width = {1}/>
                 </Grid>
               </div>
             </div>

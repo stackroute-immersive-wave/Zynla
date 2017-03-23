@@ -54,6 +54,12 @@ router.get('/auth/google/callback',
 
 router.post('/addCatagory', userController.addCategory);
 
+router.post('/forgetPassword', userController.forgetPassword);
+
+router.get('/redirectForgetPassword', userController.redirectForgetPassword);
+
+router.post('/changePassword', userController.changePassword);
+
 router.get('/displayCatagory', userController.displayCatagory);
 
 router.put('/updateIsNew/:emails', userController.updateIsNew);

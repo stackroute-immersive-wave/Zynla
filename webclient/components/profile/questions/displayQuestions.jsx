@@ -25,7 +25,7 @@ class displayQuestions extends React.Component {
           this.getQuestions();
      }
      noQuestionsAlert () {
-        this.refs.container.success(
+        this.refs.container.error(
           'No Questions yet!!',
           '', {
           timeOut: 2000,
@@ -65,7 +65,7 @@ class displayQuestions extends React.Component {
        </Dimmer>
        <h1 style={{marginLeft: '10px'}}>Questions Posted</h1>
          <QuestionsCard questionData={this.state.questionobj}/>
-         <ToastContainer ref='container' style ={{backgroundColor: '#B2242E'}}
+         <ToastContainer ref='container'
                 toastMessageFactory={ToastMessageFactory}
                 className='toast-top-center' />
        </div>

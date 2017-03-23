@@ -24,6 +24,6 @@ router.post('/getInterestedTopics', userDocController.getInterestedTopics);
 router.post('/getFollowers', userDocController.getFollowers);
 // route for retrieving followings of user
 router.post('/getFollowing', userDocController.getFollowings);
-router.post('/addProfile', userDocController.addProfile
-);
+router.post('/addProfile', userDocController.addProfile);
+router.post('/getWatching', userDocController.getWatchingTopics);
 module.exports = router;

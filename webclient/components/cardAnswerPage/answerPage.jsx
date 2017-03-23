@@ -20,6 +20,9 @@ import {
 } from 'semantic-ui-react';
 import Cookie from 'react-cookie';
 // import RichTextEditor from 'react-rte';
+const ReactToastr = require('react-toastr');
+const {ToastContainer} = ReactToastr;
+const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 const DisplayAnswer = require('./answerDisplay');
 let titlestyle = {
     fontSize: 30,
@@ -73,6 +76,7 @@ class answerPage extends React.Component {
     constructor() {
         super();
         this.state = {
+          modalState: false,
             active: false,
             value: RichTextEditor.createEmptyValue(),
             id: '',
@@ -125,10 +129,35 @@ class answerPage extends React.Component {
         this.getData = this.getData.bind(this);
         this.postAnswer = this.postAnswer.bind(this);
         this.addcomment = this.addcomment.bind(this);
+        this.locAlert = this.locAlert.bind(this);
     }
     static propTypes = {
         onChange: PropTypes.func
     };
+
+    locAlert() {
+    this.refs.container.success(
+      'Updated Successfully',
+      '', {
+      timeOut: 1000,
+      extendedTimeOut: 10000
+    });
+    }
+
+    changeModalState(x, y) {
+      // console.log(y);
+      if(y === false) {
+        this.setState({
+          modalState: false
+        });
+      }
+      else {
+        this.setState({
+          modalState: true
+        });
+      }
+    }
+
     onChange = (value) => {
         this.setState({value});
         if (this.props.onChange) {
@@ -167,7 +196,7 @@ class answerPage extends React.Component {
         /* eslint-enable */
         // console.log(JSON.stringify(ansdata));
         $.ajax({
-            url: '/answers/add',
+            url: 'http://localhost:8080/answers/add',
             type: 'POST',
             data: ansdata,
             success: function() {
@@ -208,7 +237,9 @@ class answerPage extends React.Component {
     addcomment() {
         // console.log('views before increment');
         let id = window.location.hash.split('id=')[1];
-
+        /* eslint-disable */
+        let context = this;
+        /* eslint-enable */
         let commentdata = {
             questionId: id,
             mail: Cookie.load('email'),
@@ -220,6 +251,8 @@ class answerPage extends React.Component {
             type: 'PUT',
             data: commentdata,
             success: function() {
+                context.changeModalState(123, false);
+                context.locAlert();
                 // this.setState({comment: Comments});
                 // console.log('inside success', this.state.commentdata);
             }
@@ -601,17 +634,23 @@ class answerPage extends React.Component {
                             } > Report < /Button>} on='click' position='bottom right' hideOnScroll>
                                 {pop}
                             </Popup>
-                            <Modal trigger={<Button basic color = 'black' size = 'mini' style = {
+                            <Modal trigger={<Button basic color = 'black'
+                               onClick = {this.changeModalState.bind(this)}
+                                size = 'mini' style = {
                                 buttonfolstyle
-                            } > Add Comments </Button>} closeIcon = 'close'>
+                            } > Add Comments </Button>}
+                             closeIcon = 'close' open = {this.state.modalState}>
                                 <Form style={formstyle}>
                                     <TextArea onChange={this.comment.bind(this)}
-                                       value={this.state.comment}/>
+                                       onClick = {this.changeModalState.bind(this)}
+                                        value={this.state.comment}/>
                                 </Form>
                                 <Button content='Submit' primary
                                    onClick={this.addcomment.bind(this)}/>
                             </Modal>
-
+                            <ToastContainer ref='container'
+                              toastMessageFactory={ToastMessageFactory}
+                              className='toast-top-center' />
                         </div>
                         <div
                            style={ansstyle1}>{quesObj[0].answerCounts}&nbsp;

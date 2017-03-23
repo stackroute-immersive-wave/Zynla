@@ -39,8 +39,12 @@ class basicInfo extends React.Component {
             gender: '',
             phone: 'Phone',
             interestsData: [],
-            profileForm: '',
-            status: 0
+            profileForm: <div style={{fontFamily: 'Segoe UI'}}>
+                        <div>
+                        View/update your profile data here.
+                      </div>
+                      <div>Use <strong>Profile Bot</strong> for an Interactive Experience</div>
+                    </div>
         };
 
         this.handleItemClick = this.handleItemClick.bind(this);
@@ -143,7 +147,7 @@ class basicInfo extends React.Component {
                     </Popup>
               </div>
             );
-        } else if (name === 'Interested Topics') {
+        } else if (name === 'Categories') {
             data = (<InterestsCard interestData={this.state.interestsData}/>);
         }
         this.setState({activeItem: name, profileForm: data});
@@ -239,7 +243,7 @@ class basicInfo extends React.Component {
 //                     <Button onClick={this.updateAbout.bind(this)}>Update</Button>
 //                 </div>
 //             );
-//         } else if (name === 'Interested Topics') {
+//         } else if (name === 'Categories') {
 //             data = (<InterestsCard interestData={this.state.interestsData}/>);
 //         }
 //         this.setState({activeItem: name, profileForm: data});
@@ -513,8 +517,8 @@ class basicInfo extends React.Component {
                               onClick={this.handleItemClick}/>
                             <Menu.Item name='Location' active={activeItem === 'Location'}
                               onClick={this.handleItemClick}/>
-                            <Menu.Item name='Interested Topics'
-                              active={activeItem === 'Interested Topics'}
+                            <Menu.Item name='Categories'
+                              active={activeItem === 'Categories'}
                               onClick={this.handleItemClick}/>
                         </Menu>
                     </Grid.Column>
