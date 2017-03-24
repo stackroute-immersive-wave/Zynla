@@ -215,7 +215,7 @@ inviteAlert (result) {
 
         return (
             <div className='CardSegment'>
-                <Card raised='true' className='item' onClick={this.handleChange}>
+                <Card raised={true} className='item' onClick={this.handleChange}>
                         <div className="PaddingCards">
                             <Image src={this.props.displayImage} className="imgsize"
                              onMouseEnter={this.handleShow} dimmer={{active, content}}
@@ -263,17 +263,17 @@ inviteAlert (result) {
     }
 }
 questionCard.propTypes = {
-    displayImage: React.PropTypes.string.isRequired,
-    heading: React.PropTypes.string.isRequired,
-    question: React.PropTypes.string.isRequired,
-    postedBy: React.PropTypes.string.isRequired,
-    addedOn: React.PropTypes.number.isRequired,
-    category: React.PropTypes.string.isRequired,
-    upVotes: React.PropTypes.string.isRequired,
-    downVotes: React.PropTypes.string.isRequired,
-    answerCounts: React.PropTypes.number.isRequired,
+    displayImage: React.PropTypes.string,
+    heading: React.PropTypes.string,
+    question: React.PropTypes.string,
+    postedBy: React.PropTypes.string,
+    addedOn: React.PropTypes.string,
+    category: React.PropTypes.string,
+    upVotes: React.PropTypes.string,
+    downVotes: React.PropTypes.string,
+    answerCounts: React.PropTypes.number,
     profileImage: React.PropTypes.string,
-    views: React.PropTypes.number.isRequired,
+    views: React.PropTypes.number,
     acceptedCounts: React.PropTypes.string,
     remove: React.PropTypes.func,
     id: React.PropTypes.number

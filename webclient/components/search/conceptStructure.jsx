@@ -16,7 +16,6 @@ class ConceptStructure extends React.Component {
     changeColor() {
       let colorsArray = [
           'teal',
-          'cornflower blue',
           'violet',
           'olive',
           'green',

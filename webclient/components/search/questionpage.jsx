@@ -15,9 +15,9 @@ class QuestionPage extends React.Component {
 
     render() {
         /* Getting the values from Mongo db*/
-        let Data = this.props.display.map(function(item) {
+        let Data = this.props.display.map(function(item, index) {
             return (
-                <Grid.Column>
+                <Grid.Column key = {index}>
                   <QuestionCard id={item.id} displayImage={item.displayImage}
                   heading={item.heading} question={item.question} postedBy={item.postedBy}
                   addedOn={item.addedOn} category={item.category} upVotes={item.upVotes}

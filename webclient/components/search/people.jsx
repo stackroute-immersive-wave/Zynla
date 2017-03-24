@@ -31,7 +31,7 @@ class People extends React.Component {
        }
       });
    return (
-        <PeopleCard id = {item} follow = {temp} photo = {changedphoto}/>
+      < PeopleCard key = {index} id = {item} follow = {temp} photo = {changedphoto}/>
       );
 
     // console.log(context.props.profile);

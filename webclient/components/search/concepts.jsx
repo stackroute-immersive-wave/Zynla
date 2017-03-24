@@ -50,9 +50,9 @@ class Concepts extends React.Component {
             }
         }
         // map function to send concepts of a topic to child (conceptStructure)
-        let Data = conceptName.map(function(item) {
+        let Data = conceptName.map(function(item, index) {
             return (
-                <Grid.Column>
+                <Grid.Column key = {index}>
                     <ConceptStructure conceptName={item.name}/>
                 </Grid.Column>
             );
