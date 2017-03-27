@@ -17,7 +17,10 @@ class Questions extends React.Component {
        super();
        this.state = {
            active: false,
-           objArray: []
+           objArray: [],
+           check: false,
+           likeArray: [],
+           dislikeArray: []
        };
        this.getQuestions = this.getQuestions.bind(this);
        this.handleOpen = this.handleOpen.bind(this);
@@ -28,12 +31,45 @@ class Questions extends React.Component {
    handleClose() {this.setState({ active: false });}
    // function to get questions from database
    getQuestions() {
+     let emailId = Cookie.load('email');
+     let arr1 = [];
      this.handleOpen();
        $.ajax({
-           url: '/list/',
-           type: 'GET',
+         url: `/users/getAllCards/${emailId}`,
+         type: 'GET',
            success: function(data) {
-               this.setState({objArray: data});
+             let queObj;
+               let arr = [];
+             data.map(function(item) {
+              //  console.log(item.tag);
+               if(item.tag !== 'Following'
+                && item.tag !== 'Posted by you' && item.tag !== 'You Preferred') {
+                 arr1.push(item);
+               }
+             });
+               queObj = arr1;
+               for (let i = 0; i < queObj.length; i = i + 1) {
+                 if(queObj[i].id) {
+                 arr.push(queObj[i].id);
+                 }
+               }
+               let email = Cookie.load('email');
+                 $.ajax({
+                     url: '/list/getLikeStatus',
+                     type: 'POST',
+                     data: {
+                         mail: email,
+                         qids: JSON.stringify(arr)
+                     },
+                     success: function(data2) {
+                        //  console.log('front end', data2);
+                         this.setState({likeArray: data2.like,
+                           dislikeArray: data2.unlike, check: true, objArray: arr1});
+                     }.bind(this),
+                     error: function() {
+                      //  console.log('failure in UI side',err);
+                     }
+                 });
                this.handleClose();
            }.bind(this),
            error: function() {
@@ -45,47 +81,52 @@ class Questions extends React.Component {
        this.getQuestions();
    }
 // display question component
-   render() {
-     let queCards;
-       const { active } = this.state;
-       if(Cookie.load('email')) {
-         queCards = (<div><Dimmer active={active} page>
-          <Loader>Fetching Questions</Loader>
-        </Dimmer>
-          <Grid divided='vertically'>
-              <Grid.Row columns={3}>
-                  <Grid.Column width={2}/>
-                  <Grid.Column width={10}>
-                      <h1>
-                          <Icon name='star' color='red'/>Questions For You
-                      </h1>
-                      {
-                        /*
-                        <div>
-                          <Breadcrumb>
-                              <Breadcrumb.Section link>Home</Breadcrumb.Section>
-                              <Breadcrumb.Divider icon='right angle'/>
-                              <Breadcrumb.Section link>Suggested Questions</Breadcrumb.Section>
-                          </Breadcrumb>
-                      </div>
-                      */
-                    }
-                      <Divider clearing/>
-                      <div>
-                          <QueCards quesCollection={this.state.objArray}/>
-                      </div>
-                      </Grid.Column>
-                  <Grid.Column width={2}/>
-              </Grid.Row>
-          </Grid></div>);
-       } else {
-         hashHistory.push('/');
-       }
-       return (
-         <div>
-          {queCards}
-         </div>
-       );
-   }
+render() {
+  let queCards;
+    const { active } = this.state;
+    if(Cookie.load('email') && (this.state.check)) {
+      queCards = (<div><Dimmer active={active} page>
+       <Loader>Fetching Questions</Loader>
+     </Dimmer>
+       <Grid divided='vertically'>
+           <Grid.Row columns={3}>
+               <Grid.Column width={2}/>
+               <Grid.Column width={10}>
+                   <h1>
+                       <Icon name='star' color='red'/>Questions For You
+                   </h1>
+                   {
+                     /*
+                     <div>
+                       <Breadcrumb>
+                           <Breadcrumb.Section link>Home</Breadcrumb.Section>
+                           <Breadcrumb.Divider icon='right angle'/>
+                           <Breadcrumb.Section link>Suggested Questions</Breadcrumb.Section>
+                       </Breadcrumb>
+                   </div>
+                   */
+                 }
+                   <Divider clearing/>
+                   <div>
+                       <QueCards quesCollection={this.state.objArray}
+                       queLike={this.state.likeArray} queDislike={this.state.dislikeArray}/>
+                   </div>
+                   </Grid.Column>
+               <Grid.Column width={2}/>
+           </Grid.Row>
+       </Grid></div>);
+    } else if(Cookie.load('email')) {
+      // else to prevent the redirection to homepage
+    } else {
+      hashHistory.push('/');
+    }
+    return (
+      <div><Dimmer active={active} async={false} page>
+       <Loader>Fetching Questions</Loader>
+     </Dimmer>
+       {queCards}
+      </div>
+    );
+}
 }
 module.exports = Questions;

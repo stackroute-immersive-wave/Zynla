@@ -2,6 +2,7 @@
 const UserProfile = require('../users/userProfileEntity').userModel;
 const ListDoc = require('../list/listdocEntity');
 const sentInviteMail = require('../function/sentInviteMail');
+const sentTopicInviteMail = require('../function/sentTopicInviteMail');
 let driver = require('../config/neo4j');
 let host;
 
@@ -106,17 +107,71 @@ followQuestion: function(req, res) {
                     });
                         // console.log('Logged in status',lStatus);
                         if(lStatus === 'true')
-                        {
-                             res.redirect('/#/answerPage?id=' + qId);
-                        }
-                        else
-                        {
-                        res.cookie('quesId', qId);
-                        res.redirect('/#/');
-                        }
+                          {
+                               res.redirect('/#/answerPage?id=' + qId);
+                          }
+                          else
+                          {
+                          res.cookie('quesId', qId);
+                          res.redirect('/#/');
+                          }
             }
         });
-    }
+    },
+    sendInviteTopicEmail: function (req, res) {
+                  host = req.get('host');
+                    sentTopicInviteMail(host, req.body.Topic, req.body.type,
+                req.body.emailId, req.body.sender, req.body.lStatus);
+            res.send('Invited Successfully');
+        },
+        followTopic: function (req, res) {
+          // console.log("In followTopic")
+          let query = 'match (n:User {name:"' +
+           req.query.email + '"})-[r:follow]->(m:Concept {name:"'
+            + req.query.topic + '"}) return r';
+          /* eslint-enable */
+          let follow = '';
+
+          let lStatus1 = req.query.lstatus;
+          let topic = req.query.topic;
+            // console.log(typeof lStatus1);
+          let session = driver.session();
+          session.run(query).then(function(result) {
+              session.close();
+              if(result.records.length > 0) {
+                follow = 't';
+              }
+              else {
+                follow = 'f';
+              }
+              if(follow === 'f')
+              {
+                // console.log('in f');
+              let sessionTemp = driver.session();
+              /* eslint-disable */
+              let query ='match(n:User {name:"' + req.query.email + '"}),(m:Concept {name:"' + req.query.topic + '"}) create (n)-[:follow]->(m) return n,m'
+              console.log(query);
+              /* eslint-enable */
+              sessionTemp.run(query).then(function() {
+                    // console.log("created relation")
+                     sessionTemp.close();
+                });
+              }
+          });
+
+          if(lStatus1 === 'true')
+          {
+            // console.log('true');
+               res.redirect('/#/search?question=' + topic);
+          }
+          else if((lStatus1 === 'false'))
+          {
+            // console.log('in false');
+          // res.cookie('quesId');
+          res.redirect('/#/');
+          }
+        }
+
 };
 
 module.exports = inviteCtrl;

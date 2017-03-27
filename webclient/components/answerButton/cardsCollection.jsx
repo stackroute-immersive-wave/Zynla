@@ -11,6 +11,9 @@ class QueCards extends React.Component {
 	render () {
 		// map function to get the array value and
 		// passing it to card to get the array of cards
+		let queLike = this.props.queLike;
+		let queDislike = this.props.queDislike;
+
 		let cards = this.props.quesCollection.map(function(item) {
 				return (
 					// sending data to child card
@@ -20,7 +23,7 @@ class QueCards extends React.Component {
 						time={new Date(parseInt(item.addedOn, 10)).toString().substring(0, 15)} id={item.id}
 					title={item.heading} content={item.question} upvote={item.upVotes}
 					downvote={item.downVotes} anscount={item.answerCounts} profileImage={item.profileImage}
-					category={item.category}/>
+					category={item.category} queLike={queLike} queDislike={queDislike}/>
 			</div>
 			);
 		});
@@ -33,6 +36,8 @@ class QueCards extends React.Component {
 	}
 }
 QueCards.propTypes = {
-	quesCollection: React.PropTypes.array
+	quesCollection: React.PropTypes.array,
+	queLike: React.PropTypes.array,
+	queDislike: React.PropTypes.array
 };
 module.exports = QueCards;

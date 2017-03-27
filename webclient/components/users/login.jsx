@@ -84,7 +84,7 @@ render() {
     <Grid.Column width={6}/>
     <Grid.Column width={6}>
       <img src="./../../image/Zynla.png" />
-      <p className="tagline">A place to share knowledge and better understand the world</p>
+      <p className="tagline">Quenching Thirsty Minds...</p>
     </Grid.Column>
     <Grid.Column width={4}>
       <Button id='loginButton' circular
@@ -102,12 +102,12 @@ render() {
             <Grid.Column width={9}>
               <Grid.Row />
               <Grid.Row>
-                <img src = '../../image/logo.png' style={{marginLeft: 170 + 'px',
-                backgroundColor: 'darkred'}}/>
+                <img src = '../../image/logo.png' style={{marginLeft: 199 + 'px',
+                backgroundColor: 'darkred', width: 58 + 'px', marginTop: 20 + 'px'}}/>
               </Grid.Row>
               <Grid.Row>
-                <p className="tagline" style={{marginLeft: -19 + 'px', marginTop: 14 + 'px'}}>
-                A place to share knowledge and better understand the world
+                <p className="tagline" style={{marginLeft: 109 + 'px', marginTop: 14 + 'px'}}>
+                Quenching Thirsty Minds...
                 </p>
               </Grid.Row>
               <Grid.Row>

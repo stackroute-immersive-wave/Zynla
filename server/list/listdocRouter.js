@@ -21,5 +21,6 @@ router.post('/UpdateAcceptans', listCtrl.UpdateAcceptans);
 router.put('/addanswerComment', listCtrl.addanswerComment);
 router.post('/createReport', listCtrl.createReport);
 router.post('/changePopup', listCtrl.changePopup);
+router.post('/getLikeStatus', listCtrl.getLikeStatus);
 
 module.exports = router;

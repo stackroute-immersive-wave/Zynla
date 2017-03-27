@@ -11,6 +11,9 @@ import {
     TextArea,
     Form
 } from 'semantic-ui-react';
+const ReactToastr = require('react-toastr');
+const {ToastContainer} = ReactToastr;
+const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 let menucommentstyle = {
   fontSize: 14
 };
@@ -31,22 +34,59 @@ let commentstyle = {
 let formstyle = {
     margin: '3% 3% 3% 3% '
 };
+let commentbutton = {
+  marginBottom: '2%',
+  marginLeft: '5%'
+};
+let commentbutton1 = {
+  marginRight: '3%'
+};
 class cardAnswer extends React.Component {
     constructor() {
         super();
         this.state = {
+            modalState: false,
             isAccepted: false,
             btnValue: 'Accept'
         };
         this.addAnswercomment = this.addAnswercomment.bind(this);
+        this.locAlert = this.locAlert.bind(this);
     }
     comment(e) {
        this.setState({comment: e.target.value});
+   }
+   commentclose() {
+     this.setState({modalState: false});
+   }
+   locAlert() {
+    //  console.log('inside localert');
+   this.refs.container.success(
+     'Updated Successfully',
+     '', {
+     timeOut: 1000,
+     extendedTimeOut: 10000
+   });
+   }
+   changeModalState(x, y) {
+     // console.log(y);
+     if(y === false) {
+       this.setState({
+         modalState: false
+       });
+     }
+     else {
+       this.setState({
+         modalState: true
+       });
+     }
    }
 
    addAnswercomment() {
        // console.log('views before increment');
          let id = this.props.id;
+         /* eslint-disable */
+         let context = this;
+         /* eslint-enable */
 
        let commentdata = {
            answerId: id,
@@ -59,6 +99,9 @@ class cardAnswer extends React.Component {
            type: 'PUT',
            data: commentdata,
            success: function() {
+             // console.log('insisde success');
+             context.changeModalState(123, false);
+             context.locAlert();
                // this.setState({comment: Comments});
                // console.log('inside success', this.state.commentdata);
            }
@@ -119,11 +162,9 @@ class cardAnswer extends React.Component {
                           {new Date(parseInt(this.props.createdOn, 10))
                             .toString().substring(0, 15)}</div>
                     </Card.Content>
-                    <Card.Content>
-                        <Card.Header style={ansstyle}>
+                    <Card.Content style={ansstyle}>
                             <div className='content'
                               dangerouslySetInnerHTML={{__html: ansHtmlContent}} />
-                        </Card.Header>
                     </Card.Content>
                     <Menu style={commentstyle}>
                         <Menu.Item>
@@ -139,15 +180,22 @@ class cardAnswer extends React.Component {
                         </Menu.Item>
                         <Menu.Item>
                           <Modal trigger={<Button basic color = 'black'
-                            style = {menucommentstyle} >
-                            Add Comments </Button>} closeIcon = 'close'>
-                           <Form style={formstyle}>
-                               <TextArea onChange={this.comment.bind(this)}
-                                 value={this.state.comment}/>
-                           </Form>
-                           <Button content='Submit' primary
-                             onClick={this.addAnswercomment.bind(this)} floated = 'right'/>
-                       </Modal>
+                             onClick = {this.changeModalState.bind(this)}
+                              size = 'mini' style = {menucommentstyle}> Add Comments </Button>}
+                           open = {this.state.modalState}>
+                              <Form style={formstyle}>
+                                  <TextArea onChange={this.comment.bind(this)}
+                                     onClick = {this.changeModalState.bind(this)}
+                                      value={this.state.comment}/>
+                              </Form>
+                              <Button style={commentbutton1} negative content='Cancel'
+                                floated='right' onClick={this.commentclose.bind(this)}/>
+                              <Button style={commentbutton} content='Submit' primary
+                                 onClick={this.addAnswercomment.bind(this)} floated='right'/>
+                          </Modal>
+                          <ToastContainer ref='container'
+                            toastMessageFactory={ToastMessageFactory}
+                            className='toast-top-center' />
                         </Menu.Item>
                       </Menu>
                 </Card>

@@ -1,24 +1,23 @@
 const List = require('../list/listdocEntity');
 const userList = require('../users/userEntity');
+const userProfileList = require('../users/userProfileEntity').userModel;
 let driver = require('../config/neo4j');
 let searchController = {
 
     getPeople: function(req, res) {
-        let session = driver.session();
-        let query = 'match (n:Concept {name:"' + req.body.q + '"})<-[:follow]-(u:User) return u';
-        session.run(query).then(function(result) {
-            let arr = [];
-            for (let x = 0; x < result.records.length; x = x + 1) {
-                /* eslint-disable */
-                let y = result.records[x]._fields[0].properties.name;
-                /* eslint-enable */
-                arr.push(y);
-            }
-            session.close();
-            res.send(arr);
-        }).catch(function() {
-            res.send(['abc', 'def', 'xyz']);
-        });
+    const role = 'search';
+    const cmd = 'searchuser';
+
+    const question = req.body.q;
+    const searchMicroservice = require('seneca')();
+
+    /* ToDO: Move IP and Port to config */
+
+    searchMicroservice.client({pin: 'role:search, cmd:searchuser', host: '127.0.0.1', port: 3000});
+
+      searchMicroservice.act({role, cmd}, {question}, (err, answer) => {
+        res.send(answer);
+      });
     },
 
     getuserprofile: function(req, res) {
@@ -84,19 +83,18 @@ let searchController = {
     },
 
     getConcepts: function(req, res) {
-        let query = 'match (n)<-[r]-(m:Concept) where n.name="' + req.body.concept + '" return m';
-        let session = driver.session();
-        session.run(query).then(function(result) {
-            let json = [];
-            for (let x = 0; x < result.records.length; x = x + 1) {
-                /* eslint-disable */
-                let y = result.records[x]._fields[0].properties.name;
-                let i = result.records[x]._fields[0].Image;
-                /* eslint-enable */
-                json.push({name: y, image: i});
-            }
-            res.send(json);
-            session.close();
+      const role = 'get';
+      const cmd = 'getConcepts';
+
+      const concept = req.body.concept;
+      const searchMicroservice = require('seneca')();
+
+      /* ToDO: Move IP and Port to config*/
+
+      searchMicroservice.client({pin: 'role:get, cmd:getConcepts', host: '127.0.0.1', port: 3000});
+
+        searchMicroservice.act({role, cmd}, {concept}, (err, answer) => {
+          res.send(answer);
         });
     },
 
@@ -109,7 +107,7 @@ let searchController = {
                 return n,m;';
        /* eslint-enable */
        session.run(query).then(function() {
-           userList.findOneAndUpdate({
+           userProfileList.findOneAndUpdate({
            emailId: req.body.id
        }, {
            $push: {
@@ -120,7 +118,7 @@ let searchController = {
        }, (err) => {
            res.send(err);
        });
-       userList.findOneAndUpdate({
+       userProfileList.findOneAndUpdate({
        emailId: req.body.emailId
    }, {
        $inc: {
@@ -167,29 +165,39 @@ let searchController = {
         });
     },
     isFollowTopic: function(req, res) {
-        /* eslint-disable */
-        let query = 'match (n:User {name:"' + req.body.name + '"})-[r:follow]->(m:Concept {name:"' + req.body.q + '"}) return r';
-        /* eslint-enable */
-        let session = driver.session();
-        session.run(query).then(function(result) {
-            session.close();
-            if(result.records.length > 0) {
-              res.send({follow: true});
-            }
-            else {
-              res.send({follow: false});
-            }
-        });
+      const role = 'get';
+      const cmd = 'isFollowTopic';
+
+      const q = req.body.q;
+      const name = req.body.name;
+      const searchMicroservice = require('seneca')();
+
+      /* ToDO: Move IP and Port to config*/
+
+      searchMicroservice.client({
+        pin: 'role:get, cmd:isFollowTopic', host: '127.0.0.1', port: 3000});
+
+        searchMicroservice.act({role, cmd}, {q, name}, (err, answer) => {
+          res.send(answer);
+        });  /* eslint-disable */
+
     },
     followTopic: function(req, res) {
-         let session = driver.session();
-         /* eslint-disable */
-         let query ='match(n:User {name:"' + req.body.id + '"}),(m:Concept {name:"' + req.body.concept + '"}) create (n)-[:follow]->(m) return n,m'
-         /* eslint-enable */
-         session.run(query).then(function() {
-                session.close();
-               res.send('success');
-           });
+      const role = 'do';
+      const cmd = 'followTopic';
+
+      const id = req.body.id;
+      const concept = req.body.concept;
+      const searchMicroservice = require('seneca')();
+
+      /*ToDO: Move IP and Port to config*/
+
+      searchMicroservice.client({pin: 'role:do, cmd:followTopic', host: '127.0.0.1', port: 3000});
+
+        searchMicroservice.act({role, cmd}, {id, concept}, (err, answer) => {
+          res.send(answer.result);
+        });  /* eslint-disable */
+
     }
 };
 

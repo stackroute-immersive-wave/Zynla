@@ -25,7 +25,7 @@ class displayAnswers extends React.Component {
           this.getAnswers();
      }
      noAnswersAlert () {
-        this.refs.container.success(
+        this.refs.container.error(
           'No Answers yet!!',
           '', {
           timeOut: 2000,

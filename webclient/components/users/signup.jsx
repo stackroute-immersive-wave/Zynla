@@ -58,9 +58,9 @@ export default class Signup extends React.Component {
                 data: {
                     data: dataEmail.email
                   },
-                  success: function() {
-                    // console.log('Mail Has been sent');
-                        hashHistory.push('/mail');
+                  success: function(data) {
+                    // console.log(data.email);
+                        hashHistory.push('/mail?emailId=' + data.email);
                     },
                     error: function() {
                         // console.log('Errorrrrrrrr');
@@ -191,43 +191,43 @@ render() {
         <Modal open={open} onClose={this.close}
         size="small" closeIcon="close">
         <Modal.Header style={{backgroundColor: 'teal'}}>
-        <p style={{color: 'white'}}>Sign Up</p>
+        <p style={{color: 'white', marginLeft: 300 + 'px'}}>Sign Up</p>
         </Modal.Header>
         <Modal.Content>
         <Form onSubmit={this.onRegisterUser}>
         <Form.Field>
         <Form.Input label='First Name' name='firstName' placeholder=
         'First Name' type='text' onChange={this.changeFirst}
-        error={this.state.errorfirst} required/>
-        <p style={{color: 'red'}}>{this.state.errormessagefirst}</p>
+        error={this.state.errormessagefirst} required/>
+        <p style={{color: 'red', float: 'right'}}>{this.state.errormessagefirst}</p>
         </Form.Field>
         <Form.Field>
         <Form.Input label='Last Name' id="input" name="lastName"
         placeholder='Last Name' type='text' onChange=
         {this.changeLast.bind(this)} error={this.state.errorlast}/>
-        <p style={{color: 'red'}}>{this.state.errormessagelast}</p>
+        <p style={{color: 'red', float: 'right'}}>{this.state.errormessagelast}</p>
         </Form.Field>
         <Form.Field>
         <Form.Input label='Email' id="to" name="email"
         placeholder='Email-ID' type='text'
         onChange={this.changeEmail.bind(this)}
         error={this.state.erroremail} required/>
-        <p style={{color: 'red'}}>{this.state.errormessageemail}</p>
-        <p style={{color: 'red'}}>{this.state.userexists}</p>
+        <p style={{color: 'red', float: 'right'}}>{this.state.errormessageemail}</p>
+        <p style={{color: 'red', float: 'right'}}>{this.state.userexists}</p>
         </Form.Field>
         <Form.Field>
         <Form.Input label='Password' id="input" name="password"
         placeholder='Password' type='password' onChange={this.changePassword.bind(this)}
         error={this.state.errorpassword} required/>
-        <p style={{color: 'red'}}>{this.state.errormessagepassword}</p>
+        <p style={{color: 'red', float: 'right'}}>{this.state.errormessagepassword}</p>
         </Form.Field>
         <Form.Field>
         <Form.Input label='Confirm Password' id="input" name="repassword"
         type='password' placeholder='Confirm Password'
         onChange={this.changeRepassword.bind(this)} error={this.state.errorrepassword} required/>
-        <p style={{color: 'red'}}>{this.state.errormessage}</p>
+        <p style={{color: 'red', float: 'right'}}>{this.state.errormessage}</p>
         </Form.Field>
-        <Button type = 'submit' onClick={this.handleOpen}
+        <Button primary type = 'submit' style={{marginLeft: 221 + 'px'}} onClick={this.handleOpen}
         circular disabled={!this.state.firstname || !this.state.email ||
         !this.state.password || !this.state.repassword || !this.state.mailexists
         || !this.state.verifypassword || !this.state.confirmpassword} > CREATE YOUR ACCOUNT
@@ -243,7 +243,7 @@ render() {
                    </h3></Header.Subheader>
                  </Header>
         </Dimmer > : null}
-        <h4 id="text">Already a member?&nbsp;<a href='#/'>
+        <h4 id="text" style={{marginLeft: 221 + 'px'}}>Already a member?&nbsp;<a href='#/'>
         Sign in here</a>
         </h4>
         </Form>

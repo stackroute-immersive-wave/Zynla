@@ -8,6 +8,9 @@ let BasicInfo = require('./basicInfo/basicInfo.jsx');
 let DisplayFollowing = require('./following/displayFollowing');
 let DisplayFollower = require('./followers/displayFollower');
 import WatchingCard from './basicInfo/watchingCategories/watchingCard.jsx';
+const ReactToastr = require('react-toastr');
+const {ToastContainer} = ReactToastr;
+const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 
 let picStyle = {
     marginTop: '3%'
@@ -37,6 +40,7 @@ class NavBarPro extends Component {
   constructor() {
     super();
     this.state = {
+        name: 'name',
         questionCount: 0,
         answerCount: 0,
         followerCount: 0,
@@ -48,7 +52,7 @@ class NavBarPro extends Component {
         objArray: [],
         status: 0,
         watchingData: [],
-        content: <BasicInfo />,
+        content: '',
         watchingCount: 0
     };
     this.getProfile = this.getProfile.bind(this);
@@ -56,7 +60,7 @@ class NavBarPro extends Component {
 // Fetch Basic Info page
     viewInfo() {
       let temp = (
-        <BasicInfo />
+        <BasicInfo/>
       );
       this.setState({
         content: temp
@@ -101,17 +105,23 @@ class NavBarPro extends Component {
         content: temp
       });
     }
-    // Fetch Interested Topics from data base
-    getWatching() {
-                  this.setState({
-                content: <WatchingCard watchingData={this.state.watchingData}/>
-              });
-    }
+    noWatchingsAlert () {
+       this.refs.container.error(
+         'Not Watching any Topics',
+         '', {
+         timeOut: 2000,
+         extendedTimeOut: 10000
+       });
+     }
     componentDidMount() {
         this.getProfile();
     }
-    // Fetch All Info from database
+    // Fetch All Info from databasex
     getProfile() {
+      this.setState({
+        status: 0,
+        content: <BasicInfo statusMeter = {this.getProfile.bind(this)}/>
+      });
       /*eslint-disable*/
       let context = this;
       /*eslint-enable*/
@@ -123,8 +133,8 @@ class NavBarPro extends Component {
             success: function(data) {
                 context.setState({questionCount: data.lists.length,
                    answerCount: data.answers.length,
-                    followerCount: data.followerCount,
                      followingCount: data.followingUser.length,
+                     name: data.profile.name,
                      objArray: data});
                      if(data.profile.gender.length > 0 && data.profile.gender !== 'gender' &&
                      data.profile.gender !== ' ') {
@@ -207,7 +217,8 @@ class NavBarPro extends Component {
             },
             success: function(data) {
                 // console.log(data);
-                context.setState({watchingData: data,
+                context.setState({
+                  watchingData: data,
                   watchingCount: data.length
                   // setting interestData to content
                 });
@@ -216,8 +227,32 @@ class NavBarPro extends Component {
                 // console.error(err.toString());
             }
         });
+        $.ajax({
+            url: '/userdoc/getFollowers',
+            type: 'POST',
+            data: {email: Cookie.load('email'), skip: 0, limit: 100},
+            success: function(data) {
+              context.setState({
+              followerCount: data.length
+            });
+            },
+            error: function() {
+             // console.log('error in logout' + err);
+            }
+        });
     }
-
+   // Fetch Interested Topics from data base
+   getWatching() {
+     if(this.state.watchingData.length === 0)
+     {
+       this.noWatchingsAlert();
+     }
+     else{
+     this.setState({
+       content: <WatchingCard watchingData={this.state.watchingData}/>
+     });
+   }
+   }
     render() {
         const followerCount = this.state.followerCount;
         const followingCount = this.state.followingCount;
@@ -230,7 +265,7 @@ class NavBarPro extends Component {
                       <Image style={imageStyle} src={Cookie.load('profilepicture')}
                         size = 'small' shape='circular'/>
                         <div style={nameStyle} onClick={this.viewInfo.bind(this)}>
-                            {Cookie.load('username')}
+                            {this.state.name}
                         </div>
                         <div style = {buttonStyle}>
                            <Button onClick={this.getFollowers.bind(this)}
@@ -256,7 +291,7 @@ class NavBarPro extends Component {
                           <Statistic.Label>Profile Meter</Statistic.Label>
                           <Statistic.Value> {profMeter} </Statistic.Value>
                           <Statistic.Label>completed</Statistic.Label>
-                          <Chat />
+                          <Chat handle = {this.getProfile.bind(this)}/>
                         </Statistic>
                         </div>
                     </Grid.Column>>
@@ -300,6 +335,9 @@ class NavBarPro extends Component {
                   <Grid.Column width = {1}/>
                 </Grid>
               </div>
+              <ToastContainer ref='container' style ={{backgroundColor: '#B2242E'}}
+                     toastMessageFactory={ToastMessageFactory}
+                     className='toast-top-center' />
             </div>
         );
     }

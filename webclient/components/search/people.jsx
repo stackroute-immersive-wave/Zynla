@@ -14,7 +14,7 @@ class People extends React.Component {
     let photo = '';
     // map function to retrive the get the ID of users
     let allPeople = this.props.people.map(function(item, index) {
-      let temp = false;
+      let temp = '';
       let changedphoto = '';
       // map function to check the particular user is fallowing other user
       context.props.isfollow.map(function(item2) {
@@ -27,7 +27,15 @@ class People extends React.Component {
     console.log('coming');
      if(item3.email === item){
         photo = item3.photos;
-        changedphoto = photo.replace("sz=50","sz=250");
+        if(photo !== null)
+       {
+          changedphoto = photo.replace("sz=50","sz=250");
+
+       }
+       else
+       {
+        changedphoto = 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=250';
+       }
        }
       });
    return (

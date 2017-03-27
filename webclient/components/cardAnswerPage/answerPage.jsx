@@ -72,12 +72,20 @@ let date = {
     marginTop: '1%',
     fontSize: 15
 };
+let commentbutton = {
+  marginBottom: '2%',
+  marginLeft: '5%'
+};
+let commentbutton1 = {
+  marginRight: '3%'
+};
 class answerPage extends React.Component {
     constructor() {
         super();
         this.state = {
           modalState: false,
             active: false,
+            open: true,
             value: RichTextEditor.createEmptyValue(),
             id: '',
             warnModalStatus: false,
@@ -134,7 +142,9 @@ class answerPage extends React.Component {
     static propTypes = {
         onChange: PropTypes.func
     };
-
+    commentclose() {
+      this.setState({modalState: false});
+    }
     locAlert() {
     this.refs.container.success(
       'Updated Successfully',
@@ -626,12 +636,12 @@ class answerPage extends React.Component {
                               </Button>
                             </Modal.Actions>
                           </Modal>
-                            <Popup wide trigger={< Button negative style = {
+                            <Popup wide trigger={<Button negative style = {
                                 buttonfolstyle
                             }
                             size = 'mini' onClick = {
                                 this.checkReport.bind(this)
-                            } > Report < /Button>} on='click' position='bottom right' hideOnScroll>
+                            } > Report </Button>} on='click' position='bottom right' hideOnScroll>
                                 {pop}
                             </Popup>
                             <Modal trigger={<Button basic color = 'black'
@@ -639,14 +649,16 @@ class answerPage extends React.Component {
                                 size = 'mini' style = {
                                 buttonfolstyle
                             } > Add Comments </Button>}
-                             closeIcon = 'close' open = {this.state.modalState}>
+                              open = {this.state.modalState} onClose={this.commentclose}>
                                 <Form style={formstyle}>
                                     <TextArea onChange={this.comment.bind(this)}
                                        onClick = {this.changeModalState.bind(this)}
                                         value={this.state.comment}/>
                                 </Form>
-                                <Button content='Submit' primary
-                                   onClick={this.addcomment.bind(this)}/>
+                                <Button style={commentbutton1} negative content='Cancel'
+                                  floated='right' onClick={this.commentclose.bind(this)}/>
+                                <Button style={commentbutton} content='Submit' primary
+                                   onClick={this.addcomment.bind(this)} floated='right'/>
                             </Modal>
                             <ToastContainer ref='container'
                               toastMessageFactory={ToastMessageFactory}

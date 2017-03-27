@@ -57,14 +57,22 @@ let userCtrl = {
                 /*eslint-enable */
                 VIDcheck = VID;
                 console.log(VID + ' is the VID');
-                link = 'http://' + req.get('host') + '/users/verify?id=' + VID + '&email=' + profile[0].email;
+                // link = 'http://' + req.get('host') + '/users/verify?id=' + VID + '&email=' + profile[0].email;
                 var text = 'Hello from \n\n' + req.body.data;
                 mailOptions = {
                     from: 'zynla0001@gmail.com', // sender address
                     to: profile[0].email, // reciever
                     subject: 'Verify your Email with Zynla', // Subject line
                     text: text,
-                    html: '<center><h1>Welcome to Zynla</h1></center><br><br><br>' + 'Hi,<br><br>To complete Signup Click on the button to verify yourself.' + '<br><br><br><a href=' + link + ' style=background-color:#44c767;' + '-moz-border-radius:28px;-webkit-border-radius:28px;border-radius:28px;' + 'border:1px solid #18ab29;display:inline-block;padding:16px 31px;' + 'color:#ffffff;text-shadow:0px 1px 0px #2f6627;' + 'text-decoration:none;> Verify </a><br><br>' + '<i>This link is valid for an hour.This is an Auto-generated mail,' + 'please do not reply</i></small>'
+                    html: '<p style="color: rgb(0, 0, 0); font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<img alt="" data-mce-src="logo" height="50" src="../../webclient/image/logo.png" width="50" /></p>'+
+
+'<h2 style="color: rgb(0, 0, 0); font-family: Verdana, Arial, Helvetica, sans-serif;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Welcome To Zynla</h2>'+
+
+'<h2 style="color: rgb(0, 0, 0); font-family: Verdana, Arial, Helvetica, sans-serif;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Please Enter the below code to to get Verified with Zynla&nbsp;</h2>'+
+
+'<h3 style="color: rgb(0, 0, 0); font-family: Verdana, Arial, Helvetica, sans-serif;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<span data-mce-style="text-decoration: underline; background-color: #00ffff;" style="text-decoration: underline; background-color: rgb(0, 255, 255);">&nbsp;'+VID+'</span></h3>'+
+
+'<h3 style="color: rgb(0, 0, 0); font-family: Verdana, Arial, Helvetica, sans-serif;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>&nbsp;Note</strong>: This is an auto generated mail Please do not respond to this Mail.</h3>'
                 };
                 console.log(mailOptions + host);
                 // Sent mail to recipient
@@ -74,7 +82,7 @@ let userCtrl = {
                         console.log('Error')
                     } else {
                         console.log('Message sent: ' + info.response);
-                        res.json({yo: info.response});
+                        res.send({email: req.body.data});
                     }
                 });
             }
@@ -85,13 +93,14 @@ let userCtrl = {
     // LOCAL SIGN UP
     signUp: function(req, res) {
         let newUser = new User();
+        let newUserProfile = new UserProfile();
         String.prototype.capitalizeFirstLetter = function() {
             return this.charAt(0).toUpperCase() + this.slice(1);
         }
-        rand = Math.floor((Math.random() * 100) + 54);
+        rand = Math.floor(Math.random() * 899999 + 100000);
         newUser.verificationID = rand;
         // newProfileUser.id = rand;
-        // newProfileUser.emailId = req.body.email;
+        newUserProfile.emailId = req.body.email;
         newUser.name = (req.body.firstName.toLowerCase().capitalizeFirstLetter() + ' ' + req.body.lastName.toLowerCase().capitalizeFirstLetter());
         newUser.email = req.body.email;
         // newProfileUser.emailId = req.body.email;
@@ -104,10 +113,18 @@ let userCtrl = {
         'https://cdn.petri.com/forums/core/image.php?userid=8422&thumb=1&dateline=1180704063';
         newUser.isnew = 'Y';
         res.cookie('profilepicture', newUser.photos);
+        res.cookie('username', newUser.name);
         newUser.save(function(err) {
             if (err) {
                 res.send('Error in registration');
             } else {
+                newUserProfile.save(function(err) {
+            if (err) {
+                res.send('Error in registration');
+            } else {
+                console.log('Profile saved');
+            }
+        });
                 res.send({email: req.body.email});
             }
         });
@@ -115,10 +132,13 @@ let userCtrl = {
 
     // VIRIFY EMAIL ID
     verifyEmail: function(req, res) {
-        let checkID = req.query.id;
-        let checkMail = req.query.email;
+        let emailId = req.body.email;
+        console.log(req.body.verifyId);
+        let verId = JSON.parse(req.body.verifyId);
+        console.log(typeof(verId));
+        console.log(verId);
         User.find({
-            'email': req.query.email
+            'email': emailId
         }, function(err, profile) {
 
             if (err) {
@@ -128,10 +148,12 @@ let userCtrl = {
                 console.log(req.protocol + ':/' + req.get('host') + ':' + ('http://' + host));
                 if ((req.protocol + '://' + req.get('host')) == ('http://' + host)) {
                     console.log('Domain is matched. Information is from Authentic email');
-                    if (checkID == VIDcheck) {
+                    console.log(typeof(profile[0].verificationID));
+                    console.log(profile[0].verificationID);
+                    if (verId === profile[0].verificationID) {
                         console.log('email is verified');
                         User.update({
-                            'email': req.query.email
+                            'email': req.body.email
                         }, {
                             $set: {
                                 'isEmailVerified': true,
@@ -144,14 +166,17 @@ let userCtrl = {
                                 console.log('Account Verified and Changed to true');
                             }
                         });
-                        res.cookie('email', req.query.email);
-                        var query = 'create (n:User {name : "' + req.query.email + '"})';
-                        session.run(query);
-                        res.redirect('/#/selectCategory');
+                        res.cookie('email', req.body.email);
+                        var query = 'create (n:User {name : "' + req.body.email + '"})';
+                        session.run(query).then(function(result){
+                          if(result)
+                          {
+                          res.send({isVerified: true});
+                          }
+                        });
+                        // res.send({isVerified: true});
                     } else {
-                        console.log('email is not verified');
-                        //res.end('<h1>Link expired</h1>');
-                        res.redirect('/#/expiryLink');
+                        res.send({isVerified: false});
                     }
                 } else {
                     console.log('email is not verified');
@@ -304,6 +329,15 @@ let userCtrl = {
         if (req.user.isnew === 'N') {
             res.redirect('/#/home');
         } else {
+            let newUserProfile = new UserProfile();
+            newUserProfile.emailId = req.user.email;
+            newUserProfile.save(function(err) {
+            if (err) {
+                res.send('Error in registration');
+            } else {
+                console.log('Profile saved');
+            }
+        });
             var query = 'create (n:User {name : "' + req.user.email + '"})';
             session.run(query).then(function() {
                 console.log("comes");
@@ -327,6 +361,15 @@ let userCtrl = {
         if (req.user.isnew === 'N') {
             res.redirect('/#/home');
         } else {
+            let newUserProfile = new UserProfile();
+            newUserProfile.emailId = req.user.email;
+            newUserProfile.save(function(err) {
+            if (err) {
+                res.send('Error in registration');
+            } else {
+                console.log('Profile saved');
+            }
+        });
             var query = 'create (n:User {name : "' + req.user.email + '"})';
             session.run(query).then(function() {
                 console.log("comes");
@@ -352,6 +395,15 @@ let userCtrl = {
         if (req.user.isnew === 'N') {
             res.redirect('/#/home');
         } else {
+            let newUserProfile = new UserProfile();
+            newUserProfile.emailId = req.user.email;
+            newUserProfile.save(function(err) {
+            if (err) {
+                res.send('Error in registration');
+            } else {
+                console.log('Profile saved');
+            }
+        });
             console.log(req.user.email);
             var query = 'create (n:User {name : "' + req.user.email + '"})';
             session.run(query).then(function() {
@@ -621,55 +673,91 @@ let userCtrl = {
         });
     },
     /* Add category to mongodb as well as in neo4j */
-    addCategory: function(req, res) {
-      console.log("dddddddddddddd");
-      console.log(req.body);
-      let arr1 = JSON.parse(req.body.catagory);
-      console.log(typeof(arr1));
-      console.log('got the         ', arr1);
-      let newUser = new UserProfile();
-      let arr = [];
-      // rand = Math.floor((Math.random() * 100) + 54);
-      for (let y of arr1) {
-          arr.push(y);
-      }
-      newUser.profile.name = req.body.name;
-      newUser.emailId = req.body.email;
-      newUser.profile.picture = req.body.profilePicture;
-      newUser.interestCategory = arr;
-      newUser.profile.dob = 'dob';
-      newUser.profile.gender = 'gender';
-      newUser.profile.address.country = 'Country';
-      res.cookie('email', newUser.emailId);
-      res.cookie('catagories', newUser.interestCategory);
-      console.log(arr);
-      let i = 1;
-      newUser.save(function(err) {
-          if (err) {
-              res.send('Error in registration');
-          } else {
-              let id = req.body.email;
-              console.log('email in addcategory', req.body.email);
-              /* Add category to neo4j */
-              let query = 'match (n:User {name:"' + id + '"})';
-              for (var i = 0; i < arr.length; i++) {
-                  query += ',(d' + i + ': Domain {name:"' + arr[i] + '"}) ';
-              }
-              console.log('node 1', query);
-              query += 'create (n)-[:follows]->(d0)';
-              for (let i = 1; i < arr.length; i++) {
-                  query += ',(n)-[:follows]->(d' + i + ')';
-              }
-              console.log('node 2', query);
-              session.run(query).then(function() {
-                  console.log('updated to neo4j');
-              });
-              res.send('Successfully updated');
+    fetchCatagory: function(req, res) {
+    var result2 = [];
+    logger.debug('Inside fetch catagory');
+    UserProfile.find({'emailId': req.body.email}, function(err, docs) {
+        if(err)
+        {
+            console.log(err);
+        }
+            if(docs[0].interestCategory.length === 0 || docs[0].interestCategory === null)
+            {
+                console.log('error message');
+                res.send(result2)
+            }
+            else
+            {
+                console.log(docs[0].interestCategory);
+                docs[0].interestCategory.map(function(doc)
+                {
+                    result2.push(doc);
+                    // res.send(result2);
+                });
+                console.log(result2);
+                res.send(result2);
+            }
+    });
+},
+/* Add category to mongodb as well as in neo4j */
+addCategory: function(req, res) {
+  console.log("dddddddddddddd");
+  console.log(req.body);
+  let arr1 = JSON.parse(req.body.catagory);
+  console.log(typeof(arr1));
+  console.log('got the         ', arr1);
+  let arr = [];
+  // rand = Math.floor((Math.random() * 100) + 54);
+  for (let y of arr1) {
+      arr.push(y);
+
+  }
+  UserProfile.findOne({emailId: req.body.email},function(err, newUser)
+  {
+  newUser.profile.picture = req.body.profilePicture;
+  newUser.interestCategory = arr;
+  // arr.map(function(item)
+  // {
+  //   newUser.interestCategory.push(item);
+  // });
+  newUser.profile.picture = req.body.profilePicture;
+  newUser.profile.name = req.body.name;
+  newUser.profile.dob = 'dob';
+  newUser.profile.gender = 'gender';
+  newUser.profile.address.country = 'Country';
+  res.cookie('email', newUser.emailId);
+  res.cookie('catagories', newUser.interestCategory);
+  console.log(arr);
+  let i = 1;
+  newUser.save(function(err) {
+      if (err) {
+          res.send('Error in registration');
+      } else {
+          let id = req.body.email;
+          console.log('email in addcategory', req.body.email);
+          let query1 = 'match (:User {name: "'+id+'"})-[r:follows]-(:Domain) DELETE r'
+                session.run(query1).then(function(){
+                    let query = 'match (n:User {name:"' + id + '"})';
+          for (var i = 0; i < arr.length; i++) {
+              query += ',(d' + i + ': Domain {name:"' + arr[i] + '"}) ';
           }
-      });
-    },
-    /* After selecting category chage user type fro 'Y' to 'N' */
-    updateIsNew: function(req, res) {
+          console.log('node 1', query);
+          query += 'create (n)-[:follows]->(d0)';
+          for (let i = 1; i < arr.length; i++) {
+              query += ',(n)-[:follows]->(d' + i + ')';
+          }
+          console.log('node 2', query);
+          session.run(query).then(function() {
+              console.log('updated to neo4j');
+          });
+                })
+          /* Add category to neo4j */
+          res.send('Successfully updated');
+      }
+  });
+  });
+},
+updateIsNew: function(req, res) {
         let isNew = req.body.isNew;
         console.log(typeof(isNew));
         console.log('email', req.params.emails);

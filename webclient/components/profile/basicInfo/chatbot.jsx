@@ -33,9 +33,6 @@ class ProfileBot extends React.Component {
     this.updateProfile = this.updateProfile.bind(this);
   }
 
-  componentDidMount() {
-    this.getUserprofile();
-  }
 
   skip() {
     this.state.skipques.push(this.state.chat[this.state.chat.length - 1].message);
@@ -130,6 +127,21 @@ class ProfileBot extends React.Component {
 
         success: function() {
           context.proAlert();
+          context.props.handle();
+          context.setState({
+            chat: [{
+              by: 'bot',
+              message: <div style ={{color: 'black'}}>
+                        <div>
+                          Please update your profile data here.</div>
+                        <div>
+                          Please click the <strong>Skip</strong> button to skip a question.</div>
+                        <div>
+                          <i>You can later answer that by clicking on Profile Bot on
+                          your <strong>Profile </strong>page.</i></div>
+                      </div>
+            }]
+          });
         }
       });
   }
@@ -312,7 +324,8 @@ class ProfileBot extends React.Component {
     Cookie.load('email');
     return (
       <div>
-        <Modal trigger={<Button className='butstyle'
+        <Modal trigger={<Button onClick = {this.getUserprofile.bind(this)}
+          className='butstyle'
           content = 'Profile Bot'/>}
           onClose = {this.updateProfile.bind(this)} closeIcon='close'>
          <Modal.Header><h1 style={{color: '#B2242E'}}>Profile Bot</h1></Modal.Header>

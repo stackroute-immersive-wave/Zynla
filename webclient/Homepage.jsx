@@ -8,6 +8,7 @@ import Login from './components/users/login.jsx';
 import Signup from './components/users/signup.jsx';
 import SentMailPage from './components/users/SentMailPage';
 import SelectCategory from './components/users/selectCategory';
+import SelectedCategory from './components/users/selectedCategory';
 import UserProfile from './components/users/userprofile';
 import ForgetPassword from './components/users/forgetPassword.jsx';
 import ChangePassword from './components/users/changePassword.jsx';
@@ -58,6 +59,7 @@ ReactDOM.render(
     <Route path='/forgetPassword' component={ForgetPassword}/>
 <Route path='/changePasswordPage' component={ChangePassword}/>
     <Route path='/selectCategory' component={SelectCategory}/>
+    <Route path='/selectedCategory' component={SelectedCategory}/>
     <Route path='/userProfile' component={UserProfile}/>
     <Route path='/404' component={PageNotFound}/>
             <Redirect from='*' to='/404' />

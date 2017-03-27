@@ -26,10 +26,10 @@ class displayFollowing extends React.Component {
           this.getFollowing();
      }
      noFollowingsAlert () {
-        this.refs.container.success(
-          'No Followers',
+        this.refs.container.error(
+          'Not Following anyone',
           '', {
-          timeOut: 1000,
+          timeOut: 2000,
           extendedTimeOut: 10000
         });
       }

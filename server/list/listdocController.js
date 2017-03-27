@@ -8,7 +8,55 @@ let session = driver.session();
 let redis = require('redis');
 let client = redis.createClient();
 let listController = {
-
+  getLikeStatus: function(req, res) {
+  // console.log('router suggest ques');
+  /* eslint-disable */
+  console.log(req.body);
+  // console.log('first',req.body.qids);
+  // console.log('second check',req.body.qids);
+    let queArray = req.body.qids;
+    let mail = req.body.mail;
+  let query = 'unwind '+queArray+' as idQues \
+  match (n:User {name:"'+mail+'"})-[x:liked]->(q:Like)<-[:has]-(qu:Question) where id(qu)=idQues \
+  return x,qu;';
+  console.log(query);
+  let likeQueIds = [];
+  let unlikeQueIds = [];
+  /* eslint-enable */
+  session.run(query).then(function(result) {
+      // console.log(result);
+      let queObj = result.records;
+      if (result.records.length !== 0) {
+          for (let i = 0; i < queObj.length; i = i + 1) {
+            /*eslint-disable*/
+            likeQueIds.push(queObj[i]._fields[1].identity.low);
+          }
+          // res.send(likeQueIds);
+      }
+  }, function(err) {
+      // console.log('error while connecting',err);
+  });
+  let query1 = 'unwind ' + queArray + ' as idQues \
+  match (n:User {name:"'+mail+'"})-[x:unliked]->(q:Unlike)<-[:has]-(qu:Question) where id(qu)=idQues \
+  return x,qu;';
+  // console.log(query1);
+  /* eslint-enable */
+  session.run(query1).then(function(result) {
+      // console.log(result);
+      let queObj1 = result.records;
+      if (result.records.length !== 0) {
+          for (let i = 0; i < queObj1.length; i = i + 1) {
+            /* eslint-disable */
+            unlikeQueIds.push(queObj1[i]._fields[1].identity.low);
+            /* eslint-enable */
+          }
+      }
+      let a = {like: likeQueIds, unlike: unlikeQueIds};
+      res.send(a);
+  }, function() {
+      // console.log('error while connecting',err);
+  });
+},
     addList: function(req, res) {
         // logger.debug('Inside list add post');
         let newList = new List({
@@ -218,6 +266,8 @@ let listController = {
                 }
                 // query to post a question at a particular base tag
                 /*eslint-disable*/
+                console.log("-----------------------");
+                console.log(req.body);
                 let query = 'match (c:Concept), \
                             (u:User {name:"' + req.body.email + '"}) \
                             where c.name = "' + arr[max] + '" \
@@ -230,9 +280,10 @@ let listController = {
                             (n)-[:has]->(dl) \
                             return n \
                             ';
+                            console.log(query);
                 /*eslint-enable*/
                 session.run(query).then(function(result) {
-                    // console.log(result.records);
+                    console.log(result.records);
                     if (result) {
                         /*eslint-disable*/
                         let id = result.records[0]._fields[0].identity.low;
@@ -356,7 +407,7 @@ return m';
         let query = ' \
 match (n:Answer),\
 (u:User {name:"' + req.body.mail + '" }) \
-where id(n) = 1115 \
+where id(n) = ' + req.body.answerId + ' \
 create (m:Comment{name:"' + req.body.content + '"}), \
 (n)<-[:comment_of]-(m), \
 (m)-[:commented_by{on : timestamp()}]->(u) \
@@ -365,6 +416,7 @@ return m';
         session.run(query).then(function(result) {
             // logger.debug(result);result.records[0]._fields[0].identity.low;
             console.log(result);
+            res.send(result);
         });
     },
     inviteFrnds: function(req, res) {
@@ -442,73 +494,77 @@ return m';
     },
     //router of updating like for question by sumit(3/3/2017)
     updateLike: function(req, res) {
-        console.log('inside update like', req.body);
-        var id = req.body.id;
-        var email = req.body.email;
-        let query = "";
-        if (req.body.type == 'add') {
-            query = 'match(n:Question)-[:has]->(m:Like), \
-                    (p:User {name:"' + email + '"})\
-                    where id(n)=' + req.body.id + ' \
-                    set m.count=' + req.body.upVotes + ' \
-                    create (p)-[:liked]->(m) \
-                    return m;';
-        } else {
-            query = 'match(n:Question)-[:has]->(m:Like)<-[x:liked]- \
-                    (p:User {name:"' + email + '"})\
-                    where id(n)=' + req.body.id + ' \
-                    set m.count=' + req.body.upVotes + ' \
-                    delete x \
-                    return m;';
-        }
-        session.run(query).then(function(result) {
-            if (result) {
-                console.log('id', id);
-                List.update({
-                    'id': id,
-                    'upVotes': req.body.upVotes
-                }, function(docs) {
-                    res.send("success");
-                });
+      console.log('inside update like', req.body);
+      var id = req.body.id;
+      var email = req.body.email;
+      let query = "";
+      if (req.body.type == 'add') {
+          query = 'match(n:Question)-[:has]->(m:Like), \
+                  (p:User {name:"' + email + '"})\
+                  where id(n)=' + req.body.id + ' \
+                  set m.count=' + req.body.upVotes + ' \
+                  create (p)-[:liked]->(m) \
+                  return m;';
+      } else {
+          query = 'match(n:Question)-[:has]->(m:Like)<-[x:liked]- \
+                  (p:User {name:"' + email + '"})\
+                  where id(n)=' + req.body.id + ' \
+                  set m.count=' + req.body.upVotes + ' \
+                  delete x \
+                  return m;';
+      }
+      session.run(query).then(function(result) {
+          if (result) {
+              console.log('id', id);
+              List.update(
+                {
+                  'id': id},{$set:{
+                  'upVotes': req.body.upVotes
+                  }
+                }
+          , function(docs) {
+                  res.send("success");
+              });
             } else {
-                console.log("error in updating the like");
-            }
-        });
-    },
-    //router of updating unlike for question by sumit(4/3/2017)
-    updateunlike: function(req, res) {
-        var id = req.body.id;
-        var email = req.body.email;
-        let query = "";
-        if (req.body.type == 'add') {
-            query = 'match(n:Question)-[:has]->(m:Unlike), \
-                    (p:User {name:"' + email + '"})\
-                    where id(n)=' + req.body.id + ' \
-                    set m.count=' + req.body.downVotes + ' \
-                    create (p)-[:unliked]->(m) \
-                    return m;';
-        } else {
-            query = 'match(n:Question)-[:has]->(m:Unlike)<-[x:unliked]- \
-                    (p:User {name:"' + email + '"})\
-                    where id(n)=' + req.body.id + ' \
-                    set m.count=' + req.body.downVotes + ' \
-                    delete x \
-                    return m;';
-        }
-        session.run(query).then(function(result) {
-            if (result) {
-                // console.log('id', id);
-                List.update({
-                    'id': id,
-                    'downVotes': req.body.downVotes
-                }, function(docs) {
-                    res.send("success");
-                });
-            } else {
-                // console.log("error in updating the like");
-            }
-        });
-    },
+              console.log("error in updating the like");
+          }
+      });
+  },
+  //router of updating unlike for question by sumit(4/3/2017)
+  updateunlike: function(req, res) {
+      var id = req.body.id;
+      var email = req.body.email;
+      let query = "";
+      if (req.body.type == 'add') {
+          query = 'match(n:Question)-[:has]->(m:Unlike), \
+                  (p:User {name:"' + email + '"})\
+                  where id(n)=' + req.body.id + ' \
+                  set m.count=' + req.body.downVotes + ' \
+                  create (p)-[:unliked]->(m) \
+                  return m;';
+      } else {
+          query = 'match(n:Question)-[:has]->(m:Unlike)<-[x:unliked]- \
+                  (p:User {name:"' + email + '"})\
+                  where id(n)=' + req.body.id + ' \
+                  set m.count=' + req.body.downVotes + ' \
+                  delete x \
+                  return m;';
+      }
+      session.run(query).then(function(result) {
+          if (result) {
+              // console.log('id', id);
+              List.update({
+                  'id': id},{$set:{
+                  'downVotes': req.body.downVotes
+                }
+              }, function(docs) {
+                  res.send("success");
+              });
+          } else {
+              // console.log("error in updating the like");
+          }
+      });
+  },
     getImages: function(req, res) {
         let query = 'match(n:Domain) return n.name';
         let arr = [];

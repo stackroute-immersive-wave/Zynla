@@ -14,7 +14,7 @@ router.get('/getAllUserName', userController.getAllUserName);
 // Update a user based on :id
 router.post('/signup', userController.signUp);
 
-router.get('/verify', userController.verifyEmail);
+router.post('/verify', userController.verifyEmail);
 
 router.post('/checkuser', userController.checkUser);
 
@@ -61,6 +61,8 @@ router.get('/redirectForgetPassword', userController.redirectForgetPassword);
 router.post('/changePassword', userController.changePassword);
 
 router.get('/displayCatagory', userController.displayCatagory);
+
+router.post('/fetchCatagory', userController.fetchCatagory);
 
 router.put('/updateIsNew/:emails', userController.updateIsNew);
 

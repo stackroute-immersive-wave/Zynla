@@ -27,7 +27,9 @@ let userDocController = {
             if (err) {
                 res.send('Error:' + err);
             }
+            else{
             res.send('Updated education successfully');
+          }
         });
     },
     updateLocation: function(req, res) {
@@ -46,7 +48,9 @@ let userDocController = {
             if (err) {
                 res.send('Error:' + err);
             }
+            else{
             res.send('Updated location successfully');
+          }
         });
     },
     updateProfile: function(req, res) {
@@ -63,8 +67,9 @@ let userDocController = {
         }, function(err) {
             if (err) {
                 res.send('Error:' + err);
-            }
+            }else {
             res.send('Updated userinfo successfully');
+          }
         });
     },
     getUserprofile: function(req, res) {
@@ -181,11 +186,15 @@ let userDocController = {
             emailId: req.body.email
         }, function(err, data) {
             if (err) {
-                res.send('No Followings');
+                res.send('Error');
             } else {
                 let followings = [];
                 let temp = 0;
                 let len = data.followingUser.length;
+                if(len === 0) {
+                  res.send('No Followings');
+                }
+                else{
                 // console.log(data.followingUser);
                 for (let i = 0; i < len; i = i + 1) {
                     // console.log(data.followingUser[i]);
@@ -202,6 +211,7 @@ let userDocController = {
                         }
                     });
                 }
+              }
             }
         });
     },

@@ -245,33 +245,21 @@ class QueCard extends React.Component {
     }
     // getting the initial like status to display
     getLikeStatus() {
-        let id = this.props.id;
-        let email = Cookie.load('email');
-        this.setState({upVotes: this.props.upvote, downVotes: this.props.downvote});
-        $.ajax({
-            url: '/list/likestatus',
-            type: 'POST',
-            data: {
-                id: id,
-                email: email
-            },
-            success: function(data) {
-                // console.log(data);
-                if (data.like) {
-                    this.setState({colorName: 'blue'});
-                } else {
-                    this.setState({colorName: 'green'});
-                }
-                if (data.unlike) {
-                    this.setState({colorNameUnlike: 'black'});
-                } else {
-                    this.setState({colorNameUnlike: 'red'});
-                }
-            }.bind(this)
-        });
+      this.setState({upVotes: this.props.upvote, downVotes: this.props.downvote});
+    let likeArray = this.props.queLike;
+    let unlikeArray = this.props.queDislike;
+    // console.log(likeArray);
+    // console.log(unlikeArray);
+    if(likeArray.includes(this.props.id)) {
+      this.setState({colorName: 'blue'});
+    }
+    if(unlikeArray.includes(this.props.id)) {
+      this.setState({colorNameUnlike: 'black'});
+    }
     }
     // function to update like for queCards
     updatelike() {
+      if(this.state.colorNameUnlike !== 'black') {
         let type = 'add';
         let color = 'blue';
         let upVotesTemp = parseInt(this.state.upVotes, 10) + 1;
@@ -298,9 +286,11 @@ class QueCard extends React.Component {
                 this.setState({colorName: color, upVotes: upVotesTemp});
             }.bind(this)
         });
+      }
     }
     // function to update dislike for queCards
     updateunlike() {
+      if(this.state.colorName !== 'blue') {
         let type = 'add';
         let color = 'red';
         let downVotesTemp = parseInt(this.state.downVotes, 10) + 1;
@@ -327,6 +317,7 @@ class QueCard extends React.Component {
                 this.setState({colorNameUnlike: color, downVotes: downVotesTemp});
             }.bind(this)
         });
+      }
     }
     /* ajax call To create a report for question by the user created by Soundar*/
     state = {}
@@ -576,6 +567,8 @@ QueCard.propTypes = {
     anscount: React.PropTypes.number,
     views: React.PropTypes.number,
     profileImage: React.PropTypes.string,
-    category: React.PropTypes.string
+    category: React.PropTypes.string,
+    queLike: React.PropTypes.array,
+    queDislike: React.PropTypes.array
 };
 module.exports = QueCard;

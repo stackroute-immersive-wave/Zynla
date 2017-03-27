@@ -29,6 +29,7 @@ class Cards extends React.Component {
             url: `/users/getAllCards/${emailId}`,
             type: 'GET',
             success: function(data) {
+              // console.log('----------------',data);
                 data.map(function(item) {
                     arr.push(item);
                     // console.log(item.tag);

@@ -11,7 +11,9 @@ import {
     Popup,
     Icon,
     Form,
-    Segment
+    Segment,
+    Dimmer,
+    Loader
 } from 'semantic-ui-react';
 import {Link} from 'react-router';
 import Cookie from 'react-cookie';
@@ -58,6 +60,7 @@ constructor() {
 
     componentDidMount() {
       this.updateConcept();
+      this.getIdWithQuestionfunction();
     }
 
     toggleVisibility = () => {
@@ -157,16 +160,10 @@ constructor() {
         }
       }
     }
-    changeQuestionVal(e)
-    {
-      // let h = e.target.value;
-      let context;
+    getIdWithQuestionfunction() {
       /*eslint-disable*/
-      context = this;
+      let context = this;
       /*eslint-enable*/
-      this.setState({questionKey: e});
-      // console.log('The event is ' + e);
-      // console.log('inside change question value function ' + this.state.questionKey);
       $.ajax({
           url: '/list/getIdWithQuestion',
           type: 'get',
@@ -177,6 +174,13 @@ constructor() {
           },
           error: function() {}
       });
+    }
+    changeQuestionVal(e)
+    {
+      // let h = e.target.value;
+      this.setState({questionKey: e});
+      // console.log('The event is ' + e);
+      // console.log('inside change question value function ' + this.state.questionKey);
       let b = e.toLowerCase();
       let option = '';
       // console.log(this.state.questionName);
@@ -252,24 +256,20 @@ constructor() {
 
     submitStatement() {
         // ajax call after submitting the values which needed to be asked
-        let conceptArr = {};
+        let conceptArr = [];
         /* eslint-disable */
         let context = this;
         /* eslint-enable */
         let email = Cookie.load('email');
         conceptArr = JSON.stringify(this.state.selectedConcepts);
-        // console.log("Inside submit statement question intent is " + this.state.questionIntent);
-        if(validator.isEmpty(this.state.heading)) {
+        // console.log("---------"+this.state.heading+"---"+this.state.heading.length);
+        // console.log("--------------"+this.state.statement+"---"+this.state.statement.length);
+        //  console.log("Inside submit st
+        // atement question intent is--------- " + conceptArr+"----"+conceptArr.length);
+        if(validator.isEmpty(this.state.heading) || validator.isEmpty(this.state.statement) ||
+         conceptArr.length === 0) {
           document.getElementById('errorMessage').innerHTML =
-          'Please enter the question name';
-        }
-        else if(validator.isEmpty(this.state.statement)) {
-          document.getElementById('errorMessage').innerHTML =
-          'Please enter the Description of that question';
-        }
-        else if(conceptArr.length <= 0) {
-          document.getElementById('errorMessage').innerHTML =
-          'Please select atleast one concept';
+          'All Fields Required';
         }
         else {
           document.getElementById('errorMessage').innerHTML =
@@ -282,12 +282,15 @@ constructor() {
               Concept: conceptArr,
               intent: this.state.questionIntent
           };
+          // console.log(data);
+          context.setState({activeDimmer: true});
           $.ajax({
               url: '/list/addquestion',
               type: 'POST',
               data: data,
               success: function() {
-                  context.setState({active: false});
+                  context.setState({active: false, activeDimmer: false});
+                  context.setState({heading: '', statement: '', selectedConcepts: []});
                   context.submitQuestionAlert();
               },
               error: function() {
@@ -327,12 +330,16 @@ constructor() {
     render() {
         // const {visible} = this.state;
         const {activeItem} = this.state;
+        const {activeDimmer} = this.state;
         // const backImage = {
         //     image: Cookie.load('profilepicture')
         // };
         // const {open, dimmer} = this.state;
         return (
               <div>
+                <Dimmer active={activeDimmer} page>
+                  <Loader>Posting Question</Loader>
+                </Dimmer>
           <div className='ui top fixed menu' id='divStyle'>
                      <Link to='/home'>
                          <Image src='./../../image/logo.png'

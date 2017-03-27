@@ -26,10 +26,10 @@ class displayFollower extends React.Component {
           this.getFollower();
      }
      noFollowersAlert () {
-        this.refs.container.success(
+        this.refs.container.error(
           'No Followers',
           '', {
-          timeOut: 1000,
+          timeOut: 2000,
           extendedTimeOut: 10000
         });
       }

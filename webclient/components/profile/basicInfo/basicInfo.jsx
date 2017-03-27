@@ -39,6 +39,7 @@ class basicInfo extends React.Component {
             gender: '',
             phone: 'Phone',
             interestsData: [],
+            justData: '',
             profileForm: <div style={{fontFamily: 'Segoe UI'}}>
                         <div>
                         View/update your profile data here.
@@ -47,7 +48,10 @@ class basicInfo extends React.Component {
                     </div>
         };
 
-        this.handleItemClick = this.handleItemClick.bind(this);
+        this.handleItemClick1 = this.handleItemClick1.bind(this);
+        this.handleItemClick2 = this.handleItemClick2.bind(this);
+        this.handleItemClick3 = this.handleItemClick3.bind(this);
+        this.handleItemClick4 = this.handleItemClick4.bind(this);
         this.updateEducation = this.updateEducation.bind(this);
         this.eduAlert = this.eduAlert.bind(this);
         this.locAlert = this.locAlert.bind(this);
@@ -56,101 +60,117 @@ class basicInfo extends React.Component {
         this.updateLocation = this.updateLocation.bind(this);
         this.updateAbout = this.updateAbout.bind(this);
     }
-    handleItemClick(e, {name}) {
-        let data;
-        if (name === 'Education') {
-            data = (
-              <div>
-                  I did my schooling from <Popup on = 'click' trigger=
-                      {<a style={{cursor: 'pointer'}}>{this.state.primary}</a>}
-                      flowing hoverable>
-                      <Input onChange={this.changePrimary.bind(this)} onKeyPress =
-                      {this.changePrimary.bind(this)}/>
-                      <Button onClick = {this.updateEducation} content='Update'/>
-                    </Popup> . earned my degree <br/> from <Popup on = 'click'
-                        trigger={<a style={{cursor: 'pointer'}}>{this.state.university}</a>}
-                       flowing hoverable>
-                       <Input onChange={this.changeUniversity.bind(this)} onKeyPress =
-                       {this.changeUniversity.bind(this)}/>
-                       <Button onClick = {this.updateEducation} content='Update'/>
-                       </Popup> . and completed the high schooling from <Popup on = 'click' trigger=
-                      {<a style={{cursor: 'pointer'}}>{this.state.secondary}</a>}
-                    flowing hoverable>
-                    <Input onChange={this.changeSecondary.bind(this)} onKeyPress =
-                    {this.changeSecondary.bind(this)}/>
-                    <Button onClick = {this.updateEducation} content='Update'/>
-                    </Popup>
-                    </div>
-                          );
-        } else if (name === 'Location') {
-            data = (
-
-              <div>
-                  I Live at <Popup on = 'click' trigger=
-                    {<a style={{cursor: 'pointer'}}>{this.state.line1}</a>}
-                      flowing hoverable>
-                      <Input onChange={this.changeLine1.bind(this)} onKeyPress =
-                      {this.changeLine1.bind(this)}/>
-                      <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
-                    </Popup><br/>, <Popup on = 'click' trigger=
-                      {<a style={{cursor: 'pointer'}}>{this.state.line2}</a>}
-                       flowing hoverable>
-                       <Input onChange={this.changeLine2.bind(this)} onKeyPress =
-                       {this.changeLine2.bind(this)}/>
-                       <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
-                     </Popup>. in <Popup on = 'click' trigger=
-                      {<a style={{cursor: 'pointer'}}>{this.state.city}</a>}
-                    flowing hoverable>
-                    <Input onChange={this.changeCity.bind(this)} onKeyPress =
-                    {this.changeCity.bind(this)}/>
-                    <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
-                    </Popup>. in <Popup on = 'click' trigger=
-                     {<a style={{cursor: 'pointer'}}>{this.state.region}</a>}
-                   flowing hoverable>
-                   <Input onChange={this.changeRegion.bind(this)}/>
-                   <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
-                 </Popup>. postalCode: <Popup on = 'click' trigger=
-                    {<a style={{cursor: 'pointer'}}>{this.state.postalCode}</a>}
-                  flowing hoverable>
-                  <Input onChange={this.changePostalCode.bind(this)} onKeyPress =
-                  {this.changePostalCode.bind(this)}/>
-                  <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
-                  </Popup> <Popup on = 'click' trigger=
-                   {<a style={{cursor: 'pointer'}}>{this.state.country}</a>}
+    handleItemClick1() {
+      this.getProfile();
+      /* eslint-disable */
+      this.props.statusMeter();
+      /* eslint-enable */
+      this.setState({
+        profileForm: <div>
+                <Popup on = 'click' trigger={<a style={{cursor: 'pointer'}}>
+                  {this.state.description}</a>}
+                flowing hoverable>
+                <TextArea onChange={this.changeDescription.bind(this)}/>
+                <Button onClick = {this.updateAbout.bind(this)} content='Update'/>
+              </Popup><br/> born on <Popup on = 'click' trigger=
+                {<a style={{cursor: 'pointer'}}>{this.state.dob}</a>}
                  flowing hoverable>
-                 <Input onChange={this.changeCountry.bind(this)} onKeyPress =
-                 {this.changeCountry.bind(this)}/>
+                 <Input onChange={this.changeDob.bind(this)} onKeyPress =
+                 {this.changeDob.bind(this)}/>
+                 <Button onClick = {this.updateAbout.bind(this)} content='Update'/>
+               </Popup>. My Phone number is <Popup on = 'click' trigger=
+                {<a style={{cursor: 'pointer'}}>{this.state.phone}</a>}
+              flowing hoverable>
+              <Input onChange={this.changePhone.bind(this)} onKeyPress =
+              {this.changePhone.bind(this)}/>
+              <Button onClick = {this.updateAbout.bind(this)} content='Update'/>
+              </Popup>
+        </div>,
+            activeItem: 'Personal'
+      });
+    }
+    handleItemClick2() {
+      this.getProfile();
+      /* eslint-disable */
+      this.props.statusMeter();
+      /* eslint-enable */
+      this.setState({
+        profileForm: <div>
+            I did my schooling from <Popup on = 'click' trigger=
+                {<a style={{cursor: 'pointer'}}>{this.state.primary}</a>}
+                flowing hoverable>
+                <Input onChange={this.changePrimary.bind(this)} onKeyPress =
+                {this.changePrimary.bind(this)}/>
+                <Button onClick = {this.updateEducation} content='Update'/>
+              </Popup> . earned my degree <br/> from <Popup on = 'click'
+                  trigger={<a style={{cursor: 'pointer'}}>{this.state.university}</a>}
+                 flowing hoverable>
+                 <Input onChange={this.changeUniversity.bind(this)} onKeyPress =
+                 {this.changeUniversity.bind(this)}/>
+                 <Button onClick = {this.updateEducation} content='Update'/>
+                 </Popup> . and completed the high schooling from <Popup on = 'click' trigger=
+                {<a style={{cursor: 'pointer'}}>{this.state.secondary}</a>}
+              flowing hoverable>
+              <Input onChange={this.changeSecondary.bind(this)} onKeyPress =
+              {this.changeSecondary.bind(this)}/>
+              <Button onClick = {this.updateEducation} content='Update'/>
+              </Popup>
+            </div>,
+            activeItem: 'Education'
+      });
+    }
+    handleItemClick3() {
+      this.getProfile();
+      /* eslint-disable */
+      this.props.statusMeter();
+      /* eslint-enable */
+      this.setState({
+        profileForm: <div>
+            I Live at <Popup on = 'click' trigger=
+              {<a style={{cursor: 'pointer'}}>{this.state.line1}</a>}
+                flowing hoverable>
+                <Input onChange={this.changeLine1.bind(this)} onKeyPress =
+                {this.changeLine1.bind(this)}/>
+                <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
+              </Popup><br/>, <Popup on = 'click' trigger=
+                {<a style={{cursor: 'pointer'}}>{this.state.line2}</a>}
+                 flowing hoverable>
+                 <Input onChange={this.changeLine2.bind(this)} onKeyPress =
+                 {this.changeLine2.bind(this)}/>
                  <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
-                 </Popup>
-              </div>
-            );
-        } else if (name === 'Personal') {
-            data = (
-              <div>
-                      <Popup on = 'click' trigger={<a style={{cursor: 'pointer'}}>
-                        {this.state.description}</a>}
-                      flowing hoverable>
-                      <TextArea onChange={this.changeDescription.bind(this)}/>
-                      <Button onClick = {this.updateAbout.bind(this)} content='Update'/>
-                    </Popup><br/> born on <Popup on = 'click' trigger=
-                      {<a style={{cursor: 'pointer'}}>{this.state.dob}</a>}
-                       flowing hoverable>
-                       <Input onChange={this.changeDob.bind(this)} onKeyPress =
-                       {this.changeDob.bind(this)}/>
-                       <Button onClick = {this.updateAbout.bind(this)} content='Update'/>
-                     </Popup>. My Phone number is <Popup on = 'click' trigger=
-                      {<a style={{cursor: 'pointer'}}>{this.state.phone}</a>}
-                    flowing hoverable>
-                    <Input onChange={this.changePhone.bind(this)} onKeyPress =
-                    {this.changePhone.bind(this)}/>
-                    <Button onClick = {this.updateAbout.bind(this)} content='Update'/>
-                    </Popup>
-              </div>
-            );
-        } else if (name === 'Categories') {
-            data = (<InterestsCard interestData={this.state.interestsData}/>);
-        }
-        this.setState({activeItem: name, profileForm: data});
+               </Popup>. in <Popup on = 'click' trigger=
+                {<a style={{cursor: 'pointer'}}>{this.state.city}</a>}
+              flowing hoverable>
+              <Input onChange={this.changeCity.bind(this)} onKeyPress =
+              {this.changeCity.bind(this)}/>
+              <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
+              </Popup>. in <Popup on = 'click' trigger=
+               {<a style={{cursor: 'pointer'}}>{this.state.region}</a>}
+             flowing hoverable>
+             <Input onChange={this.changeRegion.bind(this)}/>
+             <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
+           </Popup>. postalCode: <Popup on = 'click' trigger=
+              {<a style={{cursor: 'pointer'}}>{this.state.postalCode}</a>}
+            flowing hoverable>
+            <Input onChange={this.changePostalCode.bind(this)} onKeyPress =
+            {this.changePostalCode.bind(this)}/>
+            <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
+            </Popup> <Popup on = 'click' trigger=
+             {<a style={{cursor: 'pointer'}}>{this.state.country}</a>}
+           flowing hoverable>
+           <Input onChange={this.changeCountry.bind(this)} onKeyPress =
+           {this.changeCountry.bind(this)}/>
+           <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
+           </Popup>
+        </div>,
+            activeItem: 'Location'
+      });
+    }
+    handleItemClick4() {
+    this.setState({activeItem: 'Categories',
+    profileForm: <InterestsCard interestData={this.state.interestsData}/>});
+    }
+
 
 //         let data;
 //         if (name === 'Education') {
@@ -247,7 +267,6 @@ class basicInfo extends React.Component {
 //             data = (<InterestsCard interestData={this.state.interestsData}/>);
 //         }
 //         this.setState({activeItem: name, profileForm: data});
-    }
     changePrimary(e) {
         this.setState({primary: e.target.value});
         if(e.key === 'Enter') {
@@ -389,6 +408,7 @@ class basicInfo extends React.Component {
             data: eduData,
             success: function() {
               context.eduAlert();
+              context.handleItemClick2();
                 /*eslint-disable*/
                 /*eslint-enable*/
                 // console.log(data);
@@ -418,10 +438,7 @@ class basicInfo extends React.Component {
             data: locData,
             success: function() {
             context.locAlert();
-                          /*eslint-disable*/
-                // alert('Location Details Updated Successfully');
-                /*eslint-enable*/
-                // console.log(data);
+            context.handleItemClick3();
             },
             error: function() {
                 // console.error(err.toString());
@@ -449,6 +466,7 @@ class basicInfo extends React.Component {
             data: proData,
             success: function() {
               context.abtAlert();
+              context.handleItemClick1();
             },
             error: function() {
                 // console.error(err.toString());
@@ -512,14 +530,14 @@ class basicInfo extends React.Component {
                           fluid vertical tabular>
                               <Menu.Item name='Personal'
                                 active={activeItem === 'Personal'}
-                                onClick={this.handleItemClick}/>
+                                onClick={this.handleItemClick1.bind(this)}/>
                               <Menu.Item name='Education' active={activeItem === 'Education'}
-                              onClick={this.handleItemClick}/>
+                              onClick={this.handleItemClick2.bind(this)}/>
                             <Menu.Item name='Location' active={activeItem === 'Location'}
-                              onClick={this.handleItemClick}/>
+                              onClick={this.handleItemClick3.bind(this)}/>
                             <Menu.Item name='Categories'
                               active={activeItem === 'Categories'}
-                              onClick={this.handleItemClick}/>
+                              onClick={this.handleItemClick4.bind(this)}/>
                         </Menu>
                     </Grid.Column>
                     <Grid.Column stretched width={12}>

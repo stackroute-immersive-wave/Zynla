@@ -9,7 +9,6 @@ export default class SuccessfullyRegistered extends React.Component {
     this.state = {
       follows: [],
       catagories: []
-
     };
   }
   // componentWillMount() {
@@ -20,13 +19,9 @@ export default class SuccessfullyRegistered extends React.Component {
       url: '/users/displayCatagory',
       type: 'GET',
       success: function(data) {
-        // console.log('Successfully got JSON Catagory' + JSON.stringify(data));
-        // console.log(data);
         this.setState({catagories: data});
       }.bind(this),
       error: function() {
-        // console.log('error occurred on AJAX');
-        // console.log(err);
       }
     });
    }
@@ -36,6 +31,7 @@ export default class SuccessfullyRegistered extends React.Component {
     // console.log('getting items from createcards',items);
       this.setState({follows: items});
       this.setState({catagories: category});
+      // this.setState({mongoCategory: mongoCategory});
       // console.log('display states',this.state.follows);
    }
 
@@ -44,7 +40,8 @@ export default class SuccessfullyRegistered extends React.Component {
     return(
         <CreateCards categories={this.state.catagories} email={Cookie.load('email')}
         itemss={this.state.follows} addCategories={this.addCategories.bind(this)}
-      profilePic={Cookie.load('profilepicture')} userName={Cookie.load('username')}/>
+      profilePic={Cookie.load('profilepicture')} userName={Cookie.load('username')}
+      mongo={false}/>
       );
 }
 }

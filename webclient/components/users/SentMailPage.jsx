@@ -1,78 +1,107 @@
-import React from 'react';
-import {
-    Grid,
-    Button
-} from 'semantic-ui-react';
-// import './applicationHome.css';
-import SentMail from '../../config/SentMail.json';
-export default class SentMailPage extends React.Component {
-    constructor() {
-        super();
-    }
-    render() {
-        return (
-            <div id="mount">
-                <img src="./../../image/Zynla.png" className="imagePosition" />
-                <Grid container>
-                    <Grid.Row>
-                        <Grid.Column width={2}/>
-                        <Grid.Column width={9}/>
-                        <Grid.Column width={5}>
-                            <h2 style={{
-                                    marginTop: -80 + 'px'
-                                }}>
-                                <Button circular style={{
-                                    backgroundColor: 'grey'
-                                }}>
-                                    <a href="#/" style={{
-                                        color: 'white'
-                                    }}>LOGIN</a>
-                                </Button>
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                <Button circular style={{
-                                    backgroundColor: 'grey',
-                                    marginLeft: 30 + 'px'
-                                }}>
-                                    <a href="#/signup" style={{
-                                        color: 'white'
-                                    }}>SIGNUP</a>
-                                </Button>
-                            </h2>
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row>
-                        <Grid.Column style={{
-                            textAlign: 'center'
-                        }}>
-                            <p id='head1'>
-                              {SentMail.head1}<br/>
-                                <h3 >{SentMail.head2}</h3>
-                                <h1 >{SentMail.head3}</h1>
+let React = require('react');
+let {hashHistory} = require('react-router');
+import {Button, Grid, Icon, Form, Segment } from 'semantic-ui-react';
+const ReactToastr = require('react-toastr');
+const {ToastContainer} = ReactToastr;
+const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
+import validator from 'validator';
+// import graph from 'fbgraph';
+import $ from 'jquery';
+// const ReactToastr = require('react-toastr');
+// const {ToastContainer} = ReactToastr;
+// const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 
-                            </p>
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                    <Grid.Row/>
-                </Grid>
-            </div>
-        );
-    }
+class VerifyEmail extends React.Component {
+   constructor() {
+       super();
+       this.state =
+       {
+        open: true
+        };
+      this.verifyAccount = this.verifyAccount.bind(this);
+      this.locAlertError = this.locAlertError.bind(this);
+   }
+      locAlertError () {
+        this.refs.container.error(
+          'Please Enter a valid ID',
+          '', {
+          timeOut: 1000,
+          extendedTimeOut: 10000
+        });
+      }
+    verifyAccount(e, value) {
+        e.preventDefault();
+        // let emailID = window.location.hash.split('emailId=')[1];
+        /* eslint-disable*/
+        let context = this;
+        /* eslint-enable*/
+        if(validator.isAlpha(value.formData.verId, 'en-US'))
+        {
+          context.locAlertError();
+        }
+        else if(validator.isEmpty(value.formData.verId))
+        {
+          context.locAlertError();
+        }
+        else
+        {
+          $.ajax({
+                url: '/users/verify',
+                type: 'POST',
+                data: {
+                    verifyId: value.formData.verId,
+                    email: window.location.hash.split('emailId=')[1]
+                },
+                success: function(data) {
+                  // console.log(data);
+                    if(data.isVerified)
+                    {
+                    hashHistory.push('/selectCategory');
+                    }
+                    else
+                    {
+                      context.locAlertError();
+                    }
+                },
+                error: function() {
+                  // console.log(err);
+                    // this.setState({openSnackbar: true, snackbarMsg: err.responseText});
+                }
+            });
+          }
+        }
+
+render() {
+  return (
+    <div className="overlay">
+      <img src="./../../image/Zynla.png"
+       className="imagePosition" style = {{marginLeft: 600 + 'px'}}/>
+      <p className="tagline"
+       style={{marginLeft: 541 + 'px', color: 'white'}}>
+       Verification code has been sent to your Email Id.</p>
+  <div className="centerPosition">
+<Segment compact style = {{marginLeft: -24 + 'px'}} inverted>
+  <Grid centered >
+       <Form onSubmit={this.verifyAccount} className="contentCenter">
+            <Form.Field>
+            <Form.Input name= "verId" placeholder= 'Enter Verification Code' icon='lock'
+            iconPosition='left' id="formstyle"
+             required />
+            </Form.Field>
+
+            <Button color='teal' circular>
+            <Button.Content type='submit' ><Icon name='sign in'/>
+            Verify Your Account</Button.Content>
+            </Button><br/><br/>
+
+       </Form>
+       </Grid>
+</Segment>
+  </div>
+  <ToastContainer ref='container' toastMessageFactory={ToastMessageFactory}
+                       className='toast-top-center' />
+</div>);
 }
+}
+
+module.exports = VerifyEmail;

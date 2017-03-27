@@ -54,7 +54,7 @@ class PeopleCard extends React.Component {
 
        /* eslint-disable */
         <Card>
-    <Image className = 'peopleimage' src= {this.props.photo} />
+    <Image className = 'peopleimage' src= {this.props.photo} alt='Profile Image'/>
 
     <Card.Content>{this.props.id}</Card.Content>
     <Card.Content extra>

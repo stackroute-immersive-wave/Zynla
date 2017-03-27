@@ -14,6 +14,10 @@ class mainQuestionCard extends React.Component {
      }
    render() {
      let dateData = new Date(parseInt(this.props.addedOn, 10)).toString().substring(0, 15);
+     let arr = this.props.category;
+     let arr1 = arr.replace('["', ' ');
+     let arr2 = arr1.replace('"]', ' ');
+     let tags = arr2.replace('","', ' >> ');
        return (
          <div>
             <Grid divided='vertically'>
@@ -26,7 +30,7 @@ class mainQuestionCard extends React.Component {
                                          {this.props.heading}
                                     </Card.Header>
                                     <Card.Description className='ansWidth'>
-                                      {this.props.category}
+                                      {tags}
                                     </Card.Description>
                                 </Card.Content>
                                    <Menu>

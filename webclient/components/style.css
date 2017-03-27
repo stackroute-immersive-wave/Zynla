@@ -257,7 +257,7 @@ color:white;
 }
 .overlay{
   position: fixed;
-   background: url('../image/background.png');
+   background: url(https://static.pexels.com/photos/50677/rain-after-the-rain-a-drop-of-drop-of-rain-50677.jpeg);
   -webkit-animation:100s scroll infinite linear;
   -moz-animation:100s scroll infinite linear;
   -o-animation:100s scroll infinite linear;
@@ -267,6 +267,7 @@ color:white;
   left:0;
   width:100%;
  height:100%;
+ background-size: cover;
 }
 
 
@@ -339,4 +340,20 @@ color:white;
 .peopleimage {
       height: 250px !important;
     width: 350px !important;
+}
+.selectCat
+{
+  background-color: black;
+  width: 100%;
+  height: 756px;
+}
+.scroll-left {
+ height: 50px;
+ overflow: hidden;
+ position: relative;
+ color: white;
+ font-size: 22px;
+ font-weight: bold;
+ font-family: sans-serif;
+ margin-top: 10px;
 }
