@@ -10,9 +10,9 @@ class followerCard extends React.Component {
 
 
     render () {
-        let arr = this.props.followerData.map(function(item) {
+        let arr = this.props.followerData.map(function(item, index) {
                 return (
-              <Grid.Column>
+              <Grid.Column key ={index}>
                 <MainFollowerCard heading={item.profile.name} reputation={item.reputation}
                   city={item.profile.address.city}
                 image={item.profile.picture} description= {item.profile.description} followerCount=
@@ -30,5 +30,5 @@ class followerCard extends React.Component {
 
 module.exports = followerCard;
 followerCard.propTypes = {
-  followerData: React.PropTypes.Array
+  followerData: React.PropTypes.array
 };

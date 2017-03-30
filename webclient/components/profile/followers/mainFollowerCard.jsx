@@ -83,7 +83,7 @@ class mainFollowerCard extends React.Component {
                   <h3 style={{marginTop: '-5px', marginLeft: '40%',
                     color: 'lightgrey', fontSize: '15px'}}>
                     Reputation: {this.props.reputation}</h3>
-                  <Button content='Unfollow' style={{marginLeft: '60%'}}
+                  <Button content='Follow' style={{marginLeft: '60%'}}
                     className='butstyle' icon='fork' />
                 </Segment> </div>} hoverable onOpen={this.hoverCard.bind(this)}
                 style = {{width: '35%'}}>

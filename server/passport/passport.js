@@ -42,9 +42,10 @@ passport.use(new LocalStrategy({
                     const error = new Error('Your Email ID is not registered');
                     error.name = 'You have not Registered Yet! Please Sign Up first';
                     return done(err);
-                } else if (!user.isEmailVerified) {
-                    const error = new Error('Email ID is not Verified');
-                    error.name = 'Please verify your registered mail!';
+                } else if (user.authType === 'google' || user.authType === 'facebook' ||
+                 user.authType === 'instagram') {
+                    const error = new Error('Email ID Is Already Exist via Google Or Facebook');
+                    error.name = 'Please Login with ' + user.authType;
                     /* eslint-disable */
                     return done(error.name);
                 }

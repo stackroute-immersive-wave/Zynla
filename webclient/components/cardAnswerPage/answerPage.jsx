@@ -493,7 +493,7 @@ class answerPage extends React.Component {
         if (this.state.popupResult !== 'First Report') {
             pop = (
                 <div>
-                    <h4 id='h4'>Already Reported as ....</h4>
+                    <h4 id='h4'>You have already Reported as ....</h4>
                     <h4>{this.state.popupResult}</h4>
                 </div>
             );
@@ -573,7 +573,7 @@ class answerPage extends React.Component {
                             <Image
                                floated='left'
                                 size='mini'
-                        src='http://localhost:8080semantic-ui.com/images/avatar/large/steve.jpg'/>
+                        src='{quesObj[0].profileImage}'/>
                             <a>
                                 {quesObj[0].postedBy}
                             </a>

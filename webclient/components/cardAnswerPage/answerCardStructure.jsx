@@ -154,7 +154,7 @@ class cardAnswer extends React.Component {
                 <Card fluid>
                     <Card.Content style={poststyle1}>
                         <Image floated='left' size='mini'
-                          src='http://localhost:8080semantic-ui.com/images/avatar/large/steve.jpg'/>
+                          src='http://semantic-ui.com/images/avatar/large/steve.jpg'/>
                         <a>
                             {this.props.createdBy}
                         </a>

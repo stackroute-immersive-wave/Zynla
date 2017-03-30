@@ -3,6 +3,22 @@ const UserModel = require('../users/userProfileEntity').userModel;
 let driver = require('../config/neo4j');
 
 let userDocController = {
+  getuserAnsId: function(req, res) {
+    let session = driver.session();
+    /* eslint-disable */
+    let query = 'match(n:User)-[r:post]->(a:Answer)-[:answer_of]->(q:Question) where n.name="' + req.body.email + '" return q';
+    session.run(query).then(function(result) {
+        let recordObj = result.records;
+        // console.log(recordObj);
+        let queArr = [];
+        for (let i = 0; i < recordObj.length; i = i + 1) {
+          queArr.push(recordObj[i]._fields[0].identity.low);
+        }
+        // console.log(queArr);
+        res.send(queArr);
+        /* eslint-enable */
+    });
+  },
     addUser: function(req, res) {
         // logger.debug('Inside user post');
         let newUser = new UserModel(req.body);
@@ -153,7 +169,7 @@ let userDocController = {
                 let folldet = [];
                 let len = result.records.length;
                 if (len === 0) {
-                  res.send('No Followers');
+                  res.send(result.records);
                 }
                   else{
                 for (let i = 0; i < len; i = i + 1) {

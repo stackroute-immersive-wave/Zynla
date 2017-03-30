@@ -62,9 +62,7 @@ class basicInfo extends React.Component {
     }
     handleItemClick1() {
       this.getProfile();
-      /* eslint-disable */
       this.props.statusMeter();
-      /* eslint-enable */
       this.setState({
         profileForm: <div>
                 <Popup on = 'click' trigger={<a style={{cursor: 'pointer'}}>
@@ -91,9 +89,7 @@ class basicInfo extends React.Component {
     }
     handleItemClick2() {
       this.getProfile();
-      /* eslint-disable */
       this.props.statusMeter();
-      /* eslint-enable */
       this.setState({
         profileForm: <div>
             I did my schooling from <Popup on = 'click' trigger=
@@ -121,9 +117,7 @@ class basicInfo extends React.Component {
     }
     handleItemClick3() {
       this.getProfile();
-      /* eslint-disable */
       this.props.statusMeter();
-      /* eslint-enable */
       this.setState({
         profileForm: <div>
             I Live at <Popup on = 'click' trigger=
@@ -521,7 +515,7 @@ class basicInfo extends React.Component {
                       <div>
 
                 <Dimmer active={active} page>
-                    <Loader>Loading</Loader>
+                    <Loader>Fetching your profile</Loader>
                 </Dimmer>
                 <Grid>
                     <Grid.Column width={4}>
@@ -555,3 +549,6 @@ class basicInfo extends React.Component {
     }
 }
 module.exports = basicInfo;
+basicInfo.propTypes = {
+  statusMeter: React.PropTypes.function
+};

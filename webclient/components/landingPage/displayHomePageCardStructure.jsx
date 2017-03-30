@@ -251,7 +251,7 @@ inviteAlert (result) {
             }}/>
             <Popup wide open={this.state.isOpen} onClose={() => this.closePopup()}
         trigger={<Button circular onClick={() => this.openPopup()}
-        icon='google plus' id='iconColor'
+        icon='mail outline' id='iconColor'
         size='tiny' style={{'fonSize': 15 + 'px'}}/>} on='click' position='bottom right'>
           <Icon name='remove' onClick={() => this.closePopup()}
            style={{marginTop: 3 + 'px', marginBottom: 10 + 'px', marginLeft: 10 + 'px', float:'right'}}/>

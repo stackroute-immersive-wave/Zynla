@@ -44,11 +44,9 @@ class mainAnswerCard extends React.Component {
                                          <Icon name='thumbs down' size='large' color='red'/>
                                          {this.props.downVote}
                                      </Menu.Item>
-                                     <Menu.Item>
-                                         <Icon name='checkmark' size='large' color='green'/>
-                                         Added On: {dateData}
-                                     </Menu.Item>
-
+                                         <Menu.Item>
+                                             Added On: {dateData}
+                                         </Menu.Item>
                                  </Menu>
                              </Card>
                          </div>

@@ -35,7 +35,7 @@ export default class LoginPage extends React.Component
           let bool = false;
           console.log(emailID);
           let self = this;
-        this.setState({email: emailID});       
+        this.setState({email: emailID});
         if (validator.isEmail(emailID)) {
             $.ajax({
                 url: ' /users/checkuser',
@@ -50,6 +50,10 @@ export default class LoginPage extends React.Component
                         console.log('inside then function');
                         bool = false;
                         // console.log(self.setState({bool: false}));
+                    }
+                    else if(response.userexists === false)
+                    {
+                      bool = false;
                     }
                      else{
                       console.log('in else true');
@@ -102,7 +106,7 @@ export default class LoginPage extends React.Component
       context.setState({forgetPasswordMessage: 'Email exists through Google or Facebook provider. Please update with the provider.'});
     }
   }
-    
+
 }
         handleRequestClose = () => {
             this.setState({openSnackbar: false});
@@ -115,7 +119,7 @@ export default class LoginPage extends React.Component
             <Modal open={open} onClose={this.close} closeIcon="close">
                     <Modal.Header>Lets Find your Zynla Account</Modal.Header>
                     <Modal.Content image>
-                      <Image wrapped size='medium' 
+                      <Image wrapped size='medium'
                       src='https://cdn0.iconfinder.com/data/icons/PRACTIKA/256/user.png'
                       style={{width: 80 + 'px', height: 80 + 'px', marginLeft: 39 + 'px',
                       marginTop: -5 + 'px'}}/>
@@ -126,7 +130,7 @@ export default class LoginPage extends React.Component
                               {{width: 560 + 'px', height: 50+'px',marginTop: 9 + 'px'}}/>
                               <p style={{color: 'green'}}>{this.state.forgetPasswordMessage}</p>
                               <Button color='teal' circular style=
-                              {{marginLeft: 27 + 'px', 
+                              {{marginLeft: 27 + 'px',
                                 float: 'right',
                                 marginRight: - 160 + 'px',
                                 marginTop: - 59 + 'px'}}>

@@ -10,6 +10,15 @@ const propTypes = {
 export function Item(props) {
   /*eslint-disable*/
   const { items, isDragging } = props;
+  if(items.upVotes === undefined) {
+    items.upVotes = 0;
+  }
+  if(items.answerCounts === undefined) {
+    items.answerCounts = 0;
+  }
+  if(items.views === undefined) {
+    items.views = 0;
+  }
   /*eslint-enable*/
   return (
     <div>

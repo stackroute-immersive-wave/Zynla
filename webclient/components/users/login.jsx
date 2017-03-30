@@ -15,10 +15,14 @@ class Login extends React.Component {
         email: '',
         validemail: '',
         open: true,
-        snackbarMsg: ''
+        snackbarMsg: '',
+        dimmer: false
         };
       this.onSubmitLoginData = this.onSubmitLoginData.bind(this);
    }
+   handleRequestClose = () => {
+            this.setState({openSnackbar: false});
+        };
    show = (dimmer) => () => this.setState({ dimmer, open: true })
   close = () => this.setState({ open: false })
     ChangeEmail = (event) => {
@@ -63,37 +67,29 @@ class Login extends React.Component {
                     hashHistory.push('/answerPage?id=' + qId);
                   }
                 },
-                error: function() {
-                  context.setState({snackbarMsg: 'Username or Password is Invalid'});
+                error: function(err) {
+                  // context.setState({snackbarMsg: 'Username or Password is Invalid'});
                   // console.log(err);
-                    // this.setState({openSnackbar: true, snackbarMsg: err.responseText});
+                  // let re = /.*<pre>\s+(.*)\s+<pre>.*/;
+                  let a = err.responseText;
+                  // let newtext = (err.responseText).replace(re, "$1");
+                    context.setState({snackbarMsg: a});
                 }
             });
     }
 render() {
   const { open, dimmer } = this.state;
   let login;
+  let message = this.state.snackbarMsg;
   if(Cookie.load('email'))
   {
     hashHistory.push('/home');
   }
   else {
     login = (<div className='overlay'>
-    <Grid container={true} centered={true}>
-    <Grid.Row>
-    <Grid.Column width={6}/>
-    <Grid.Column width={6}>
-      <img src="./../../image/Zynla.png" />
-      <p className="tagline">Quenching Thirsty Minds...</p>
-    </Grid.Column>
-    <Grid.Column width={4}>
-      <Button id='loginButton' circular
-      secondary onClick={this.show('blurring').bind(this)}>Login</Button>
-  </Grid.Column>
-  </Grid.Row>
-  </Grid>
 
-  <Modal dimmer={dimmer} open={open} onClose={this.close} closeIcon="close">
+
+  <Modal dimmer={dimmer} open={open}>
       <Grid>
           <Grid.Row>
             <Grid.Column width={7}>
@@ -102,11 +98,11 @@ render() {
             <Grid.Column width={9}>
               <Grid.Row />
               <Grid.Row>
-                <img src = '../../image/logo.png' style={{marginLeft: 199 + 'px',
-                backgroundColor: 'darkred', width: 58 + 'px', marginTop: 20 + 'px'}}/>
+                <img src="./../../image/Zynla.png"
+                style = {{marginLeft: 83 + 'px'}}/>
               </Grid.Row>
               <Grid.Row>
-                <p className="tagline" style={{marginLeft: 109 + 'px', marginTop: 14 + 'px'}}>
+                <p className="tagline" style={{marginLeft: 109 + 'px', marginTop: -17 + 'px'}}>
                 Quenching Thirsty Minds...
                 </p>
               </Grid.Row>
@@ -126,7 +122,7 @@ render() {
                      iconPosition='left' id="formstyle" icon = 'lock'
                     placeholder = 'Enter Password' id='passForm' required/>
                     </Form.Field><br/>
-                    <div>
+                    <div style = {{marginTop: -21 + 'px'}}>
                     <a href="#/forgetPassword" style =
                      {{marginLeft: 273 + 'px'}}>Forgot Password?</a>
                     </div>
@@ -135,7 +131,8 @@ render() {
                     <Button.Content type='submit' ><Icon name='sign in'/>Login</Button.Content>
                     </Button><br/><br/>
                     <div>
-                    <p style={{color: '#a54f4f'}}>{this.state.snackbarMsg}</p>
+                  <p dangerouslySetInnerHTML={{__html: message}} style={{color: '#a54f4f',
+                  marginLeft: 110 + 'px'}}/>
                     </div>
                     <p id="footer">Not yet registered?&nbsp;
                     <a href="#/signup">Create Now</a>

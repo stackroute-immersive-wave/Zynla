@@ -8,9 +8,9 @@ class questionsCard extends React.Component {
 
 
     render () {
-        let arr = this.props.questionData.map(function(item) {
+        let arr = this.props.questionData.map(function(item, index) {
                 return (
-            <div>
+            <div key = {index}>
 
                 <MainQuestionCard heading={item.heading} category={item.category}
                 statement={item.statement} image={item.image} addedOn={item.addedOn}
@@ -29,5 +29,5 @@ class questionsCard extends React.Component {
 
 module.exports = questionsCard;
 questionsCard.propTypes = {
-  questionData: React.PropTypes.Array
+  questionData: React.PropTypes.array
 };

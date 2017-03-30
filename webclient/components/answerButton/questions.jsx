@@ -20,7 +20,8 @@ class Questions extends React.Component {
            objArray: [],
            check: false,
            likeArray: [],
-           dislikeArray: []
+           dislikeArray: [],
+           queIdsArr: []
        };
        this.getQuestions = this.getQuestions.bind(this);
        this.handleOpen = this.handleOpen.bind(this);
@@ -39,13 +40,22 @@ class Questions extends React.Component {
          type: 'GET',
            success: function(data) {
              let queObj;
+             let checkQueArr = this.state.queIdsArr;
                let arr = [];
              data.map(function(item) {
               //  console.log(item.tag);
+              // console.log('checking',checkQueArr);
+              // console.log(item.id);
+              if((checkQueArr.includes(item.id))) {
+                // console.log('already answered', item.id);
+              }else {
+                /* eslint-disable */
                if(item.tag !== 'Following'
                 && item.tag !== 'Posted by you' && item.tag !== 'You Preferred') {
                  arr1.push(item);
                }
+             }
+             /* eslint-enable */
              });
                queObj = arr1;
                for (let i = 0; i < queObj.length; i = i + 1) {
@@ -76,8 +86,30 @@ class Questions extends React.Component {
            }
        });
    }
+   getAnswerIds() {
+    //  console.log('inside 1');
+     /*eslint-disable*/
+     let context = this;
+     let queIds = [];
+     /*eslint-enable*/
+           $.ajax({
+           url: '/userdoc/getuserAnsId',
+           type: 'post',
+           data: {
+               email: Cookie.load('email')
+           },
+           success: function(data) {
+            //  console.log(data);
+             context.setState({queIdsArr: data});
+           },
+           error: function() {
+
+           }
+       });
+   }
    // getQuestions function is called as soon as the page renders
    componentDidMount() {
+     this.getAnswerIds();
        this.getQuestions();
    }
 // display question component
