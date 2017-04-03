@@ -28,5 +28,5 @@ router.post('/addProfile', userDocController.addProfile);
 router.post('/getWatching', userDocController.getWatchingTopics);
 // to get user answer Ids
 router.post('/getuserAnsId', userDocController.getuserAnsId);
-router.post('/updatePicture', userDocController.updatePicture);
+
 module.exports = router;
