@@ -381,7 +381,7 @@ constructor() {
                                                     onInput={this.inputofHeading.bind(this)}
                                                     onChange={this.updateHeading.bind(this)}
                                                     rows='1'
-                                                    placeholder='Enter Description here...'
+                                                    placeholder='Enter Question here...'
                                                     style={{width: 700 + 'px'}}
                                                   />
                                                   <datalist id="questionName" />
@@ -396,7 +396,7 @@ constructor() {
                                                 <Textarea
                                                    onChange={this.updateStatement.bind(this)}
                                                    size='large'
-                                                    placeholder='Enter statement here ...'
+                                                    placeholder='Enter Description here ...'
                                                    style={{ width: 700 + 'px',
                                                       height: 150 + 'px'}}
                                                   />

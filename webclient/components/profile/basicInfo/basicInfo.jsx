@@ -390,7 +390,7 @@ class basicInfo extends React.Component {
           let context = this;
           /*eslint-enable*/
             $.ajax({
-            url: 'http://localhost:8080/userdoc/updateEdu',
+            url: '/userdoc/updateEdu',
             type: 'POST',
             data: eduData,
             success: function() {
@@ -420,7 +420,7 @@ class basicInfo extends React.Component {
         /*eslint-enable*/
         //   // console.log(JSON.stringify(locData);
         $.ajax({
-            url: 'http://localhost:8080/userdoc/updateLoc',
+            url: '/userdoc/updateLoc',
             type: 'POST',
             data: locData,
             success: function() {
@@ -446,7 +446,7 @@ class basicInfo extends React.Component {
         let context = this;
         /*eslint-enable*/
         $.ajax({
-            url: 'http://localhost:8080/userdoc/updatePro',
+            url: '/userdoc/updatePro',
             type: 'POST',
             data: proData,
             success: function() {
@@ -460,7 +460,7 @@ class basicInfo extends React.Component {
     }
     getInterestedTopics() {
         $.ajax({
-            url: 'http://localhost:8080/userdoc/getInterestedTopics',
+            url: '/userdoc/getInterestedTopics',
             type: 'POST',
             data: {
                 email: Cookie.load('email')

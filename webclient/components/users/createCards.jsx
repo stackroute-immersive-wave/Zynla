@@ -145,7 +145,7 @@ marginLeft: -31 + 'px',marginTop: -67 + 'px'}}/>;
             // console.log('card Buttton: ', cardButton)
             return (
                 <div style = {{marginLeft: 38 + 'px',marginTop: -27 + 'px'}}>
-                <Grid.Column style = {{marginBottom: 30 + 'px',marginTop: 60 + 'px'}} >  
+                <Grid.Column style = {{marginBottom: 30 + 'px',marginTop: 60 + 'px'}} >
         <Image src = {item.image} style = {{height: 250 + 'px', width: 250 + 'px'}} shape = 'circular'
         onClick={() => context.setSelected(item.name)} disabled = {show}/>
                </Grid.Column>
@@ -156,9 +156,9 @@ marginLeft: -31 + 'px',marginTop: -67 + 'px'}}/>;
 
         return (
             <div className = "selectCat">
-            <marquee behavior="scroll" direction="left" className="scroll-left">
+              <div className='scroll-left'>
             Welcome to Zynla.Please Choose Your Area Of Interest
-            </marquee>
+          </div>
 
                 <Grid.Row>
                     <Grid.Column width = {12} style = {{width: 800 + 'px'}}>

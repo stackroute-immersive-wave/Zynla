@@ -280,7 +280,7 @@ class NavBarPro extends Component {
      let context = this;
      /*eslint-enable*/
      $.ajax({
-         url: 'http://localhost:8080/userdoc/updatePicture',
+         url: '/userdoc/updatePicture',
          type: 'POST',
          data: {picture: this.state.picture, email: Cookie.load('email')},
          success: function() {
@@ -301,7 +301,7 @@ class NavBarPro extends Component {
                 <Grid centered columns={2}>
                     <Grid.Column style={picStyle}>
                       <Popup on = 'click' trigger={<Image alt= 'No Image' style={imageStyle}
-                        src={this.state.picture}
+                        src={Cookie.load('profilepicture')}
                           size = 'small' shape='circular'/>}
                       flowing hoverable>
                       <Input onChange={this.changePicture.bind(this)} onKeyPress =

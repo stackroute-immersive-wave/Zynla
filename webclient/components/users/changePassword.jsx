@@ -46,7 +46,7 @@ class ChangePassword extends React.Component {
         if(value.formData.newPass === value.formData.confPass)
         {
           $.ajax({
-                url: 'http://localhost:8080/users/changePassword',
+                url: '/users/changePassword',
                 type: 'POST',
                 data: {
                     newPass: value.formData.newPass,

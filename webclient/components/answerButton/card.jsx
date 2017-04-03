@@ -550,7 +550,7 @@ class QueCard extends React.Component {
                 </Modal>
                 <ToastContainer ref = "container"
                   toastMessageFactory = {ToastMessageFactory}
-                          className = "toast-top-right"/>
+                          className = "toast-top-center"/>
                         </div>
         );
     }
