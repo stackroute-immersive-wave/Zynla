@@ -97,10 +97,10 @@ let userDocController = {
             }
         }, function(err) {
             if (err) {
-              console.log('error');
+              // console.log('error');
                 res.send('Error:' + err);
             }else {
-              console.log('success');
+              // console.log('success');
             res.send('Updated userinfo successfully');
           }
         });
