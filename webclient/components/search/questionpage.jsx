@@ -22,6 +22,7 @@ class QuestionPage extends React.Component {
                   heading={item.heading} question={item.question} postedBy={item.postedBy}
                   addedOn={item.addedOn} category={item.category} upVotes={item.upVotes}
                   downVotes={item.downVotes} answerCounts={item.answerCounts} views={item.views}
+                  profileImage={item.profileImage}
                 />
               </Grid.Column>
 

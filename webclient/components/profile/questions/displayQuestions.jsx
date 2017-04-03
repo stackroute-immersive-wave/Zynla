@@ -1,10 +1,6 @@
 import React from 'react';
 import Cookie from 'react-cookie';
 import QuestionsCard from './questionsCard';
-const ReactToastr = require('react-toastr');
-const {ToastContainer} = ReactToastr;
-const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
-
 import {
    Dimmer,
    Loader
@@ -18,20 +14,11 @@ class displayQuestions extends React.Component {
        this.state = {
          questionobj: []
        };
-       this.noQuestionsAlert = this.noQuestionsAlert.bind(this);
      }
      componentWillMount() {
           this.handleOpen();
           this.getQuestions();
      }
-     noQuestionsAlert () {
-        this.refs.container.error(
-          'No Questions yet!!',
-          '', {
-          timeOut: 2000,
-          extendedTimeOut: 10000
-        });
-      }
      getQuestions() {
        let email = Cookie.load('email');
        /*eslint-disable*/
@@ -44,12 +31,7 @@ class displayQuestions extends React.Component {
              data: {email: email},
              success: function(data) {
                context.handleClose();
-               if(data === 'No Questions') {
-                 context.noQuestionsAlert();
-               }
-               else{
-                 context.setState({questionobj: data});
-               }
+                  context.setState({questionobj: data});
              },
              error: function() {
               // console.log('error in logout' + err);
@@ -61,13 +43,10 @@ class displayQuestions extends React.Component {
        return (
          <div>
          <Dimmer active={active} page>
-         <Loader>Loading Questions</Loader>
+         <Loader>Your Questions on the way...</Loader>
        </Dimmer>
        <h1 style={{marginLeft: '10px'}}>Questions Posted</h1>
          <QuestionsCard questionData={this.state.questionobj}/>
-         <ToastContainer ref='container'
-                toastMessageFactory={ToastMessageFactory}
-                className='toast-top-center' />
        </div>
      );
    }

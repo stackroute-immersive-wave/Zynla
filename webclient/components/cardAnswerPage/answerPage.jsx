@@ -291,6 +291,7 @@ class answerPage extends React.Component {
     }
     // updating like for question by sumit(28/2/2017)
     updatelike() {
+      if(this.state.colorNameUnlike !== 'black') {
         let type = 'add';
         let color = 'blue';
         let upVotesTemp = parseInt(this.state.upVotes, 10) + 1;
@@ -320,10 +321,12 @@ class answerPage extends React.Component {
                 this.setState({colorName: color, upVotes: upVotesTemp});
             }.bind(this)
         });
+      }
     }
     // updating unlike for question by sumit(1/3/2017)
     updateunlike() {
         // console.log("coming to update unlike");
+        if(this.state.colorName !== 'blue') {
         let type = 'add';
         let color = 'red';
         let downVotesTemp = parseInt(this.state.downVotes, 10) + 1;
@@ -350,6 +353,7 @@ class answerPage extends React.Component {
                 this.setState({colorNameUnlike: color, downVotes: downVotesTemp});
             }.bind(this)
         });
+      }
     }
     // updating status of the button (color)for question by sumit(1/3/2017)
     getLikeStatus() {
@@ -493,7 +497,7 @@ class answerPage extends React.Component {
         if (this.state.popupResult !== 'First Report') {
             pop = (
                 <div>
-                    <h4 id='h4'>Already Reported as ....</h4>
+                    <h4 id='h4'>You have already Reported as ....</h4>
                     <h4>{this.state.popupResult}</h4>
                 </div>
             );
@@ -573,7 +577,7 @@ class answerPage extends React.Component {
                             <Image
                                floated='left'
                                 size='mini'
-                        src='http://localhost:8080semantic-ui.com/images/avatar/large/steve.jpg'/>
+                        src='{quesObj[0].profileImage}'/>
                             <a>
                                 {quesObj[0].postedBy}
                             </a>

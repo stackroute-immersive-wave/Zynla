@@ -20,8 +20,8 @@ sendInviteEmail: function (req, res) {
                 res.send(err);
               //  console.log('error ocuured');
             } else {
-                // console.log('Question', docs[0].question);
-                questionName = docs[0].question;
+                // console.log(docs);
+                questionName = docs[0].heading;
                 host = req.get('host');
         sentInviteMail(host, req.body.id, req.body.type,
             req.body.emailId, req.body.sender, req.body.lStatus, questionName);
@@ -49,62 +49,71 @@ followQuestion: function(req, res) {
                     ListDoc.findOne({id: qId}, function(error, question)
                     {
                         // console.log(question);
-                        let isQuesPresent = false;
-                        UserProfile.findOne({emailId: email}, function(error1, user)
-                        {
-                        // console.log('user',user);
-                        user.watchingList.map(function(item)
-                        {
-                            // console.log('type of question id   ',typeof(questionId));
-                            // console.log('type of item.id   ',typeof(item.id));
-                            if(item.id === qId)
-                            {
-                                isQuesPresent = true;
-                            }
-                        });
-                        if(!isQuesPresent)
-                        {
-                            // console.log('Question is not present');
-                        let session = driver.session();
-                        let query = 'match (n:User {name:"' + email + '"})' +
-                                       ' match (q:Question) where id(q)=' + qId +
-                                    ' create (n)-[:follow]->(q)';
+                        // let isQuesPresent = false;
+                        // UserProfile.findOne({emailId: email}, function(error1, user)
+                        // {
+                        // // console.log('user',user);
+                        // user.watchingList.map(function(item)
+                        // {
+                        //     // console.log('type of question id   ',typeof(questionId));
+                        //     // console.log('type of item.id   ',typeof(item.id));
+                        //     if(item.id === qId)
+                        //     {
+                        //         isQuesPresent = true;
+                        //     }
+                        // });
+                         let session = driver.session();
+                        /* eslint-disable */
+                        console.log('in ques');
+                        let query = 'match (n:User {name:"' + email + '"})-[r:follow]->(m:Question) where id(m)='+qId+' return r';
                         // console.log(query);
-                        session.run(query).then(function() {
-            // console.log('updated to neo4j');
+                        /* eslint-enable */
+                        session.run(query).then(function(result) {
+            //  console.log(result.records.length);
+            if(result.records.length === 0)
+            {
+                //  console.log('Question is not present');
+
+            /* eslint-disable */
+            let query = 'match (n:User {name:"' + email + '"}), (q:Question) where id(q)=' + qId + ' create (n)-[:follow]->(q);';
+            // console.log(query);
+            /* eslint-enable */
+            session.run(query).then(function() {
+// console.log('updated to neo4j');
+});
+            session.close();
+            // console.log(question);
+            UserProfile.findOneAndUpdate({
+                    emailId: req.query.email
+                }, {
+                    $push: {
+                        watchingList: {
+                            id: question.id,
+                            displayImage: question.displayImage,
+                            heading: question.heading,
+                            statement: question.question,
+                            postedBy: question.postedBy,
+                            profileImage: question.profileImage,
+                            addedOn: question.addedOn,
+                            category: question.category,
+                            upVotes: question.upVotes,
+                            downVotes: question.downVotes,
+                            noofans: question.answerCounts
+                        }
+                    }
+                }, {new: true}).then(() => {
+                    //  console.log(docs);
+                }, (error2) => {
+                    res.send(error2);
+                });
+            }
+            else
+            {
+                // console.log('question is already present');
+            }
         });
-                        session.close();
-                        // console.log(question);
-                        UserProfile.findOneAndUpdate({
-                                emailId: req.query.email
-                            }, {
-                                $push: {
-                                    watchingList: {
-                                        id: question.id,
-                                        displayImage: question.displayImage,
-                                        heading: question.heading,
-                                        statement: question.question,
-                                        postedBy: question.postedBy,
-                                        profileImage: question.profileImage,
-                                        addedOn: question.addedOn,
-                                        category: question.category,
-                                        upVotes: question.upVotes,
-                                        downVotes: question.downVotes,
-                                        noofans: question.answerCounts
-                                    }
-                                }
-                            }, {new: true}).then(() => {
-                                // res.send(doc);
-                            }, (error2) => {
-                                res.send(error2);
-                            });
-                        }
-                        else
-                        {
-                            // console.log('question is already present');
-                        }
-                    });
-                    });
+                  });
+                    // });
                         // console.log('Logged in status',lStatus);
                         if(lStatus === 'true')
                           {
@@ -126,9 +135,8 @@ followQuestion: function(req, res) {
         },
         followTopic: function (req, res) {
           // console.log("In followTopic")
-          let query = 'match (n:User {name:"' +
-           req.query.email + '"})-[r:follow]->(m:Concept {name:"'
-            + req.query.topic + '"}) return r';
+          /* eslint-disable */
+          let query = 'match (n:User {name:"' + req.query.email + '"})-[r:follow]->(m:Concept {name:"' + req.query.topic + '"}) return r';
           /* eslint-enable */
           let follow = '';
 
@@ -164,7 +172,7 @@ followQuestion: function(req, res) {
             // console.log('true');
                res.redirect('/#/search?question=' + topic);
           }
-          else if((lStatus1 === 'false'))
+          else
           {
             // console.log('in false');
           // res.cookie('quesId');

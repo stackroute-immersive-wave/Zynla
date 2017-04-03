@@ -237,7 +237,16 @@ let listController = {
             'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/IBM_Bluemix_logo.svg/1036px-IBM_Bluemix_logo.svg.png',
             'http://www.oppo.nl/files/2012/03/hd-abstracte-wallpaper-met-felle-kleuren-hd-abstracte-achtergrond.jpg',
             'https://c1.staticflickr.com/8/7570/15087405704_f571d14063_b.jpg',
-            'http://maxpixel.freegreatpicture.com/static/photo/1x/Shape-Simple-Hex-Hexagonal-Abstract-Modern-675576.jpg'
+            'http://maxpixel.freegreatpicture.com/static/photo/1x/Shape-Simple-Hex-Hexagonal-Abstract-Modern-675576.jpg',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Barnstar_-_technical_works.svg/2000px-Barnstar_-_technical_works.svg.png',
+            'https://previews.123rf.com/images/dskdesign/dskdesign1204/dskdesign120400574/13241701-chemistry-teacher-writing-science-and-chemical-formula-on-whiteboard-Stock-Photo.jpg',
+            'https://c1.staticflickr.com/9/8666/16203260320_3b7bc32962_b.jpg',
+            'https://thumbs.dreamstime.com/x/abstract-technology-background-planet-white-backdrop-30605816.jpg',
+            'https://c1.staticflickr.com/3/2080/2349225230_ef4e238caf.jpg',
+            'https://c1.staticflickr.com/5/4078/4819055826_776b042f09_b.jpg',
+            'http://theemon.com/wp-content/uploads/2015/11/Semantic.jpg',
+            'https://react.semantic-ui.com/logo.png',
+            'https://cdn.pixabay.com/photo/2015/06/28/09/36/email-824310_960_720.jpg'
         ];
         /*eslint-enable*/
         let randomNumber = Math.floor(Math.random() * imagesArray.length);

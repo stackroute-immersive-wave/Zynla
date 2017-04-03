@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Button, Image, Grid, Statistic, Segment, Header} from 'semantic-ui-react';
+import {Button, Image, Grid, Statistic, Segment, Header, Loader, Popup,
+  Input} from 'semantic-ui-react';
 import Cookie from 'react-cookie';
 import Chat from './basicInfo/chatbot.jsx';
 let DisplayQues = require('./questions/displayQuestions.jsx');
@@ -53,58 +54,70 @@ class NavBarPro extends Component {
         status: 0,
         watchingData: [],
         content: '',
-        watchingCount: 0
+        watchingCount: 0,
+        load: false,
+        picture: ''
     };
     this.getProfile = this.getProfile.bind(this);
   }
 // Fetch Basic Info page
     viewInfo() {
-      let temp = (
-        <BasicInfo/>
-      );
       this.setState({
-        content: temp
+        content: <BasicInfo statusMeter = {this.getProfile}/>
       });
     }
     // Fetch Questions page
     getQuestions() {
-      // console.log('comes');
-      let temp = (
-        <DisplayQues/>
-      );
+      if(this.state.questionCount === 0)
+      {
+        this.noQuestionsAlert();
+      }
+      else{
       this.setState({
-        content: temp
+        content: <DisplayQues/>
       });
+    }
     }
     // Fetch Answers page
     getAnswers() {
-      let temp = (
-        <DisplayAns/>
-      );
+      if(this.state.answerCount === 0)
+      {
+        this.noAnswersAlert();
+      }
+      else{
       this.setState({
-        content: temp
+        content: <DisplayAns/>
       });
+    }
     }
     // Fetch Followers page
     getFollowers() {
-      // console.log('comes');
-      let temp = (
-        <DisplayFollower/>
-      );
       this.setState({
-        content: temp
+        content: <DisplayFollower/>
       });
     }
     // Fetch Following page
     getFollowings() {
-      // console.log('comes');
-      let temp = (
-        <DisplayFollowing/>
-      );
       this.setState({
-        content: temp
+        content: <DisplayFollowing/>
       });
     }
+    noAnswersAlert () {
+       this.refs.container.error(
+         'No Answers yet!!',
+         '', {
+         timeOut: 2000,
+         extendedTimeOut: 10000
+       });
+     }
+    noQuestionsAlert () {
+       this.refs.container.error(
+         'No Questions yet!!',
+         '', {
+         timeOut: 2000,
+         extendedTimeOut: 10000
+       });
+     }
     noWatchingsAlert () {
        this.refs.container.error(
          'Not Watching any Topics',
@@ -113,6 +126,12 @@ class NavBarPro extends Component {
          extendedTimeOut: 10000
        });
      }
+     changePicture(e) {
+         this.setState({picture: e.target.value});
+         if(e.key === 'Enter') {
+           this.updateAbout();
+         }
+     }
     componentDidMount() {
         this.getProfile();
     }
@@ -120,7 +139,8 @@ class NavBarPro extends Component {
     getProfile() {
       this.setState({
         status: 0,
-        content: <BasicInfo statusMeter = {this.getProfile.bind(this)}/>
+        content: <BasicInfo statusMeter = {this.getProfile}/>,
+        load: true
       });
       /*eslint-disable*/
       let context = this;
@@ -135,7 +155,7 @@ class NavBarPro extends Component {
                    answerCount: data.answers.length,
                      followingCount: data.followingUser.length,
                      name: data.profile.name,
-                     objArray: data});
+                     objArray: data, load: false, picture: data.profile.picture});
                      if(data.profile.gender.length > 0 && data.profile.gender !== 'gender' &&
                      data.profile.gender !== ' ') {
                        context.setState({
@@ -252,7 +272,25 @@ class NavBarPro extends Component {
        content: <WatchingCard watchingData={this.state.watchingData}/>
      });
    }
-   }
+ }
+ updateAbout() {
+     //   // console.log(JSON.stringify(proData);
+     /*eslint-disable*/
+     console.log('here in picture');
+     let context = this;
+     /*eslint-enable*/
+     $.ajax({
+         url: 'http://localhost:8080/userdoc/updatePicture',
+         type: 'POST',
+         data: {picture: this.state.picture, email: Cookie.load('email')},
+         success: function() {
+           context.getProfile();
+         },
+         error: function() {
+             // console.error(err.toString());
+         }
+     });
+ }
     render() {
         const followerCount = this.state.followerCount;
         const followingCount = this.state.followingCount;
@@ -262,8 +300,14 @@ class NavBarPro extends Component {
               <Segment style={{marginRight: '6.70%'}}>
                 <Grid centered columns={2}>
                     <Grid.Column style={picStyle}>
-                      <Image style={imageStyle} src={Cookie.load('profilepicture')}
-                        size = 'small' shape='circular'/>
+                      <Popup on = 'click' trigger={<Image alt= 'No Image' style={imageStyle}
+                        src={this.state.picture}
+                          size = 'small' shape='circular'/>}
+                      flowing hoverable>
+                      <Input onChange={this.changePicture.bind(this)} onKeyPress =
+                      {this.changePicture.bind(this)}/>
+                      <Button onClick = {this.updateAbout.bind(this)} content='Update'/>
+                    </Popup>
                         <div style={nameStyle} onClick={this.viewInfo.bind(this)}>
                             {this.state.name}
                         </div>
@@ -289,12 +333,15 @@ class NavBarPro extends Component {
                       <div style={meterStyle}>
                         <Statistic>
                           <Statistic.Label>Profile Meter</Statistic.Label>
-                          <Statistic.Value> {profMeter} </Statistic.Value>
+                          <Statistic.Value> {profMeter}
+                          </Statistic.Value>
                           <Statistic.Label>completed</Statistic.Label>
                           <Chat handle = {this.getProfile.bind(this)}/>
                         </Statistic>
+                        <Loader size='huge' style={{marginLeft: '180px', marginTop: '60px'}}
+                          active ={this.state.load}/>
                         </div>
-                    </Grid.Column>>
+                    </Grid.Column>
                   </Grid>
                      </Segment>
                 <div>

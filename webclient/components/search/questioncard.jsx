@@ -190,7 +190,7 @@ inviteAlert (result) {
                   size='tiny' style={{fontSize: 13 + 'px'}}/>
                   <Popup wide open={this.state.isOpen} onClose={() => this.closePopup()}
               trigger={<Button circular onClick={() => this.openPopup()}
-              icon='google plus' id='iconColor'
+              icon='mail outline' id='iconColor'
               size='tiny' style={{'fonSize': 15 + 'px'}}/>} on='click' position='bottom right'>
                 <Icon name='remove' onClick={() => this.closePopup()}
                  style={{marginTop: 3 + 'px', marginBottom: 10 + 'px', marginLeft: 10 + 'px', float:'right'}}/>
@@ -224,13 +224,13 @@ inviteAlert (result) {
                                 <Link to= {'/answerPage?id=' + this.props.id}>
                             <div>
                             <Card.Header id='textheader' className='spacing'>
-                                <b>{this.props.heading}</b>
+                                <b className= 'headingcard'>{this.props.heading}</b>
                             </Card.Header>
                             </div>
                             </Link>
                             <div className='spacing' id='PaddingCards1'>
                                 <Image className="border" floated='left' size='mini'
-                          src='http://localhost:8080semantic-ui.com/images/avatar/large/steve.jpg'
+                          src={this.props.profileImage} alt = 'image'
                                 />
                                 <Card.Meta>
                                     <a href='' className='LinkColor'>{this.props.postedBy}</a>

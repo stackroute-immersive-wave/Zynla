@@ -516,7 +516,8 @@ let userCtrl = {
                 });
               }
               let query = 'match (n:User {name:"' + emailId + '"}) - \
-              [:follow]->(m:User) return distinct m';
+              [:follow]->(m:User)-[:follow]->(o:Question) return distinct m,o';
+              console.log(query);
               session.run(query).then(function(result) {
                   let mongoMail = [];
                   let following = [];
@@ -548,20 +549,44 @@ let userCtrl = {
                             }
                           }
                           // console.log('coming without error');
-                          res.send(arr);
+                          resSend(res, arr);
+                          // res.send(arr);
                         });
                     });
                   }
                   else {
                     UserProfile.find({$or: mongoMail}).then(function(docs2) {
+                        let tempArr = [];
+                        docs2.map(function(doc){
+                          doc.watchingList.map(function(watchingList) {
+                            tempArr.push(watchingList);
+                          });
+                        });
+                        tempArr = followCount(tempArr);
+                        tempArr.map(function(watchingList) {
+                          if(distinctFunc(arr, watchingList)) {
+                            qid.push(watchingList.id);
+                            for(let followRecord of result.records) {
+                              if(watchingList.id === followRecord._fields[1].identity.low) {
+                                watchingList = storeFollowedBy(watchingList, followRecord._fields[0].properties.name);
+                              }
+                            }
+                            arr.push(storeTag(watchingList, 'Friend\'s following'));
+                          }
+                        });
                         docs2.map(function(doc) {
-                            doc.watchingList.map(function(watchingList) {
-                                  if (distinctFunc(arr, watchingList)) {
-                                    qid.push(watchingList.id);
-                                    arr.push(storeTag(watchingList, 'Friend\'s following'));
-                                  }
-                                }
-                            );
+                            // doc.watchingList.map(function(watchingList) {
+                            //       if (distinctFunc(arr, watchingList)) {
+                            //         qid.push(watchingList.id);
+                            //         for(let followRecord of result.records) {
+                            //           if(watchingList.id === followRecord._fields[1].identity.low) {
+                            //             watchingList = storeFollowedBy(watchingList, followRecord._fields[0].properties.name);
+                            //           }
+                            //         }
+                            //         arr.push(storeTag(watchingList, 'Friend\'s following'));
+                            //       }
+                            //     }
+                            // );
                             doc.lists.map(function(lists) {
                                 if(distinctFunc(arr, lists)) {
                                   qid.push(lists.id);
@@ -570,11 +595,12 @@ let userCtrl = {
                                 }
                             );
                         });
-                        let queryfof = 'match (n:User),(n)-[:follow]->(m:User) where n.name="' + following[0] + '"';
+                        let queryfof = 'match (n:User),(n)-[:follow]->(m:User)-[x]->(o:Question) where n.name="' + following[0] + '"';
                         for (let qi = 1; qi < following.length; qi = qi + 1) {
                             queryfof = queryfof + ' or n.name="' + following[qi] + '"';
                         }
-                        queryfof = queryfof + ' return distinct m';
+                        queryfof = queryfof + ' return distinct m,n,o';
+                        // console.log(queryfof);
                         session.run(queryfof).then(function(result) {
                             let mongoMailFof = [];
                             for (let record of result.records) {
@@ -600,7 +626,8 @@ let userCtrl = {
                                             }
                                           }
                                         }
-                                        res.send(arr);
+                                        resSend(res, arr);
+                                        // res.send(arr);
                                       });
                               });
                             }
@@ -609,6 +636,11 @@ let userCtrl = {
                                     doc.watchingList.map(function(watchingList) {
                                         if (distinctFunc(arr, watchingList)){
                                             qid.push(watchingList.id);
+                                            for(let followRecord of result.records) {
+                                              if(watchingList.id === followRecord._fields[2].identity.low) {
+                                                watchingList = storeFriendOf(watchingList, followRecord._fields[1].properties.name);
+                                              }
+                                            }
                                             arr.push(storeTag(watchingList, 'FoF follow'));
                                           }
                                         }
@@ -616,6 +648,11 @@ let userCtrl = {
                                     doc.lists.map(function(lists) {
                                         if (distinctFunc(arr, lists)){
                                             qid.push(lists.id);
+                                            for(let followRecord of result.records) {
+                                              if(lists.id === followRecord._fields[2].identity.low) {
+                                                lists = storeFriendOf(lists, followRecord._fields[1].properties.name);
+                                              }
+                                            }
                                             arr.push(storeTag(lists, 'FoF posted'));
                                           }
                                         }
@@ -641,7 +678,8 @@ let userCtrl = {
                                               }
                                             }
                                           }
-                                          res.send(arr);
+                                          resSend(res, arr);
+                                          // res.send(arr);
                                         });
                                 });
                             });
@@ -883,6 +921,27 @@ function storeTag(obj, val) {
   return obj;
 }
 
+function storeFollowedBy(obj, val) {
+  let temp = JSON.stringify(obj);
+  temp = temp.substring(0, temp.length-1);
+  obj = JSON.parse(temp + ', "followedBy":"' + val + '"}');
+  return obj;
+}
+
+function storeFriendOf(obj, val) {
+  let temp = JSON.stringify(obj);
+  temp = temp.substring(0, temp.length-1);
+  obj = JSON.parse(temp + ', "friendOf":"' + val + '"}');
+  return obj;
+}
+
+function storeFollowCount(obj, val) {
+  let temp = JSON.stringify(obj);
+  temp = temp.substring(0, temp.length-1);
+  obj = JSON.parse(temp + ', "followCount":"' + val + '"}');
+  return obj;
+}
+
 function checkPreference(id, arr) {
   for(let temp of arr) {
     if(temp.id == id) {
@@ -891,6 +950,53 @@ function checkPreference(id, arr) {
     }
   }
   return false;
+}
+
+function resSend(res, arr) {
+  let emailId = [];
+  for(let array of arr) {
+    if(array.followedBy) {
+      emailId.push({email:array.followedBy});
+    }
+    else if (array.friendOf) {
+      emailId.push({email:array.friendOf});
+    }
+    emailId.push({email:array.postedBy});
+  }
+  User.find({$or:emailId}).then(function(docs){
+    let data = [];
+    docs.map(function(doc){
+      if(doc.name) {
+        data[doc.email] = doc.name;
+      }
+      else {
+        data[doc.email] = doc.email;
+      }
+    });
+    for(let i in arr) {
+      arr[i].postedBy = data[arr[i].postedBy];
+      if(arr[i].followedBy) {
+        arr[i].followedBy = data[arr[i].followedBy];
+      }
+      else if (arr[i].friendOf) {
+        arr[i].friendOf = data[arr[i].friendOf];
+      }
+    }
+    res.send(arr);
+  });
+}
+
+function followCount(arr) {
+  for(let i in arr) {
+    let count = -1;
+    arr.map(function(data2){
+      if(arr[i].id === data2.id) {
+        count = count + 1;
+      }
+    });
+    arr[i] = storeFollowCount(arr[i], count);
+  }
+  return arr;
 }
 
 module.exports = userCtrl;

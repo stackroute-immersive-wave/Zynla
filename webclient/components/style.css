@@ -100,6 +100,7 @@ transition: opacity .4s ease-in-out;
 }
 .spacing {
  padding-top: 10px;
+ margin-left: 12px !important;
  }
 
 .spacing.margin{
@@ -257,7 +258,7 @@ color:white;
 }
 .overlay{
   position: fixed;
-   background: url(https://static.pexels.com/photos/50677/rain-after-the-rain-a-drop-of-drop-of-rain-50677.jpeg);
+   background: url(https://static.pexels.com/photos/39284/macbook-apple-imac-computer-39284.jpeg);
   -webkit-animation:100s scroll infinite linear;
   -moz-animation:100s scroll infinite linear;
   -o-animation:100s scroll infinite linear;

@@ -10,9 +10,9 @@ class followingCard extends React.Component {
 
 
     render () {
-        let arr = this.props.followingData.map(function(item) {
+        let arr = this.props.followingData.map(function(item, index) {
                 return (
-              <Grid.Column>
+              <Grid.Column key ={index}>
                 <MainFollowingCard heading={item.profile.name} reputation={item.reputation}
                   city={item.profile.address.city}
                 image={item.profile.picture} description= {item.profile.description} followerCount=
@@ -30,5 +30,5 @@ class followingCard extends React.Component {
 
 module.exports = followingCard;
 followingCard.propTypes = {
-  followingData: React.PropTypes.Array
+  followingData: React.PropTypes.array
 };

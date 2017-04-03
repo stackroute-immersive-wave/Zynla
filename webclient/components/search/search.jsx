@@ -21,7 +21,8 @@ class Search extends React.Component {
             isfollow: [],
             profile: [],
             followtopic: 'Follow',
-             active: false
+             active: false,
+             icon: 'plus circle'
         };
     }
     componentDidMount() {
@@ -202,6 +203,7 @@ class Search extends React.Component {
          success: function() {
            let temp = 'Following';
            this.setState({followtopic: temp});
+           this.setState({icon: 'minus circle'});
          }.bind(this)
       });
    }
@@ -213,7 +215,7 @@ class Search extends React.Component {
                   <Loader>Searching Questions</Loader>
                  </Dimmer>
                  <Concepts json = {this.state.concept} ques = {this.state.followtopic}
-                  followTopic = {this.followTopic.bind(this)}
+                  followTopic = {this.followTopic.bind(this)} Icon = {this.state.icon}
                   topic = {window.location.hash.split('question=')[1]} />
                  <Categories changeComponent = {this.changeComponent.bind(this)}/>
                  {this.state.component}

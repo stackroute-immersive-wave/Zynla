@@ -193,20 +193,13 @@ closePopup() {
         const content = (
           <Popup wide open={this.state.isOpen} onClose={() => this.closePopup()}
       trigger={<Button circular onClick={() => this.openPopup()}
-      icon='google plus' id='iconColor'
-      size='huge' style={{fontSize: 15 + 'px'}}/>} on='click' position='bottom right'>
+      icon='mail outline' id='iconColor'
+      size='huge' />} on='click' position='bottom right'>
         <Icon name='remove' onClick={() => this.closePopup()}
-         style={{marginTop: 3 + 'px',
-          marginBottom: 10 + 'px', marginLeft: 10 + 'px', float: 'right'}}/>
-      <p style={{'text-align': 'center',
-        'padding-right': '10px', 'margin-top': '0px'}}>
-      <div className="ui fluid icon input">
-        <input style={{resize: 'horizontal',
-          width: '250px', height: '30px'}}
-           id="users"
-            placeholder="Search friends Here"
-             list="usernames" onKeyDown={this.changeval.bind(this)} />
-             /* eslint-disable */
+         style={{marginTop: 3 + 'px', marginBottom: 10 + 'px', marginLeft: 10 + 'px', float:'right'}}/>
+      <p style={{'text-align': 'center','padding-right': '10px','margin-top': '0px'}}>
+      <div class="ui fluid icon input">
+        <input style={{'resize': 'horizontal','width': '250px','height':'30px'}} id="users" placeholder="Search friends Here" list="usernames" onKeyDown={this.changeval.bind(this)} />
  <datalist id="usernames"></datalist></div><br />
 <Button fluid animated='fade' onClick={this.findMail.bind(this)} color='red' className='butstyle'>
 <Button.Content visible >
@@ -241,11 +234,11 @@ closePopup() {
                  marginLeft: 70 + 'px'}} className='arrowsize'>
                     <Icon name='chevron right' onClick={this.changeStartRight.bind(this)}/>
                 </Grid.Column>
-             <Grid.Column width={2} className='arrowsize' style={{paddingTop: 80 + 'px'}}>
+             <Grid.Column width={3} className='arrowsize' style={{paddingTop: 80 + 'px'}}>
                <div>
                  {content}
-              <Icon name = "plus circle" color={'red'} size = "huge"
-               onClick = {this.props.followTopic.bind(this)}/><br />
+              <Icon name = {this.props.Icon} color={'red'} size = "huge"
+               onClick = {this.props.followTopic.bind(this)}/>
                         {this.props.ques}
                </div>
 
@@ -264,6 +257,7 @@ closePopup() {
    json: React.PropTypes.func,
    topic: React.PropTypes.string,
    ques: React.PropTypes.string,
-   followTopic: React.PropTypes.func
+   followTopic: React.PropTypes.func,
+   Icon: React.PropTypes.string
  };
   module.exports = Concepts;

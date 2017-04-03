@@ -229,19 +229,24 @@ inviteAlert (result) {
           label = <Label as='a' color='violet' ribbon='left' style={{marginLeft: 13 + 'px'}} >{this.props.tag}</Label>;
         }
         else if(tag === 'Friend\'s following') {
-          label = <Label as='a' color='blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >Followed by Friend</Label>;
+          if(this.props.fullObj.followCount && this.props.fullObj.followCount > 0) {
+            label = <Label as='a' color='blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >Followed by {this.props.fullObj.followedBy} and {this.props.fullObj.followCount} more</Label>;  
+          }
+          else {
+            label = <Label as='a' color='blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >Followed by {this.props.fullObj.followedBy}</Label>;
+          }
         }
         else if(tag === 'Friend\'s posted') {
-          label = <Label as='a' color='green' ribbon='left' style={{marginLeft: 13 + 'px'}} >Posted by Friend</Label>;
+          label = <Label as='a' color='green' ribbon='left' style={{marginLeft: 13 + 'px'}} >Posted by {this.props.fullObj.postedBy}</Label>;
         }
         else if(tag === 'FoF follow') {
-          label = <Label as='a' color='light blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >Followed by Mutual Friend</Label>;
+          label = <Label as='a' color='light blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >Followed by Friend of {this.props.fullObj.friendOf}</Label>;
         }
         else if(tag === 'Preferred Topic') {
           label = <Label as='a' color='brown' ribbon='left' style={{marginLeft: 13 + 'px'}} >Following Topic</Label>;
         }
         else {
-          label = <Label as='a' color='teal' ribbon='left' style={{marginLeft: 13 + 'px'}} >Posted by Mutual Friend</Label>;
+          label = <Label as='a' color='teal' ribbon='left' style={{marginLeft: 13 + 'px'}} >Posted by Friend of {this.props.fullObj.friendOf}</Label>;
         }
         const {active} = this.state;
         const content = (
@@ -251,7 +256,7 @@ inviteAlert (result) {
             }}/>
             <Popup wide open={this.state.isOpen} onClose={() => this.closePopup()}
         trigger={<Button circular onClick={() => this.openPopup()}
-        icon='google plus' id='iconColor'
+        icon='mail outline' id='iconColor'
         size='tiny' style={{'fonSize': 15 + 'px'}}/>} on='click' position='bottom right'>
           <Icon name='remove' onClick={() => this.closePopup()}
            style={{marginTop: 3 + 'px', marginBottom: 10 + 'px', marginLeft: 10 + 'px', float:'right'}}/>

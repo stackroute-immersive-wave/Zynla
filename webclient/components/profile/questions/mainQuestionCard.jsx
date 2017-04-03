@@ -43,8 +43,7 @@ class mainQuestionCard extends React.Component {
                                             {this.props.downVote}
                                             </Menu.Item>
                                             <Menu.Item>
-                                                <Icon name='checkmark' color='green' size='large'/>
-                                                {this.props.acceptedCount} Accepted
+                                                {this.props.acceptedCount}&nbsp;&nbsp;Accepted
                                                 </Menu.Item>
                                                 <Menu.Item>
                                                     Added On: {dateData}
@@ -66,7 +65,7 @@ module.exports = mainQuestionCard;
 mainQuestionCard.propTypes = {
   heading: React.PropTypes.string,
   category: React.PropTypes.string,
-  acceptedCount: React.PropTypes.number,
+  acceptedCount: React.PropTypes.string,
   upVote: React.PropTypes.number,
   downVote: React.PropTypes.number,
   addedOn: React.PropTypes.string

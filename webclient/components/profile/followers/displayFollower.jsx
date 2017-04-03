@@ -44,8 +44,9 @@ class displayFollower extends React.Component {
              type: 'POST',
              data: {email: email, skip: 0, limit: 10},
              success: function(data) {
-               context.handleClose();
-               if(data === 'No Followers') {
+                 context.handleClose();
+                //  console.log(data);
+               if(data.length === 0) {
                  context.noFollowersAlert();
                }
                else {
@@ -55,6 +56,8 @@ class displayFollower extends React.Component {
                }
              },
              error: function() {
+                   context.handleClose();
+               context.noFollowersAlert();
               // console.log('error in logout' + err);
              }
          });

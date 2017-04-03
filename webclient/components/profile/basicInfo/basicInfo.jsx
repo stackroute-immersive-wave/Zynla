@@ -33,7 +33,6 @@ class basicInfo extends React.Component {
             country: '',
             postalCode: '',
             city: '',
-            picture: '',
             description: '',
             dob: '',
             gender: '',
@@ -62,9 +61,7 @@ class basicInfo extends React.Component {
     }
     handleItemClick1() {
       this.getProfile();
-      /* eslint-disable */
       this.props.statusMeter();
-      /* eslint-enable */
       this.setState({
         profileForm: <div>
                 <Popup on = 'click' trigger={<a style={{cursor: 'pointer'}}>
@@ -91,9 +88,7 @@ class basicInfo extends React.Component {
     }
     handleItemClick2() {
       this.getProfile();
-      /* eslint-disable */
       this.props.statusMeter();
-      /* eslint-enable */
       this.setState({
         profileForm: <div>
             I did my schooling from <Popup on = 'click' trigger=
@@ -121,9 +116,7 @@ class basicInfo extends React.Component {
     }
     handleItemClick3() {
       this.getProfile();
-      /* eslint-disable */
       this.props.statusMeter();
-      /* eslint-enable */
       this.setState({
         profileForm: <div>
             I Live at <Popup on = 'click' trigger=
@@ -147,7 +140,8 @@ class basicInfo extends React.Component {
               </Popup>. in <Popup on = 'click' trigger=
                {<a style={{cursor: 'pointer'}}>{this.state.region}</a>}
              flowing hoverable>
-             <Input onChange={this.changeRegion.bind(this)}/>
+             <Input onChange={this.changeRegion.bind(this)} onKeyPress =
+             {this.changeRegion.bind(this)}/>
              <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
            </Popup>. postalCode: <Popup on = 'click' trigger=
               {<a style={{cursor: 'pointer'}}>{this.state.postalCode}</a>}
@@ -158,7 +152,7 @@ class basicInfo extends React.Component {
             </Popup> <Popup on = 'click' trigger=
              {<a style={{cursor: 'pointer'}}>{this.state.country}</a>}
            flowing hoverable>
-           <Input onChange={this.changeCountry.bind(this)} onKeyPress =
+           <Input on={this.changeCountry.bind(this)} value ={this.state.country} onKeyPress =
            {this.changeCountry.bind(this)}/>
            <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
            </Popup>
@@ -321,12 +315,6 @@ class basicInfo extends React.Component {
           this.updateLocation();
         }
     }
-    changePhoto(e) {
-        this.setState({picture: e.target.value});
-        if(e.key === 'Enter') {
-          this.updateLocation();
-        }
-    }
     changeDescription(e) {
         this.setState({description: e.target.value});
         if(e.key === 'Enter') {
@@ -380,7 +368,6 @@ class basicInfo extends React.Component {
                         region: data.profile.address.region,
                         city: data.profile.address.city,
                         postalCode: data.profile.address.postalCode,
-                        picture: data.profile.picture,
                         description: data.profile.description,
                         dob: data.profile.dob,
                         gender: data.profile.gender,
@@ -448,8 +435,6 @@ class basicInfo extends React.Component {
 
     updateAbout() {
         let proData = {
-
-            picture: this.state.picture,
             description: this.state.description,
             dob: this.state.dob,
             gender: this.state.gender,
@@ -521,7 +506,7 @@ class basicInfo extends React.Component {
                       <div>
 
                 <Dimmer active={active} page>
-                    <Loader>Loading</Loader>
+                    <Loader>Fetching your profile</Loader>
                 </Dimmer>
                 <Grid>
                     <Grid.Column width={4}>
@@ -555,3 +540,6 @@ class basicInfo extends React.Component {
     }
 }
 module.exports = basicInfo;
+basicInfo.propTypes = {
+  statusMeter: React.PropTypes.function
+};

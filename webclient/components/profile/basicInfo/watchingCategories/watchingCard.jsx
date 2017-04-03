@@ -9,9 +9,9 @@ class interestsCard extends React.Component {
 
 
     render () {
-        let arr = this.props.watchingData.map(function(item) {
+        let arr = this.props.watchingData.map(function(item, index) {
                 return (
-            <Grid.Column>
+            <Grid.Column key = {index}>
                 <MainWatchingCard heading={item}/>
             </Grid.Column>
             );
@@ -26,5 +26,5 @@ class interestsCard extends React.Component {
 
 module.exports = interestsCard;
 interestsCard.propTypes = {
-  watchingData: React.PropTypes.Array
+  watchingData: React.PropTypes.array
 };

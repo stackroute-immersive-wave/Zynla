@@ -8,9 +8,9 @@ class answersCard extends React.Component {
 
 
     render () {
-        let arr = this.props.answerData.map(function(item) {
+        let arr = this.props.answerData.map(function(item, index) {
                 return (
-            <div>
+            <div key ={index}>
                 <MainAnswerCard answer={item.statement} addedOn={item.addedOn}
                 image={item.image} upVote={item.upVote} downVote={item.downVote}
                 />
@@ -25,7 +25,7 @@ class answersCard extends React.Component {
       }
 }
 answersCard.propTypes = {
-  answerData: React.PropTypes.Array
+  answerData: React.PropTypes.array
 };
 
 module.exports = answersCard;
