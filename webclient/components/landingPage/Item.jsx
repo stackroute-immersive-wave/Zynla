@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {Grid} from 'semantic-ui-react';
 import DisplayHomePageCardStructure from './displayHomePageCardStructure.jsx';
 
@@ -24,7 +25,7 @@ export function Item(props) {
     <div>
       <Grid.Column>
         <DisplayHomePageCardStructure id={items.id} displayImage={items.displayImage}
-        heading={items.heading} question={items.question} postedBy={items.postedBy}
+        heading={items.heading} question={items.question} postedBy={items.postedBy} userName={items.userName}
         addedOn={items.addedOn} category={items.category} upVotes={parseInt(items.upVotes, 10)}
         downVotes={parseInt(items.downVotes, 10)}
          answerCounts={items.answerCounts} views={items.views}

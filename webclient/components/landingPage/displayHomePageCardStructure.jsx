@@ -92,7 +92,7 @@ class DisplayFavouriteCategoryStructure extends React.Component {
           url: '/users/getAllUserName',
           type: 'get',
           success: function(data) {
-              // console.log(JSON.stringify(data));
+              // console.log("Inside Home Page card Structure...",data);
               this.setState({userNames: data});
           }.bind(this),
           error: function() {}
@@ -230,7 +230,7 @@ inviteAlert (result) {
         }
         else if(tag === 'Friend\'s following') {
           if(this.props.fullObj.followCount && this.props.fullObj.followCount > 0) {
-            label = <Label as='a' color='blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >Followed by {this.props.fullObj.followedBy} and {this.props.fullObj.followCount} more</Label>;  
+            label = <Label as='a' color='blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >Followed by {this.props.fullObj.followedBy} and {this.props.fullObj.followCount} more</Label>;
           }
           else {
             label = <Label as='a' color='blue' ribbon='left' style={{marginLeft: 13 + 'px'}} >Followed by {this.props.fullObj.followedBy}</Label>;
@@ -299,6 +299,9 @@ inviteAlert (result) {
                     </Link>
                     <div className='spacing' id='PaddingCards1'>
                         <Image className="border" floated='left' size='mini' src={this.props.profileImage} alt='pro image'/>
+                        <Card.Meta>
+                            <a href='' className='LinkColor'>{this.props.userName}</a>
+                        </Card.Meta>
                         <Card.Meta>
                             <a href='' className='LinkColor'>{this.props.postedBy}</a>
                         </Card.Meta>

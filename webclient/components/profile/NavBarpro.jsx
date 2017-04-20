@@ -151,79 +151,80 @@ class NavBarPro extends Component {
             type: 'POST',
             data: {email: email},
             success: function(data) {
+              let status=0;
                 context.setState({questionCount: data.lists.length,
                    answerCount: data.answers.length,
                      followingCount: data.followingUser.length,
                      name: data.profile.name,
                      objArray: data, load: false, picture: data.profile.picture});
                      if(data.profile.gender.length > 0 && data.profile.gender !== 'gender' &&
-                     data.profile.gender !== ' ') {
-                       context.setState({
-                         // setting conditions for profile meter
-                         status: parseInt(context.state.status, 10) + 10
-                       });
+                     data.profile.gender.trim() !== '') {
+                      status= parseInt(status, 10) + 10;
                      }
                      if(data.profile.name.length > 0 &&
                        data.profile.name !== 'name' &&
-                       data.profile.name !== ' ') {
-                       context.setState({
-                         status: parseInt(context.state.status, 10) + 10
-                       });
-                     }
+                       data.profile.name.trim() !== '') {
+                         status= parseInt(status, 10) + 10;
+                      }
+                      if(data.profile.education.primary.length > 0 &&
+                        data.profile.education.primary !== 'Primary' &&
+                        data.profile.education.primary.trim() !== '') {
+                          status= parseInt(status, 10) + 5;
+                       }
                      if(data.profile.education.highSchool.length > 0 &&
                        data.profile.education.highSchool !== 'Secondary' &&
-                       data.profile.education.highSchool !== ' ') {
-                       context.setState({
-                         status: parseInt(context.state.status, 10) + 10
-                       });
-                     }
+                       data.profile.education.highSchool.trim() !== '') {
+                         status= parseInt(status, 10) + 5;
+                      }
                      if(data.profile.education.university.length > 0 &&
                        data.profile.education.university !== 'University' &&
-                         data.profile.education.university !== ' ') {
-                       context.setState({
-                         status: parseInt(context.state.status, 10) + 10
-                       });
-                     }
+                         data.profile.education.university.trim() !== '') {
+                           status= parseInt(status, 10) + 10;
+                      }
                      if(data.profile.address.country.length > 0
                        && data.profile.address.country !== 'Country'
-                     && data.profile.address.country !== ' ') {
-                       context.setState({
-                         status: parseInt(context.state.status, 10) + 10
-                       });
-                     }
+                     && data.profile.address.country.trim() !== '') {
+                       status= parseInt(status, 10) + 10;
+                      }
+                      if(data.profile.address.Line1.length > 0
+                        && data.profile.address.Line1 !== 'H.No.'
+                      && data.profile.address.Line1.trim() !== '') {
+                        status= parseInt(status, 10) + 5;
+                      }
+                      if(data.profile.address.Line2.length > 0
+                        && data.profile.address.Line2 !== 'Street'
+                      && data.profile.address.Line2.trim() !== '') {
+                        status= parseInt(status, 10) + 5;
+                      }
                      if(data.profile.address.city.length > 0
                        && data.profile.address.city !== 'City'
-                     && data.profile.address.city !== ' ') {
-                       context.setState({
-                         status: parseInt(context.state.status, 10) + 10
-                       });
+                     && data.profile.address.city.trim() !== '') {
+                       status= parseInt(status, 10) + 5;
                      }
                      if(data.profile.address.region.length > 0
                        && data.profile.address.region !== 'State'
-                     && data.profile.address.region !== ' ') {
-                       context.setState({
-                         status: parseInt(context.state.status, 10) + 10
-                       });
+                     && data.profile.address.region.trim() !== '') {
+                       status= parseInt(status, 10) + 5;
+                     }
+                     if(data.profile.address.postalCode.length > 0
+                       && data.profile.address.postalCode !== 'postal Code'
+                     && data.profile.address.postalCode.trim() !== '') {
+                       status= parseInt(status, 10) + 5;
                      }
                      if(data.profile.dob.length > 0 && data.profile.dob !== 'dob'
-                   && data.profile.dob !== ' ') {
-                       context.setState({
-                         status: parseInt(context.state.status, 10) + 10
-                       });
+                   && data.profile.dob.trim() !== '') {
+                     status= parseInt(status, 10) + 10;
                      }
                      if(data.profile.phone.length > 0 && data.profile.phone !== 'Phone'
-                   && data.profile.phone !== ' ') {
-                       context.setState({
-                         status: parseInt(context.state.status, 10) + 10
-                       });
+                   && data.profile.phone.trim() !== '') {
+                     status= parseInt(status, 10) + 10;
                      }
                      if(data.profile.description.length > 0
                        && data.profile.description !== 'Describe About Yourself'
-                     && data.profile.description !== ' ') {
-                       context.setState({
-                         status: parseInt(context.state.status, 10) + 10
-                       });
+                     && data.profile.description.trim() !== '') {
+                       status= parseInt(status, 10) + 5;
                      }
+                     context.setState({status:status});
             },
             error: function() {
               // console.log('error in logout' + err);
@@ -333,8 +334,7 @@ class NavBarPro extends Component {
                       <div style={meterStyle}>
                         <Statistic>
                           <Statistic.Label>Profile Meter</Statistic.Label>
-                          <Statistic.Value> {profMeter}
-                          </Statistic.Value>
+                          <Statistic.Value> {profMeter}</Statistic.Value>
                           <Statistic.Label>completed</Statistic.Label>
                           <Chat handle = {this.getProfile.bind(this)}/>
                         </Statistic>

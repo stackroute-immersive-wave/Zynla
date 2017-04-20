@@ -90,6 +90,7 @@ class QueCard extends React.Component {
             url: `/users/viewFollowCard/${emailId}`,
             type: 'GET',
             success: function(data) {
+              //console.log("getPreviousStatus",data);
                 data.map(function(item) {
                     item.watchingList.map(function(items) {
                         arr.push(items);

@@ -1,4 +1,5 @@
-import {PropTypes} from 'react';
+import {PropTypes} from 'prop-types';
+// import RichTextEditor from 'react-rte';
 import RichTextEditor from 'react-rte';
 import React from 'react';
 import {
@@ -19,7 +20,6 @@ import {
     Header
 } from 'semantic-ui-react';
 import Cookie from 'react-cookie';
-// import RichTextEditor from 'react-rte';
 const ReactToastr = require('react-toastr');
 const {ToastContainer} = ReactToastr;
 const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
@@ -193,6 +193,7 @@ class answerPage extends React.Component {
     // Posting answer for question created by Aswini K
     postAnswer() {
       if((this.state.value.toString('html')).length > 11) {
+        //console.log("postAnswer",this.state.value);
         this.close();
         let id = window.location.hash.split('id=')[1];
         // console.log('inside post Answer');

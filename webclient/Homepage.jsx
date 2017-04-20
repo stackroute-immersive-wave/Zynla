@@ -57,12 +57,12 @@ ReactDOM.render(
     <Route path='/signup' component={Signup}/>
     <Route path='/mail' component={SentMailPage} />
     <Route path='/forgetPassword' component={ForgetPassword}/>
-<Route path='/changePasswordPage' component={ChangePassword}/>
+    <Route path='/changePasswordPage' component={ChangePassword}/>
     <Route path='/selectCategory' component={SelectCategory}/>
     <Route path='/selectedCategory' component={SelectedCategory}/>
     <Route path='/userProfile' component={UserProfile}/>
     <Route path='/404' component={PageNotFound}/>
-            <Redirect from='*' to='/404' />
+        <Redirect from='*' to='/404' />
   </Router>, document.getElementById('mountapp'));
 MainComp.propTypes = {
     children: React.PropTypes.object.isRequired

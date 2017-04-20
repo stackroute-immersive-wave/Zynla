@@ -355,7 +355,7 @@ let listController = {
             }
         });
     },
-    // Router for adding viwe count in mongo db created by Aswini K
+    // Router for adding view count in mongo db created by Aswini K
     updateviews: function(req, res) {
         let id = req.body.id;
         // console.log("ID:" + id);

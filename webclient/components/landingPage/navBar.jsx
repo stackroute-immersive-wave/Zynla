@@ -311,7 +311,8 @@ constructor() {
    // console.log(Cookie.load('username'));
    // console.log('email for logout',emailId);
      $.ajax({
-         url: '/users/logOut', type: 'POST',
+         url: '/users/logOut',
+          type: 'POST',
          datatype: 'JSON',
           data: {email: emailId},
          success: function() {
