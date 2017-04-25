@@ -32,7 +32,7 @@ let userCtrl = {
 
   //getUserprofileQuestion from Mongo DB
   getUserQues: function(req,res) {
-    UserProfileQues.find({_id:'58f5f596838f7a0e88b70a08'},function(err,data){
+    UserProfileQues.find({name:'Please let me know your full name.'},function(err,data){
 if(err)
   res.send(err);
 else {

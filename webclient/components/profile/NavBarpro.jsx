@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Image, Grid, Statistic, Segment, Header, Loader, Popup,
+import {Button, Image, Menu, Grid, Statistic, Segment, Header, Loader, Popup,
   Input} from 'semantic-ui-react';
 import Cookie from 'react-cookie';
 import Chat from './basicInfo/chatbot.jsx';
@@ -54,6 +54,7 @@ class NavBarPro extends Component {
         status: 0,
         watchingData: [],
         content: '',
+        contentNew:'',
         watchingCount: 0,
         load: false,
         picture: ''
@@ -70,23 +71,30 @@ class NavBarPro extends Component {
     getQuestions() {
       if(this.state.questionCount === 0)
       {
+        //#swathi setting the contentNew to null sothat it will not be displayed when the next segment is clicked
+        this.setState({
+      contentNew:null });
         this.noQuestionsAlert();
       }
       else{
       this.setState({
-        content: <DisplayQues/>
+        contentNew: <DisplayQues/>
       });
     }
+    
     }
     // Fetch Answers page
     getAnswers() {
       if(this.state.answerCount === 0)
       {
+        //#swathi setting the contentNew to null sothat it will not be displayed when the next segment is clicked
+        this.setState({
+      contentNew:null });
         this.noAnswersAlert();
       }
       else{
       this.setState({
-        content: <DisplayAns/>
+        contentNew: <DisplayAns/>
       });
     }
     }
@@ -244,6 +252,7 @@ class NavBarPro extends Component {
                   // setting interestData to content
                 });
             },
+
             error: function() {
                 // console.error(err.toString());
             }
@@ -266,11 +275,14 @@ class NavBarPro extends Component {
    getWatching() {
      if(this.state.watchingData.length === 0)
      {
+      //#swathi setting the contentNew to null sothat it will not be displayed when the next segment is clicked
+      this.setState({
+      contentNew:null });
        this.noWatchingsAlert();
      }
      else{
      this.setState({
-       content: <WatchingCard watchingData={this.state.watchingData}/>
+       contentNew: <WatchingCard watchingData={this.state.watchingData}/>
      });
    }
  }
@@ -297,18 +309,21 @@ class NavBarPro extends Component {
         const followingCount = this.state.followingCount;
         let profMeter = parseInt(this.state.status, 10) + '%';
         return (
+
             <div>
+
               <Segment style={{marginRight: '6.70%'}}>
                 <Grid centered columns={2}>
                     <Grid.Column style={picStyle}>
-                      <Popup on = 'click' trigger={<Image alt= 'No Image' style={imageStyle}
+                    
+                      <Popup  trigger={<Image alt= 'No Image' style={imageStyle}
                         src={Cookie.load('profilepicture')}
                           size = 'small' shape='circular'/>}
-                      flowing hoverable>
+                      flowing hoverable >
                       <Input onChange={this.changePicture.bind(this)} onKeyPress =
                       {this.changePicture.bind(this)}/>
                       <Button onClick = {this.updateAbout.bind(this)} content='Update'/>
-                    </Popup>
+                      </Popup>
                         <div style={nameStyle} onClick={this.viewInfo.bind(this)}>
                             {this.state.name}
                         </div>
@@ -334,7 +349,8 @@ class NavBarPro extends Component {
                       <div style={meterStyle}>
                         <Statistic>
                           <Statistic.Label>Profile Meter</Statistic.Label>
-                          <Statistic.Value> {profMeter}</Statistic.Value>
+                          <Statistic.Value> {profMeter}
+                          </Statistic.Value>
                           <Statistic.Label>completed</Statistic.Label>
                           <Chat handle = {this.getProfile.bind(this)}/>
                         </Statistic>
@@ -343,17 +359,21 @@ class NavBarPro extends Component {
                         </div>
                     </Grid.Column>
                   </Grid>
+                                     
                      </Segment>
                 <div>
                     <br/>
                   <Grid>
                     <Grid.Column width = {11}>
                     {this.state.content}
-                  </Grid.Column>
+                    </Grid.Column>
+                   
                   <Grid.Column width = {4}>
-                    <Segment>
+                  
+                   <Segment>
                       <Header style ={{cursor: 'pointer'}} dividing
                         onClick={this.getQuestions.bind(this)}>
+
  <Header.Content>
    Questions &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -378,11 +398,17 @@ class NavBarPro extends Component {
 
 </Header>
 </Segment>
-                  </Grid.Column>
+                  
                   <Grid.Column width = {1}/>
-                </Grid>
-              </div>
-              <ToastContainer ref='container' style ={{backgroundColor: '#B2242E'}}
+                    </Grid.Column>
+<Grid.Column width = {12}>
+                    {this.state.contentNew}
+                    </Grid.Column>
+            
+
+                    </Grid>
+                  </div>
+                  <ToastContainer ref='container' style ={{backgroundColor: '#B2242E'}}
                      toastMessageFactory={ToastMessageFactory}
                      className='toast-top-center' />
             </div>
@@ -391,3 +417,30 @@ class NavBarPro extends Component {
 }
 
 module.exports = NavBarPro;
+                        
+          //#swathi this doesn't seem to work or I don't know how to make it work.
+              
+                  //       <Menu.Item name='Answers' active={activeItem === 'Answers'}
+                        //       onClick={this.handleItemClick2.bind(this)}>
+                        //     <Menu.Item name='Location' active={activeItem === 'Location'}
+                        //       onClick={this.handleItemClick3.bind(this)}/>
+                        //     <Menu.Item name='Categories'
+                        //       active={activeItem === 'Categories'}
+                        //       onClick={this.handleItemClick4.bind(this)}/>
+                        // </Menu>
+       //#swathi-commented the working code
+
+                  // #swathi trying menu bar
+                 
+                  // <Menu style={{fontFamily: 'Georgia, serif'}}
+                  //         fluid vertical tabular>
+                  //             <Menu.Item name='Questions'
+                  //               //active={activeItem === 'Questions'} 
+                  //               onClick={this.getQuestions.bind(this)}/>
+
+                  // </Menu>
+                  // </Grid.Column>
+                  // </Grid>
+                  // <Grid>
+                  //   <Grid.Column width = {11}>
+                  //   {this.state.contentNew}    

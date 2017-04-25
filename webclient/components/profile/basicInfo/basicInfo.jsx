@@ -64,18 +64,18 @@ class basicInfo extends React.Component {
       this.props.statusMeter();
       this.setState({
         profileForm: <div>
-                <Popup on = 'click' trigger={<a style={{cursor: 'pointer'}}>
+                <Popup trigger={<a style={{cursor: 'pointer'}}>
                   {this.state.description}</a>}
-                flowing hoverable>
+                flowing hoverable >
                 <TextArea onChange={this.changeDescription.bind(this)}/>
-                <Button onClick = {this.updateAbout.bind(this)} content='Update'/>
-              </Popup><br/> born on <Popup on = 'click' trigger=
+                <Button onClick = {this.updateAbout.bind(this)} content='Update' />
+              </Popup><br/> born on <Popup trigger=
                 {<a style={{cursor: 'pointer'}}>{this.state.dob}</a>}
                  flowing hoverable>
                  <Input onChange={this.changeDob.bind(this)} onKeyPress =
                  {this.changeDob.bind(this)}/>
-                 <Button onClick = {this.updateAbout.bind(this)} content='Update'/>
-               </Popup>. My Phone number is <Popup on = 'click' trigger=
+                 <Button onClick = {this.updateAbout.bind(this)} content='Update' />
+               </Popup>. My Phone number is <Popup trigger=
                 {<a style={{cursor: 'pointer'}}>{this.state.phone}</a>}
               flowing hoverable>
               <Input onChange={this.changePhone.bind(this)} onKeyPress =
@@ -91,21 +91,21 @@ class basicInfo extends React.Component {
       this.props.statusMeter();
       this.setState({
         profileForm: <div>
-            I did my schooling from <Popup on = 'click' trigger=
+            I did my schooling from <Popup trigger=
                 {<a style={{cursor: 'pointer'}}>{this.state.primary}</a>}
-                flowing hoverable>
+                flowing hoverable >
                 <Input onChange={this.changePrimary.bind(this)} onKeyPress =
                 {this.changePrimary.bind(this)}/>
                 <Button onClick = {this.updateEducation} content='Update'/>
-              </Popup> . earned my degree <br/> from <Popup on = 'click'
+              </Popup> . earned my degree <br/> from <Popup
                   trigger={<a style={{cursor: 'pointer'}}>{this.state.university}</a>}
-                 flowing hoverable>
+                 flowing hoverable >
                  <Input onChange={this.changeUniversity.bind(this)} onKeyPress =
                  {this.changeUniversity.bind(this)}/>
                  <Button onClick = {this.updateEducation} content='Update'/>
-                 </Popup> . and completed the high schooling from <Popup on = 'click' trigger=
+                 </Popup> . and completed the high schooling from <Popup trigger=
                 {<a style={{cursor: 'pointer'}}>{this.state.secondary}</a>}
-              flowing hoverable>
+              flowing hoverable >
               <Input onChange={this.changeSecondary.bind(this)} onKeyPress =
               {this.changeSecondary.bind(this)}/>
               <Button onClick = {this.updateEducation} content='Update'/>
@@ -119,40 +119,39 @@ class basicInfo extends React.Component {
       this.props.statusMeter();
       this.setState({
         profileForm: <div>
-            I Live at <Popup on = 'click' trigger=
+            I Live at <Popup trigger=
               {<a style={{cursor: 'pointer'}}>{this.state.line1}</a>}
                 flowing hoverable>
-                <Input onChange={this.changeLine1.bind(this)} onKeyPress =
-                {this.changeLine1.bind(this)}/>
+                <Input onChange={this.changeLine1.bind(this)} />
                 <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
-              </Popup><br/>, <Popup on = 'click' trigger=
+              </Popup><br/>, <Popup  trigger=
                 {<a style={{cursor: 'pointer'}}>{this.state.line2}</a>}
-                 flowing hoverable>
+                 flowing hoverable >
                  <Input onChange={this.changeLine2.bind(this)} onKeyPress =
                  {this.changeLine2.bind(this)}/>
                  <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
-               </Popup>. in <Popup on = 'click' trigger=
+               </Popup>. in <Popup  trigger=
                 {<a style={{cursor: 'pointer'}}>{this.state.city}</a>}
-              flowing hoverable>
+              flowing hoverable >
               <Input onChange={this.changeCity.bind(this)} onKeyPress =
               {this.changeCity.bind(this)}/>
               <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
-              </Popup>. in <Popup on = 'click' trigger=
+              </Popup>. in <Popup trigger=
                {<a style={{cursor: 'pointer'}}>{this.state.region}</a>}
              flowing hoverable>
              <Input onChange={this.changeRegion.bind(this)} onKeyPress =
              {this.changeRegion.bind(this)}/>
              <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
-           </Popup>. postalCode: <Popup on = 'click' trigger=
+           </Popup>. postalCode: <Popup trigger=
               {<a style={{cursor: 'pointer'}}>{this.state.postalCode}</a>}
             flowing hoverable>
             <Input onChange={this.changePostalCode.bind(this)} onKeyPress =
             {this.changePostalCode.bind(this)}/>
             <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
-            </Popup> <Popup on = 'click' trigger=
+            </Popup> <Popup trigger=
              {<a style={{cursor: 'pointer'}}>{this.state.country}</a>}
            flowing hoverable>
-           <Input on={this.changeCountry.bind(this)} value ={this.state.country} onKeyPress =
+           <Input onChange={this.changeCountry.bind(this)}  onKeyPress =
            {this.changeCountry.bind(this)}/>
            <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
            </Popup>
@@ -165,7 +164,7 @@ class basicInfo extends React.Component {
     profileForm: <InterestsCard interestData={this.state.interestsData}/>});
     }
 
-
+//value ={this.state.country}
 //         let data;
 //         if (name === 'Education') {
 //             data = (
@@ -281,6 +280,7 @@ class basicInfo extends React.Component {
     }
     changeLine1(e) {
         this.setState({line1: e.target.value});
+        console.log(this.state.line1)
         if(e.key === 'Enter') {
           this.updateLocation();
         }
@@ -358,6 +358,7 @@ class basicInfo extends React.Component {
             },
             success: function(data) {
                 context.handleClose();
+               // context.setState({obj:data.profile});
                     context.setState({
                         primary: data.profile.education.primary,
                         secondary: data.profile.education.highSchool,
@@ -380,6 +381,19 @@ class basicInfo extends React.Component {
         });
     }
     updateEducation() {
+      //#swathi checking for empty data
+      if(this.state.primary.trim() ==='' || this.state.secondary.trim()=== '' || this.state.university.trim() === '')
+      {
+        console.log("inside edu if...");
+        this.refs.container.error('Do not leave the data empty',
+           '', {
+           timeOut: 1000,
+           extendedTimeOut: 10000
+         });
+      }
+      else
+       {
+        console.log("inside edu else....");
         let eduData = {
             primary: this.state.primary,
             highSchool: this.state.secondary,
@@ -404,10 +418,24 @@ class basicInfo extends React.Component {
                 // console.error(err.toString());
             }
         });
+          }
       }
     updateLocation() {
-        let locData = {
-            Line1: this.state.line1,
+      //#swathi checking for updating empty data
+      
+          
+          if(this.state.line1.trim() ==='' || this.state.line2.trim() ==='' ||this.state.country.trim() ==='' || this.state.region.trim() ==='' || this.state.city.trim() ==='' || this.state.postalCode.trim() ==='')
+           {
+              this.refs.container.error('Do not leave the data empty','',{
+              timeOut: 1000,
+              extendedTimeOut: 10000
+              });
+           } 
+         
+          else        
+         {
+               let locData = {
+               Line1: this.state.line1,
             Line2: this.state.line2,
             country: this.state.country,
             region: this.state.region,
@@ -431,10 +459,27 @@ class basicInfo extends React.Component {
                 // console.error(err.toString());
             }
         });
+        
+      }
+
     }
 
     updateAbout() {
-        let proData = {
+      //#swathi checking for empty data
+     if(this.state.description.trim() === '' || this.state.dob.trim() ==='' || this.state.gender==='' || this.state.phone.trim()==='' )
+     {
+        console.log("abt if...");
+        this.refs.container.error('Do not leave the data empty',
+           '', {
+           timeOut: 1000,
+           extendedTimeOut: 10000
+         });
+      }
+    
+        else
+        {
+          console.log("inside abt else...");
+            let proData = {
             description: this.state.description,
             dob: this.state.dob,
             gender: this.state.gender,
@@ -457,6 +502,7 @@ class basicInfo extends React.Component {
                 // console.error(err.toString());
             }
         });
+      }
     }
     getInterestedTopics() {
         $.ajax({
@@ -497,6 +543,8 @@ class basicInfo extends React.Component {
            extendedTimeOut: 10000
          });
        }
+
+       
     render() {
         const {active} = this.state;
         const {activeItem} = this.state;
@@ -511,7 +559,7 @@ class basicInfo extends React.Component {
                 <Grid>
                     <Grid.Column width={4}>
 
-                        <Menu style={{fontFamily: 'Georgia, serif'}}
+                          <Menu style={{fontFamily: 'Georgia, serif'}}
                           fluid vertical tabular>
                               <Menu.Item name='Personal'
                                 active={activeItem === 'Personal'}

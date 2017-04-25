@@ -1,0 +1,24 @@
+copy the query and run it on zynla db to get userProfile Question
+
+db.userprofileques.insert({
+'name':'Please let me know your full name.',
+'gender':'What is your gender? (Male/Female)',
+'dob':'Pease type your Date of Birth in DD/MM/YYYY.',
+'description':'Please write few lines about yourself.',
+'address':{
+'Line1':'Type your address Line1.',
+'Line2':'Type your address Line2.',
+'country':'Type your country name.',
+'region':'Which state are you from?',
+'city':'What is your city name?',
+'postalCode':'Type your postal Code.',
+},
+'education':{
+'primary':'What about your Primary schooling?',
+'highSchool':'Please type your high school name.',
+'university':'Which University did you last  studied?',
+},
+'phone':'What is your Primary Contact Number ?'
+})
+
+
