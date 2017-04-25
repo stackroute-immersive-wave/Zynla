@@ -251,7 +251,10 @@ constructor() {
       let res = result.value.toString();
       this.setState({
         searchQuery: res
+      
       });
+      //#pavithra N pressing enter reloads the page instead of clicking the search button
+      hashHistory.push('/search?question='+res);
     }
 
     submitStatement() {

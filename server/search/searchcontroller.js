@@ -79,7 +79,9 @@ let searchController = {
                 session.close();
             });
         });
-        session.close();
+        //<Shambhavi> 4/19/2017 commented because it was responsible app crashing and unnecessary data was
+      //displayed on search of related questions of certain concept.
+       // session.close();
     },
 
     getConcepts: function(req, res) {
