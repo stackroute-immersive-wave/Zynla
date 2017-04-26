@@ -54,7 +54,7 @@ class QueCard extends React.Component {
     }
     // functions to maintain modal states
     open = () => this.setState({open: true});
-    close = () => this.setState({open: false, modalStatus: false});
+    close = () => this.setState({open: true, modalStatus: true});
     // function to open loader initially
     handleOpenLoader() {
         this.setState({active: true});
