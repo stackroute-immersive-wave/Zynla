@@ -2,6 +2,7 @@
 // importing the required files
 import React from 'react';
 import QueCard from './card.jsx';
+import Cookies from 'react-cookie';
 
 class QueCards extends React.Component {
 	constructor () {
@@ -15,6 +16,8 @@ class QueCards extends React.Component {
 		let queDislike = this.props.queDislike;
 
 		let cards = this.props.quesCollection.map(function(item) {
+			//#Abu 20/4/2017 (To avoid posted questions in suggested question list)
+			if((Cookies.load('email') !== item.postedBy) || (Cookies.load('email') !== Cookies.load('email'.name))){
 				return (
 					// sending data to child card
 			<div>
@@ -26,6 +29,7 @@ class QueCards extends React.Component {
 					category={item.category} queLike={queLike} queDislike={queDislike}/>
 			</div>
 			);
+		}
 		});
 		return(
 			// returning cards to questions page

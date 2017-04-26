@@ -5,6 +5,7 @@ router.post('/getquestions', searchCtrl.getQuestions);
 router.post('/getpeople', searchCtrl.getPeople);
 router.post('/getconcepts', searchCtrl.getConcepts);
 router.post('/followuser', searchCtrl.followUser);
+router.put('/unfollowuser', searchCtrl.unfollowUser);
 router.post('/isfollow', searchCtrl.isFollow);
 router.post('/isfollowtopic', searchCtrl.isFollowTopic);
 router.post('/followtopic', searchCtrl.followTopic);
