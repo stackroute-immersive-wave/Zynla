@@ -29,6 +29,10 @@ module.exports = {
                 // include: [/flexboxgrid/,/react-select/]
               },
               {
+              test: /\.(jpe?g|png|gif|svg)$/i,
+              loaders: ['file-loader']
+            },
+              {
 
                 test: /\.json$/,
                 loaders: ['json-loader']

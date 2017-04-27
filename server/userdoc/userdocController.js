@@ -105,6 +105,23 @@ let userDocController = {
           }
         });
     },
+    //#Malar 27-4-2017{to update the profile picture}
+    changeProfilePicture: function(req, res) {
+      console.log("changeProfilePicture success");
+        UserModel.update({
+            emailId: req.body.email
+        }, {
+            $set: {
+                'profile.picture': req.body.picture
+            }
+        }, function(err) {
+            if (err) {
+                res.send('Error:' + err);
+            }else {
+            res.send('Updated userinfo successfully');
+          }
+        });
+    },
     getUserprofile: function(req, res) {
         UserModel.findOne({
             emailId: req.body.email

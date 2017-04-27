@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import {Button, Image, Menu, Grid, Statistic, Segment, Header, Loader, Popup,
   Input} from 'semantic-ui-react';
 import Cookie from 'react-cookie';
+import Dropzone from 'react-dropzone';
+import request from 'superagent';
+import Axios from 'axios';
+import {hashHistory} from 'react-router';
 import Chat from './basicInfo/chatbot.jsx';
 let DisplayQues = require('./questions/displayQuestions.jsx');
 let DisplayAns = require('./answers/displayAnswers.jsx');
@@ -57,9 +61,14 @@ class NavBarPro extends Component {
         contentNew:'',
         watchingCount: 0,
         load: false,
-        picture: ''
+        picture: '',
+        allFiles: [],
     };
     this.getProfile = this.getProfile.bind(this);
+  this.uploadImage = this.uploadImage.bind(this);
+   //this.show = this.show.bind(this);
+    this.saveImage = this.saveImage.bind(this);
+    this.uploadSuccess = this.uploadSuccess.bind(this);
   }
 // Fetch Basic Info page
     viewInfo() {
@@ -67,6 +76,56 @@ class NavBarPro extends Component {
         content: <BasicInfo statusMeter = {this.getProfile}/>
       });
     }
+    //#Malar 27-4-2017{onImageDrop:used to take files from local machine}
+  onImageDrop(files) {
+  files.forEach((file) => {
+    console.log("files",files);
+         this.state.allFiles.push(file);
+     });
+     this.setState({allFiles: this.state.allFiles[0]});
+  }
+  //#Malar 27-4-2017{to save the image in server}
+  uploadImage()
+  {
+      let photo = new FormData();
+      photo.append('IMG', this.state.allFiles);
+      let self = this;
+        // sending the image to server
+      request.post('userdoc/upload').send(photo).end(function(err, resp) {
+          if (err) {
+              console.error(err);
+          } else {
+              self.saveImage(resp.text);
+              return resp;
+          }
+      });
+  }
+    //#Malar 27-4-2017{ to save the image name in database in which the image already saved in server}
+  saveImage(image) {
+      let context = this;
+      Axios({
+          method: 'POST',
+          url: 'userdoc/uploadImage',
+          data: {
+              picture: image, email: Cookie.load('email')
+          }
+      }).then(function(response) {
+        context.uploadSuccess();
+        context.getProfile();
+      }).catch(function(err) {
+          console.log(err);
+      });
+  }
+    //#Malar 27-4-2017{ if image uploaded successfully}
+  uploadSuccess()
+  {
+    this.refs.container.success(
+       'Uploaded Successfully',
+      '', {
+      timeOut: 2000,
+      extendedTimeOut: 10000
+    });
+  }
     // Fetch Questions page
     getQuestions() {
       if(this.state.questionCount === 0)
@@ -81,7 +140,7 @@ class NavBarPro extends Component {
         contentNew: <DisplayQues/>
       });
     }
-    
+
     }
     // Fetch Answers page
     getAnswers() {
@@ -134,12 +193,13 @@ class NavBarPro extends Component {
          extendedTimeOut: 10000
        });
      }
-     changePicture(e) {
-         this.setState({picture: e.target.value});
-         if(e.key === 'Enter') {
-           this.updateAbout();
-         }
-     }
+     //#Malar 27-4-2017{commented}
+    //  changePicture(e) {
+    //      this.setState({picture: e.target.value});
+    //      if(e.key === 'Enter') {
+    //        this.updateAbout();
+    //      }
+    //  }
     componentDidMount() {
         this.getProfile();
     }
@@ -165,6 +225,13 @@ class NavBarPro extends Component {
                      followingCount: data.followingUser.length,
                      name: data.profile.name,
                      objArray: data, load: false, picture: data.profile.picture});
+                     if(data.profile.picture.length > 0 && data.profile.picture !== 'picture' &&
+                    data.profile.picture !== ' ') {
+                      context.setState({
+                        // setting conditions for profile meter
+                        status: parseInt(context.state.status, 10) + 10
+                      });
+                    }
                      if(data.profile.gender.length > 0 && data.profile.gender !== 'gender' &&
                      data.profile.gender.trim() !== '') {
                       status= parseInt(status, 10) + 10;
@@ -286,28 +353,50 @@ class NavBarPro extends Component {
      });
    }
  }
- updateAbout() {
-     //   // console.log(JSON.stringify(proData);
-     /*eslint-disable*/
-     console.log('here in picture');
-     let context = this;
-     /*eslint-enable*/
-     $.ajax({
-         url: '/userdoc/updatePicture',
-         type: 'POST',
-         data: {picture: this.state.picture, email: Cookie.load('email')},
-         success: function() {
-           context.getProfile();
-         },
-         error: function() {
-             // console.error(err.toString());
-         }
-     });
- }
+ //#Malar 27-4-2017{commented}
+ // updateAbout() {
+ //     //   // console.log(JSON.stringify(proData);
+ //     /*eslint-disable*/
+ //     console.log('here in picture');
+ //     let context = this;
+ //     /*eslint-enable*/
+ //     $.ajax({
+ //         url: '/userdoc/updatePicture',
+ //         type: 'POST',
+ //         data: {picture: this.state.picture, email: Cookie.load('email')},
+ //         success: function() {
+ //           context.getProfile();
+ //         },
+ //         error: function() {
+ //             // console.error(err.toString());
+ //         }
+ //     });
+ // }
     render() {
         const followerCount = this.state.followerCount;
         const followingCount = this.state.followingCount;
         let profMeter = parseInt(this.state.status, 10) + '%';
+        let imagechange = null;
+       const {open, size} = this.state;
+        if (this.state.picture!='') {
+          if(this.state.allFiles.preview==undefined){
+          let pic=this.state.picture;
+          imagechange = (<Image src={require("../../../webserver/pictures/"+pic)} style={{
+              height: 204
+          }}/>);}
+          else{
+            console.log(this.state.allFiles.preview);
+            imagechange = (<Image src={this.state.allFiles.preview} style={{
+                height: 204
+            }}/>);
+          }
+        }
+        else { imagechange = (
+                <Image src={Cookie.load('profilepicture')}
+               size='large' style= {{
+                height: 204
+            }}/>);
+        }
         return (
 
             <div>
@@ -315,15 +404,27 @@ class NavBarPro extends Component {
               <Segment style={{marginRight: '6.70%'}}>
                 <Grid centered columns={2}>
                     <Grid.Column style={picStyle}>
-                    
-                      <Popup  trigger={<Image alt= 'No Image' style={imageStyle}
+                      {/*//#Malar 27-4-2017{commented}*/}
+                       {/* <Popup  trigger={<Image alt= 'No Image' style={imageStyle}
                         src={Cookie.load('profilepicture')}
                           size = 'small' shape='circular'/>}
                       flowing hoverable >
                       <Input onChange={this.changePicture.bind(this)} onKeyPress =
                       {this.changePicture.bind(this)}/>
                       <Button onClick = {this.updateAbout.bind(this)} content='Update'/>
-                      </Popup>
+                      </Popup> */}
+                      {/*//#Malar 27-4-2017{Dropzone is used to upload picture}*/}
+                  <Image wrapped size='small' style={imageStyle} >
+                  <Dropzone multiple={false}  accept={'image/*'}
+                     onDrop={this.onImageDrop.bind(this)} >
+                         {imagechange}
+                      </Dropzone>
+                      <br/>
+                      <Button primary onClick={this.uploadImage}>
+                          upload Photo
+                      </Button>
+
+                    </Image>
                         <div style={nameStyle} onClick={this.viewInfo.bind(this)}>
                             {this.state.name}
                         </div>
@@ -359,7 +460,7 @@ class NavBarPro extends Component {
                         </div>
                     </Grid.Column>
                   </Grid>
-                                     
+
                      </Segment>
                 <div>
                     <br/>
@@ -367,9 +468,9 @@ class NavBarPro extends Component {
                     <Grid.Column width = {11}>
                     {this.state.content}
                     </Grid.Column>
-                   
+
                   <Grid.Column width = {4}>
-                  
+
                    <Segment>
                       <Header style ={{cursor: 'pointer'}} dividing
                         onClick={this.getQuestions.bind(this)}>
@@ -398,13 +499,13 @@ class NavBarPro extends Component {
 
 </Header>
 </Segment>
-                  
+
                   <Grid.Column width = {1}/>
                     </Grid.Column>
 <Grid.Column width = {12}>
                     {this.state.contentNew}
                     </Grid.Column>
-            
+
 
                     </Grid>
                   </div>
@@ -417,9 +518,9 @@ class NavBarPro extends Component {
 }
 
 module.exports = NavBarPro;
-                        
+
           //#swathi this doesn't seem to work or I don't know how to make it work.
-              
+
                   //       <Menu.Item name='Answers' active={activeItem === 'Answers'}
                         //       onClick={this.handleItemClick2.bind(this)}>
                         //     <Menu.Item name='Location' active={activeItem === 'Location'}
@@ -431,11 +532,11 @@ module.exports = NavBarPro;
        //#swathi-commented the working code
 
                   // #swathi trying menu bar
-                 
+
                   // <Menu style={{fontFamily: 'Georgia, serif'}}
                   //         fluid vertical tabular>
                   //             <Menu.Item name='Questions'
-                  //               //active={activeItem === 'Questions'} 
+                  //               //active={activeItem === 'Questions'}
                   //               onClick={this.getQuestions.bind(this)}/>
 
                   // </Menu>
@@ -443,4 +544,4 @@ module.exports = NavBarPro;
                   // </Grid>
                   // <Grid>
                   //   <Grid.Column width = {11}>
-                  //   {this.state.contentNew}    
+                  //   {this.state.contentNew}

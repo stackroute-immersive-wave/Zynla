@@ -196,6 +196,7 @@ class DisplayFavouriteCategoryStructure extends React.Component {
         // console.log(this.state.s);
         // this.findAllUsers(this.state.s);
     }
+    //#Malar 27-4-17{commented}
     /* fetching all usernames and emailid from mongo DB Createdon 10/3/2017 by Soundar*/
     // findAllUsers(s)
     // {
@@ -355,8 +356,7 @@ class DisplayFavouriteCategoryStructure extends React.Component {
                           }} id="users" placeholder="Search friends Here" list="usernames" onKeyDown={this.changeval.bind(this)}/>
                           <datalist id="usernames"></datalist>
                       </div><br/> */}
-                      {/*//#Malar 26-4-2017{instead of textbox,dropdown is used}
-                        */}
+                      {/*//#Malar 26-4-2017{instead of textbox,dropdown is used}*/}
                                 <Dropdown placeholder='search friends here...' search selection options={this.state.inviteUser} onChange={this.getValue.bind(this)}/>
                             </div>
                             <br/>

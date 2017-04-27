@@ -54,6 +54,7 @@ class QueCard extends React.Component {
     }
     // functions to maintain modal states
     open = () => this.setState({open: true});
+      //#Malar 27-4-2017{made modalStatus enable to enable scrollbar}
     close = () => this.setState({open: true, modalStatus: true});
     // function to open loader initially
     handleOpenLoader() {
