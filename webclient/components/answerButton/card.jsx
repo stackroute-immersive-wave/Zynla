@@ -129,6 +129,8 @@ class QueCard extends React.Component {
                     // console.log('success',data);
                     context.showRelatedQues();
                     context.setState({active: false});
+                    context.setState({errormsg:false});
+
                 },
                 error: function() {
                 }
@@ -184,6 +186,8 @@ class QueCard extends React.Component {
     }
     warningModal = () => {
         this.setState({warnModalStatus: true});
+        this.setState({errormsg:false});
+        this.setState({value:RichTextEditor.createEmptyValue()});
     }
     warningModalCancel = () => {
         this.setState({warnModalStatus: false});

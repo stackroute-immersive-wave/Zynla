@@ -8,6 +8,55 @@ let session = driver.session();
 let redis = require('redis');
 let client = redis.createClient();
 let listController = {
+
+  //#Indhu _method to match the question concept with dB concepts (26-Apr-17)
+  getQuestionConcept: function(req, res) {
+        let val = req.body.intent;
+        let concept = [];
+        //  console.log("dffffffff"+val);
+        let query = ' match (n:Concept)-[part_of]-(m:Concept) where n.name="' + val + '" return m,n';
+        session.run(query).then(function(result) {
+            session.close();
+            for (var i = 0; i < result.records.length; i++) {
+                //  console.log(result.records[i]._fields[0].properties.name);
+                concept.push(result.records[i]._fields[0].properties.name);
+            }
+            res.send(concept);
+        });
+
+    },
+
+    //#Indhu _function to get the concept(noun) from the posting question(26-Apr-17)
+    nlp: function(req, res) {
+        var noun = '';
+        var noun1 = '';
+        let val = req.body.val;
+        let response;
+        let pos = require('pos');
+        let nlp = require('nlp_compromise');
+
+        let str = nlp.text(val);
+        // split str into individual words
+        let tokens = str.root().split(' ');
+        // intent array will contain intents extracted from question
+        let intents = '';
+        let words = new pos.Lexer().lex(val);
+        let tagger = new pos.Tagger();
+        let taggedWords = tagger.tag(words);
+        for (let y = 0; y < taggedWords.length; y = y + 1) {
+            let taggedWord = taggedWords[y];
+            let tag = taggedWord[1];
+            if (tag === 'NN') {
+                noun = taggedWord[0];
+            }
+        }
+        //  console.log('in navBar====', intents[0]);
+        noun1 = noun.charAt(0).toUpperCase() + noun.slice(1);
+        res.send(noun1);
+      //  console.log("noun1 is", noun1);
+
+    },
+
   getLikeStatus: function(req, res) {
   // console.log('router suggest ques');
   /* eslint-disable */

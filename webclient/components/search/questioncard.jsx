@@ -260,7 +260,7 @@ inviteAlert (result) {
 
           //#Abu 25/4/2017 (To change the symbol for following and unfollowing)
                 if(this.state.iconName == 'minus'){
-                  console.log("icon is minus");
+                  //console.log("icon is minus");
                   var content = (
 
                     <div><Button circular onClick={this.unfollowFromProfile.bind(this)} icon={this.state.iconName || 'minus'} className='spacing' id='iconColor' size='tiny' style={{
@@ -314,7 +314,7 @@ inviteAlert (result) {
                 );
               }
               else {
-                console.log("icon is plus and to follow the question");
+              //  console.log("icon is plus and to follow the question");
 
               var content = (
 

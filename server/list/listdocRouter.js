@@ -2,6 +2,8 @@
 const router = require('express').Router();
 const listCtrl = require('./listdocController');
 
+router.post('/getQuestionConcept',listCtrl.getQuestionConcept);
+router.post('/nlp',listCtrl.nlp);
 router.post('/add', listCtrl.addList);
 router.get('/', listCtrl.viewList);
 router.post('/invite', listCtrl.inviteFrnds);

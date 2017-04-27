@@ -30,7 +30,7 @@ handleFollow() {
   let emailId = Cookie.load('email');
   //#Abu 25/4/2017 (To Unfollow the user)
   if(this.state.follow === 'Following') {
-    console.log("Unfollowing people");
+    //console.log("Unfollowing people");
     $.ajax({
       url: '/search/unfollowuser',
         type: 'PUT',
@@ -41,7 +41,7 @@ handleFollow() {
           /* eslint-enable */
         },
         success: function() {
-          console.log("Unfollowing people success inside peopleCard");
+          //console.log("Unfollowing people success inside peopleCard");
           this.setState({follow: 'Follow'});
         }.bind(this),
         error: function() {}
@@ -59,7 +59,7 @@ handleFollow() {
         /* eslint-enable */
       },
       success: function() {
-        console.log("following people success inside peopleCard");
+        //console.log("following people success inside peopleCard");
         this.setState({follow: 'Following'});
       }.bind(this)
     });
