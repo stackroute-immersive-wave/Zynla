@@ -13,9 +13,12 @@ class Cards extends React.Component {
 		let cards = arr[0].topCards.map(function(item) {
 				return (
 			<div>
-				<Answercard quesId={arr[0].id} createdBy={item.createdBy} content={item.content}
-				createdOn={item.createdOn} id={item.id} upvote={item.upVote}
-				downvote={item.downVote} isAccepted={item.isAccepted} postedBy={arr[0].postedBy}/>
+				<Answercard quesId={arr[0].id} createdBy={item.createdBy} 
+				content={item.content} createdOn={item.createdOn} 
+				id={item.id} upvote={item.upVote}
+				downvote={item.downVote} isAccepted={item.isAccepted} 
+				postedBy={arr[0].postedBy} name={item.name}
+				/>
 			</div>
 			);
 		});
@@ -28,6 +31,6 @@ class Cards extends React.Component {
 	}
 }
 Cards.propTypes = {
-	ansCollection: React.PropTypes.array.isRequired
+	ansCollection: React.PropTypes.array.isRequired,
 };
 module.exports = Cards;

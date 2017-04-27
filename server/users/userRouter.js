@@ -4,17 +4,13 @@ const passport = require('passport');
 
 let userController = require('./userController.js');
 
-//create a profileQues
-router.post('/profileQues',userController.userQues);
-// get userProfileQuestion
-router.get('/getProfileQues',userController.getUserQues);
-
 // Create new user
 router.post('/login', passport.authenticate('local', {failureRedirect: '/'}), userController.logIn);
 
 // Delete a user based on :id
 router.post('/send', userController.sendEmail);
 router.get('/getAllUserName', userController.getAllUserName);
+router.get('/getusername/:emailId', userController.getUserName);
 
 // Update a user based on :id
 router.post('/signup', userController.signUp);
@@ -32,7 +28,7 @@ router.get('/viewFollowCard/:emailId', userController.viewFollowCard);
 // Get the user List
 router.get('/getAllCards/:emailId', userController.getAllCards);
 
-// Get the following category
+// Get the folloeing category
 router.get('/', userController.viewFav);
 
 router.get('/auth/facebook', passport.authenticate('facebook', {

@@ -105,23 +105,6 @@ let userDocController = {
           }
         });
     },
-    //#Malar 27-4-2017{to update the profile picture}
-    changeProfilePicture: function(req, res) {
-      console.log("changeProfilePicture success");
-        UserModel.update({
-            emailId: req.body.email
-        }, {
-            $set: {
-                'profile.picture': req.body.picture
-            }
-        }, function(err) {
-            if (err) {
-                res.send('Error:' + err);
-            }else {
-            res.send('Updated userinfo successfully');
-          }
-        });
-    },
     getUserprofile: function(req, res) {
         UserModel.findOne({
             emailId: req.body.email
@@ -274,12 +257,9 @@ let userDocController = {
                 'profile.education.primary': p.education.primary,
                 'profile.education.highSchool': p.education.highSchool,
                 'profile.education.university': p.education.university,
-                'profile.address.Line1': p.address.Line1,
-                'profile.address.Line2': p.address.Line2,
                 'profile.address.country': p.address.country,
                 'profile.address.region': p.address.region,
                 'profile.address.city': p.address.city,
-                'profile.address.postalCode': p.address.postalCode,
                 'profile.description': p.description,
                 'profile.dob': p.dob,
                 'profile.gender': p.gender,

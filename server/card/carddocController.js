@@ -31,7 +31,7 @@ let cardController = {
             let queId = req.body.questionId;
             /*eslint-enable*/
             let db = new Answer({id: id, createdBy: req.body.mail,
-              content: req.body.content, answeredOn: new Date().getTime()});
+              content: req.body.content, answeredOn: new Date().getTime(), name: req.body.name});
             // adding data in carddocs collection
             db.save(function(err) {
                 if (err) {
@@ -51,7 +51,8 @@ let cardController = {
                       content: req.body.content,
                       createdOn: new Date().getTime(),
                       upVote: 0,
-                      downVote: 0
+                      downVote: 0,
+                      name: req.body.name
                 }
             }
         }, {new: true}).then(() => {
@@ -77,7 +78,8 @@ let cardController = {
                     statement: req.body.content,
                     addedOn: new Date().getTime(),
                     upVote: 0,
-                    downVote: 0
+                    downVote: 0,
+                    name: req.body.name
               }
           }
       }, {new: true}).then((doc) => {

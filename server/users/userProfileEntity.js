@@ -124,6 +124,9 @@ const schema = new mongoose.Schema({
             id: {
                 type: Number
             },
+            name: {
+                type: String
+            },
             statement: {
                 type: String,
                 default: 'statement'
@@ -159,8 +162,7 @@ const schema = new mongoose.Schema({
             answerCounts: Number,
             upVotes: Number,
             downVotes: Number,
-            views: Number,
-            userName:String
+            views: Number
         }
     ],
     preferenceList: [
@@ -175,8 +177,7 @@ const schema = new mongoose.Schema({
             upVotes: Number,
             downVotes: Number,
             views: Number,
-            position: Number,
-            userName:String
+            position: Number
         }
     ],
     watchingTopic: [

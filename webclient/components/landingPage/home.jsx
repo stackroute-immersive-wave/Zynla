@@ -29,8 +29,7 @@ class Cards extends React.Component {
             url: `/users/getAllCards/${emailId}`,
             type: 'GET',
             success: function(data) {
-
-
+              // console.log('----------------',data);
                 data.map(function(item) {
                     arr.push(item);
                     // console.log(item.tag);
@@ -38,7 +37,6 @@ class Cards extends React.Component {
 
                 this.setState({savedata: arr});
                 this.rankingCards();
-                
             }.bind(this)
         });
     }

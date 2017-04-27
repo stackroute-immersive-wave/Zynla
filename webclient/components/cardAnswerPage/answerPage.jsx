@@ -1,5 +1,4 @@
-import {PropTypes} from 'prop-types';
-// import RichTextEditor from 'react-rte';
+import {PropTypes} from 'react';
 import RichTextEditor from 'react-rte';
 import React from 'react';
 import {
@@ -20,6 +19,7 @@ import {
     Header
 } from 'semantic-ui-react';
 import Cookie from 'react-cookie';
+// import RichTextEditor from 'react-rte';
 const ReactToastr = require('react-toastr');
 const {ToastContainer} = ReactToastr;
 const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
@@ -98,6 +98,9 @@ class answerPage extends React.Component {
             report: '',
             reportResult: '',
             popupResult: '',
+            name: '',
+            usermail: '',
+            comment: '',
             objArray: [
                 {
                     id: 0,
@@ -138,12 +141,15 @@ class answerPage extends React.Component {
         this.postAnswer = this.postAnswer.bind(this);
         this.addcomment = this.addcomment.bind(this);
         this.locAlert = this.locAlert.bind(this);
+        this.getUserName = this.getUserName.bind(this);
     }
     static propTypes = {
         onChange: PropTypes.func
     };
     commentclose() {
       this.setState({modalState: false});
+      this.setState({commentmsg:false});
+      this.setState({comment: ''});
     }
     locAlert() {
     this.refs.container.success(
@@ -193,14 +199,14 @@ class answerPage extends React.Component {
     // Posting answer for question created by Aswini K
     postAnswer() {
       if((this.state.value.toString('html')).length > 11) {
-        //console.log("postAnswer",this.state.value);
         this.close();
         let id = window.location.hash.split('id=')[1];
-        // console.log('inside post Answer');
+         console.log(this.state.name);
         let ansdata = {
             questionId: id,
             mail: Cookie.load('email'),
-            content: this.state.value.toString('html')
+            content: this.state.value.toString('html'),
+            name: this.state.name
         };
         /* eslint-disable */
         let context = this;
@@ -213,6 +219,8 @@ class answerPage extends React.Component {
             success: function() {
                 // console.log('success', data);
                 context.setState({active: false});
+                context.setState({value: RichTextEditor.createEmptyValue()});
+                context.setState({errormsg: false});
                 context.getData();
             },
             error: function() {
@@ -246,7 +254,7 @@ class answerPage extends React.Component {
     }
     // Adding comments for question created by Aswini K
     addcomment() {
-        // console.log('views before increment');
+        if(this.state.comment!== ''){
         let id = window.location.hash.split('id=')[1];
         /* eslint-disable */
         let context = this;
@@ -264,10 +272,16 @@ class answerPage extends React.Component {
             success: function() {
                 context.changeModalState(123, false);
                 context.locAlert();
-                // this.setState({comment: Comments});
+                context.setState({commentmsg:false});
+                context.setState({comment: ''});
                 // console.log('inside success', this.state.commentdata);
             }
         });
+    }
+        else {
+             this.setState({commentmsg: true});
+
+    }
     }
     // Getting question data from mongo db created by Aswini K
     getData() {
@@ -285,6 +299,17 @@ class answerPage extends React.Component {
             }.bind(this)
         });
     }
+    // #Pavithra_K Retrieves userName who posted the question
+    getUserName(mailId){
+      $.ajax({
+           url: '/users/getusername/'+ mailId,
+           type: 'GET',
+           success: function(data) {
+            console.log(data)
+              this.setState({name:data});
+           }.bind(this)
+         });
+    }
     componentWillMount() {
         this.getData();
         this.getLikeStatus();
@@ -295,7 +320,7 @@ class answerPage extends React.Component {
       if(this.state.colorNameUnlike !== 'black') {
         let type = 'add';
         let color = 'blue';
-        let upVotesTemp = parseInt(this.state.upVotes, 10) + 1;
+        let upVotesTemp;//= parseInt(this.state.upVotes, 10) + 1;
         if (this.state.colorName === 'green') {
             type = 'add';
             upVotesTemp = parseInt(this.state.upVotes, 10) + 1;
@@ -330,7 +355,7 @@ class answerPage extends React.Component {
         if(this.state.colorName !== 'blue') {
         let type = 'add';
         let color = 'red';
-        let downVotesTemp = parseInt(this.state.downVotes, 10) + 1;
+        let downVotesTemp;//= parseInt(this.state.downVotes, 10) + 1;
         if (this.state.colorNameUnlike === 'red') {
             type = 'add';
             downVotesTemp = parseInt(this.state.downVotes, 10) + 1;
@@ -371,13 +396,17 @@ class answerPage extends React.Component {
                 // console.log(data);
                 if (data.like) {
                     this.setState({colorName: 'blue'});
+                    this.setState({upVotes:1})
                 } else {
                     this.setState({colorName: 'green'});
+                    this.setState({upVotes:0})
                 }
                 if (data.unlike) {
-                    this.setState({colorNameUnlike: 'black'});
+                   this.setState({colorNameUnlike: 'black'});
+                   this.setState({downVotes:1})
                 } else {
                     this.setState({colorNameUnlike: 'red'});
+                    this.setState({downVotes:0})
                 }
             }.bind(this)
         });
@@ -385,6 +414,7 @@ class answerPage extends React.Component {
     // Following the question created by Aswini K
     CheckingId() {
         let emailId = Cookie.load('email');
+        this.setState({usermail:emailId});
         let arr = [];
         $.ajax({
             url: `/users/viewFollowCard/${emailId}`,
@@ -400,6 +430,7 @@ class answerPage extends React.Component {
                         this.setState({iconName: 'minus'});
                     }
                 }
+                this.getUserName(this.state.usermail);
             }.bind(this)
         });
     }
@@ -436,6 +467,8 @@ class answerPage extends React.Component {
     close = () => this.setState({modalStatus: false})
     warningModal = () => {
       this.setState({warnModalStatus: true});
+      this.setState({value: RichTextEditor.createEmptyValue()});
+      this.setState({errormsg: false});
     }
     warningModalCancel = () => {
       this.setState({warnModalStatus: false});
@@ -487,6 +520,7 @@ class answerPage extends React.Component {
 
     render() {
       let errorMessage;
+      let commentMessage;
         let quesObj = this.state.objArray;
         let arr = quesObj[0].tags;
         let arr1 = arr.replace('["', ' ');
@@ -552,6 +586,11 @@ class answerPage extends React.Component {
           errorMessage = (<div className='errorCss'>Please give your answer </div>);
         }else {
           errorMessage = '';
+        }
+        if(this.state.commentmsg) {
+          commentMessage = (<div className='errorCss'>Comments cannot be empty</div>);
+        }else {
+          commentMessage = '';
         }
         return (
             <div>
@@ -655,7 +694,7 @@ class answerPage extends React.Component {
                                 buttonfolstyle
                             } > Add Comments </Button>}
                               open = {this.state.modalState} onClose={this.commentclose}>
-                                <Form style={formstyle}>
+                                <Form style={formstyle}>{commentMessage}
                                     <TextArea onChange={this.comment.bind(this)}
                                        onClick = {this.changeModalState.bind(this)}
                                         value={this.state.comment}/>

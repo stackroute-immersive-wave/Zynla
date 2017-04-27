@@ -9,27 +9,27 @@ class ChatCard extends React.Component {
     /* eslint-disable */
     let chatContent = this.props.data.message;
     console.log(chatContent);
-    let chatCardContent = (
+    let render = (
       <div className = "chatcard">
         {this.props.data.message}
       </div>
     );
-    // if(this.props.data.by !== 'bot') {
-    //   console.log(this.props.data.by);
-    //   chatCardContent = (
-    //
-    //     <div className = "chatcardhuman">
-    //       <Segment>
-    //       {this.props.data.message}
-    //     </Segment>
-    //     </div>
-    //
-    //   );
-    // }
+    if(this.props.data.by !== 'bot') {
+      console.log(this.props.data.by);
+      render = (
+
+        <div className = "chatcardhuman">
+          <Segment>
+          {this.props.data.message}
+        </Segment>
+        </div>
+
+      );
+    }
     /* eslint-enable */
     return (
       <div>
-        {chatCardContent}
+        {render}
       </div>
     );
   }

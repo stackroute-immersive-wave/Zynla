@@ -103,7 +103,6 @@ class Questions extends React.Component {
              context.setState({queIdsArr: data});
            },
            error: function() {
-
            }
        });
    }

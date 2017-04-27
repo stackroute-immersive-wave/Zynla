@@ -79,9 +79,7 @@ let searchController = {
                 session.close();
             });
         });
-        //<Shambhavi> 4/19/2017 commented because it was responsible app crashing and unnecessary data was
-      //displayed on search of related questions of certain concept.
-       // session.close();
+        //session.close();
     },
 
     getConcepts: function(req, res) {
@@ -135,40 +133,6 @@ let searchController = {
            res.send('success');
        });
    },
-   //#Abu 25/4/2017 (Query to unfollow the people and decrementing the following)
-     unfollowUser: function(req, res) {
-        let session = driver.session();
-        /* eslint-disable */
-        let query = 'match(n:User {name:"' + req.body.id + '"})-[f:follow]->(m:User {name:"' + req.body.emailId + '"}) delete f return m;';
-        /* eslint-enable */
-        console.log(query);
-        session.run(query).then(function() {
-            userProfileList.findOneAndUpdate({
-            emailId: req.body.id
-        }, {
-            $pop: {
-                followingUser: req.body.emailId
-            }
-        }, {new: true}).then(() => {
-            res.send('followed user deleted');
-        }, (err) => {
-            res.send(err);
-        });
-        userProfileList.findOneAndUpdate({
-        emailId: req.body.emailId
-     }, {
-        $inc: {
-            followerCount: -1
-        }
-     }, {new: true}).then(() => {
-        res.send('followerCount Decremented');
-     }, (err) => {
-        res.send(err);
-     });
-            session.close();
-            res.send('success');
-        });
-     },
     isFollow: function(req, res) {
         let query = 'match (n:User {name:"' + req.body.name + '"})-[:follow]->(m:User) return m';
         let session = driver.session();

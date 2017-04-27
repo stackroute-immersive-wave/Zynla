@@ -15,6 +15,9 @@ const schema = new mongoose.Schema({
     },
     image: {
       type: String
+    },
+    name: {
+      type: String
     }
   });
 const model = mongoose.model('carddoc', schema);

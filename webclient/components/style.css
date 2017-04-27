@@ -359,3 +359,7 @@ color:white;
  padding: 25px;
  margin-left: 25%;
 }
+.rteEditor{
+  text : "type here..";
+  AutoFocus : true;
+}

@@ -3,7 +3,6 @@ const logger = require('./../../applogger');
 
 const User = require('./userEntity');
 const UserProfile = require('./userProfileEntity').userModel;
-const UserProfileQues = require('./userProfileQuesEntity');
 const ListEntity = require('../list/listdocEntity');
 const nodemailer = require('nodemailer');
 let driver = require('../config/neo4j');
@@ -18,29 +17,6 @@ var rand,
 
 let userCtrl = {
 
-  //store userProfileQuestion in db as one time process
-  userQues: function(req,res){
-    var userProfileQues=new UserProfileQues(req.body);
-  userProfileQues.save(function(err,data){
-  if(err)
-    res.send({'success':'Not Saved'});
-  else
-  res.send({'success':'SAVED'});
-  });
-
-``},
-
-  //getUserprofileQuestion from Mongo DB
-  getUserQues: function(req,res) {
-    UserProfileQues.find({name:'Please let me know your full name.'},function(err,data){
-if(err)
-  res.send(err);
-else {
-  res.send(data);
-}
-});
-
-  },
     // Login
     logIn: function(req, res) {
         res.cookie('username', req.user.name);
@@ -501,7 +477,6 @@ else {
         let arr = [];
         let qid = [];
         UserProfile.find({"emailId": emailId}).then((docs) => {
-          //console.log('userController---',docs)
             if(docs[0].preferenceList) {
               for(let pref of docs[0].preferenceList) {
                 qid.push(pref.id);
@@ -764,7 +739,7 @@ else {
 },
 /* Add category to mongodb as well as in neo4j */
 addCategory: function(req, res) {
-  //console.log("dddddddddddddd");
+  console.log("dddddddddddddd");
   console.log(req.body);
   let arr1 = JSON.parse(req.body.catagory);
   console.log(typeof(arr1));
@@ -888,6 +863,20 @@ updateIsNew: function(req, res) {
             }
         });
     },
+    //#Pavithra_K to get username for required mailID 
+     getUserName: function(req, res) {
+        let emailId =  req.params.emailId;
+        console.log("Inside router: "+emailId)
+        User.find({'email': emailId},function(err, docs) {
+            if (err) {
+                res.send('Error:' + err);
+            }
+            else {
+                console.log(docs)
+                res.send(docs[0].name);
+            }   
+        });
+    },
     // updates the user preference data inside mongo
     addPreference: function(req, res) {
         let emailId = req.body.emailId;
@@ -915,8 +904,7 @@ updateIsNew: function(req, res) {
                       upVotes: req.body.upVotes,
                       downVotes: req.body.downVotes,
                       views: req.body.views,
-                      position: req.body.preferedPos,
-                      userName:req.body.userName
+                      position: req.body.preferedPos
                   }
               }
           }).then((doc) => {
@@ -992,17 +980,14 @@ function resSend(res, arr) {
   User.find({$or:emailId}).then(function(docs){
     let data = [];
     docs.map(function(doc){
-      //#Nandhini username and mail display
       if(doc.name) {
-        data[doc.email+"name"]=doc.name; //for getting username using emailId as keyword
-        data[doc.email] = doc.email;
+        data[doc.email] = doc.name;
       }
       else {
         data[doc.email] = doc.email;
       }
     });
     for(let i in arr) {
-      arr[i].userName=data[arr[i].postedBy+"name"]; //getting username for particular email Id
       arr[i].postedBy = data[arr[i].postedBy];
       if(arr[i].followedBy) {
         arr[i].followedBy = data[arr[i].followedBy];
@@ -1011,7 +996,6 @@ function resSend(res, arr) {
         arr[i].friendOf = data[arr[i].friendOf];
       }
     }
-    //  console.log("userController---",arr);
     res.send(arr);
   });
 }

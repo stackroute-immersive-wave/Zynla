@@ -20,7 +20,6 @@ class DisplayHomePageCard extends React.Component {
     }
     moveCard(dragIndex, hoverIndex) {
         let emailId = Cookie.load('email');
-        //console.log(" ---display home----",this.state.allCards);
         const {allCards} = this.state;
         const dragItem = allCards[dragIndex];
         this.setState(update(this.state, {
@@ -48,7 +47,6 @@ class DisplayHomePageCard extends React.Component {
                 views: dragItem.views,
                 displayImage: dragItem.displayImage,
                 profileImage: dragItem.profileImage,
-                userName:dragItem.userName,
                 preferedPos: hoverIndex
             },
             success: function() {

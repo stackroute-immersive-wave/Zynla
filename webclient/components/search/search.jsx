@@ -40,7 +40,7 @@ class Search extends React.Component {
     }
      handleOpen() {this.setState({ active: true });}
     handleClose() {this.setState({ active: false });}
-// function to change component basing in the slected option (people or questions) in search
+// function to change component basing in the seected option (people or questions) in search
     changeComponent(x) {
       if(x === 'people') {
         /* eslint-disable */

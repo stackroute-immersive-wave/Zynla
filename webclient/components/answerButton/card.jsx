@@ -54,8 +54,7 @@ class QueCard extends React.Component {
     }
     // functions to maintain modal states
     open = () => this.setState({open: true});
-      //#Malar 27-4-2017{made modalStatus enable to enable scrollbar}
-    close = () => this.setState({open: true, modalStatus: true});
+    close = () => this.setState({open: false, modalStatus: false});
     // function to open loader initially
     handleOpenLoader() {
         this.setState({active: true});
@@ -91,7 +90,6 @@ class QueCard extends React.Component {
             url: `/users/viewFollowCard/${emailId}`,
             type: 'GET',
             success: function(data) {
-              //console.log("getPreviousStatus",data);
                 data.map(function(item) {
                     item.watchingList.map(function(items) {
                         arr.push(items);
@@ -130,8 +128,6 @@ class QueCard extends React.Component {
                     // console.log('success',data);
                     context.showRelatedQues();
                     context.setState({active: false});
-                    context.setState({errormsg:false});
-
                 },
                 error: function() {
                 }
@@ -187,8 +183,6 @@ class QueCard extends React.Component {
     }
     warningModal = () => {
         this.setState({warnModalStatus: true});
-        this.setState({errormsg:false});
-        this.setState({value:RichTextEditor.createEmptyValue()});
     }
     warningModalCancel = () => {
         this.setState({warnModalStatus: false});

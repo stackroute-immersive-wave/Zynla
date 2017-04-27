@@ -26,14 +26,14 @@ class PeopleCard extends React.Component {
     /* eslint-enable */
   }
 // function to make user fallow to other user
-handleFollow() {
-  let emailId = Cookie.load('email');
-  //#Abu 25/4/2017 (To Unfollow the user)
-  if(this.state.follow === 'Following') {
-    //console.log("Unfollowing people");
+  handleFollow() {
+    let emailId = Cookie.load('email');
+    if(this.state.follow === 'Following') {
+      return 0;
+    }
     $.ajax({
-      url: '/search/unfollowuser',
-        type: 'PUT',
+        url: '/search/followuser',
+        type: 'POST',
         data: {
           id: emailId,
           /*eslint-disable */
@@ -41,30 +41,12 @@ handleFollow() {
           /* eslint-enable */
         },
         success: function() {
-          //console.log("Unfollowing people success inside peopleCard");
-          this.setState({follow: 'Follow'});
-        }.bind(this),
-        error: function() {}
-    });
+          this.setState({follow: 'Following'});
+        }.bind(this)
+      });
+      return 1;
   }
-  else{
-    //to follow the user
-  $.ajax({
-      url: '/search/followuser',
-      type: 'POST',
-      data: {
-        id: emailId,
-        /*eslint-disable */
-        emailId: this.props.id
-        /* eslint-enable */
-      },
-      success: function() {
-        //console.log("following people success inside peopleCard");
-        this.setState({follow: 'Following'});
-      }.bind(this)
-    });
-  }
-}
+
  render() {
           //  console.log('image from peoplecard '+this.props.photo);
           //  console.log((this.props.photo))

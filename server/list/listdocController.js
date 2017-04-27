@@ -8,55 +8,6 @@ let session = driver.session();
 let redis = require('redis');
 let client = redis.createClient();
 let listController = {
-
-  //#Indhu _method to match the question concept with dB concepts (26-Apr-17)
-  getQuestionConcept: function(req, res) {
-        let val = req.body.intent;
-        let concept = [];
-        //  console.log("dffffffff"+val);
-        let query = ' match (n:Concept)-[part_of]-(m:Concept) where n.name="' + val + '" return m,n';
-        session.run(query).then(function(result) {
-            session.close();
-            for (var i = 0; i < result.records.length; i++) {
-                //  console.log(result.records[i]._fields[0].properties.name);
-                concept.push(result.records[i]._fields[0].properties.name);
-            }
-            res.send(concept);
-        });
-
-    },
-
-    //#Indhu _function to get the concept(noun) from the posting question(26-Apr-17)
-    nlp: function(req, res) {
-        var noun = '';
-        var noun1 = '';
-        let val = req.body.val;
-        let response;
-        let pos = require('pos');
-        let nlp = require('nlp_compromise');
-
-        let str = nlp.text(val);
-        // split str into individual words
-        let tokens = str.root().split(' ');
-        // intent array will contain intents extracted from question
-        let intents = '';
-        let words = new pos.Lexer().lex(val);
-        let tagger = new pos.Tagger();
-        let taggedWords = tagger.tag(words);
-        for (let y = 0; y < taggedWords.length; y = y + 1) {
-            let taggedWord = taggedWords[y];
-            let tag = taggedWord[1];
-            if (tag === 'NN') {
-                noun = taggedWord[0];
-            }
-        }
-        //  console.log('in navBar====', intents[0]);
-        noun1 = noun.charAt(0).toUpperCase() + noun.slice(1);
-        res.send(noun1);
-      //  console.log("noun1 is", noun1);
-
-    },
-
   getLikeStatus: function(req, res) {
   // console.log('router suggest ques');
   /* eslint-disable */
@@ -193,6 +144,7 @@ let listController = {
             res.send('Cant get the docs', err);
         });
     },
+   
     getIdWithQuestion: function(req, res) {
        let questionArray = [];
        List.find().then((docs) => {
@@ -404,7 +356,7 @@ let listController = {
             }
         });
     },
-    // Router for adding view count in mongo db created by Aswini K
+    // Router for adding viwe count in mongo db created by Aswini K
     updateviews: function(req, res) {
         let id = req.body.id;
         // console.log("ID:" + id);
@@ -460,23 +412,76 @@ return m';
             }
         });
     },
+    getComments: function(req, res) {
+        console.log("inside get comments");
+        console.log("qid: "+req.body.qid);
+        console.log("aid: "+req.body.aid);
+       // console.log('Inside Ques get' + req.params.id);
+        List.find({id:req.body.qid,'topCards.id':req.body.aid}).then((docs) => {
+            // console.log('inside route', JSON.stringify(docs));
+            docs[0].topCards.forEach(function (item){
+              if(item.id == req.body.aid){
+                  console.log(item);
+                  res.send(item);
+              }
+            })
+
+        }, (err) => {
+          console.log("error",err)
+            res.send('Cant get the docs', err);
+        });
+    },
     addanswerComment: function(req, res) {
       console.log('inside addanswer');
+      console.log("AnswerID: "+req.body.answerId);
         let query = ' \
 match (n:Answer),\
-(u:User {name:"' + req.body.mail + '" }) \
+(u:User {name:"' + req.body.email + '" }) \
 where id(n) = ' + req.body.answerId + ' \
 create (m:Comment{name:"' + req.body.content + '"}), \
 (n)<-[:comment_of]-(m), \
 (m)-[:commented_by{on : timestamp()}]->(u) \
 return m';
+session.run(query).then(function(result) {
+            // logger.debug(result);result.records[0]._fields[0].identity.low;
+            console.log(result);
+            if (result) {
+                let id = result.records[0]._fields[0].identity.low;
+                console.log("ID:" + id);
+                console.log("quesId:" + req.body.questionId);
+                console.log("ansid:" + req.body.answerId);
+               List.findOneAndUpdate({
+                    id: req.body.questionId,
+                    'topCards.id': req.body.answerId,
+                }, {
+                    $push: {
+                        'topCards.$.comment': {
+                            id: id,
+                            createdBy: req.body.email,
+                            content: req.body.content,
+                            createdOn: new Date().getTime(),
+                            name: req.body.name
+                        }
+                    }
+                }, {new: true}).then((doc) => {
+                    console.log(doc);
+                    res.send(doc);
+                });
+            } else {
+                // logger.debug('error occurred');
+                (err) => {
+                    res.send(err);
+                }
+            }
+        });
+    },
 
-        session.run(query).then(function(result) {
+       /* session.run(query).then(function(result) {
             // logger.debug(result);result.records[0]._fields[0].identity.low;
             console.log(result);
             res.send(result);
         });
-    },
+    },*/
     inviteFrnds: function(req, res) {
         // router.post('/send', function handleSayHello(req, res) {
         // logger.debug(req.body.data);
