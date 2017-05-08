@@ -21,8 +21,8 @@ let menucommentstyle = {
 let headerstyle = {
    fontFamily: 'Georgia',
     fontSize: 15,
-    fontWeight: 'serif',
-    
+    fontWeight: 'serif'
+
 }
 let poststyle1 = {
     fontFamily: 'Georgia',
@@ -63,7 +63,7 @@ class cardAnswer extends React.Component {
         this.getUserName = this.getUserName.bind(this);
         this.redirectToComments = this.redirectToComments.bind(this);
     }
-   
+
    // #Pavithra_K Retrieves userName who posted the question
     getUserName(mailId){
       $.ajax({
@@ -118,7 +118,9 @@ class cardAnswer extends React.Component {
    addAnswercomment() {
         if(this.state.comment!== ''){
          let qid = window.location.hash.split('id=')[1];
-         console.log("quesId: "+qid);
+         //console.log("quesId: "+qid);
+         //console.log("ansid "+this.props.id)
+         //console.log("Comment: "+this.state.comment)
          let id = this.props.id;
          let email = Cookie.load('email');
          this.getUserName(email);
@@ -132,12 +134,13 @@ class cardAnswer extends React.Component {
            content: this.state.comment,
            name: this.state.name
        };
+       console.log(commentdata)
        $.ajax({
            url: '/list/addanswerComment',
            type: 'PUT',
            data: commentdata,
            success: function() {
-             // console.log('insisde success');
+              console.log('insisde success');
              context.changeModalState(123, false);
              context.locAlert();
              // #Pavithra_K Set commentmsg as false to remove error message
@@ -175,8 +178,9 @@ class cardAnswer extends React.Component {
             error: function() {}
         });
     }
-   
+
     render() {
+      console.log(this.props.name)
         let commentMessage;
         // accepting the answer by user (by sumit on 10/3/2017 )
         let accept = '';
@@ -268,6 +272,6 @@ cardAnswer.propTypes = {
     id: React.PropTypes.number,
     quesId: React.PropTypes.number.isRequired,
     postedBy: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
+    name: React.PropTypes.string.isRequired
 };
 module.exports = cardAnswer;

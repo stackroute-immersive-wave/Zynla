@@ -6,7 +6,7 @@
     "wpbuild": "node ./node_modules/webpack/bin/webpack.js",
     "gbuild": "gulp lint",
     "clean": "gulp clean",
-    "start": "nodemon -L bin/www"
+    "start": "node  bin/www"
   },
   "repository": {
     "type": "git",
@@ -57,12 +57,14 @@
     "muicss": "^0.9.4",
     "multer": "^1.3.0",
     "neo4j-driver": "^1.1.1",
+    "nlp_compromise": "^6.5.3",
     "nodemailer": "^3.1.3",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
     "passport-instagram": "^1.0.0",
     "passport-local": "^1.0.0",
+    "pos": "^0.4.2",
     "rc-pagination": "^1.6.1",
     "react": "^15.3.2",
     "react-cookie": "^1.0.4",

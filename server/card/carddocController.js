@@ -10,20 +10,14 @@ let cardController = {
     addAnswer: function(req, res) {
         /*eslint-disable*/
         let query = ' \
-                    match (q:Question), \
-                   (u:User {name:"' + req.body.mail + '"}) \
-                   where id(q) = ' + req.body.questionId + ' \
-                   create (n:Answer {Content:"' + req.body.content + '"}), \
-                   (l:Like {count:0}), \
-                   (dl:Unlike {Count:0}), \
-                   (n)-[:has]->(l),\
-                   (l)-[:context_of]->(q),\
-                   (n)-[:has]->(dl),\
-                   (dl)-[:context_of]->(q),\
-                   (n)-[:answer_of]->(q), \
-                   (u)-[:post {on : timestamp()}]->(n) \
-                   return n \
-                    ';
+        match (q:question), \
+       (u:user {emailid:"' + req.body.mail + '"}) \
+       where id(q) = ' + req.body.questionId + ' \
+       create (n:'+req.body.type+'{value:"' + req.body.content + '"}), \
+       (n)-[:answer_of]->(q), \
+       (u)-[:post {on : timestamp()}]->(n) \
+       return n \
+        ';
         /*eslint-enable*/
         session.run(query).then(function(result) {
             /*eslint-disable*/
@@ -31,7 +25,7 @@ let cardController = {
             let queId = req.body.questionId;
             /*eslint-enable*/
             let db = new Answer({id: id, createdBy: req.body.mail,
-              content: req.body.content, answeredOn: new Date().getTime(), name: req.body.name});
+              content: req.body.content, answeredOn: new Date().getTime()});
             // adding data in carddocs collection
             db.save(function(err) {
                 if (err) {
@@ -51,8 +45,7 @@ let cardController = {
                       content: req.body.content,
                       createdOn: new Date().getTime(),
                       upVote: 0,
-                      downVote: 0,
-                      name: req.body.name
+                      downVote: 0
                 }
             }
         }, {new: true}).then(() => {
@@ -78,8 +71,7 @@ let cardController = {
                     statement: req.body.content,
                     addedOn: new Date().getTime(),
                     upVote: 0,
-                    downVote: 0,
-                    name: req.body.name
+                    downVote: 0
               }
           }
       }, {new: true}).then((doc) => {

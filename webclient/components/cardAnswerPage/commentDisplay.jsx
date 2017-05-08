@@ -1,22 +1,22 @@
-import {PropTypes} from 'react';
+//import {PropTypes} from 'react';
 import React from 'react';
 import CommentPage from './commentPage.jsx';
 import {
     Grid,
     Image,
-    Button,
+   // Button,
     Divider,
-    Icon,
-    Breadcrumb,
-    Segment,
-    Form,
-    Modal,
-    TextArea,
-    Popup,
-    Checkbox,
-    Dimmer,
-    Loader,
-    Header
+   // Icon,
+    //Breadcrumb,
+    Segment
+   // Form,
+    // Modal,
+    // TextArea,
+    // Popup,
+    // Checkbox,
+    // Dimmer,
+    // Loader,
+    // Header
 } from 'semantic-ui-react';
 let date = {
     marginTop: '1%',
@@ -59,22 +59,23 @@ class CommentCards extends React.Component {
     }
     handleOpen() {this.setState({ active: true });}
     handleClose() {this.setState({ active: false });}
-    
+
     getComments() {
         this.handleOpen();
         let retId = window.location.hash.split('qid=')[1];
         let id = retId.split('&aid=');
-        console.log(id[0] + " "+ id[1]);
+        console.log("qid & aid: "+id[0] + " "+ id[1]);
         this.setState({ansId: parseInt(id[1], 10)});
         let data = {qid: parseInt(id[0], 10),
                     aid: parseInt(id[1], 10)
                     }
+                    console.log(data)
         $.ajax({
             url: '/list/comment',
             type: 'POST',
             data: data,
             success: function(data) {
-                console.log("success"+data)
+                console.log(data)
                 console.log(data.createdBy)
                 console.log(data.content)
                 this.setState({objArray: data});
@@ -88,7 +89,7 @@ class CommentCards extends React.Component {
  	componentWillMount() {
         this.getComments();
 
-    }   
+    }
     render(){
         let ansObj = this.state.objArray;
         let dateData = new Date(parseInt(ansObj.createdOn, 10)).toString().substring(0, 15);
@@ -99,8 +100,8 @@ class CommentCards extends React.Component {
                 <Grid.Row columns={3}>
                   <Grid.Column width={1}/>
                     <Grid.Column width={12}>
-                       
-                        <Segment  size='big'>
+
+                        <Segment size='big'>
                          <div style={titlestyle} className='content'
                               dangerouslySetInnerHTML={{__html: ansHtmlContent}} />
                             <Image
@@ -115,7 +116,7 @@ class CommentCards extends React.Component {
                               style={date}>Answered On
                               {dateData}
                             </div>
-                       
+
                         </Segment>
                         <Divider clearing/>
                         <CommentPage objArray={ansObj} />
@@ -124,7 +125,7 @@ class CommentCards extends React.Component {
             </Grid>
             </div>
             );
-    
+
 }
 }
 

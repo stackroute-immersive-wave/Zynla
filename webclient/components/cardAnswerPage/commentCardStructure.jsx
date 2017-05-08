@@ -1,20 +1,20 @@
 import React from 'react';
-import Cookie from 'react-cookie';
-import {hashHistory} from 'react-router';
+//import Cookie from 'react-cookie';
+//import {hashHistory} from 'react-router';
 import {
     Image,
     Card,
-    Icon,
-    Menu,
-    Divider,
-    Button,
-    Modal,
-    TextArea,
-    Form
+  //  Icon,
+    //Menu,
+    Divider
+    //Button,
+    //Modal,
+    //TextArea,
+    //Form
 } from 'semantic-ui-react';
-const ReactToastr = require('react-toastr');
-const {ToastContainer} = ReactToastr;
-const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
+//const ReactToastr = require('react-toastr');
+//const {ToastContainer} = ReactToastr;
+//const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 
 let poststyle1 = {
     fontFamily: 'Georgia',
@@ -26,20 +26,20 @@ let ansstyle = {
     fontWeight: 'serif',
     fontSize: 21
 };
-let commentstyle = {
-    fontFamily: 'Cochin',
-    fontSize: 14
-};
-let formstyle = {
-    margin: '3% 3% 3% 3% '
-};
-let commentbutton = {
-  marginBottom: '2%',
-  marginLeft: '5%'
-};
-let commentbutton1 = {
-  marginRight: '3%'
-};
+// let commentstyle = {
+//     fontFamily: 'Cochin',
+//     fontSize: 14
+// };
+// let formstyle = {
+//     margin: '3% 3% 3% 3% '
+// };
+// let commentbutton = {
+//   marginBottom: '2%',
+//   marginLeft: '5%'
+// };
+// let commentbutton1 = {
+//   marginRight: '3%'
+// };
 class CommentStructure extends React.Component {
     constructor() {
         super();
@@ -73,6 +73,6 @@ CommentStructure.propTypes = {
     content: React.PropTypes.string.isRequired,
     createdOn: React.PropTypes.string.isRequired,
     id: React.PropTypes.number.isRequired,
-    name: React.PropTypes.string.isRequired,
+    name: React.PropTypes.string.isRequired
 };
 module.exports = CommentStructure;

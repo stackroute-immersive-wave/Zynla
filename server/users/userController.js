@@ -3,6 +3,7 @@ const logger = require('./../../applogger');
 
 const User = require('./userEntity');
 const UserProfile = require('./userProfileEntity').userModel;
+const UserProfileQues = require('./userProfileQuesEntity');
 const ListEntity = require('../list/listdocEntity');
 const nodemailer = require('nodemailer');
 let driver = require('../config/neo4j');
@@ -17,6 +18,44 @@ var rand,
 
 let userCtrl = {
 
+  //store userProfileQuestion in db as one time process
+  userQues: function(req,res){
+    let userProfileQues=new UserProfileQues(req.body);
+  userProfileQues.save(function(err,data){
+  if(err){
+    res.send({'success':'Not Saved'});}
+  else{
+  res.send({'success':'SAVED'});}
+  });
+
+},
+
+  //getUserprofileQuestion from Mongo DB
+  getUserQues: function(req,res) {
+    UserProfileQues.find({name:'Please let me know your full name.'},function(err,data){
+if(err){
+  res.send(err);}
+else {
+  res.send(data);
+}
+});
+
+  },
+
+  //#Pavithra_K to get username for required mailID
+     getUserName: function(req, res) {
+        let emailId =req.params.emailId;
+        console.log("Inside router: "+emailId)
+        User.find({'email': emailId},function(err, docs) {
+            if (err) {
+                res.send('Error:' + err);
+            }
+            else {
+                console.log(docs)
+                res.send(docs[0].name);
+            }
+        });
+    },
     // Login
     logIn: function(req, res) {
         res.cookie('username', req.user.name);
@@ -167,7 +206,7 @@ let userCtrl = {
                             }
                         });
                         res.cookie('email', req.body.email);
-                        var query = 'create (n:User {name : "' + req.body.email + '"})';
+                        var query = 'create (n:user {emailid : "' + req.body.email + '"})';
                         session.run(query).then(function(result){
                           if(result)
                           {
@@ -338,7 +377,7 @@ let userCtrl = {
                 console.log('Profile saved');
             }
         });
-            var query = 'create (n:User {name : "' + req.user.email + '"})';
+            var query = 'create (n:user {emailid : "' + req.user.email + '"})';
             session.run(query).then(function() {
                 console.log("comes");
             });
@@ -370,7 +409,7 @@ let userCtrl = {
                 console.log('Profile saved');
             }
         });
-            var query = 'create (n:User {name : "' + req.user.email + '"})';
+            var query = 'create (n:user {emailid: "' + req.user.email + '"})';
             session.run(query).then(function() {
                 console.log("comes");
             });
@@ -386,6 +425,7 @@ let userCtrl = {
 
     // the callback after google has authorized the user
     googleCallBack: function(req, res) {
+      console.log(".........")
         let user = new User();
         res.cookie('token', req.user.token);
         res.cookie('username', req.user.name);
@@ -405,7 +445,7 @@ let userCtrl = {
             }
         });
             console.log(req.user.email);
-            var query = 'create (n:User {name : "' + req.user.email + '"})';
+            var query = 'create (n:user {emailid : "' + req.user.email + '"})';
             session.run(query).then(function() {
                 console.log("comes");
             });
@@ -419,7 +459,7 @@ let userCtrl = {
         let id = req.body.id;
         let emailId = req.body.emailId;
         /*eslint-disable*/
-        let query = "match (q:Question), (u:User) where id(q)=" + id + " and u.name='" + emailId + "' create (q)<-[:follow {on:timestamp()}]-(u) return q";
+        let query = "match (q:question), (u:user) where id(q)=" + id + " and u.emailid='" + emailId + "' create (q)<-[:following {on:timestamp()}]-(u) return q";
         /*eslint-enable*/
         session.run(query).then(function(result) {
             /*eslint-disable*/
@@ -443,6 +483,37 @@ let userCtrl = {
                         upVotes: req.body.upVotes,
                         downVotes: req.body.downVotes,
                         noofans: req.body.noofans
+                    }
+                }
+            }, {new: true}).then((doc) => {
+                res.send(doc);
+            }, (err) => {
+                res.send(err);
+            });
+        });
+    },
+    //#Abu (24-4-2017) To delete the following card in mongo db and neo4j
+    unfollowFromProfile: function(req, res) {
+        logger.debug("inside userController and in unfollowFromProfile to follow cards");
+        let id = req.body.id;
+        let emailId = req.body.emailId;
+        /*eslint-disable*/
+        let query = "match (q:question)-[f:following]-(u:user) where id(q)=" + id + " and u.emailid='" + emailId + "' delete f return q";
+        /*eslint-enable*/
+        console.log(query)
+        session.run(query).then(function(result) {
+            /*eslint-disable*/
+            logger.debug(query);
+            let id = result.records[0]._fields[0].identity.low;
+            /*eslint-enable*/
+            let emailId = req.body.emailId;
+            logger.debug('Inside delete and id= '+id+' emailId '+emailId);
+            UserProfile.findOneAndUpdate({
+                emailId: emailId
+            }, {
+                $pop: {
+                    watchingList: {
+                        id: id
                     }
                 }
             }, {new: true}).then((doc) => {
@@ -477,6 +548,7 @@ let userCtrl = {
         let arr = [];
         let qid = [];
         UserProfile.find({"emailId": emailId}).then((docs) => {
+          //console.log('userController---',docs)
             if(docs[0].preferenceList) {
               for(let pref of docs[0].preferenceList) {
                 qid.push(pref.id);
@@ -501,8 +573,8 @@ let userCtrl = {
                     break;
                 }
             }
-            let topicQuery = 'match (n:User {name:"' + emailId + '"}) - \
-            [:follow]->(m:Concept)<-[:question_of]-(q:Question) return distinct q';
+            let topicQuery = 'match (n:user {emailid:"' + emailId + '"}) - \
+            [:following]->(m:concept)<-[*]-(q:question) return distinct q';
             session.run(topicQuery).then(function(resultTopic){
               let mongoQues = [];
               for(let quesRec of resultTopic.records) {
@@ -515,8 +587,8 @@ let userCtrl = {
                   }
                 });
               }
-              let query = 'match (n:User {name:"' + emailId + '"}) - \
-              [:follow]->(m:User)-[:follow]->(o:Question) return distinct m,o';
+              let query = 'match (n:user {emailid:"' + emailId + '"}) - \
+              [:following]->(m:user)-[:following]->(o:question) return distinct m,o';
               console.log(query);
               session.run(query).then(function(result) {
                   let mongoMail = [];
@@ -595,7 +667,7 @@ let userCtrl = {
                                 }
                             );
                         });
-                        let queryfof = 'match (n:User),(n)-[:follow]->(m:User)-[x]->(o:Question) where n.name="' + following[0] + '"';
+                        let queryfof = 'match (n:user),(n)-[:following]->(m:user)-[x]->(o:question) where n.emailid="' + following[0] + '"';
                         for (let qi = 1; qi < following.length; qi = qi + 1) {
                             queryfof = queryfof + ' or n.name="' + following[qi] + '"';
                         }
@@ -678,6 +750,7 @@ let userCtrl = {
                                               }
                                             }
                                           }
+
                                           resSend(res, arr);
                                           // res.send(arr);
                                         });
@@ -696,7 +769,7 @@ let userCtrl = {
     displayCatagory: function(req, res) {
         var result1 = [];
         logger.debug('Inside display catagory');
-        var query = 'match (n:Domain) return n';
+        var query = 'match (n:domain) return n';
         session.run(query).then(function(result) {
             for (var x of result.records) {
                 result1.push({
@@ -739,7 +812,7 @@ let userCtrl = {
 },
 /* Add category to mongodb as well as in neo4j */
 addCategory: function(req, res) {
-  console.log("dddddddddddddd");
+  //console.log("dddddddddddddd");
   console.log(req.body);
   let arr1 = JSON.parse(req.body.catagory);
   console.log(typeof(arr1));
@@ -773,16 +846,16 @@ addCategory: function(req, res) {
       } else {
           let id = req.body.email;
           console.log('email in addcategory', req.body.email);
-          let query1 = 'match (:User {name: "'+id+'"})-[r:follows]-(:Domain) DELETE r'
+          let query1 = 'match (:user {emailid: "'+id+'"})-[r:following]-(:domain) DELETE r'
                 session.run(query1).then(function(){
-                    let query = 'match (n:User {name:"' + id + '"})';
+                    let query = 'match (n:user {emailid:"' + id + '"})';
           for (var i = 0; i < arr.length; i++) {
               query += ',(d' + i + ': Domain {name:"' + arr[i] + '"}) ';
           }
           console.log('node 1', query);
-          query += 'create (n)-[:follows]->(d0)';
+          query += 'create (n)-[:following]->(d0)';
           for (let i = 1; i < arr.length; i++) {
-              query += ',(n)-[:follows]->(d' + i + ')';
+              query += ',(n)-[:following]->(d' + i + ')';
           }
           console.log('node 2', query);
           session.run(query).then(function() {
@@ -863,20 +936,6 @@ updateIsNew: function(req, res) {
             }
         });
     },
-    //#Pavithra_K to get username for required mailID 
-     getUserName: function(req, res) {
-        let emailId =  req.params.emailId;
-        console.log("Inside router: "+emailId)
-        User.find({'email': emailId},function(err, docs) {
-            if (err) {
-                res.send('Error:' + err);
-            }
-            else {
-                console.log(docs)
-                res.send(docs[0].name);
-            }   
-        });
-    },
     // updates the user preference data inside mongo
     addPreference: function(req, res) {
         let emailId = req.body.emailId;
@@ -904,7 +963,8 @@ updateIsNew: function(req, res) {
                       upVotes: req.body.upVotes,
                       downVotes: req.body.downVotes,
                       views: req.body.views,
-                      position: req.body.preferedPos
+                      position: req.body.preferedPos,
+                      userName:req.body.userName
                   }
               }
           }).then((doc) => {
@@ -980,14 +1040,17 @@ function resSend(res, arr) {
   User.find({$or:emailId}).then(function(docs){
     let data = [];
     docs.map(function(doc){
+      //#Nandhini username and mail display
       if(doc.name) {
-        data[doc.email] = doc.name;
+        data[doc.email+"name"]=doc.name; //for getting username using emailId as keyword
+        data[doc.email] = doc.email;
       }
       else {
         data[doc.email] = doc.email;
       }
     });
     for(let i in arr) {
+      arr[i].userName=data[arr[i].postedBy+"name"]; //getting username for particular email Id
       arr[i].postedBy = data[arr[i].postedBy];
       if(arr[i].followedBy) {
         arr[i].followedBy = data[arr[i].followedBy];
@@ -996,6 +1059,7 @@ function resSend(res, arr) {
         arr[i].friendOf = data[arr[i].friendOf];
       }
     }
+    console.log("userController---",arr);
     res.send(arr);
   });
 }

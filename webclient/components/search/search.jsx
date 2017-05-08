@@ -40,7 +40,7 @@ class Search extends React.Component {
     }
      handleOpen() {this.setState({ active: true });}
     handleClose() {this.setState({ active: false });}
-// function to change component basing in the seected option (people or questions) in search
+// function to change component basing in the slected option (people or questions) in search
     changeComponent(x) {
       if(x === 'people') {
         /* eslint-disable */
@@ -204,6 +204,24 @@ class Search extends React.Component {
            let temp = 'Following';
            this.setState({followtopic: temp});
            this.setState({icon: 'minus circle'});
+         }.bind(this)
+      });
+   }
+   //#Abu (29/4/2017)  Method To Unfollow topic by using ajax call
+   UnFollowTopic() {
+     let q = window.location.hash.split('question=')[1];
+     let id = Cookie.load('email');
+     $.ajax({
+         url: '/search/unfollowtopic',
+         type: 'PUT',
+         data: {
+           id: id,
+           concept: q
+         },
+         success: function() {
+           let temp = 'Follow';
+           this.setState({followtopic: temp});
+           this.setState({icon: 'plus circle'});
          }.bind(this)
       });
    }

@@ -20,7 +20,8 @@ function setupStaticRoutes(app) {
 }
 
 function setupRestRoutes(app) {
-  // console.log('Inside service setupRestRoutes');
+  // console.log('Inside service setupRestRoutes
+  global.vini="akil";
   app.use('/users', require(path.join(__dirname, './users')));
   app.use('/list', require(path.join(__dirname, './list')));
   app.use('/userdoc', require(path.join(__dirname, './userdoc')));

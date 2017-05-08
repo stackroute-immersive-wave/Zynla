@@ -105,9 +105,9 @@ sendInviteEmail: function (req, res) {
                         if(checkTypeProfile(watchingList, qId, email))
                         {
                         let session = driver.session();
-                        var query = 'match (n:User) where n.name='+email+''+
-                                        +'match (q:Question) where id(q)='+qId+''+
-                                        +'create (n)-[:follow]->(q)'+
+                        var query = 'match (n:user) where n.emailid='+email+''+
+                                        +'match (q:question) where id(q)='+qId+''+
+                                        +'create (n)-[:following]->(q)'+
                                         +'return n,q';
                         session.run(query);
                         session.end();

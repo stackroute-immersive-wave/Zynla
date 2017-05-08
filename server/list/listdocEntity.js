@@ -61,8 +61,7 @@ const schema = new mongoose.Schema({
          id: Number,
          createdBy: String,
          content: String,
-         createdOn: String,
-         name: String
+         createdOn: String
        }
    ],
     topCards: [
@@ -75,7 +74,6 @@ const schema = new mongoose.Schema({
             upVote: Number,
             downVote: Number,
             isAccepted: Boolean,
-            name: String,
             comment: [
                 {
                     id: Number,
