@@ -14,7 +14,7 @@ class QueCards extends React.Component {
 		// passing it to card to get the array of cards
 		let queLike = this.props.queLike;
 		let queDislike = this.props.queDislike;
-
+    /*eslint-disable*/
 		let cards = this.props.quesCollection.map(function(item) {
 			//#Abu 20/4/2017 (To avoid posted questions in suggested question list)
 			if((Cookies.load('email') !== item.postedBy) ||
@@ -32,6 +32,7 @@ class QueCards extends React.Component {
 			);
 		}
 		});
+		/*eslint-enable*/
 		return(
 			// returning cards to questions page
 			<div>

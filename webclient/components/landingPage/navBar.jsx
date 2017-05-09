@@ -141,8 +141,9 @@ class NavBar extends Component {
 
     //#Indhu _Method to display matching concepts in dropdown(26-Apr-17)
     inputofHeading(evt) {
-        let val = document.getElementById('input').value;
+      let val = document.getElementById('input').value;
       if(evt.keyCode===13)
+      {
         $.ajax({
             url: '/list/nlp',
             type: 'post',
@@ -168,6 +169,7 @@ class NavBar extends Component {
                 console.log("@@@@@@@@ " , error);
             }
         });
+        }
         let opts = document.getElementById('questionName').childNodes;
         let questionName1 = this.state.questionName;
         for (let i = 0; i < opts.length; i = i + 1) {

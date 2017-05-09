@@ -40,12 +40,14 @@ class DisplayFavouriteCategoryStructure extends React.Component {
     componentWillMount() {
         //#Abu 24-04-2017 (To set the icon depending on
         // whether the card is followed or not even when it is refreshed)
+        /*eslint-disable*/
         let tag = this.props.tag;
         if (tag === 'Following') {
             this.setState({iconName: 'minus'})
         } else {
             this.setState({iconName: 'plus'})
         }
+        /*eslint-enable*/
         //#Abu 24-04-2017 (it has already been there, instead of this code, simple code is used)
         /*let emailId = Cookie.load('email');
         let arr = [];
@@ -231,7 +233,9 @@ class DisplayFavouriteCategoryStructure extends React.Component {
         let uname = this.state.sendUserName;
         console.log(uname);
         // let uname = '';
+        /*eslint-disable*/
         if (uname === '' || uname === undefined) {
+          /*eslint-enable*/
             this.refs.container.error('select username to invite', '', {
                 timeOut: 2000,
                 extendedTimeOut: 10000

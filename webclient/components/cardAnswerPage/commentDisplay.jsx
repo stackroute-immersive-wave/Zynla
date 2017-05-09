@@ -74,11 +74,11 @@ class CommentCards extends React.Component {
             url: '/list/comment',
             type: 'POST',
             data: data,
-            success: function(data) {
-                console.log(data)
-                console.log(data.createdBy)
-                console.log(data.content)
-                this.setState({objArray: data});
+            success: function(res) {
+                console.log("output: ",res)
+                console.log(res.createdBy)
+                console.log(res.content)
+                this.setState({objArray: res});
                 this.handleClose();
             }.bind(this),
             error: function(err){

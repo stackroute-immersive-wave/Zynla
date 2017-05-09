@@ -91,6 +91,7 @@ class NavBarPro extends Component {
       photo.append('IMG', this.state.allFiles);
       let self = this;
         // sending the image to server
+        /*eslint-disable*/
       request.post('userdoc/upload').send(photo).end(function(err, resp) {
           if (err) {
               console.error(err);
@@ -99,6 +100,7 @@ class NavBarPro extends Component {
               return resp;
           }
       });
+      /*eslint-enable*/
   }
     //#Malar 27-4-2017{ to save the image name in
     //  database in which the image already saved in server}
@@ -113,6 +115,7 @@ class NavBarPro extends Component {
       }).then(function(response) {
         context.uploadSuccess();
         context.getProfile();
+        console.log(response);
       }).catch(function(err) {
           console.log(err);
       });
@@ -380,9 +383,13 @@ class NavBarPro extends Component {
         const followingCount = this.state.followingCount;
         let profMeter = parseInt(this.state.status, 10) + '%';
         let imagechange = null;
-       const {open, size} = this.state;
+        /*eslint-disable*/
+        const {open, size} = this.state;
+        /*eslint-enable*/
         if (this.state.picture!=='') {
+        /*eslint-disable*/
           if(this.state.allFiles.preview===undefined){
+          /*eslint-enable*/
           let pic=this.state.picture;
           imagechange = (<Image src={require("../../../webserver/pictures/"+pic)} style={{
               height: 204

@@ -159,11 +159,13 @@ class ProfileBot extends React.Component {
 
         success: function() {
           if(context.state.countOfSkip>=0)
+          {
             context.skipAlert();
+          }
           else
+          {
             context.proAlert();
-
-
+          }
           context.props.handle();
           context.setState({countOfSkip:0});
           //after updation it should empty the count of skip values

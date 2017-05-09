@@ -254,6 +254,7 @@ return (
   </div>
 );
 }
+/*eslint-disable*/
 else{
 let conceptName = [];
 for (let i = this.state.start; i <= this.state.end; i = i + 1) {
@@ -332,6 +333,7 @@ return (
 </div>
 );
 }
+/*eslint-enable*/
 }
   }
   // type that props will accept coming from the parent

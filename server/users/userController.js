@@ -25,7 +25,7 @@ let userCtrl = {
   if(err){
     res.send({'success':'Not Saved'});}
   else{
-  res.send({'success':'SAVED'});}
+  res.send({'success':'SAVED','data':data});}
   });
 
 },

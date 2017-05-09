@@ -349,12 +349,12 @@ class answerPage extends React.Component {
                 email: Cookie.load('email'),
                 type: type
             },
-            success: function() {
+            success: function(){
                 console.log('comes');
                 this.setState({colorName: color, upVotes: upVotesTemp});
                 console.log("color: "+ this.state.colorName+"upvotes: "+ this.state.upVotes)
             }.bind(this),
-            error: function(){
+            error: function(error){
                 console.log("error: "+error)
             }
         });

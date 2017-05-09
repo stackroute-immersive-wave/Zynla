@@ -39,14 +39,16 @@ let storage = multer.diskStorage({
     cb(null, './webserver/pictures/')
   },
   filename: function (req, file, cb) {
+    /*eslint-disable*/
     let extArray = file.mimetype.split("/");
     let extension = extArray[extArray.length - 1];
+    /*eslint-enable*/
     imageArray=file.originalname;
     cb(null, file.originalname)
   }
 });
 const upload = multer({ storage: storage });
-router.post('/upload', upload.any('IMG'), function(req, res, next){
+router.post('/upload', upload.any('IMG'), function(req, res){
   let uploadedImages = imageArray;
   imageArray = '';
   res.send(uploadedImages);

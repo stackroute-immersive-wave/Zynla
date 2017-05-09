@@ -13,9 +13,9 @@ let listController = {
   getQuestionConcept: function(req, res) {
         let val = req.body.intent;
         let concept = [];
-        //  console.log("dffffffff"+val);
-        let query = 'match (n:concept)-[:concept_of|:same_as]-(m:concept) \
-        where n.name="' + val + '" return m,n';
+        /*eslint-disable*/
+        let query = 'match (n:concept)-[:concept_of|:same_as]-(m:concept) where n.name="' + val + '" return m,n';
+        /*eslint-enable*/
         session.run(query).then(function(result) {
             session.close();
             for (let i = 0; i < result.records.length; i=i+1) {
@@ -60,8 +60,9 @@ let listController = {
                                   conceptsArr.push(conceptFullLexicon[taggedWords[y][0]])
                               }
                               }
+                              /*eslint-disable*/
                               let query='unwind $conceptsArr as token MATCH (n:concept)-[:concept_of|:same_as]-(m:concept) where n.name=token return collect(m.name)';
-                              console.log(query,conceptsArr)
+                              /*eslint-enable*/
                               session.run(query,{"conceptsArr":conceptsArr}).then(function(result) {
                                 conceptsArr=result.records[0]._fields[0]
                                 console.log(result.records[0]._fields)
@@ -417,6 +418,7 @@ let listController = {
             res.send(err);
         });
     },
+    /*eslint-disable*/
     // Router for storing comments for question in mongo and neo4j created by Aswini K
     updatecomments: function(req, res) {
       let query = '\
@@ -427,7 +429,7 @@ create (m:comment{name:"' + req.body.content + '"}),\
  (n)<-[:comment_of]-(m),\
 (m)-[:commented_by{on : timestamp()}]->(u)\
 return m';
-
+/*eslint-enable*/
         session.run(query).then(function(result) {
             // logger.debug(result);result.records[0]._fields[0].identity.low;
             console.log(result);
@@ -451,10 +453,11 @@ return m';
                 });
             } else {
                 // logger.debug('error occurred');
+                /*eslint-disable*/
                (err) => {
-              // ? e(err){
                     res.send(err);
                 }
+                /*eslint-enable*/
             }
         });
     },
@@ -462,12 +465,13 @@ return m';
     getComments: function(req, res) {
         console.log("inside get comments");
         console.log("qid: "+req.body.qid);
-        console.log("aid: "+req.body.aid);
+        let aid = parseInt(req.body.aid,10);
        // console.log('Inside Ques get' + req.params.id);
         List.find({id:req.body.qid,'topCards.id':req.body.aid}).then((docs) => {
             // console.log('inside route', JSON.stringify(docs));
             docs[0].topCards.forEach(function (item){
-              if(item.id === req.body.aid){
+
+              if(item.id === aid){
                   console.log(item);
                   res.send(item);
               }
@@ -480,6 +484,7 @@ return m';
     },
     /* @pavithra K: add answer comments into db*/
     addanswerComment: function(req, res) {
+      /*eslint-disable*/
       console.log('inside addanswer');
       console.log("AnswerID: "+req.body.answerId);
          let query = ' \
@@ -490,9 +495,10 @@ create (m:comment{name:"' + req.body.content + '"}), \
 (n)<-[:comment_of]-(m), \
 (m)-[:commented_by{on : timestamp()}]->(u) \
 return m';
+/*eslint-enable*/
 session.run(query).then(function(result) {
             // logger.debug(result);result.records[0]._fields[0].identity.low;
-            console.log(result);
+            console.log("answercomments",result);
             if (result) {
                 let id = result.records[0]._fields[0].identity.low;
                 console.log("ID:" + id);
@@ -517,9 +523,11 @@ session.run(query).then(function(result) {
                 });
             } else {
                 // logger.debug('error occurred');
+                /*eslint-disable*/
                 (err) => {
                     res.send(err);
                 }
+                /*eslint-enable*/
             }
         });
     },

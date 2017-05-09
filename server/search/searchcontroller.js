@@ -173,7 +173,9 @@ let searchController = {
         });
      },
     isFollow: function(req, res) {
+       /*eslint-disable*/
         let query = 'match (n:user {emailid:"' + req.body.name + '"})-[:following]->(m:user) return m';
+        /*eslint-enable*/
         let session = driver.session();
         session.run(query).then(function(result) {
             let namearr = [];
