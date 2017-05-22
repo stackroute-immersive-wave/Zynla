@@ -25,7 +25,8 @@ export function Item(props) {
     <div>
       <Grid.Column>
         <DisplayHomePageCardStructure id={items.id} displayImage={items.displayImage}
-        heading={items.heading} question={items.question} postedBy={items.postedBy} userName={items.userName}
+        heading={items.heading} question={items.question}
+        postedBy={items.postedBy} userName={items.userName}
         addedOn={items.addedOn} category={items.category} upVotes={parseInt(items.upVotes, 10)}
         downVotes={parseInt(items.downVotes, 10)}
          answerCounts={items.answerCounts} views={items.views}

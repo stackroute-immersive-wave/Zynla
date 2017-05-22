@@ -20,10 +20,13 @@ function setupStaticRoutes(app) {
 }
 
 function setupRestRoutes(app) {
-  // console.log('Inside service setupRestRoutes');
+  // console.log('Inside service setupRestRoutes
+  global.vini="akil";
+  app.use('/book', require(path.join(__dirname, './book')));
   app.use('/users', require(path.join(__dirname, './users')));
   app.use('/list', require(path.join(__dirname, './list')));
   app.use('/userdoc', require(path.join(__dirname, './userdoc')));
+  app.use('/uploadBook', require(path.join(__dirname, './uploadBook')));
   app.use('/answers', require(path.join(__dirname, './card')));
   app.use('/invite', require(path.join(__dirname, './invite')));
   app.use('/followinvite', require(path.join(__dirname, './followinvite')));
@@ -139,7 +142,10 @@ function setupMongooseConnections() {
 }
 function setupRedisStore() {
   redisData.getConceptFromNeo4j();
+
   redisData.getIntentFromNeo4j();
+  redisData.getTopicFromNeo4j();
+  redisData.getDomainsFromNeo4j();
 }
 
 // App Constructor function is exported

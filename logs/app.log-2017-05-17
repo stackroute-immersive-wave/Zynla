@@ -1,0 +1,70 @@
+[17 05 2017 03:28:34.448] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[17 05 2017 03:31:28.464] [DEBUG] - Mongoose is now disconnected..!
+[17 05 2017 03:31:35.977] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[17 05 2017 03:32:41.433] [DEBUG] - { _id: 591985d291912206709c1d36,
+  emailId: 'sindhuvarshu95@gmail.com',
+  __v: 1,
+  followerCount: 0,
+  followingUser: [],
+  reputation: 0,
+  interestCategory: [ 'react', 'semantic-ui', 'java', 'html' ],
+  watchingTopic: [],
+  preferenceList: [],
+  watchingList: [],
+  answers: [],
+  lists: [],
+  profile: 
+   { phone: 'Phone',
+     education: 
+      { university: 'University',
+        highSchool: 'Secondary',
+        primary: 'Primary' },
+     address: 
+      { postalCode: 'postal Code',
+        city: 'City',
+        region: 'State',
+        country: 'Country',
+        Line2: 'Street',
+        Line1: 'H.No.' },
+     gender: 'gender',
+     dob: 'dob',
+     description: 'Describe About Yourself',
+     picture: 'https://lh3.googleusercontent.com/-J-GZ3EGUQFk/AAAAAAAAAAI/AAAAAAAAAB0/k_bKNSCQ8HA/photo.jpg?sz=50',
+     name: 'Sindhuja Pandiyan' } }
+[17 05 2017 03:32:41.569] [DEBUG] - { _id: 591985d291912206709c1d36,
+  emailId: 'sindhuvarshu95@gmail.com',
+  __v: 1,
+  followerCount: 0,
+  followingUser: [],
+  reputation: 0,
+  interestCategory: [ 'react', 'semantic-ui', 'java', 'html' ],
+  watchingTopic: [],
+  preferenceList: [],
+  watchingList: [],
+  answers: [],
+  lists: [],
+  profile: 
+   { phone: 'Phone',
+     education: 
+      { university: 'University',
+        highSchool: 'Secondary',
+        primary: 'Primary' },
+     address: 
+      { postalCode: 'postal Code',
+        city: 'City',
+        region: 'State',
+        country: 'Country',
+        Line2: 'Street',
+        Line1: 'H.No.' },
+     gender: 'gender',
+     dob: 'dob',
+     description: 'Describe About Yourself',
+     picture: 'https://lh3.googleusercontent.com/-J-GZ3EGUQFk/AAAAAAAAAAI/AAAAAAAAAB0/k_bKNSCQ8HA/photo.jpg?sz=50',
+     name: 'Sindhuja Pandiyan' } }
+[17 05 2017 07:06:37.883] [DEBUG] - Mongoose is now disconnected..!
+[17 05 2017 07:06:44.386] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[17 05 2017 07:21:09.020] [DEBUG] - Mongoose is now disconnected..!
+[17 05 2017 07:21:14.069] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[17 05 2017 07:37:14.169] [DEBUG] - Mongoose is now disconnected..!
+[17 05 2017 07:37:21.256] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[17 05 2017 12:53:46.274] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla

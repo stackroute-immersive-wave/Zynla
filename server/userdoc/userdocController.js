@@ -1,12 +1,13 @@
 const UserModel = require('../users/userProfileEntity').userModel;
 // const // logger = require('./../../app// logger');
 let driver = require('../config/neo4j');
-
+let log4js = require('log4js');
+let logger = log4js.getLogger();
 let userDocController = {
   getuserAnsId: function(req, res) {
     let session = driver.session();
     /* eslint-disable */
-    let query = 'match(n:User)-[r:post]->(a:Answer)-[:answer_of]->(q:Question) where n.name="' + req.body.email + '" return q';
+    let query = 'match(n:user)-[r:posted]->()-[:answer_of]->(q:question) where n.emailid="' + req.body.email + '" return q';
     session.run(query).then(function(result) {
         let recordObj = result.records;
         // console.log(recordObj);
@@ -105,12 +106,30 @@ let userDocController = {
           }
         });
     },
+    //#Malar 27-4-2017{to update the profile picture}
+    changeProfilePicture: function(req, res) {
+//console.log("changeProfilePicture success");
+        UserModel.update({
+            emailId: req.body.email
+        }, {
+            $set: {
+                'profile.picture': req.body.picture
+            }
+        }, function(err) {
+            if (err) {
+                res.send('Error:' + err);
+            }else {
+            res.send('Updated userinfo successfully');
+          }
+        });
+    },
     getUserprofile: function(req, res) {
         UserModel.findOne({
             emailId: req.body.email
         }, function() {
             // console.log('comes');
         }).then((docs) => {
+           logger.debug(docs)
             res.send(docs);
         }, (err) => {
             res.send('Cant get the docs', err);
@@ -177,7 +196,7 @@ let userDocController = {
     getFollowers: function(req, res) {
       let session = driver.session();
       /*eslint-disable*/
-            let query = 'match (n:User {name:"' + req.body.email + '"})<-[:follow]-(m:User) return m skip ' + req.body.skip + ' limit ' + req.body.limit;
+            let query = 'match (n:user {emailid:"' + req.body.email + '"})<-[:following]-(m:user) return m skip ' + req.body.skip + ' limit ' + req.body.limit;
             /*eslint-enable*/
             session.run(query).then(function(result) {
                 // let id = result.records[0]._fields[0].identity.low;
@@ -280,7 +299,7 @@ let userDocController = {
       let session = driver.session();
       /*eslint-disable*/
       console.log(req.body);
-            let query = 'match (n:User {name:"' + req.body.email + '"})-[:follow]->(u:Concept) return u;';
+            let query = 'match (n:user {emailid:"' + req.body.email + '"})-[:following]->(u:concept) return u;';
             /*eslint-enable*/
             let watch = [];
             session.run(query).then(function(result) {

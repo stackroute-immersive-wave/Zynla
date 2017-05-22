@@ -11,13 +11,13 @@ const quesSchema = new mongoose.Schema({
     country: String,
     region: String,
     city: String,
-    postalCode: String,
+    postalCode: String
     },
   education: {
     primary: String,
     highSchool: String,
-    university: String,
+    university: String
       },
-  phone: String,
+  phone: String
 });
 module.exports = mongoose.model('userProfileQues', quesSchema);

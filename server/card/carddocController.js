@@ -10,20 +10,14 @@ let cardController = {
     addAnswer: function(req, res) {
         /*eslint-disable*/
         let query = ' \
-                    match (q:Question), \
-                   (u:User {name:"' + req.body.mail + '"}) \
-                   where id(q) = ' + req.body.questionId + ' \
-                   create (n:Answer {Content:"' + req.body.content + '"}), \
-                   (l:Like {count:0}), \
-                   (dl:Unlike {Count:0}), \
-                   (n)-[:has]->(l),\
-                   (l)-[:context_of]->(q),\
-                   (n)-[:has]->(dl),\
-                   (dl)-[:context_of]->(q),\
-                   (n)-[:answer_of]->(q), \
-                   (u)-[:post {on : timestamp()}]->(n) \
-                   return n \
-                    ';
+        match (q:question), \
+       (u:user {emailid:"' + req.body.mail + '"}) \
+       where id(q) = ' + req.body.questionId + ' \
+       create (n:'+req.body.type+'{value:"' + req.body.content + '"}), \
+       (n)-[:answer_of]->(q), \
+       (u)-[:post {on : timestamp()}]->(n) \
+       return n \
+        ';
         /*eslint-enable*/
         session.run(query).then(function(result) {
             /*eslint-disable*/

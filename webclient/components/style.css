@@ -1,7 +1,384 @@
 #divStyle {
-   background-color:   #B2242E ;
+   background-color:   #1E90FF ;
    color: white !important;
-   font-family: Arial, Helvetica, sans-serif;
+   font-family: 'Philosopher';
+}
+#table{
+  height: 700px;
+}
+#table2{
+  height: 700px;
+}
+#tab1{
+  height: 700px;
+
+}
+#tab2{
+  height: 700px;
+}
+#tabe1{
+  margin-left: -50px;
+  height:700px;
+  width:365px;
+}
+#tabe2{
+  height:700px;
+  margin-left: -10px;
+}
+
+#toc1{
+  margin-top: 20px;
+  color: #20B2AA ;
+  font-size: 18px;
+  font-family: 'Philosopher' ;
+}
+
+
+#sc{
+  font-size: 16px;
+  font-family: 'Philosopher' ;
+  margin-left: 100px;
+  letter-spacing: 1px;
+}
+#sc1{
+  font-size: 20px;
+  font-family: 'Philosopher' ;
+  margin-left: 145px;
+  letter-spacing: 1px;
+}
+#cardDes{
+  color: #4169E1;
+  font-family: 'Philosopher' ;
+  letter-spacing:1px;
+  font-size: 16px;
+}
+#cardBtn{
+  font-family: 'Philosopher';
+}
+#edit-button {
+  width : 150px;
+}
+#ButtonGroupStyle {
+  margin-left: 35px;
+}
+#label1{
+  margin-left: 20px;
+  color: green;
+  font-family: 'Philosopher';
+
+}
+
+#label2{
+  margin-left: 20px;
+  color: green;
+  font-family: 'Philosopher';
+
+}
+#label3{
+  margin-left: 20px;
+  color: green;
+  font-family: 'Philosopher';
+
+}
+
+#form1{
+  margin-left: 20px;
+  color: teal;
+  font-family: 'Philosopher';
+
+}
+
+#form2{
+  margin-left: 20px;
+  color: teal;
+  font-family: 'Philosopher';
+
+}
+#form3{
+  margin-left: 20px;
+  color: teal;
+  font-family: 'Philosopher';
+
+}
+
+#pdf{
+  margin-left: 10px;
+}
+
+#preview {
+color: #20B2AA ;
+margin-top: 20px;
+font-family: 'Philosopher';
+
+}
+
+#edBtn{
+
+    font-family: 'Philosopher';
+    font-weight: 20px;
+    margin-left: 135px;
+    margin-top: 30px;
+
+
+}
+#edBtn1{
+  font-family: 'Philosopher';
+  font-weight: 20px;
+  margin-left: -10px;
+  margin-top: 20px;
+  margin-bottom: 3px;
+
+}
+
+#edBtn11{
+  font-family: 'Philosopher';
+  margin-top: 20px;
+}
+
+#edBtn12{
+  margin-left: -10px;
+  margin-bottom: 2px;
+  font-family: 'Philosopher';
+}
+#edBt{
+  margin-left: 90px;
+  font-family: 'Philosopher';
+  font-weight: 20px;
+  margin-top: 45px;
+
+}
+#edBtn2{
+
+  margin-left: 3px;
+  margin-top: 7px;
+  margin-bottom: 10px;
+
+}
+
+#crBtn{
+  font-family: 'Philosopher';
+  font-weight: 20px;
+  margin-left: 65px;
+}
+#top{
+  font-family: 'Philosopher';
+}
+#subTop{
+  font-family: 'Philosopher';
+}
+#preview1 {
+color:#20B2AA;
+margin-top: 10px;
+font-family: 'Philosopher';
+
+}
+
+#head{
+
+  font-family:'Philosopher';
+  letter-spacing:1px;
+}
+
+#back1{
+  background-color: #87CEEB;
+}
+
+#button:hover {
+  background: #C447E5 ;
+
+}
+#btn{
+  margin-left: 90px;
+  font-family:'Philosopher';
+}
+#subBtn{
+  font-family:'Philosopher';
+}
+#ButtonGroupStyle {
+  margin-left: 35px;
+}
+
+#inp4 {
+  margin-left: 20px;
+}
+
+#inp5 {
+  margin-left: 40px;
+}
+
+#inp6 {
+  margin-left: 15px;
+}
+
+
+#label4 {
+  margin-left: 20px;
+  color:#DC143C ;
+}
+
+#label5 {
+  margin-left: 20px;
+  color:#DC143C ;
+}
+
+#label6 {
+  margin-left: 20px;
+  color:#DC143C ;
+}
+
+
+#edit-button {
+  width : 150px;
+}
+
+#title{
+  width: 356px;
+  margin-left: 20px;
+  font-family: 'Philosopher';
+  font-size: 20px;
+}
+#tit1{
+  font-family: 'Philosopher';
+  font-size: 10px;
+}
+#dropdown{
+  width: 356px;
+  color:teal;
+  margin-left: 20px;
+  font-family: 'Philosopher';
+}
+
+#dropdown1{
+  width: 310px;
+  color:teal;
+  margin-left: 20px;
+  font-family: 'Philosopher';
+}
+
+#thumbs{
+  margin-left: 16px;
+  color:blue;
+}
+#st,#t,#do,#ch{
+  color:dodgerblue;
+  font-family: 'Philosopher';
+  width:60px;
+  margin-left: 3px;
+  font-size: 12px;
+}
+
+#su,#top,#do,#cha{
+
+  font-family: 'Philosopher';
+  width:60px;
+  margin-left: 3px;
+  font-size: 12px;
+}
+
+#do1{
+  margin-top: 20px;
+}
+
+#su1,#t1,#do1,#cha1{
+
+
+  font-family: 'Philosopher';
+  width:60px;
+  margin-left: 3px;
+  font-size: 12px;
+}
+
+#do{
+
+  font-size: 12px;
+}
+#ch{
+  color: #008B8B;
+}
+#t,#st{
+  color:#20B2AA;
+}
+#cha{
+  color: #008B8B;
+}
+#to,#su{
+  color:#20B2AA;
+}
+#cha1{
+  color: #008B8B;
+}
+#t1,#su1{
+  color:#20B2AA;
+}
+#ch1{
+  color: #008B8B;
+  margin-left: 40px;
+}
+#t1,#st1{
+  color:#20B2AA;
+    margin-left: 100px;
+}
+
+#st1,#t1,#ch1{
+  font-family: 'Philosopher';
+  width:60px;
+  margin-left: 3px;
+  font-size: 12px;
+}
+
+#tocc,#chp,#top,#subTop{
+  margin-left: 20px;
+  font-size: 1px;
+  font-family: 'Philosopher';
+}
+#tocc1,#chp1,#top1,#subTop1{
+  margin-left: 20px;
+  font-size:1px;
+  font-family: 'Philosopher';
+}
+
+#ts,#ton,#cn,#tn{
+  margin-left: 20px;
+  font-size:1px;
+  font-family: 'Philosopher';
+}
+#te,#te1,#te2,#te3{
+  margin-left: 20px;
+  font-size:1px;
+  font-family: 'Philosopher';
+}
+
+
+
+#tab2{
+  margin-left: 5px;
+}
+#dd{
+  margin-top: 5px;
+  font-family: 'Philosopher';
+  height: 30px;
+  width: 310px;
+  margin-left: 10px;
+}
+
+#fileinput{
+    width:270px
+}
+#upload{
+  margin-left: 370px
+}
+#downloadDoc{
+  margin-left: 320px;
+}
+
+#back{
+  background-image:url('../../image/.jpg');
+  background-repeat: no-repeat;
+  background-size: 1000px 1000px
+  height:590px;
+}
+#outputpdf{
+  width:850px
 }
 .search3 {
   padding-left: 200px;
@@ -56,7 +433,7 @@
     margin-left: -100px;
    font-weight: 400;
    font-family: Georgia,Times,"Times New Roman",serif;
-   color: #999;
+   color: white;
 }
 #qw{
  originLeft: false;
@@ -76,7 +453,7 @@ transition: opacity .4s ease-in-out;
 .chat {
    position: top;
    float: right;
-   color: red;
+   color: teal;
    background-color: blue;
 }
 .profileImageSize{
@@ -123,6 +500,9 @@ transition: opacity .4s ease-in-out;
 margin-right: 25px;
 margin-bottom: 15px;
 }
+#card{
+  margin-left: 10px;
+}
 .PaddingCards{
  padding-top: 9px;
  padding-left: 9px;
@@ -142,8 +522,9 @@ margin-bottom: 15px;
  font-family: Georgia, serif;
  letter-spacing: 1px;
  word-spacing: 2px;
- color:black;
+ color:white;
 }
+
 .imgsize {
 width: 250px;
 }
@@ -238,13 +619,13 @@ color:white;
 }
 
 .search {
-   padding-left: 50px;
+   padding-left: 70px;
    width: 70% !important;
 }
 .navSearch {
  margin-top: 6px;
  margin-left: 5%;
- width:55% !important;
+ width:650px !important;
  margin-bottom: 5px;
 }
 
@@ -344,7 +725,7 @@ color:white;
 }
 .selectCat
 {
-  background-color: black;
+  background-color: white;
   width: 100%;
   height: 830px;
 }

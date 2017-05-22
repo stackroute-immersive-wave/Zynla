@@ -5,68 +5,80 @@ const client = redis.createClient();
 let getDataFromNeo4j = {
   getConceptFromNeo4j: function(req, res) {
 //  console.log('inside get concept from neo4j');
-   let query = 'MATCH (n:Concept) RETURN n.name';
-   let conceptArray = [];
+   let query = 'MATCH (m:concept)<-[:same_as]-(n:concept) with collect(m.name) as concept,collect(n.name) as base RETURN concept,base';
+    session.run(query).then(function(result) {
+      if (result) {
+        // console.log(result.records);
+        let intentTerms,baseIntents;
+    for(let k = 0 ; k<result.records.length ; k++)
+    {
+      intentTerms = result.records[k]._fields[0];
+      baseIntents = result.records[k]._fields[1];
+   }
+   for (let i = 0; i < intentTerms.length; i = i + 1) {
+      /* inserting 'intents' in redis */
+      client.hmset(['concepts', intentTerms[i], baseIntents[i]], function(err, reply) {
+          if (reply) {
 
-   session.run(query).then(function(result) {
-     // console.log('inside session',result);
-       result.records.map(function(item) {
-         /*eslint-disable*/
-           conceptArray.push(item._fields[0]);
-           /*eslint-enable*/
-       });
+          }
+      });
+  }
 
-       for (let i = 0; i < conceptArray.length; i = i + 1) {
-           client.sadd([
-               'concepts', conceptArray[i]
-               /*eslint-disable*/
-           ], function(err) {
-               if (err) {
-                   res.send('Error:' + err);
-               } else {
-                   // res.send(concepts);
-               }/*eslint-enable*/
-           });
-       }
-      // session.close();
-      //  driver.close();
-   }, function() {
-    //  console.log('couldnt connect to neo', err);
-    //  session.close();
-    //  driver.close();
+      }
    });
+},
+getDomainsFromNeo4j:function(req,res){
+  let query="match (n:domain) return collect(n.name) as domainArray";
+  session.run(query).then(function(result) {
+    if (result) {
+        let domainAray=result.records[0]._fields[0];
+        domainAray.forEach((domain)=>{
+          client.sadd("domain",domain)
+        })
+    }
+  })
+},
+getTopicFromNeo4j:function(req,res){
+  // let query="MATCH (m:concept)-[:concept_of]->(n:concept) return collect(m.name) as subtopic,collect(n.name) as topic";
+  let query="MATCH (m:concept)-[:concept_of]->(n:concept) with {concept :n.name,subconcept:collect(m.name)} as obj return collect(obj)";
+  session.run(query).then(function(result) {
+    if (result) {
+      // let subconceptsArray=result.records[0]._fields[0];
+      // let conceptsArray=result.records[0]._fields[1]
+      result.records[0]._fields[0].forEach((value,index)=>{
+        client.sadd(value.concept,value.subconcept)
+        console.log(value.concept,value.subconcept)
+      })
+      // subconceptsArray.forEach((subconcept,index)=>{
+      //   client.hmset(['subconcepts',subconcept,conceptsArray[index]])
+      // })
+    }
+  })
 },
 getIntentFromNeo4j: function(req, res) {
  // console.log('inside get intent from neo4j');
   // let session = driver.session();
   // const client = redis.createClient();
-  let query = 'match (q:QuestionIntent) return q.value;';
-  session.run(query).then(function(result) {
-      if (result) {
-        // console.log(result.records);
-          let intentArray = [];
-           result.records.map(function(item) {
-             /*eslint-disable*/
-              intentArray.push(item._fields[0]);
-              /*eslint-enable*/
-          });
-          for (let i = 0; i < intentArray.length; i = i + 1) {
-              client.sadd([
-                  'intents', intentArray[i]
-              ], function(err) {
-                  if (err) {
-                      res.send('Error:' + err);
-                      // session.close();
-                      // driver.close();
-                  } else {
-                      // res.send('saved successfully');
-                      // session.close();
-                      // driver.close();
-                  }
-              });
-          }
-      }
-   });
+  // let query = 'MATCH (m:intent)-[:same_as]->(n:intent) with collect(m.name) as intent,collect(n.name) as base RETURN intent,base;';
+  // session.run(query).then(function(result) {
+  //     if (result) {
+  //       // console.log(result.records);
+  //       let intentTerms,baseIntents;
+  //   for(let k = 0 ; k<result.records.length ; k++)
+  //   {
+  //     intentTerms = result.records[k]._fields[0];
+  //     baseIntents = result.records[k]._fields[1];
+  //  }
+  //  for (let i = 0; i < intentTerms.length; i = i + 1) {
+  //     /* inserting 'intents' in redis */
+  //     client.hmset(['intents', intentTerms[i], baseIntents[i]], function(err, reply) {
+  //         if (reply) {
+  //         }
+  //     });
+  // }
+  //
+  //     }
+  //  });
  }
 };
 module.exports = getDataFromNeo4j;

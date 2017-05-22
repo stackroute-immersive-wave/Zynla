@@ -13,7 +13,8 @@ import {
     Loader,
     Dimmer,
     Popup,
-    Checkbox
+    Checkbox,
+    Radio
 } from 'semantic-ui-react';
 import RichTextEditor from 'react-rte';
 import Cookie from 'react-cookie';
@@ -44,7 +45,8 @@ class QueCard extends React.Component {
             warnModalStatus: false,
             errormsg: false,
             suggModalOpen: false,
-            popupResult: ''
+            popupResult: '',
+            answerType:""
         };
         this.textVal = this.textVal.bind(this);
         this.postAnswer = this.postAnswer.bind(this);
@@ -54,6 +56,7 @@ class QueCard extends React.Component {
     }
     // functions to maintain modal states
     open = () => this.setState({open: true});
+      //#Malar 27-4-2017{made modalStatus enable to enable scrollbar}
     close = () => this.setState({open: true, modalStatus: true});
     // function to open loader initially
     handleOpenLoader() {
@@ -83,6 +86,7 @@ class QueCard extends React.Component {
         }
     };
     // function to check whether card is saved or not
+    //#Abu (4/5/2017) Function to check the question is following or not
     getPreviousStatus() {
         let emailId = Cookie.load('email');
         let arr = [];
@@ -90,9 +94,10 @@ class QueCard extends React.Component {
             url: `/users/viewFollowCard/${emailId}`,
             type: 'GET',
             success: function(data) {
-              //console.log("getPreviousStatus",data);
                 data.map(function(item) {
                     item.watchingList.map(function(items) {
+                      console.log('inside getPreviousStatus ');
+                      console.log(items);
                         arr.push(items);
                     });
                 });
@@ -107,6 +112,7 @@ class QueCard extends React.Component {
     // an ajax call inside to find whether a card is already followed or not
     componentWillMount() {
         this.getLikeStatus();
+        this.getPreviousStatus();
     }
     // function to store answer to mongo and neo4j
     postAnswer() {
@@ -115,8 +121,10 @@ class QueCard extends React.Component {
             let ansdata = {
                 questionId: this.props.id,
                 mail: Cookie.load('email'),
-                content: this.state.value.toString('html')
+                content: this.state.value.toString('html'),
+                type:this.state.answerType
             };
+            console.log(this.state.answerType)
             /* eslint-disable */
             let context = this;
             /* eslint-enable */
@@ -129,6 +137,8 @@ class QueCard extends React.Component {
                     // console.log('success',data);
                     context.showRelatedQues();
                     context.setState({active: false});
+                    context.setState({errormsg:false});
+
                 },
                 error: function() {
                 }
@@ -184,6 +194,8 @@ class QueCard extends React.Component {
     }
     warningModal = () => {
         this.setState({warnModalStatus: true});
+        this.setState({errormsg:false});
+        this.setState({value:RichTextEditor.createEmptyValue()});
     }
     warningModalCancel = () => {
         this.setState({warnModalStatus: false});
@@ -202,7 +214,8 @@ class QueCard extends React.Component {
             let ansdata = {
                 questionId: queArray[i],
                 mail: Cookie.load('email'),
-                content: this.state.value.toString('html')
+                content: this.state.value.toString('html'),
+                type:this.state.answerType
             };
             /* eslint-disable */
             let context = this;
@@ -217,9 +230,11 @@ class QueCard extends React.Component {
         }
         this.close();
     }
-    // function to save card in profile
+    //#Abu (4/5/2017) function to save and unsave cards in profile
     saveToProfile() {
         let emailId = Cookie.load('email');
+        if(this.state.iconName === 'add'){
+          console.log('inside answerbutton/card.jsx to follow');
         $.ajax({
             url: '/users/saveToProfile',
             type: 'PUT',
@@ -243,6 +258,36 @@ class QueCard extends React.Component {
             }.bind(this),
             error: function() {}
         });
+      }
+      else{
+        console.log('inside answerbutton/card.jsx to unfollow');
+        $.ajax({
+            url: '/users/unfollowFromProfile',
+            type: 'PUT',
+            data: {
+                emailId: emailId,
+                id: this.props.id,
+                displayImage: this.props.dp,
+                heading: this.props.title,
+                statement: this.props.content,
+                postedBy: this.props.name,
+                views: this.props.views,
+                profileImage: this.props.profileImage,
+                addedOn: this.props.time,
+                category: this.props.category,
+                upVotes: this.props.upvote,
+                downVotes: this.props.downvote,
+                answerCounts: this.props.anscount
+            },
+            success: function() {
+              console.log('success inside card while unfollow');
+                this.setState({iconName: 'add', text: 'save'});
+            }.bind(this),
+            error: function() {
+              console.log('error inside card.jsx while unfollow');
+            }
+        });
+      }
     }
     // getting the initial like status to display
     getLikeStatus() {
@@ -321,7 +366,7 @@ class QueCard extends React.Component {
       }
     }
     /* ajax call To create a report for question by the user created by Soundar*/
-    state = {}
+
     handleChange = (e, {value}) => this.setState({value})
 
     changeType()
@@ -374,6 +419,7 @@ class QueCard extends React.Component {
             extendedTimeOut: 1000
         });
     }
+     handleAnsTypeChange = (e, { value }) => this.setState({ answerType:value });
     render() {
         // const { open } = this.state;
         const {active} = this.state;
@@ -502,6 +548,35 @@ class QueCard extends React.Component {
                 <Modal dimmer={true} open={this.state.modalStatus}>
                     <Modal.Header>{this.props.title}</Modal.Header>
                     <Modal.Content>
+                    <Form>
+                      <Form.Field style={{display: "inline"}}>
+                        <Radio
+                          label='text'
+                          name='radioGroup'
+                          value='text'
+                          checked={this.state.answerType === 'text'}
+                          onChange={this.handleAnsTypeChange}
+                        />
+                      </Form.Field>
+                      <Form.Field style={{display: "inline"}}>
+                        <Radio
+                          label='video'
+                          name='radioGroup'
+                          value='video'
+                          checked={this.state.answerType === 'video'}
+                          onChange={this.handleAnsTypeChange}
+                        />
+                      </Form.Field>
+                      <Form.Field style={{display: "inline"}}>
+                        <Radio
+                          label='blog'
+                          name='radioGroup'
+                          value='blog'
+                          checked={this.state.answerType === 'blog'}
+                          onChange={this.handleAnsTypeChange}
+                        />
+                      </Form.Field>
+                    </Form>
                         <Form>
                             <Form.Field>
                                 {errorMessage}

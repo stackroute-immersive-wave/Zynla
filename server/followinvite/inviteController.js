@@ -65,7 +65,7 @@ followQuestion: function(req, res) {
                          let session = driver.session();
                         /* eslint-disable */
                         console.log('in ques');
-                        let query = 'match (n:User {name:"' + email + '"})-[r:follow]->(m:Question) where id(m)='+qId+' return r';
+                        let query = 'match (n:user {emailid:"' + email + '"})-[r:following]-(m:question) where id(m)='+qId+' return r';
                         // console.log(query);
                         /* eslint-enable */
                         session.run(query).then(function(result) {
@@ -75,7 +75,7 @@ followQuestion: function(req, res) {
                 //  console.log('Question is not present');
 
             /* eslint-disable */
-            let query = 'match (n:User {name:"' + email + '"}), (q:Question) where id(q)=' + qId + ' create (n)-[:follow]->(q);';
+            let query = 'match (n:user {emailid:"' + email + '"}), (q:question) where id(q)=' + qId + ' create (n)-[:following]->(q);';
             // console.log(query);
             /* eslint-enable */
             session.run(query).then(function() {
@@ -136,7 +136,7 @@ followQuestion: function(req, res) {
         followTopic: function (req, res) {
           // console.log("In followTopic")
           /* eslint-disable */
-          let query = 'match (n:User {name:"' + req.query.email + '"})-[r:follow]->(m:Concept {name:"' + req.query.topic + '"}) return r';
+          let query = 'match (n:user {emailid:"' + req.query.email + '"})-[r:following]-(m:concept {name:"' + req.query.topic + '"}) return r';
           /* eslint-enable */
           let follow = '';
 
@@ -157,7 +157,7 @@ followQuestion: function(req, res) {
                 // console.log('in f');
               let sessionTemp = driver.session();
               /* eslint-disable */
-              let query ='match(n:User {name:"' + req.query.email + '"}),(m:Concept {name:"' + req.query.topic + '"}) create (n)-[:follow]->(m) return n,m'
+              let query ='match(n:user {emailid:"' + req.query.email + '"}),(m:concept {name:"' + req.query.topic + '"}) create (n)-[:following]->(m) return n,m'
               console.log(query);
               /* eslint-enable */
               sessionTemp.run(query).then(function() {

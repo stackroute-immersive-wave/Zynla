@@ -175,35 +175,38 @@ closePopup() {
    }
 
     render() {
-        let conceptName = [];
-        for (let i = this.state.start; i <= this.state.end; i = i + 1) {
-            if (typeof this.props.json[i] !== 'undefined') {
-                conceptName.push(this.props.json[i]);
-            }
-        }
-        // map function to send concepts of a topic to child (conceptStructure)
-        let Data = conceptName.map(function(item) {
-            return (
-                <Grid.Column>
-                    <ConceptStructure conceptName={item.name}/>
-                </Grid.Column>
-            );
-        });
-        /* eslint-disable */
-        const content = (
-          <Popup wide open={this.state.isOpen} onClose={() => this.closePopup()}
-      trigger={<Button circular onClick={() => this.openPopup()}
-      icon='mail outline' id='iconColor'
-      size='huge' />} on='click' position='bottom right'>
-        <Icon name='remove' onClick={() => this.closePopup()}
-         style={{marginTop: 3 + 'px', marginBottom: 10 + 'px', marginLeft: 10 + 'px', float:'right'}}/>
-      <p style={{'text-align': 'center','padding-right': '10px','margin-top': '0px'}}>
-      <div class="ui fluid icon input">
-        <input style={{'resize': 'horizontal','width': '250px','height':'30px'}} id="users" placeholder="Search friends Here" list="usernames" onKeyDown={this.changeval.bind(this)} />
- <datalist id="usernames"></datalist></div><br />
+      //#Abu (29/4/2017) to change the icon according to
+      // the status whether the user is following or not
+if(this.props.Icon === 'plus circle'){
+let conceptName = [];
+for (let i = this.state.start; i <= this.state.end; i = i + 1) {
+    if (typeof this.props.json[i] !== 'undefined') {
+        conceptName.push(this.props.json[i]);
+    }
+}
+// map function to send concepts of a topic to child (conceptStructure)
+let Data = conceptName.map(function(item) {
+    return (
+        <Grid.Column>
+            <ConceptStructure conceptName={item.name}/>
+        </Grid.Column>
+    );
+});
+/* eslint-disable */
+var content = (
+  <Popup wide open={this.state.isOpen} onClose={() => this.closePopup()}
+trigger={<Button circular onClick={() => this.openPopup()}
+icon='mail outline' id='iconColor'
+size='huge' />} on='click' position='bottom right'>
+<Icon name='remove' onClick={() => this.closePopup()}
+ style={{marginTop: 3 + 'px', marginBottom: 10 + 'px', marginLeft: 10 + 'px', float:'right'}}/>
+<p style={{'text-align': 'center','padding-right': '10px','margin-top': '0px'}}>
+<div class="ui fluid icon input">
+<input style={{'resize': 'horizontal','width': '250px','height':'30px'}} id="users" placeholder="Search friends Here" list="usernames" onKeyDown={this.changeval.bind(this)} />
+<datalist id="usernames"></datalist></div><br />
 <Button fluid animated='fade' onClick={this.findMail.bind(this)} color='red' className='butstyle'>
 <Button.Content visible >
-  <p style={{'text-align': 'center','color': 'white','font-family': 'Arial, Helvetica, sans-serif'}}>  Invite</p>
+<p style={{'text-align': 'center','color': 'white','font-family': 'Arial, Helvetica, sans-serif'}}>  Invite</p>
 </Button.Content>
 <Button.Content hidden >
 <p style={{'text-align': 'center','color': 'white','font-family': 'Arial, Helvetica, sans-serif'}}>  Invite a friend</p>
@@ -211,46 +214,127 @@ closePopup() {
 </Button>
 </p>
 </Popup>
-        );
-        /* eslint-enable */
-        return (
-          <div className = 'favbg'>
-            <Grid centered style={{marginLeft: -250 + 'px'}}>
-            <h1 className = 'conceptheading' style={{fontSize: 50 + 'px'}}>{this.props.topic}</h1>
+);
+/* eslint-enable */
+return (
+  <div className = 'favbg'>
+    <Grid centered style={{marginLeft: -250 + 'px'}}>
+    <h1 className = 'conceptheading' style={{fontSize: 50 + 'px'}}>{this.props.topic}</h1>
+    </Grid>
+    <Grid centered style = {{marginTop: -30 + 'px'}}>
+        <Grid.Column width={2} style={{marginTop: 56 + 'px',
+         marginRight: -35 + 'px' }} className='arrowsize'>
+            <Icon name='chevron left' onClick={this.changeStartLeft.bind(this)}/>
+        </Grid.Column>
+        <Grid.Column width={6} centered style={{marginLeft: -70 + 'px',
+         marginTop: 40 + 'px', marginBottom: -70 + 'px', marginRight: -50 + 'px'}} >
+            <Grid centered columns={4}>
+                {Data}
             </Grid>
-            <Grid centered style = {{marginTop: -30 + 'px'}}>
-                <Grid.Column width={2} style={{marginTop: 56 + 'px',
-                 marginRight: -35 + 'px' }} className='arrowsize'>
-                    <Icon name='chevron left' onClick={this.changeStartLeft.bind(this)}/>
-                </Grid.Column>
-                <Grid.Column width={6} centered style={{marginLeft: -70 + 'px',
-                 marginTop: 40 + 'px', marginBottom: -70 + 'px', marginRight: -50 + 'px'}} >
-                    <Grid centered columns={4}>
-                        {Data}
-                    </Grid>
-                </Grid.Column>
-                <Grid.Column widt
-                  /* eslint-enable */h={2} style={{marginTop: 56 + 'px',
-                 marginLeft: 70 + 'px'}} className='arrowsize'>
-                    <Icon name='chevron right' onClick={this.changeStartRight.bind(this)}/>
-                </Grid.Column>
-             <Grid.Column width={3} className='arrowsize' style={{paddingTop: 80 + 'px'}}>
-               <div>
-                 {content}
-              <Icon name = {this.props.Icon} color={'red'} size = "huge"
-               onClick = {this.props.followTopic.bind(this)}/>
-                        {this.props.ques}
-               </div>
+        </Grid.Column>
+        <Grid.Column widt
+          /* eslint-enable */h={2} style={{marginTop: 56 + 'px',
+         marginLeft: 70 + 'px'}} className='arrowsize'>
+            <Icon name='chevron right' onClick={this.changeStartRight.bind(this)}/>
+        </Grid.Column>
+     <Grid.Column width={3} className='arrowsize' style={{paddingTop: 80 + 'px'}}>
+       <div>
+         {content}
+      <Button circular icon = {this.props.Icon} color={'red'} size = "huge"
+       onClick = {this.props.followTopic.bind(this)}/>
+                {this.props.ques}
+       </div>
 
-                </Grid.Column>
-            </Grid>
-            <ToastContainer ref='container' style ={{backgroundColor: '#B2242E '}}
-                                toastMessageFactory={ToastMessageFactory}
-                                className='toast-top-center' />
+        </Grid.Column>
+    </Grid>
+    <ToastContainer ref='container' style ={{backgroundColor: '#B2242E '}}
+                        toastMessageFactory={ToastMessageFactory}
+                        className='toast-top-center' />
 
-          </div>
-        );
-    }
+  </div>
+);
+}
+/*eslint-disable*/
+else{
+let conceptName = [];
+for (let i = this.state.start; i <= this.state.end; i = i + 1) {
+if (typeof this.props.json[i] !== 'undefined') {
+  conceptName.push(this.props.json[i]);
+}
+}
+// map function to send concepts of a topic to child (conceptStructure)
+let Data = conceptName.map(function(item) {
+return (
+  <Grid.Column>
+      <ConceptStructure conceptName={item.name}/>
+  </Grid.Column>
+);
+});
+/* eslint-disable */
+var content = (
+<Popup wide open={this.state.isOpen} onClose={() => this.closePopup()}
+trigger={<Button circular onClick={() => this.openPopup()}
+icon='mail outline' id='iconColor'
+size='huge' />} on='click' position='bottom right'>
+<Icon name='remove' onClick={() => this.closePopup()}
+style={{marginTop: 3 + 'px', marginBottom: 10 + 'px', marginLeft: 10 + 'px', float:'right'}}/>
+<p style={{'text-align': 'center','padding-right': '10px','margin-top': '0px'}}>
+<div class="ui fluid icon input">
+<input style={{'resize': 'horizontal','width': '250px','height':'30px'}} id="users" placeholder="Search friends Here" list="usernames" onKeyDown={this.changeval.bind(this)} />
+<datalist id="usernames"></datalist></div><br />
+<Button fluid animated='fade' onClick={this.findMail.bind(this)} color='red' className='butstyle'>
+<Button.Content visible >
+<p style={{'text-align': 'center','color': 'white','font-family': 'Arial, Helvetica, sans-serif'}}>  Invite</p>
+</Button.Content>
+<Button.Content hidden >
+<p style={{'text-align': 'center','color': 'white','font-family': 'Arial, Helvetica, sans-serif'}}>  Invite a friend</p>
+</Button.Content>
+</Button>
+</p>
+</Popup>
+);
+/* eslint-enable */
+return (
+<div className = 'favbg'>
+<Grid centered style={{marginLeft: -250 + 'px'}}>
+<h1 className = 'conceptheading' style={{fontSize: 50 + 'px'}}>{this.props.topic}</h1>
+</Grid>
+<Grid centered style = {{marginTop: -30 + 'px'}}>
+  <Grid.Column width={2} style={{marginTop: 56 + 'px',
+   marginRight: -35 + 'px' }} className='arrowsize'>
+      <Icon name='chevron left' onClick={this.changeStartLeft.bind(this)}/>
+  </Grid.Column>
+  <Grid.Column width={6} centered style={{marginLeft: -70 + 'px',
+   marginTop: 40 + 'px', marginBottom: -70 + 'px', marginRight: -50 + 'px'}} >
+      <Grid centered columns={4}>
+          {Data}
+      </Grid>
+  </Grid.Column>
+  <Grid.Column widt
+    /* eslint-enable */h={2} style={{marginTop: 56 + 'px',
+   marginLeft: 70 + 'px'}} className='arrowsize'>
+      <Icon name='chevron right' onClick={this.changeStartRight.bind(this)}/>
+  </Grid.Column>
+<Grid.Column width={3} className='arrowsize' style={{paddingTop: 80 + 'px'}}>
+ <div>
+   {content}
+<Button circular icon = {this.props.Icon} color={'red'} size = "huge"
+ onClick = {this.props.UnFollowTopic.bind(this)}/>
+          {this.props.ques}
+
+ </div>
+
+  </Grid.Column>
+</Grid>
+<ToastContainer ref='container' style ={{backgroundColor: '#B2242E '}}
+                  toastMessageFactory={ToastMessageFactory}
+                  className='toast-top-center' />
+
+</div>
+);
+}
+/*eslint-enable*/
+}
   }
   // type that props will accept coming from the parent
   Concepts.propTypes = {
@@ -258,6 +342,7 @@ closePopup() {
    topic: React.PropTypes.string,
    ques: React.PropTypes.string,
    followTopic: React.PropTypes.func,
+   UnFollowTopic: React.PropTypes.func,
    Icon: React.PropTypes.string
  };
   module.exports = Concepts;

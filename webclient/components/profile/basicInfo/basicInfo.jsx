@@ -124,13 +124,13 @@ class basicInfo extends React.Component {
                 flowing hoverable>
                 <Input onChange={this.changeLine1.bind(this)} />
                 <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
-              </Popup><br/>, <Popup  trigger=
+              </Popup><br/>, <Popup trigger=
                 {<a style={{cursor: 'pointer'}}>{this.state.line2}</a>}
                  flowing hoverable >
                  <Input onChange={this.changeLine2.bind(this)} onKeyPress =
                  {this.changeLine2.bind(this)}/>
                  <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
-               </Popup>. in <Popup  trigger=
+               </Popup>. in <Popup trigger=
                 {<a style={{cursor: 'pointer'}}>{this.state.city}</a>}
               flowing hoverable >
               <Input onChange={this.changeCity.bind(this)} onKeyPress =
@@ -151,7 +151,7 @@ class basicInfo extends React.Component {
             </Popup> <Popup trigger=
              {<a style={{cursor: 'pointer'}}>{this.state.country}</a>}
            flowing hoverable>
-           <Input onChange={this.changeCountry.bind(this)}  onKeyPress =
+           <Input onChange={this.changeCountry.bind(this)} onKeyPress =
            {this.changeCountry.bind(this)}/>
            <Button onClick = {this.updateLocation.bind(this)} content='Update'/>
            </Popup>
@@ -382,7 +382,8 @@ class basicInfo extends React.Component {
     }
     updateEducation() {
       //#swathi checking for empty data
-      if(this.state.primary.trim() ==='' || this.state.secondary.trim()=== '' || this.state.university.trim() === '')
+      if(this.state.primary.trim() ==='' || this.state.secondary.trim()=== '' ||
+      this.state.university.trim() === '')
       {
         console.log("inside edu if...");
         this.refs.container.error('Do not leave the data empty',
@@ -422,17 +423,19 @@ class basicInfo extends React.Component {
       }
     updateLocation() {
       //#swathi checking for updating empty data
-      
-          
-          if(this.state.line1.trim() ==='' || this.state.line2.trim() ==='' ||this.state.country.trim() ==='' || this.state.region.trim() ==='' || this.state.city.trim() ==='' || this.state.postalCode.trim() ==='')
+
+
+          if(this.state.line1.trim() ==='' || this.state.line2.trim() ==='' ||
+          this.state.country.trim() ==='' || this.state.region.trim() ==='' ||
+           this.state.city.trim() ==='' || this.state.postalCode.trim() ==='')
            {
               this.refs.container.error('Do not leave the data empty','',{
               timeOut: 1000,
               extendedTimeOut: 10000
               });
-           } 
-         
-          else        
+           }
+
+          else
          {
                let locData = {
                Line1: this.state.line1,
@@ -459,14 +462,15 @@ class basicInfo extends React.Component {
                 // console.error(err.toString());
             }
         });
-        
+
       }
 
     }
 
     updateAbout() {
       //#swathi checking for empty data
-     if(this.state.description.trim() === '' || this.state.dob.trim() ==='' || this.state.gender==='' || this.state.phone.trim()==='' )
+     if(this.state.description.trim() === '' || this.state.dob.trim() ==='' ||
+      this.state.gender==='' || this.state.phone.trim()==='' )
      {
         console.log("abt if...");
         this.refs.container.error('Do not leave the data empty',
@@ -475,7 +479,7 @@ class basicInfo extends React.Component {
            extendedTimeOut: 10000
          });
       }
-    
+
         else
         {
           console.log("inside abt else...");
@@ -544,7 +548,7 @@ class basicInfo extends React.Component {
          });
        }
 
-       
+
     render() {
         const {active} = this.state;
         const {activeItem} = this.state;

@@ -15,6 +15,7 @@
   "author": "Simanta",
   "license": "Apache-2.0",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "express": "^4.15.2",
     "mongoose": "^4.9.0",
     "seneca": "^3.3.0"

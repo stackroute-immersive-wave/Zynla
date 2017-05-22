@@ -61,7 +61,7 @@ class ProfileBot extends React.Component {
   }
 //when enter key is pressed it should update the value and go to next question
   handleKeyPress(e) {
-    let id = Cookie.load('username');
+    // let id = Cookie.load('username');
     let message = this.state.message;
     if(e.key === 'Enter'&& message.trim()!=='') {
       if(this.state.updatepart === 'name') {
@@ -159,14 +159,18 @@ class ProfileBot extends React.Component {
 
         success: function() {
           if(context.state.countOfSkip>=0)
+          {
             context.skipAlert();
+          }
           else
+          {
             context.proAlert();
-
-
+          }
           context.props.handle();
-          context.setState({countOfSkip:0});//after updation it should empty the count of skip values
-          context.setState({skipques:[]}); //after you close the bot again it should ask the question which you have skipped
+          context.setState({countOfSkip:0});
+          //after updation it should empty the count of skip values
+          context.setState({skipques:[]});
+          //after you close the bot again it should ask the question which you have skipped
         }
       });
   }
@@ -187,8 +191,10 @@ class ProfileBot extends React.Component {
           context.setState({
             userprofile: data.profile
           });
-          context.setState({inputBoxStatus:true}); // display input box if any profile want to update
-          context.askQuestion(); //update profile u have to call this method
+          context.setState({inputBoxStatus:true});
+          // display input box if any profile want to update
+          context.askQuestion();
+          //update profile u have to call this method
 
         }
       });
@@ -409,7 +415,8 @@ class ProfileBot extends React.Component {
         });
     }
     else {
-      //when user completed all the updation or skipped all the question finally it should hide text box and display some message
+      //when user completed all the updation or skipped all the
+      //  question finally it should hide text box and display some message
       this.setState({inputBoxStatus:false});
       if(this.state.countOfSkip>0)
       {

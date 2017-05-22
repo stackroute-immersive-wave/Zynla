@@ -140,11 +140,13 @@ class Search extends React.Component {
          success: function(data) {
            if(data.follow) {
              this.setState({
+               icon: 'minus circle',
                followtopic: 'Following'
              });
            }
            else {
              this.setState({
+               icon: 'plus circle',
                followtopic: 'Follow'
              });
            }
@@ -207,6 +209,24 @@ class Search extends React.Component {
          }.bind(this)
       });
    }
+   //#Abu (29/4/2017)  Method To Unfollow topic by using ajax call
+   UnFollowTopic() {
+     let q = window.location.hash.split('question=')[1];
+     let id = Cookie.load('email');
+     $.ajax({
+         url: '/search/unfollowtopic',
+         type: 'PUT',
+         data: {
+           id: id,
+           concept: q
+         },
+         success: function() {
+           let temp = 'Follow';
+           this.setState({followtopic: temp});
+           this.setState({icon: 'plus circle'});
+         }.bind(this)
+      });
+   }
    render() {
     const { active } = this.state;
        return (
@@ -215,7 +235,9 @@ class Search extends React.Component {
                   <Loader>Searching Questions</Loader>
                  </Dimmer>
                  <Concepts json = {this.state.concept} ques = {this.state.followtopic}
-                  followTopic = {this.followTopic.bind(this)} Icon = {this.state.icon}
+                   /*eslint-disable*/
+                  followTopic = {this.followTopic.bind(this)} UnFollowTopic = {this.UnFollowTopic.bind(this)} Icon = {this.state.icon}
+ /*eslint-enable*/
                   topic = {window.location.hash.split('question=')[1]} />
                  <Categories changeComponent = {this.changeComponent.bind(this)}/>
                  {this.state.component}
