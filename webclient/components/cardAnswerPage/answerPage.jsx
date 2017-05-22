@@ -442,11 +442,8 @@ class answerPage extends React.Component {
                 for (let i = 0; i < arr.length; i = i + 1) {
                   console.log(id);
                   console.log(arr[i].id);
-<<<<<<< HEAD
-                    if (id == arr[i].id) {
-=======
+
                     if (id === arr[i].id) {
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
                       console.log('inside CheckingId for assigning minus');
                         this.setState({iconName: 'minus'});
                     }

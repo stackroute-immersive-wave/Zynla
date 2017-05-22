@@ -103,13 +103,9 @@ class NavBar extends Component {
     }
 
     handlePostQuestionClick() {
-<<<<<<< HEAD
-        let context = this;
-=======
         /*eslint-disable*/
         let context = this;
         /*eslint-enable*/
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
         if (Cookie.load('email')) {
             this.setState({active: true});
             $.ajax({
