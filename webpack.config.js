@@ -29,8 +29,9 @@ module.exports = {
                 // include: [/flexboxgrid/,/react-select/]
               },
               {
+
               test: /\.(jpe?g|png|gif|svg|pdf|docx)$/i,
-              loaders: ['file-loader']
+                 loaders: ['file-loader']
             },
               {
 
