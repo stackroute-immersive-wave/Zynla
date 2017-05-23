@@ -1,29 +1,16 @@
 import React from 'react';
 import {
-   Grid,
-   Divider,
-   Header,
-   Container,
-   Icon,
    Form,
    Label,
-   Dimmer,
-   Loader,
    Button,
-   Modal,
-   Input,
-   TextArea
+   Input
 } from 'semantic-ui-react';
-import Cookie from 'react-cookie';
 import Topic from './topic';
-let addtoc={
-  marginLeft:'90px',
-};
 let addchapterstyle={
-marginLeft:'45px',
+marginLeft:'45px'
 };
 let removechapterstyle={
-marginLeft:'2px',
+marginLeft:'2px'
 };
 let inputstyle={
 };
@@ -33,13 +20,14 @@ export default class Chapter extends React.Component {
        this.state = {
             emptyInput : false,
             TopicComponent : null,
-            chapIndex: "",
+            chapIndex: ""
            };
-           this.addNewChapter = this.addNewChapter.bind(this);
-           this.getInputData  = this.getInputData.bind(this);
-           this.removeChapter = this.removeChapter.bind(this);
-           this.addTopic = this.addTopic.bind(this);
+           this.addNewChapter= this.addNewChapter.bind(this);
+           this.getInputData= this.getInputData.bind(this);
+           this.removeChapter= this.removeChapter.bind(this);
+           this.addTopic= this.addTopic.bind(this);
        }
+       /* eslint-disable */
        getInputData(e,data){
          if(data.value.trim()===""){
           this.setState({emptyInput:true});
@@ -84,8 +72,6 @@ export default class Chapter extends React.Component {
         }
         return (
           <div key = {index}>
-            {/*<Button id={index} onClick={this.addTopic} style={addchapterstyle}  icon='plus' inverted color='grey' size='mini'>
-            </Button>*/}
                 <Label id='label1' circular size='large'>Chapter</Label>
                 <Button id={index} style={addchapterstyle} icon='add circle' color='blue' onClick={this.addTopic}  size='small'>
                 </Button>
@@ -94,8 +80,6 @@ export default class Chapter extends React.Component {
                   <Button id={index} style={removechapterstyle} icon='remove circle' color='blue' onClick={this.removeChapter}  size='small'>
                 </Button>
                     <br/>
-            {/*<Button id={index} onClick={this.removeChapter} style={removechapterstyle}  icon='remove' inverted color='grey' size='mini'>
-            </Button>*/}
             <div>
               {tempChap===index?<Topic topicData={this.props.chapterData} handleAddTopic={this.props.handleAddTopic} handleRemoveTopic={this.props.handleRemoveTopic} handleAddSubTopic={this.props.handleAddSubTopic} handleRemoveSubTopic={this.props.handleRemoveSubTopic} chapIndex={this.props.chapterType} topicType={this.props.topicType} />:null}
             </div><br/><br/>
@@ -113,3 +97,4 @@ export default class Chapter extends React.Component {
         );
     }
 }
+/* eslint-enable */

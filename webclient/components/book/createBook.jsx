@@ -3,47 +3,37 @@ import {
    Grid,
    Divider,
    Header,
-   Container,
    Icon,
    Segment,
-   Form,
    Label,
    Dimmer,
    Loader,
    Button,
-   Modal,
    Table,
    Input,
    Dropdown
 } from 'semantic-ui-react';
-let {hashHistory} = require('react-router');
 import Cookie from 'react-cookie';
 import Chapter from './chapter'
-
 let mainGrid={
-marginLeft:'5px',
+marginLeft:'5px'
 };
 let grid1={
 color:'black',
-'margin-left':'-30px',
+'margin-left':'-30px'
 };
 let tit={
   fontFamily:'Philosopher'
 };
 
 let grid2={
-color:'green',
-};
-
-let submit={
-  color:'teal',
-  marginLeft:'90px'
+color:'green'
 };
 let submitform={
-  marginLeft:'128px',
+  marginLeft:'128px'
 };
 
-
+/* eslint-disable */
 class CreateBook extends React.Component {
    constructor() {
        super();
@@ -327,11 +317,7 @@ class CreateBook extends React.Component {
                 console.log("success!!");
                 console.log(success)
                 console.log((JSON.stringify(success)))
-
-
-
-
-                this.setState({outputDocx:success})
+               this.setState({outputDocx:success})
                 console.log(this.state.outputDocx);
                 this.state.viewBook=true;
                 this.setState({viewBook:this.state.viewBook})
@@ -368,13 +354,10 @@ class CreateBook extends React.Component {
 
            handleTemplate(e,data)
            {
-            // console.log("out "+this.state.tFlag)
-            //this.state.flag = true;
           this.setState({flag:true})
 
           if(data.value === '../../BookDocs/input.docx')
           {
-          //  this.state.flag = true;
           this.setState({tFlag:true})
             console.log("if "+this.state.tFlag)
           }
@@ -517,3 +500,4 @@ class CreateBook extends React.Component {
     }
 }
 module.exports = CreateBook;
+/* eslint-enable */

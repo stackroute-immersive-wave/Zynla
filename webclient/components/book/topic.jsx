@@ -1,30 +1,20 @@
 import React from 'react';
 import {
-   Grid,
-   Divider,
-   Header,
-   Container,
-   Icon,
-   Form,
    Label,
-   Dimmer,
-   Loader,
    Button,
-   Modal,
-   Input,
-   TextArea
+   Input
 } from 'semantic-ui-react';
-import Cookie from 'react-cookie';
 import SubTopic from './subTopic';
 let addtopicstyle={
-marginLeft:'61px',
+marginLeft:'61px'
 };
 let removetopicstyle={
-marginLeft:'2px',
+marginLeft:'2px'
 };
 let inputtopicstyle={
-  
+
 };
+/* eslint-disable */
 export default class Topic extends React.Component {
    constructor(props) {
        super(props);
@@ -74,16 +64,12 @@ export default class Topic extends React.Component {
          return (
              <div>
                <div key = {index}>
-              {/*  <Button id={index} onClick={this.addSubTopic} style={addtopicstyle} icon='plus' inverted color='grey' size='mini'>
-                </Button>*/}
                     <Label id='label2' circular size='large'>Topic</Label>
                    <Button id={index} style={addtopicstyle} icon='add circle' color='blue' onClick={this.addSubTopic} size='small'></Button>
                      <Input value={inp} size='tiny'
                        id={index} onChange={this.getTopicData} placeholder={topic} style={inputtopicstyle} required/>
                      <Button id={index} style={removetopicstyle} icon='remove circle' color='blue' onClick={this.RemoveNewTopic} size='small'></Button>
                     <br/>
-              {/* <Button id={index} onClick={this.RemoveNewTopic} style={removetopicstyle} icon='remove' inverted color='grey' size='mini'>
-               </Button>*/}
                 </div>
                <div>
                 {this.props.topicType===topicT?<SubTopic subTopicData={this.props.topicData} handleAddSubTopic={this.props.handleAddSubTopic} handleRemoveSubTopic={this.props.handleRemoveSubTopic} chapterIndex = {chapterIndex} topicIndex = {this.state.topicInd}  />:null}
@@ -100,3 +86,4 @@ export default class Topic extends React.Component {
             );
     }
 }
+/* eslint-enable */

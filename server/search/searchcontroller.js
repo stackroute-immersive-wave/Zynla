@@ -181,8 +181,8 @@ let searchController = {
             let namearr = [];
             for (let x = 0; x < result.records.length; x = x + 1) {
                 /* eslint-disable */
-                // console.log(result.records[x]._fields[0].properties.name);
-                let name = result.records[x]._fields[0].properties.name;
+                 console.log('follow ',result.records[x]._fields[0].properties.emailid);
+                let name = result.records[x]._fields[0].properties.emailid;
                 /* eslint-enable */
                 namearr.push(name);
             }

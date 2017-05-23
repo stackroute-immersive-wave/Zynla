@@ -1,53 +1,34 @@
 import React from 'react';
 import {
     Grid,
-    Card,
-    Image,
     Divider,
-    Header,
     Table,
-    Container,
     Segment,
-    Icon,
-    Form,
     Label,
-    Dimmer,
-    Loader,
-    Button,
-    Modal,
-    Input,
-    Dropdown,
-    Checkbox
+    Button
 } from 'semantic-ui-react';
 import TextField from 'material-ui/TextField';
 import {blue500} from 'material-ui/styles/colors';
-let {hashHistory} = require('react-router');
 import Cookie from 'react-cookie';
-import AllToc from './allToc';
 import Chapter from './chapter';
 import EditBook from './editBook';
 const styles = {
   style: {
     color: blue500,
-    fontFamily:'Philosopher',
-  },
+    fontFamily:'Philosopher'
+  }
 };
+/* eslint-disable */
 class EditToc extends React.Component {
     constructor() {
         super();
         var arr=new Set();
         this.state = {
-      // isChecked:true
-          //  edittoc:false;
           chapArr:arr,
           dataArr:[],
           dataArr2:[],
           forward:false,
           bookArr : null,
-          // flag:false,
-          // tFlag:false,
-          // listOfTemplates:[],
-          // path:'../../BookDocs/input.docx'
         };
         this.checkvalues=this.checkvalues.bind(this);
         this.createJson=this.createJson.bind(this);
@@ -57,36 +38,9 @@ class EditToc extends React.Component {
         this.handleRemoveTopic = this.handleRemoveTopic.bind(this);
         this.handleAddSubTopic = this.handleAddSubTopic.bind(this);
         this.handleRemoveSubTopic = this.handleRemoveSubTopic.bind(this);
-        //this.handleTemplate = this.handleTemplate.bind(this);
-        //  this.createbooks = this.createbooks.bind(this);
-        // //this.getTocDetails=this.getTocDetails.bind(this);
     }
     componentWillMount()
      {
-    //   let d=this.props.data;
-    //   console.log("enter");
-    //   console.log(d);
-    //
-    //     console.log(this.props.data);
-    //     let chapterData = this.props.data
-    //     let email = chapterData[0]['author']
-    //     let toc = chapterData[0]['toc']
-    //     console.log(toc)
-    //   $.ajax({
-    //     url: '/book/saveToc',
-    //     type: 'POST',
-    //     data: {author:email,book:JSON.stringify(toc)},
-    //     success: function(success) {
-    //       console.log("success!!");
-    //       console.log(success)
-    //       this.state.output='output'
-    //       this.setState({output:this.state.output})
-    //     }.bind(this),
-    //     error: function(error){
-    //       console.log("error");
-    //       console.log(error)
-    //     }
-    //   })
     }
 
     handleAdd(chapterName,index){
@@ -306,14 +260,8 @@ class EditToc extends React.Component {
         }
         this.state.dataArr[chapterIndex][chapterInd][topicIndex][topicInd]=newChapterData
         this.setState({dataArr:this.state.dataArr})
-
-
-
-    }
-
-
-
-    createJson()
+          }
+createJson()
         {
           this.state.forward = false;
           this.setState({forward:this.state.forward})
@@ -386,9 +334,6 @@ class EditToc extends React.Component {
                     console.log(error)
                   }
                 })
-
-                //console.log(this.state.dataArr2);
-
         }
         back1()
         {
@@ -414,37 +359,6 @@ checkvalues(e)
   }
   console.log(this.state.chapArr);
   }
-
- //  handleTemplate(e,data)
- //  {
- //   // console.log("out "+this.state.tFlag)
- //   this.state.flag = true;
- // this.setState({flag:this.state.flag})
- //
- // if(data.value === '../../BookDocs/input.docx')
- // {
- //   this.state.flag = true;
- // this.setState({flag:this.state.flag})
- //   console.log("in "+this.state.tFlag)
- // }
- // else if(data.value === '../../BookDocs/input1.docx')
- // {
- // this.setState({tFlag:false})
- // console.log("else "+this.state.tFlag)
- // }
- //    this.setState({path:data.value});
- //  }
- //
- //  componentDidMount()
- //  {
- //    var template=[{key:'../../BookDocs/input.docx',
- //     value:'../../BookDocs/input.docx',text:'Template uno'},
- //   {key:'../../BookDocs/input1.docx',
- //    value:'../../BookDocs/input1.docx',text:'Template dos'}];
- //
- //    this.setState({listOfTemplates:template})
- //  }
-
               render() {
                 let arr=[];
               (this.props.data[0].toc).forEach((toc,tocIndex,tocArr) => {
@@ -531,13 +445,6 @@ checkvalues(e)
                                        handleRemoveSubTopic={this.handleRemoveSubTopic}
                                         chapterType={this.state.chapterType} topicType={this.state.topicType}/>
                                           <Button primary icon='settings' id='edBt' size='medium' inverted onClick={this.createJson} content='EDIT'/>
-                                  
-
-                                            {/* <br/><br/>
-                                              <Dropdown  id='dropdown'  placeholder='Select Template'
-                                              onChange={this.handleTemplate}
-                                              options={this.state.listOfTemplates}
-                                            /> */}
                                     </Table>
                                 </Grid.Column>
                               </Segment>
@@ -550,16 +457,6 @@ checkvalues(e)
                                         </center>
 
                                         <div>
-                               {/* {(this.state.flag) ?
-                                <div>
-                                {(this.state.tFlag) ? */}
-                               {/* <embed id='pdf'
-                               src={require('../../../BookDocs/pdf/input.pdf')}
-                               width='855' height='600' type='application/pdf'/>
-                                  :<embed id='pdf'
-                                  src={require('../../../BookDocs/pdf/input1.pdf')}
-                                   width='855' height='600' type='application/pdf'/> }
-                                   </div> */}
                                        <embed id='pdf'
                                        src={require('../../../BookDocs/pdf/last2.pdf')}
                                        width='855' height='600' type='application/pdf'/>
@@ -574,3 +471,4 @@ checkvalues(e)
                 }
             }
             module.exports = EditToc;
+/* eslint-enable */

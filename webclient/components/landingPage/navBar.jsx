@@ -20,7 +20,8 @@ import Cookie from 'react-cookie';
 import validator from 'validator';
 const ReactToastr = require('react-toastr');
 const {ToastContainer} = ReactToastr;
-const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
+const ToastMessageFactory = React.createFactory
+(ReactToastr.ToastMessage.animation);
 // const logger = require('./../../applogger');
 import Textarea from 'react-textarea-autosize';
 import {hashHistory} from 'react-router';
@@ -57,7 +58,6 @@ class NavBar extends Component {
             intent: '',
             suggestedQuestionconcepts: [],
             suggestedIntents:[]
-
         };
         this.submitQuestionAlert = this.submitQuestionAlert.bind(this);
     }
@@ -87,7 +87,8 @@ class NavBar extends Component {
         /*eslint-enable*/
     }
 
-    //  #Indhu _Alert when question concept doesnt match with database concepts(26-Apr-17)
+    //  #Indhu _Alert when question concept doesnt match with database
+    // concepts(26-Apr-17)
     submitConceptAlert() {
         this.refs.container.warning('Concept does not exist', '', {
             timeOut: 3000,
@@ -139,38 +140,6 @@ class NavBar extends Component {
         this.setState({openNewModal: false, active: false});
         hashHistory.push('/answerPage?id=' + this.state.onClickId);
     }
-<<<<<<< HEAD
-    handleBook() {
-        hashHistory.push('/home');
-    }
-    //#Indhu _Method to display matching concepts in dropdown(26-Apr-17)
-    inputofHeading(evt) {
-        let val = document.getElementById('input').value;
-        if (evt.keyCode === 13) {
-            $.ajax({
-                url: '/list/nlp',
-                type: 'post',
-                data: {
-                    val: val
-                },
-                success: function(res) {
-                    console.log(res)
-                    if (res.conceptsArr.length === 0) {
-                        this.submitConceptAlert();
-                    }
-                    console.log(res.intentsArr);
-                    let dropdowntempArry = [];
-                    for (let i = 0; i < res.conceptsArr.length; i = i + 1) {
-                        dropdowntempArry.push({key: res.conceptsArr[i], value: res.conceptsArr[i], text: res.conceptsArr[i]});
-                    }
-                    this.setState({suggestedQuestionconcepts: dropdowntempArry, suggestedIntents: res.intentsArr});
-
-                }.bind(this),
-                error: function(error) {
-                    console.log("@@@@@@@@ ", error);
-                }
-            });
-=======
 
     //#Indhu _Method to display matching concepts in dropdown(26-Apr-17)
     inputofHeading(evt) {
@@ -192,7 +161,8 @@ class NavBar extends Component {
                 let dropdowntempArry = [];
                  for (let i = 0; i < res.conceptsArr.length; i=i+1) {
                            dropdowntempArry.push({key: res.conceptsArr[i],
-                             value: res.conceptsArr[i], text: res.conceptsArr[i]});
+                             value: res.conceptsArr[i],
+                              text: res.conceptsArr[i]});
                        }
                 this.setState({suggestedQuestionconcepts: dropdowntempArry,
                   suggestedIntents:res.intentsArr});
@@ -202,7 +172,6 @@ class NavBar extends Component {
                 console.log("@@@@@@@@ " , error);
             }
         });
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
         }
         let opts = document.getElementById('questionName').childNodes;
         let questionName1 = this.state.questionName;
@@ -218,7 +187,7 @@ class NavBar extends Component {
                             openNewModal: true,
                             ModalQuestionId: questionName1[j].qId,
                             ModalQuestionName: opts[i].value,
-                            ModalQuestionDescription: questionName1[j].qDescription,
+                        ModalQuestionDescription: questionName1[j].qDescription,
                             ModalQuestionPostedBy: questionName1[j].qPostedBy,
                             ModalQuestionViews: questionName1[j].qViews
                         });
@@ -238,11 +207,7 @@ class NavBar extends Component {
             url: '/list/getIdWithQuestion',
             type: 'get',
             success: function(data) {
-<<<<<<< HEAD
-                console.log(data)
-=======
               console.log(data)
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
                 context.setState({questionName: data});
             },
             error: function() {}
@@ -253,7 +218,8 @@ class NavBar extends Component {
         // let h = e.target.value;
         this.setState({questionKey: e});
         // console.log('The event is ' + e);
-        // console.log('inside change question value function ' + this.state.questionKey);
+        // console.log('inside change question value function '
+        // + this.state.questionKey);
         let b = e.toLowerCase();
         let option = '';
         // console.log(this.state.questionName);
@@ -262,7 +228,8 @@ class NavBar extends Component {
         // console.log(questionNames[1].qName.toLowerCase().indexOf('form'));
         for (let i = 0; i < questionNames.length; i = i + 1) {
             if (questionNames[i].qName.toLowerCase().indexOf(b) === 0) {
-                option = option + '<option value="' + questionNames[i].qName + '"/>';
+                option = option + '<option value="'
+                   + questionNames[i].qName + '"/>';
             }
         }
         document.getElementById('questionName').innerHTML = option;
@@ -295,7 +262,8 @@ class NavBar extends Component {
     updateConcept() {
         let arr = [];
         // this.setState({Concept: evt.target.value});
-        // ajax call to get the concepts from the neo4j based on particular keywoard
+        // ajax call to get the concepts from the neo4j based on
+        //particular keywoard
         $.ajax({
             url: '/list/getconcepts/',
             type: 'GET',
@@ -319,7 +287,8 @@ class NavBar extends Component {
     updatesearchQuery(evt, result) {
         let res = result.value.toString();
         this.setState({searchQuery: res});
-        //#pavithra N pressing enter reloads the page instead of clicking the search button
+        //#pavithra N pressing enter reloads the page instead of
+        //clicking the search button
         hashHistory.push('/search?question=' + res);
     }
 
@@ -331,21 +300,19 @@ class NavBar extends Component {
         /* eslint-enable */
         let email = Cookie.load('email');
         conceptArr = JSON.stringify(this.state.selectedConcepts);
-        // console.log("---------"+this.state.heading+"---"+this.state.heading.length);
-        // console.log("--------------"+this.state.statement+"---"+this.state.statement.length);
+        // console.log("---------"+this.state.heading+"---"
+        //+this.state.heading.length);
+        // console.log("--------------"+this.state.statement+"---"
+        //+this.state.statement.length);
         //  console.log("Inside submit st
-        // atement question intent is--------- " + conceptArr+"----"+conceptArr.length);
-<<<<<<< HEAD
-        if (validator.isEmpty(this.state.heading) || validator.isEmpty(this.state.statement) || conceptArr.length === 0) {
-            document.getElementById('errorMessage').innerHTML = 'All Fields Required';
-        } else {
-=======
-        if (validator.isEmpty(this.state.heading) || validator.isEmpty(this.state.statement) ||
+        // atement question intent is--------- " + conceptArr
+        //+"----"+conceptArr.length);
+if (validator.isEmpty(this.state.heading)
+|| validator.isEmpty(this.state.statement) ||
             conceptArr.length === 0) {
-            document.getElementById('errorMessage').innerHTML = 'All Fields Required';
+    document.getElementById('errorMessage').innerHTML = 'All Fields Required';
         }
         else {
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
             document.getElementById('errorMessage').innerHTML = '';
             let data = {
                 email: email,
@@ -354,13 +321,8 @@ class NavBar extends Component {
                 statement: this.state.statement,
                 Concept: conceptArr,
                 intent: this.state.questionIntent,
-<<<<<<< HEAD
-                suggestedIntents: JSON.stringify(this.state.suggestedIntents),
-                suggestedQuestionconcepts: JSON.stringify(this.state.selectedConcepts)
-=======
                 suggestedIntents:JSON.stringify(this.state.suggestedIntents),
-                suggestedQuestionconcepts:JSON.stringify(this.state.selectedConcepts)
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
+        suggestedQuestionconcepts:JSON.stringify(this.state.selectedConcepts)
             };
             console.log(data);
             context.setState({activeDimmer: true});
@@ -370,7 +332,7 @@ class NavBar extends Component {
                 data: data,
                 success: function() {
                     context.setState({active: false, activeDimmer: false});
-                    context.setState({heading: '', statement: '', selectedConcepts: []});
+        context.setState({heading: '', statement: '', selectedConcepts: []});
                     context.submitQuestionAlert();
                 },
                 error: function() {}
@@ -417,6 +379,7 @@ class NavBar extends Component {
         //     image: Cookie.load('profilepicture')
         // };
         // const {open, dimmer} = this.state;
+        /* eslint-disable */
         return (
             <div>
                 <Dimmer active={activeDimmer} page>
@@ -424,13 +387,6 @@ class NavBar extends Component {
                 </Dimmer>
                 <div className='ui top fixed menu' id='divStyle'>
                     <Link to='/home'>
-<<<<<<< HEAD
-                        <Image src='./../../image/logo.png' name='image' onClick={this.handleItemClick} className='logosize'/>
-                    </Link>
-
-                    <Dropdown className="navSearch" placeholder='Search...' onChange={this.updatesearchQuery.bind(this)} search selection options={this.state.suggestedQuestions}/>
-                    <Link to= {'/search?question=' + this.state.searchQuery} className='searchIconPosition'>
-=======
                         <Image src='./../../image/logo.png' name='image'
                          onClick={this.handleItemClick}
                          className='logosize'/>
@@ -441,7 +397,6 @@ class NavBar extends Component {
                     search selection options={this.state.suggestedQuestions}/>
                     <Link to= {'/search?question=' + this.state.searchQuery}
                     className='searchIconPosition'>
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
                         <Icon name='search' size='large'/>
                     </Link>
                     <Modal open={this.state.active} dimmer={true} basic>
@@ -468,16 +423,6 @@ class NavBar extends Component {
                                             }} id='errorMessage'/>
                                         </Form.Field>
                                         <Form.Field>
-<<<<<<< HEAD
-                                            <input id='input' list="questionName" onKeyDown ={this.inputofHeading.bind(this)} onChange={this.updateHeading.bind(this)} rows='1' placeholder='Enter Question here...' style={{
-                                                width: 700 + 'px'
-                                            }}/>
-                                            <datalist id="questionName"/>
-                                            <Popup trigger= {<datalist id="questionName" />} content='Sends an email invite to a friend.' on='hover'/>
-                                        </Form.Field>
-                                        <Form.Field>
-                                            <Textarea onChange={this.updateStatement.bind(this)} size='large' placeholder='Enter Description here ...' style={{
-=======
                                             <input id='input' list="questionName"
                                              onKeyDown ={this.inputofHeading.bind(this)}
                                             onChange={this.updateHeading.bind(this)} rows='1'
@@ -493,7 +438,6 @@ class NavBar extends Component {
                                             <Textarea onChange={this.updateStatement.bind(this)}
                                             size='large'
                                             placeholder='Enter Description here ...' style={{
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
                                                 width: 700 + 'px',
                                                 height: 150 + 'px'
                                             }}/>
@@ -502,12 +446,6 @@ class NavBar extends Component {
                                             marginLeft: -72 + 'px',
                                             marginRight: -73 + 'px'
                                         }}>
-<<<<<<< HEAD
-                                            <Dropdown placeholder='Enter Concept here...' onChange={this.updateQuestionTags.bind(this)} multiple search selection options={this.state.suggestedQuestionconcepts}/>
-                                        </Form.Field>
-                                    </Form>
-                                    <Button className='submitbutstyle' primary size='large' type='submit' value='Submit' onClick={this.submitStatement.bind(this)}>
-=======
                                             <Dropdown placeholder='Enter Concept here...'
                                             onChange={this.updateQuestionTags.bind(this)}
                                             multiple search selection options=
@@ -517,7 +455,6 @@ class NavBar extends Component {
                                     <Button className='submitbutstyle' primary size='large'
                                     type='submit' value='Submit'
                                      onClick={this.submitStatement.bind(this)}>
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
                                         Submit Question</Button>
                                 </Container>
                             </Header.Subheader>
@@ -538,12 +475,8 @@ class NavBar extends Component {
                                 {this.state.ModalQuestionDescription}
                             </p>
                             <Segment float='left' compact>
-<<<<<<< HEAD
-                                <Image floated='left' size='mini' src='http://semantic-ui.com/images/avatar/large/steve.jpg'/>
-=======
                                 <Image floated='left' size='mini'
                                 src='http://semantic-ui.com/images/avatar/large/steve.jpg'/>
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
                                 <a>
                                     {this.state.ModalQuestionPostedBy}
                                 </a>
@@ -561,9 +494,8 @@ class NavBar extends Component {
                         </Modal.Actions>
                     </Modal>
                     <Menu.Menu position='right' style={Style} id='divStyle'>
-<<<<<<< HEAD
 
-                        <Popup wide trigger={< Button icon = 'leanpub' id = 'divStyle'/>} on='click' position='bottom left' hideOnScroll>
+                      <Popup wide trigger={< Button icon = 'leanpub' id = 'divStyle'/>} on='click' position='bottom left' hideOnScroll>
                             <div>
                                 <Link to='/createbook'>
                                     <Menu secondary>
@@ -579,20 +511,7 @@ class NavBar extends Component {
                                 </Link>
                             </div>
 
-                        </Popup>
-                        <Menu.Item name='PostQuestion' active={activeItem === 'PostQuestion'} id='divStyle' onClick={this.handlePostQuestionClick.bind(this)}/>
-                        <Link to='/answer'>
-                            <Menu.Item name='Answer' active={activeItem === 'Answer'} id='divStyle' onClick={this.handleItemClick}/>
-                        </Link>
-                        <Link to='/profile'>
-                            <Menu.Item name='Profile' active={activeItem === 'Profile'} id='divStyle' onClick={this.handleItemClick}/>
-                        </Link>
-                        <Popup wide trigger={< Button icon = 'user' id = 'divStyle' />} on='click' position='bottom left' hideOnScroll>
-                            <div>
-                                <Grid >
-                                    <Grid.Column width={5}>
-                                        <Image src={Cookie.load('profilepicture')} className='profileImageSize' alt='img'/>
-=======
+                       </Popup>
                         <Menu.Item name='PostQuestion' active={activeItem === 'PostQuestion'}
                         id='divStyle' onClick={this.handlePostQuestionClick.bind(this)}/>
                         <Link to='/answer'>
@@ -610,7 +529,6 @@ class NavBar extends Component {
                                     <Grid.Column width={5}>
                                         <Image src={Cookie.load('profilepicture')}
                                         className='profileImageSize' alt='img'/>
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
                                     </Grid.Column>
                                     <Grid.Column >
                                         <p className='profileColor'>
@@ -620,39 +538,27 @@ class NavBar extends Component {
                                 <div>
                                     <Link to='/invite'>
                                         <Menu secondary>
-<<<<<<< HEAD
-                                            <Menu.Item name='invite' active={activeItem === 'invite'} onClick={this.handleItemClick}/>
-=======
                                             <Menu.Item name='invite'
                                             active={activeItem === 'invite'}
                                             onClick={this.handleItemClick}/>
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
                                         </Menu>
                                     </Link>
                                 </div>
                                 <div>
                                     <Link to=''>
                                         <Menu secondary>
-<<<<<<< HEAD
-                                            <Menu.Item name='Terms and Conditions' active={activeItem === 'terms'} onClick={this.handleItemClick}/>
-=======
                                             <Menu.Item name='Terms and Conditions'
                                             active={activeItem === 'terms'}
                                             onClick={this.handleItemClick}/>
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
                                         </Menu>
                                     </Link>
                                 </div>
                                 <div>
                                     <Link to='/'>
                                         <Menu secondary>
-<<<<<<< HEAD
-                                            <Menu.Item name='Logout' active={activeItem === 'Logout'} onClick={this.logoutCall.bind(this)}/>
-=======
                                             <Menu.Item name='Logout'
                                             active={activeItem === 'Logout'}
                                             onClick={this.logoutCall.bind(this)}/>
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
                                         </Menu>
                                     </Link>
                                 </div>
@@ -661,12 +567,8 @@ class NavBar extends Component {
                         <Menu.Item/>
                     </Menu.Menu>
                 </div>
-<<<<<<< HEAD
-                <ToastContainer ref='container' toastMessageFactory={ToastMessageFactory} className='toast-top-center'/>
-=======
                 <ToastContainer ref='container' toastMessageFactory={ToastMessageFactory}
                 className='toast-top-center'/>
->>>>>>> 0b9589cb01aaf33336b076cbc4e39c7fc4c384b4
             </div>
 
         );
@@ -674,3 +576,4 @@ class NavBar extends Component {
 }
 
 module.exports = NavBar;
+/* eslint-enable */

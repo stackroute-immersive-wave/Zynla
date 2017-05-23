@@ -25,9 +25,10 @@ let schema = new mongoose.Schema({
 											{
 												label: String,
 												_id:false,
-												value: String,
+												value: String
 											}
 										],
+										    /* eslint-disable */
 										default:undefined
 									}
 
@@ -92,6 +93,7 @@ let schema = new mongoose.Schema({
 	    }
 	  ]
 });
+    /* eslint-enable */
 
 const model = mongoose.model('bookdoc', schema);
 module.exports = model;

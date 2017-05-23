@@ -1,6 +1,6 @@
 //'use strict';
 const router = require('express').Router();
-const passport = require('passport');
+//const passport = require('passport');
 //const file = require('./server/uploadFiles');
 //let uploadBookController = require('./uploadBookController.js');
 const multer = require('multer');
@@ -15,8 +15,8 @@ let storage = multer.diskStorage({
             let extension = extArray[extArray.length - 1];
             /*eslint-enable*/
             imageArray=file.originalname;
-            var filename=imageArray.split('.');
-            var f=filename[1];
+            const filename=imageArray.split('.');
+            const f=filename[1];
             if(f==='docx')
             {
               console.log(imageArray);
@@ -37,6 +37,7 @@ let storage = multer.diskStorage({
 //var book = exports = module.exports = {};
 //let uploadBookController={
   //uploadDoc:f
+  /* eslint-disable */
      router.post('/uploadDoc',upload.any('docx'),function(req,res){
 let uploadedfile = imageArray;
 imageArray='';
@@ -44,4 +45,5 @@ imageArray='';
           //res.send(uploadedfile);
          });
      // }
+     /* eslint-enable */
 module.exports = router;

@@ -1,37 +1,28 @@
 import React from 'react';
 import {
-    Checkbox,
     Grid,
     Card,
     Image,
     Divider,
     Header,
     Table,
-    Container,
-    Segment,
     Icon,
-    Form,
     Label,
     Dimmer,
     Loader,
     Button,
-    Modal,
-    Input,
     Dropdown,
     Rating
 } from 'semantic-ui-react';
 import TextField from 'material-ui/TextField';
 import {blue500} from 'material-ui/styles/colors';
-let {hashHistory} = require('react-router');
 import EditToc from './editToc.jsx';
-import Cookie from 'react-cookie';
 const styles = {
   style: {
     color: blue500,
-    fontFamily:'Philosopher',
-  },
+    fontFamily:'Philosopher'
+  }
 };
-
 class AllToc extends React.Component {
     constructor() {
         super();
@@ -64,51 +55,10 @@ class AllToc extends React.Component {
         this.getDomains = this.getDomains.bind(this);
         this.getImage=this.getImage.bind(this);
         this.forwardToc=this.forwardToc.bind(this);
-        this.checkbox=this.checkbox.bind(this)
-        //this.saveToc=this.saveToc.bind(this)
-        //this.updateRating=this.updateRating.bind(this);
+        this.checkbox=this.checkbox.bind(this);
     }
-
     handleOpen() {this.setState({ active: true });}
     handleClose() {this.setState({ active: false });}
-    // saveToc()
-    // {
-    //   console.log("inside saveTocMongo")
-    //   console.log(this.state.tocDetails)
-    //   let editedbook = JSON.stringify(this.state.tocDetails)
-    //   console.log(editedbook)
-    //   let toc={}
-    //   toc["chapdata"]=this.state.tocDetails
-    //   let book=this.state.tocDetails.slice();
-    //         console.log(book)
-    //      var email = Cookie.load('email');
-    //      var authorName = Cookie.load('username')
-    //      console.log(authorName)
-    //      var title = this.state.tocDetails[0]["title"];
-    //      var domain = this.state.tocDetails[0]["Domain"]
-    //      console.log(JSON.stringify(book))
-    //     let check = false;
-    //     console.log(check);
-    //     $.ajax({
-    //       url: '/book/saveToc',
-    //       type: 'POST',
-    //       data: {book:JSON.stringify(book), type:'editedbook', author:email, domain:domain,title:title,username:authorName,editedbook:editedbook},
-    //       success: function(success) {
-    //         console.log("success!!");
-    //         console.log(success)
-    //         console.log((JSON.stringify(success)))
-    //         this.state.viewBook=true;
-    //         this.setState({viewBook:this.state.viewBook})
-    //         console.log(this.state.viewBook)
-    //         this.setState({outputDocx:'output'})
-    //         this.setState({output:"output"})
-    //       }.bind(this),
-    //       error: function(error){
-    //         console.log("error");
-    //         console.log(error)
-    //       }
-    //     });
-    // }
     back()
     {
   this.setState({forward:false});
@@ -133,9 +83,11 @@ class AllToc extends React.Component {
                 console.log(this.state.allTocs, "listofCards..")
                 this.setState({imageFlag:true});
                   this.getImage();
+                  /* eslint-disable */
                 this.state.allTocs.map((data, index) => {
                     console.log("zzcxvcc" + data.author);
                 });
+                /* eslint-enable */
               }.bind(this),
             error: function(error) {
                 console.log("error");
@@ -150,13 +102,14 @@ class AllToc extends React.Component {
             type: 'GET',
             success: function(result) {
                 console.log(result)
-                //this.setState({listofCards:result})
                 console.log(result.length);
                 this.setState({allTocs: result});
                 console.log(this.state.allTocs, "listofCards..")
+                /* eslint-disable */
                 this.state.allTocs.map((data, index) => {
                     console.log("zzcxvcc" + data.author);
                 });
+                /* eslint-enable */
             }.bind(this),
             error: function(error) {
                 console.log("error");
@@ -178,7 +131,6 @@ getImage()
         this.setState({src: '../../image/HTML5.png'});
     }
     else {
-
         this.setState({src: '../../image/nodejs.png'});
     }
   }
@@ -188,18 +140,10 @@ getImage()
 }
     componentWillMount()
     {
-        // let domain = Cookie.load('domain');
-        // console.log(domain);
-        // if (domain == 'REACT') {
-        //     this.setState({src: '../../image/react.PNG'});
-        // } else {
-        //     this.setState({src: '../../image/nodejs.png'});
-        // }
         this.getTocs();
         this.getDomains();
         this.getImage();
     }
-
     getTocDetails(data)
     {
         let arr = [];
@@ -210,39 +154,12 @@ getImage()
         console.log(this.state.tocDetails);
 
     }
-    // updateRating(data)
-    // {
-    //   console.log(data);
-    //   console.log(data.likes);
-    //   if(data.likes===undefined){
-    //     let arr = []
-    //     arr.push(Cookie.load("email"))
-    //     data.likes =arr
-    //
-    //   }
-    //   //console.log({_id:data._id,email:Cookie.load("email"),id:data.id,likes:JSON.parse(JSON.stringify(data.likes))});
-    //   $.ajax({
-    //     url: '/book/updateLikes',
-    //     type: 'POST',
-    //     data:{_id:data._id,email:Cookie.load("email"),id:data.id,likes:JSON.stringify(data.likes)},
-    //     success: function(data) {
-    //         console.log(data);
-    //         this.getTocs();
-    //     }.bind(this),
-    //     error: function(error){
-    //       console.log("error");
-    //       console.log(error)
-    //     }
-    //   });
-    //   console.log(this.state.rating);
-    //   console.log(data);
-    // }
     updateRating(data)
     {
       console.log(this.state.rating);
       console.log(data);
-    //  console.log({_id:data._id,email:Cookie.load("email"),id:data.id,likes:JSON.parse(JSON.stringify(data.likes))});
       $.ajax({
+        /* eslint-disable */
         url: '/book/updateRating',
         type: 'POST',
         data:{id:data.id,rating:this.state.rating},
@@ -255,8 +172,6 @@ getImage()
           console.log(error)
         }
     });
-      // console.log(this.state.rating);
-      // console.log(data);
     }
     forwardToc()
     {
@@ -270,6 +185,7 @@ getImage()
              this.setState({rating:this.state.rating});
              console.log(this.state.rating);
    }
+     /* eslint-enable */
     getDomains(){
            let arr = [];
            $.ajax({
@@ -277,7 +193,7 @@ getImage()
              type: 'GET',
              success: function(data) {
                console.log("dsskfjdjdkj"+data)
-               for (let i=0;i<data.length;i++) {
+               for (let i=0;i<data.length;i=i+1) {
                    if (i !== null) {
                        arr.push({key: data[i], value: data[i], text: data[i]});
                    }
@@ -296,7 +212,9 @@ checkbox(e,data){
   console.log(this.add,"this.add")
   console.log(data.checked,"data.checked")
   if(!data.checked)
+  {
   this.setState({checked:(this.state.checked+1)})
+}
   else {
     this.setState({checked:(this.state.checked-1)})
   }
@@ -307,15 +225,14 @@ checkbox(e,data){
   console.log(data);
 }
     render() {
-        //console.log(this.state.tocDetails[0]);
         const { active } = this.state
         let arr = [];
-        let arr1=[];
         console.log(this.state.tocDetails[0].toc);
                 (this.state.tocDetails[0].toc).forEach((toc, tocIndex, tocArr) => {
             if (toc.hasOwnProperty('name')) {
 
                 arr.push(
+                    /* eslint-disable */
                   <div>
                   <Label id='do' color='teal'>Domain</Label>
                 <TextField id='tocc'
@@ -372,10 +289,11 @@ checkbox(e,data){
                 })
             }
         })
-
+  /* eslint-enable */
         return (
           this.state.forward?
-          <EditToc data={this.state.tocDetails} backdata={this.back.bind(this)}/>:
+          <EditToc data={this.state.tocDetails}
+            backdata={this.back.bind(this)}/>:
             <div>
                 <Grid divided='vertically'>
                     <Grid.Row columns={2}>
@@ -384,17 +302,17 @@ checkbox(e,data){
                             <Table color='teal' id='tabe1'>
 
 
-                                           <Dropdown id='dd' floating button className='icon' placeholder='Select Domain'
+                                           <Dropdown id='dd' floating button
+                                             className='icon'
+                                             placeholder='Select Domain'
                                               onChange={this.handleDomainAdd}
-                                              fluid selection options={this.state.listOfDomains}
-                                              />
+                      fluid selection options={this.state.listOfDomains}
+                                    />
 
                                 <Divider horizontal>
                                     <h3 id='toc1'>Table of Contents</h3>
                                 </Divider>
-                                {/* {this.state.tocDetails
-                                                ? this.state.tocDetails.map((data, index) => <TextField value={data}/>)
-                                                : ''} */}
+                              {/* eslint-disable */}
                                 {this.state.flag
                                     ?<div>{arr.map((name, index) => {
 
@@ -453,7 +371,11 @@ checkbox(e,data){
                                                   <strong>Rating:</strong><Rating icon='star' size='tiny' defaultRating={data.rating} maxRating={5} disabled/>
                                                  </div>:
                                                  <div>
-                                                   <strong>Rating:</strong><Rating icon='star' size='small' defaultRating={data.rating} maxRating={5} onRate={this.handleRate.bind(this)} clearable />&nbsp;&nbsp;&nbsp;&nbsp;
+                                                   <strong>Rating:</strong>
+                                                  <Rating icon='star'
+                                                    size='small'
+                                                    defaultRating={data.rating}
+                                                     maxRating={5} onRate={this.handleRate.bind(this)} clearable />&nbsp;&nbsp;&nbsp;&nbsp;
                                                    <Button icon="thumbs up" color='teal' size='small'  onClick={this.updateRating.bind(this,data)}></Button>
                                                    <br/><br/>
                                                  </div>
@@ -463,7 +385,10 @@ checkbox(e,data){
                                         </Card.Content>
                                         <Card.Content extra>
                                             <div className='ui two buttons'>
-                                                <Button id='cardBtn' color='blue' onClick={this.getTocDetails.bind(this, data)}><h4>Click here to View</h4></Button>
+                                                <Button id='cardBtn'
+                                                  color='blue'
+                  onClick={this.getTocDetails.bind(this, data)}>
+                  <h4>Click here to View</h4></Button>
                                             </div>
                                         </Card.Content>
                                     </Card>)}
@@ -478,3 +403,4 @@ checkbox(e,data){
     }
 }
 module.exports = AllToc;
+/* eslint-enable */

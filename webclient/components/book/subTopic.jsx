@@ -1,20 +1,10 @@
 import React from 'react';
 import {
-   Grid,
-   Divider,
-   Header,
-   Container,
-   Icon,
-   Form,
    Label,
-   Dimmer,
-   Loader,
    Button,
-   Modal,
-   Input,
-   TextArea
+   Input
 } from 'semantic-ui-react';
-import Cookie from 'react-cookie';
+/* eslint-disable */
 let removesubtopicstyle={
 marginLeft:'3px',
 };
@@ -81,3 +71,4 @@ render()
             );
     }
 }
+/* eslint-enable */

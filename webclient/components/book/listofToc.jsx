@@ -1,23 +1,6 @@
-//#swathi dimmer for book form loading
 import React from 'react';
 import {
-   Grid,
-   Divider,
-   Header,
-   Container,
-   Icon,
-   Form,
-   Label,
-   Dimmer,
-   Loader,
-   Button,
-   Modal,
-   Input,
-   Dropdown,
-   Card
 } from 'semantic-ui-react';
-let {hashHistory} = require('react-router');
-import Cookie from 'react-cookie';
 import TocCard from './tocCard'
 
 class ListOfToc extends React.Component {

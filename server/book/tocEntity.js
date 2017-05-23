@@ -1,6 +1,7 @@
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 let schema = new mongoose.Schema({
+      /* eslint-disable */
   author: String,
   timestamp: String,
    id: {type:Number,required:true},
@@ -37,6 +38,7 @@ let schema = new mongoose.Schema({
     }
   ]
   });
+      /* eslint-enable */
 
   const model = mongoose.model('tocDoc', schema);
   module.exports = model;

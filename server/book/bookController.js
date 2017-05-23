@@ -1,17 +1,17 @@
 'use strict';
-const logger = require('./../../applogger');
+
 let driver = require('../config/neo4j');
 let session = driver.session();
 const bookDoc = require('./bookEntity');
 const tocDoc = require('./tocEntity');
 const redis = require('redis');
 const client = redis.createClient();
-var JSZip = require('jszip');
-var Docxtemplater = require('docxtemplater');
-var ImageModule = require('docxtemplater-image-module');
+const JSZip = require('jszip');
+const Docxtemplater = require('docxtemplater');
+//const ImageModule = require('docxtemplater-image-module');
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 //Load the docx file as a binary
 //let context = fs.readFileSync(path.resolve(__dirname, '../../BookDocs/input.docx'), 'binary');
@@ -26,7 +26,9 @@ let bookController = {
             }
         }).then((docs) => {
             if (docs)
+            {
                 res.send(docs)
+              }
             else {
                 res.send("unable to give rating")
             }
@@ -38,7 +40,9 @@ let bookController = {
     // updateLikes: function(req, res) {
     //     console.log(JSON.parse(req.body.likes));
     //     if (JSON.parse(req.body.likes).includes(req.body.email)) {
-    //         let query = 'match (toc:toc)<-[liked:liked]-(user:user) where id(toc)=' + req.body.id + ' and user.emailid="' + req.body.email + '" delete liked '
+    //         let query = 'match (toc:toc)<-[liked:liked]-(user:user)
+    // where id(toc)=' + req.body.id + ' and user.emailid="'
+    // + req.body.email + '" delete liked '
     //         console.log("if", query);
     //         session.run(query).then(function(result) {
     //             tocDoc.update({
@@ -59,7 +63,8 @@ let bookController = {
     //         })
     //     } else {
     //         console.log("else");
-    //         let query = 'match (toc:toc) ,(user:user) where id(toc)=' + req.body.id + ' and user.emailid="' + req.body.email + '" merge (user)-[:liked]->(toc) '
+    //         let query = 'match (toc:toc) ,(user:user) where id(toc)=' + req.body.id + '
+    // and user.emailid="' + req.body.email + '" merge (user)-[:liked]->(toc) '
     //         console.log(query);
     //         session.run(query).then(function(result) {
     //             console.log(result["summary"]["counters"]["_stats"]["relationshipsCreated"]);
@@ -125,22 +130,30 @@ let bookController = {
         // res.send("success entry")
         let template = req.body.template;
         let chapterData = JSON.parse(req.body.book);
+        /* eslint-disable */
         let domain = chapterData[0]["Domain"];
-        let author = req.body.username;
+        /* eslint-enable */
+        //let author = req.body.username;
         let email = req.body.author;
         let title = ''
-        if(req.body.title===undefined){
+        /* eslint-disable */
+        if(req.body.title===undefined)
+    {
+
              title = chapterData[0]["titles"];
         }
+            /* eslint-enable */
         else{
            title = req.body.title
         }
 
         console.log(title);
         let newDate = new Date();
+            /* eslint-disable */
         let date = (newDate.getMonth() + 1) + "/" + newDate.getDate() + "/" + newDate.getFullYear();
-
+    /* eslint-enable */
         console.log(date)
+            /* eslint-disable */
         let query = "\
                     match (n:domain),\
                     (u:user) where n.name='" + domain + "'\
@@ -149,6 +162,7 @@ let bookController = {
                     merge (t)<-[r:posted]-(u) \
                     ON CREATE  set r.timestamp=" + date + "\
                      merge (t)-[:toc_of]->(n) return t";
+                         /* eslint-enable */
         //   console.log(query)
         session.run(query).then(function(result) {
             /*eslint-disable*/
@@ -423,7 +437,6 @@ let addTemplate = function(x, username, res, type, email,template) {
     fs.writeFile(path.resolve(__dirname, '../../BookDocs/output.docx'), buffer);
     return savePDF(x, res, type, username, finalJSON.BOOKTITLE, email);
 }
-
 let savePDF = function(x, res, type, username, title, email) {
     // var book1 = req.body.book;
     var unoconv1 = require('child_process').exec;

@@ -1,41 +1,25 @@
 import React from 'react';
 import {
     Grid,
-    Card,
-    Image,
     Divider,
-    Header,
     Table,
-    Container,
-    Icon,
     Form,
     Label,
-    Dimmer,
-    Loader,
     Segment,
     Button,
-    Modal,
-    Input,
     Dropdown,
-    Checkbox,
-    TextArea
+  TextArea
 } from 'semantic-ui-react';
 import TextField from 'material-ui/TextField';
 import {blue500} from 'material-ui/styles/colors';
-let {hashHistory} = require('react-router');
 import Cookie from 'react-cookie';
 const styles = {
   style: {
     color: blue500,
-    fontFamily:'Philosopher',
-  },
+    fontFamily:'Philosopher'
+  }
 };
-
-let cb={
-  marginLeft:'30px'
-}
-
-
+/* eslint-disable */
 class EditBook extends React.Component {
     constructor(props) {
         super(props);
@@ -57,10 +41,6 @@ class EditBook extends React.Component {
         viewBook:false,
         listOfTemplates:[],
         path:'../../BookDocs/input.docx',
-
-
-
-
 }
  this.handleTemplate = this.handleTemplate.bind(this);
  this.handleTitleChange = this.handleTitleChange.bind(this);
@@ -314,13 +294,13 @@ class EditBook extends React.Component {
     handleTemplate(e,data)
     {
      // console.log("out "+this.state.tFlag)
-     this.state.flag = true;
-   this.setState({flag:this.state.flag})
+     //this.state.flag = true;
+   this.setState({flag:true})
 
    if(data.value === '../../BookDocs/input.docx')
    {
-     this.state.flag = true;
-   this.setState({flag:this.state.flag})
+     //this.state.flag = true;
+   this.setState({tFlag:true})
      console.log("in "+this.state.tFlag)
    }
    else if(data.value === '../../BookDocs/input1.docx')
@@ -625,11 +605,6 @@ this.setState({intent:this.state.intent})
                                       src={require('../../../BookDocs/pdf/'+output)}
                                       width='855' height='600' type='application/pdf'/>
                                     </div>:
-                                  //   <div>
-                                  //   <embed id='pdf'
-                                  //   src={require('../../../BookDocs/pdf/'+output)}
-                                  //   width='855' height='600' type='application/pdf'/>
-                                  // </div>}
                                       <div>
                                   <Divider horizontal>
                                       <h3 id='preview'>Edit Answers</h3>
@@ -653,3 +628,4 @@ this.setState({intent:this.state.intent})
                 }
             }
             module.exports = EditBook;
+/* eslint-enable */
