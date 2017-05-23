@@ -21,6 +21,8 @@ describe('userdoc CRUD Testing using sinon',()=>{
     done();
     });
 });
+});
+describe('userdoc CRUD Testing using sinon',()=>{
 it('should not add new Users(Save)',(done)=>{
       var UsersMock = sinon.mock(new userDoc({'emaiId':'kohli'}));
       var user = UsersMock.object;
@@ -33,6 +35,8 @@ it('should not add new Users(Save)',(done)=>{
       done();
       });
 });
+});
+describe('userdoc CRUD Testing using sinon',()=>{
 it('should get all the Users(find)',(done)=>{
     var UsersMock = sinon.mock(userDoc);
     var expectedResult = {status:true};
@@ -44,6 +48,8 @@ it('should get all the Users(find)',(done)=>{
     done();
     });
 });
+});
+describe('userdoc CRUD Testing using sinon',()=>{
 it('should not get the Users(find)',(done)=>{
     var UsersMock = sinon.mock(userDoc);
     var expectedResult = {status:false };
@@ -55,6 +61,8 @@ it('should not get the Users(find)',(done)=>{
     done();
     });
 });
+});
+describe('userdoc CRUD Testing using sinon',()=>{
 it('should get all the Users(findOne)',(done)=>{
     var UsersMock = sinon.mock(userDoc);
     var expectedResult = {status:true};
@@ -66,6 +74,8 @@ it('should get all the Users(findOne)',(done)=>{
     done();
     });
 });
+});
+describe('userdoc CRUD Testing using sinon',()=>{
 it('should not get the Users(findOne)',(done)=>{
     var UsersMock = sinon.mock(userDoc);
     var expectedResult = {status:false };
@@ -77,6 +87,8 @@ it('should not get the Users(findOne)',(done)=>{
     done();
     });
 });
+});
+describe('userdoc CRUD Testing using sinon',()=>{
 it('should update Users by Id(update)',(done)=>{
       var UsersMock = sinon.mock(new userDoc({phone:'123445567'}));
       var user = UsersMock.object;
@@ -89,6 +101,8 @@ it('should update Users by Id(update)',(done)=>{
         done();
       });
 });
+});
+describe('userdoc CRUD Testing using sinon',()=>{
 it('should not update Users by Id(update)',(done)=>{
       var UsersMock = sinon.mock(new userDoc({phone:'123456746'}));
       var user = UsersMock.object;

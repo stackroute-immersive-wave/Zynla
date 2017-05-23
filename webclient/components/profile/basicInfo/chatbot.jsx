@@ -445,7 +445,7 @@ class ProfileBot extends React.Component {
     return (
       <div>
         <Modal trigger={<Button onClick = {this.getUserprofile.bind(this)}
-          className='butstyle'
+
           content = 'Profile Bot'/>}
           onClose = {this.updateProfile.bind(this)} closeIcon='close'>
          <Modal.Header><h1 style={{color: '#B2242E'}}>Profile Bot</h1></Modal.Header>
@@ -456,7 +456,7 @@ class ProfileBot extends React.Component {
            onChange = {this.updateMessageState.bind(this)}
            onKeyPress = {this.handleKeyPress.bind(this)}/>:
            ""}
-             {this.state.inputBoxStatus?<Button className='butstyle'
+             {this.state.inputBoxStatus?<Button 
             style={{float: 'right'}}
             onClick={this.skip.bind(this)}
              primary>Skip</Button>:''}

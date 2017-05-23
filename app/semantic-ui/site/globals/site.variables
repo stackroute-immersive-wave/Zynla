@@ -1,0 +1,14 @@
+@textColor : teal;
+
+/*-------------------
+     Fonts
+--------------------*/
+
+@headerFont        : 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@pageFont          : 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@fontSmoothing     : antialiased;
+
+@importGoogleFonts : true;
+@googleFontName    : 'Roboto';
+
+@googleFontFamily  : '@{googleFontName}:@{googleFontSizes}';

@@ -457,7 +457,7 @@ class QueCard extends React.Component {
                 </Form.Field>
             </Form>
                     <div style={{'text-align': 'center'}}>
-                      <Button content='Report' color='red'
+                      <Button content='Report'
                         onClick={this.changeType.bind(this)}/></div>
                     <p style={{
                         'text-align': 'center',
@@ -468,8 +468,8 @@ class QueCard extends React.Component {
                 </div>
             );
         }
-        let save = (<Icon name={this.state.iconName} circular
-          className='plusbtn' color='red' size='large'/>);
+        let save = (<Icon name={this.state.iconName} circular color='teal'
+          className='plusbtn'  size='large'/>);
         if (this.state.errormsg) {
             errorMessage = (
                 <div className='errorCss'>Answer cannot be too short or empty</div>
@@ -532,7 +532,7 @@ class QueCard extends React.Component {
                           onClick={this.modalOpen.bind(this)}>Answer</Button>
                         <Menu.Menu position='right'>
                             <Menu.Item>
-                                <Popup wide trigger={<Icon name = 'flag' color = 'red'
+                                <Popup wide trigger={<Icon name = 'flag'
                                   onClick = {this.checkReport.bind(this)}/>}
                                   on='click' position='bottom right' hideOnScroll>
                                   {pop}
@@ -620,7 +620,7 @@ class QueCard extends React.Component {
                   <Modal.Actions>
                     <Button color='green' inverted onClick={this.handleClose}>
                         <Icon name='checkmark'/>Yes</Button>
-                    <Button basic color = 'red' inverted onClick = {this.warningModalCancel}>
+                    <Button basic inverted onClick = {this.warningModalCancel}>
                       <Icon name='remove'/>No</Button>
                   </Modal.Actions>
                 </Modal>

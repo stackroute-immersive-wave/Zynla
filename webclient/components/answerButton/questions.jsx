@@ -125,7 +125,7 @@ render() {
                <Grid.Column width={2}/>
                <Grid.Column width={10}>
                    <h1>
-                       <Icon name='star' color='red'/>Questions For You
+                       <Icon name='star' />Questions For You
                    </h1>
                    {
                      /*

@@ -9,8 +9,6 @@ const url = supertest('http://localhost:8080/search');
 
 
 describe('Searchdoc CRUD Testing using sinon',()=>{
-
-
   it('should add a List(save)',(done)=>{
     var ListMock = sinon.mock(new listDoc({id:12}));
     var list =ListMock.object;
@@ -23,6 +21,8 @@ describe('Searchdoc CRUD Testing using sinon',()=>{
     done();
     });
   });
+});
+describe('Searchdoc CRUD Testing using sinon',()=>{
   it('should not add a list(save)',(done)=>{
         var ListMock = sinon.mock(new listDoc({id:12}));
         var list = ListMock.object;
@@ -35,6 +35,8 @@ describe('Searchdoc CRUD Testing using sinon',()=>{
         done();
         });
   });
+});
+describe('Searchdoc CRUD Testing using sinon',()=>{
   it('should get the list(find)',(done)=>{
       var ListMock = sinon.mock(listDoc);
       var expectedResult = {status:true};
@@ -46,6 +48,8 @@ describe('Searchdoc CRUD Testing using sinon',()=>{
       done();
       });
   });
+});
+describe('Searchdoc CRUD Testing using sinon',()=>{
   it('should not get the list(find)',(done)=>{
       var ListMock = sinon.mock(listDoc);
       var expectedResult = {status:false };
@@ -57,6 +61,8 @@ describe('Searchdoc CRUD Testing using sinon',()=>{
       done();
       });
   });
+});
+describe('Searchdoc CRUD Testing using sinon',()=>{
   it('should get one row and update the list(findOneAndUpdate)',(done)=>{
       var ListMock = sinon.mock(listDoc);
       var expectedResult = {status:true};
@@ -68,6 +74,8 @@ describe('Searchdoc CRUD Testing using sinon',()=>{
       done();
       });
   });
+});
+describe('Searchdoc CRUD Testing using sinon',()=>{
   it('should not update the list(findOneAndUpdate)',(done)=>{
       var ListMock = sinon.mock(listDoc);
       var expectedResult = {status:false };
@@ -79,6 +87,8 @@ describe('Searchdoc CRUD Testing using sinon',()=>{
       done();
       });
   });
+});
+describe('Searchdoc CRUD Testing using sinon',()=>{
   it('should get one row and update the list(update)',(done)=>{
       var ListMock = sinon.mock(listDoc);
       var expectedResult = {status:true};
@@ -90,6 +100,8 @@ describe('Searchdoc CRUD Testing using sinon',()=>{
       done();
       });
   });
+});
+describe('Searchdoc CRUD Testing using sinon',()=>{
   it('should not update the list(update)',(done)=>{
       var ListMock = sinon.mock(listDoc);
       var expectedResult = {status:false };

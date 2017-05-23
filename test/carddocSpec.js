@@ -21,6 +21,9 @@ describe('carddoc CRUD Testing using sinon',()=>{
     done();
     });
   });
+});
+
+describe('carddoc CRUD Testing using sinon',()=>{
   it('should not add a card(save)',(done)=>{
         var CardMock = sinon.mock(new cardDoc({id:12}));
         var card = CardMock.object;

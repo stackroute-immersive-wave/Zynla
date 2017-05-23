@@ -33,7 +33,6 @@ let nameStyle = {
     fontSize: '20px',
     fontWeight: 'bold',
     marginLeft: '37.5%',
-    color: '#B2242E',
     cursor: 'pointer'
 };
 let buttonStyle = {
@@ -430,8 +429,8 @@ class NavBarPro extends Component {
                          {imagechange}
                       </Dropzone>
                       <br/>
-                      <Button primary onClick={this.uploadImage}>
-                          upload Photo
+                      <Button onClick={this.uploadImage}>
+                          Upload Photo
                       </Button>
 
                     </Image>
@@ -440,14 +439,14 @@ class NavBarPro extends Component {
                         </div>
                         <div style = {buttonStyle}>
                            <Button onClick={this.getFollowers.bind(this)}
-                             className='butstyle'
+
                              content='Followers'
                              icon='user plus' label={{
                                basic: true,
                                pointing: 'left',
                                content: followerCount
                            }}/>
-                           <Button onClick={this.getFollowings.bind(this)} className='butstyle'
+                           <Button onClick={this.getFollowings.bind(this)}
                              content='Following'
                              icon='fork' label={{
                                basic: true,
