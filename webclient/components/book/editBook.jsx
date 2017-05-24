@@ -1,25 +1,42 @@
 import React from 'react';
 import {
     Grid,
+    Card,
+    Image,
     Divider,
+    Header,
     Table,
+    Container,
+    Icon,
     Form,
     Label,
+    Dimmer,
+    Loader,
     Segment,
     Button,
+    Modal,
+    Input,
     Dropdown,
-  TextArea
+    Checkbox,
+    TextArea,
+
 } from 'semantic-ui-react';
 import TextField from 'material-ui/TextField';
 import {blue500} from 'material-ui/styles/colors';
+let {hashHistory} = require('react-router');
 import Cookie from 'react-cookie';
 const styles = {
   style: {
     color: blue500,
-    fontFamily:'Philosopher'
-  }
+    fontFamily:'Philosopher',
+  },
 };
-/* eslint-disable */
+
+let cb={
+  marginLeft:'30px'
+}
+
+
 class EditBook extends React.Component {
     constructor(props) {
         super(props);
@@ -31,41 +48,53 @@ class EditBook extends React.Component {
         arr:[],
         value:'',
         intent : [],
-        data : this.props.data,
+        data : JSON.parse(this.props.data),
         book: null,
         emptyCheck : false,
         title:'',
-
+        nameInIntent:{},
         flag:false,
         tFlag:false,
         viewBook:false,
         listOfTemplates:[],
         path:'../../BookDocs/input.docx',
+        active:false
+
+
+
+
 }
+this.handleOpen = this.handleOpen.bind(this);
+this.handleClose = this.handleClose.bind(this);
  this.handleTemplate = this.handleTemplate.bind(this);
  this.handleTitleChange = this.handleTitleChange.bind(this);
     }
+    handleOpen() {this.setState({ active: true });}
+    handleClose() {this.setState({ active: false });}
     handleTitleChange(e,data){
-      console.log(data.value)
-      this.state.title=data.value;
+      //console.log(e.target.value)
+
+      this.state.title=e.target.value;
       this.setState({title:this.state.title})
-      console.log(this.state.title)
+      //console.log(this.state.title)
     }
     handleRadio(e,data){
 
-      console.log(e.target.id)
-    	console.log(data.id)
+      //console.log(e.target.id)
+    	//console.log(data.id)
         let dataArray = [];
-        console.log("hey")
-        console.log(e.target.value);
+        //console.log("hey")
+        //console.log(e.target.value);
         let va = e.target.value;
 
 
-      	console.log(this.state.check)
+      	//console.log(this.state.check)
 
        let dataArray1
        console.log(this.state.data);
-            JSON.parse(this.state.data).forEach((book, bookIndex, bookArr) => {
+       let book = JSON.parse(this.props.data)
+       this.setState({data:book})
+            book.forEach((book, bookIndex, bookArr) => {
 
                 if (!book.hasOwnProperty('name'))
                 	 {
@@ -75,13 +104,15 @@ class EditBook extends React.Component {
                             chapterArr[chapterIndex]["content"].forEach((contentChap, contentIndex, contentArray) => {
                                 if (contentChap.hasOwnProperty('name')) {
                                     chapter = contentChap["name"]
-                                    console.log(chapter)
+                                    //console.log(chapter)
+                                    this.state.nameInIntent=contentChap
+                                    this.setState({nameInIntent:this.state.nameInIntent})
 
                                 }
                                 else{
                                   if (chapter === e.target.value) {
                                     if(contentChap!==undefined){
-                                      console.log(contentChap)
+                                      //console.log(contentChap)
                                       let intent = {}
                                       intent.intent = contentChap.intent
                                       let values = []
@@ -109,7 +140,7 @@ class EditBook extends React.Component {
 
                                           }
                                         })
-                                        intent.values = values
+                                        intent.value = values
                                         this.state.intent.push(intent)
                                         this.setState({intent:this.state.intent})
                                           this.state.check = e.target.value
@@ -125,16 +156,31 @@ class EditBook extends React.Component {
 
                                   }
                                   else if (e.target.id === 'subBtn' && this.state.check===chapter){
-                                    console.log(chapter)
-                                    console.log('chapter')
-
-                                    bookArr[bookIndex]['Chapter'][0]['content'][1]=this.state.intent;
-
+                                    // //console.log(chapter)
+                                    // //console.log('chapter')
+                                    // //console.log(this.state.intent)
+                                    // this.state.intent.push(this.state.nameInIntent)
+                                    // this.setState({intent:this.state.intent})
+                                    // console.log(this.state.nameInIntent)
+                                    // console.log(this.state.intent)
+                                    let arrOfIntents = []
+                                    let intent = this.state.intent
+                                    console.log("intent",this.state.intent)
+                                    arrOfIntents.push(this.state.nameInIntent)
+                                    intent.forEach((intents)=>{
+                                        arrOfIntents.push(intents)
+                                    })
+                                    //arrOfIntents.pop()
+                                    console.log(arrOfIntents)
+                                    this.state.data[bookIndex]['Chapter'][0]['content']=arrOfIntents;
+                                    // console.log(this.state.intent)
                                     this.setState({data:this.state.data})
-                                    console.log(this.state.intent);
-                                    this.state.intent.splice(0,this.state.intent.length)
-                                    this.setState({intent:this.state.intent})
-                                    // console.log(this.state.dataArray)
+                                    console.log(this.state.data);
+                                    // console.log(this.state.intent);
+                                    //this.state.intent.splice(0,this.state.intent.length)
+                                    this.setState({intent:[]})
+
+                                    // // console.log(this.state.dataArray)
                                   }
                                 }
 
@@ -152,14 +198,16 @@ class EditBook extends React.Component {
                                         if (contentTopic.hasOwnProperty('name'))
                                          {
                                             topic = contentTopic["name"]
-                                            console.log(topic)
+                                            //console.log(topic)
+                                            this.state.nameInIntent=contentTopic
+                                            this.setState({nameInIntent:this.state.nameInIntent})
 
                                           }
                                           else{
                                             if (topic === e.target.value)
                                             {
                                               if(contentTopic.value!==undefined){
-                                                console.log(contentTopic);
+                                                //console.log(contentTopic);
                                                 let intent = {}
                                                 intent.intent = contentTopic.intent
                                                 let values = []
@@ -186,12 +234,12 @@ class EditBook extends React.Component {
 
                                                   }
                                                 })
-                                                intent.values = values
+                                                intent.value = values
                                                 this.state.intent.push(intent)
                                                 this.setState({intent:this.state.intent})
                                         this.state.check = e.target.value
                                         this.setState({check:this.state.check})
-                                                 console.log(this.state.intent)
+                                                 //console.log(this.state.intent)
 
                                               }
                                               else{
@@ -201,15 +249,29 @@ class EditBook extends React.Component {
 
                                             }
                                             else if (e.target.id === 'subBtn' && this.state.check===topic){
-                                    				console.log('topic')
-                                            console.log(topic)
-                                    				//this.setState({dataArray:bookArr[bookIndex]['Chapter'][chapterIndex]['Topic'][0]['content'][1]})
-                                    				bookArr[bookIndex]['Chapter'][chapterIndex]['Topic'][topicIndex]['content']=this.state.intent
-                                            console.log()
+                                    				//console.log('topic')
+                                            //console.log(topic)
+                                            //console.log(this.state.intent)
+                                            // this.state.intent.push(this.state.nameInIntent)
+                                            // this.setState({intent:this.state.intent})
+                                            // console.log(this.state.nameInIntent)
+                                            // console.log(this.state.intent)
+                                            let arrOfIntents = []
+                                            let intent = this.state.intent
+                                            console.log("intent",this.state.intent)
+                                            arrOfIntents.push(this.state.nameInIntent)
+                                            intent.forEach((intents)=>{
+                                                arrOfIntents.push(intents)
+                                            })
+                                            //arrOfIntents.pop()
+                                            console.log(arrOfIntents)
+                                            this.state.data[bookIndex]['Chapter'][chapterIndex]['Topic'][topicIndex]['content']=arrOfIntents
+                                            // console.log(this.state.intent)
                                             this.setState({data:this.state.data})
-                                            console.log(this.state.intent);
-                                            this.state.intent.splice(0,this.state.intent.length)
-                                            this.setState({intent:this.state.intent})
+                                            console.log(this.state.data);
+                                            // //console.log(this.state.intent);
+                                            //this.state.intent.splice(0,this.state.intent.length)
+                                            this.setState({intent:[]})
 
                                     }
                                           }
@@ -222,13 +284,15 @@ class EditBook extends React.Component {
 
                                 if(subtopic.hasOwnProperty('name')){
                                 	sub = subtopic['name']
-                                  console.log(sub)
+                                  //console.log(sub)
+                                  this.state.nameInIntent=subtopic
+                                  this.setState({nameInIntent:this.state.nameInIntent})
                                 }
                                 if (!subtopic.hasOwnProperty('name')) {
 
                                     if (sub === e.target.value) {
                                       if(subtopic.value!==undefined){
-                                        console.log(subtopic)
+                                        //console.log(subtopic)
                                         let intent = {}
                                         intent.intent = subtopic.intent
                                         let values = []
@@ -255,12 +319,12 @@ class EditBook extends React.Component {
 
                                           }
                                         })
-                                        intent.values = values
+                                        intent.value = values
                                         this.state.intent.push(intent)
                                         this.setState({intent:this.state.intent})
                                         this.state.check = e.target.value
                                         this.setState({check:this.state.check})
-                                         console.log(this.state.intent)
+                                         //console.log(this.state.intent)
                                       }
                                       else{
                                         this.state.emptyCheck = true
@@ -269,13 +333,29 @@ class EditBook extends React.Component {
 
                                     }
                                     else if (e.target.id === 'subBtn' && this.state.check===sub){
-                                      console.log(sub)
-                                    				console.log('subtopic')
-                                    				bookArr[bookIndex]['Chapter'][chapterIndex]['Topic'][topicIndex]['Subtopic'][1]=this.state.intent;
-                                            this.setState({data:this.state.data})
-                                            console.log(this.state.intent);
-                                            this.state.intent.splice(0,this.state.intent.length)
-                                            this.setState({intent:this.state.intent})
+                                      //console.log(sub)
+                                    				//console.log('subtopic')
+                                                // this.state.intent.push(this.state.nameInIntent)
+                                                // this.setState({intent:this.state.intent})
+                                                // console.log(this.state.nameInIntent)
+                                                // console.log(this.state.intent)
+                                                let arrOfIntents = []
+                                                let intent = this.state.intent
+                                                console.log("intent",this.state.intent)
+                                                arrOfIntents.push(this.state.nameInIntent)
+                                                intent.forEach((intents)=>{
+                                                    arrOfIntents.push(intents)
+                                                })
+
+                                                //arrOfIntents.pop()
+
+                                                console.log(arrOfIntents)
+                                               this.state.data[bookIndex]['Chapter'][chapterIndex]['Topic'][topicIndex]['Subtopic']=arrOfIntents;
+                                               this.setState({data:this.state.data})
+                                               console.log(this.state.data);
+                                          //   //console.log(this.state.intent);
+                                            //this.state.intent.splice(0,this.state.intent.length)
+                                            this.setState({intent:[]})
                                     }
                                 }
                             });
@@ -284,31 +364,31 @@ class EditBook extends React.Component {
                         }
                     });
 					}
-          dataArray1= bookArr
+
 				});
-        this.state.book = dataArray1
-        this.setState({book:this.state.book})
+
 
 
 		}
     handleTemplate(e,data)
     {
      // console.log("out "+this.state.tFlag)
-     //this.state.flag = true;
-   this.setState({flag:true})
+     this.state.flag = true;
+   this.setState({flag:this.state.flag})
 
    if(data.value === '../../BookDocs/input.docx')
    {
-     //this.state.flag = true;
-   this.setState({tFlag:true})
-     console.log("in "+this.state.tFlag)
+     this.state.flag = true;
+   this.setState({flag:this.state.flag})
+     //console.log("in "+this.state.tFlag)
    }
    else if(data.value === '../../BookDocs/input1.docx')
    {
    this.setState({tFlag:false})
-   console.log("else "+this.state.tFlag)
+   //console.log("else "+this.state.tFlag)
    }
       this.setState({path:data.value});
+      //console.log(this.state.path)
     }
 
     componentDidMount()
@@ -322,41 +402,52 @@ class EditBook extends React.Component {
     }
 
     saveToMongo(){
-
-      console.log("inside saveTocMongo")
-      console.log(this.props.toc);
+      this.handleOpen()
+      this.state.viewBook=true;
+      this.setState({viewBook:this.state.viewBook})
+      //console.log("inside saveTocMongo")
+      //console.log(this.props.toc);
       var path = this.state.path;
+      //console.log('path............')
+      //console.log('consoling this.state.path',this.state.path)
+
       let editedbook = JSON.stringify(this.state.data)
-      console.log(editedbook)
+      console.log(this.state.data)
+      //console.log('state.data')
+      //console.log(this.state.data)
+      //console.log(editedbook)
       let toc={}
       toc["chapdata"]=this.props.toc
       let book=this.props.toc.slice();
-            console.log(book)
+            //console.log(book)
          var email = Cookie.load('email');
          var authorName = Cookie.load('username')
-         console.log(authorName)
-         var title = 'shaik'
+         //console.log(authorName)
+         var title = this.state.title
+         console.log(title)
+         //console.log('title')
+         //console.log(this.state.title)
          var domain = this.props.toc[0]["Domain"]
-         console.log(JSON.stringify(book))
+         //console.log(JSON.stringify(book))
         let check = false;
-        console.log(check);
+        //console.log(check);
         $.ajax({
           url: '/book/saveToc',
           type: 'POST',
           data: {book:JSON.stringify(book), type:'editedbook', author:email,template:path, domain:domain,title:title,username:authorName,editedbook:editedbook},
           success: function(success) {
             console.log("success!!");
-            console.log(success.path)
-            console.log((JSON.stringify(success)))
+            //console.log(success.path)
+            //console.log((JSON.stringify(success)))
 
             this.setState({outputDocx:success})
-            console.log(this.state.outputDocx);
-            this.state.viewBook=true;
-            this.setState({viewBook:this.state.viewBook})
-            console.log(this.state.viewBook)
+            //console.log(this.state.outputDocx);
+
+            //console.log(this.state.viewBook)
+            this.handleClose()
           }.bind(this),
           error: function(error){
-            console.log("error");
+            //console.log("error");
             console.log(error)
           }
         });
@@ -368,43 +459,47 @@ back()
 handleTextChange(e,data){
   this.state.intent.forEach((intents,intentIndex,intentArray)=>{
     if(data.id===intentIndex){
-        intents.values.forEach((val,valIndex,valArray)=>{
+        intents.value.forEach((val,valIndex,valArray)=>{
           if(val.label==='text'){
-            intentArray[intentIndex]['values'][valIndex]['value']=data.value
+            intentArray[intentIndex]['value'][valIndex]['value']=data.value
           }
         })
     }
 
 })
 this.setState({intent:this.state.intent})
+console.log(this.state.intent)
 }
 handleBlogChange(e,data){
   this.state.intent.forEach((intents,intentIndex,intentArray)=>{
     if(data.id===intentIndex){
-        intents.values.forEach((val,valIndex,valArray)=>{
+        intents.value.forEach((val,valIndex,valArray)=>{
           if(val.label==='blog'){
-            intentArray[intentIndex]['values'][valIndex]['value']=data.value
+            intentArray[intentIndex]['value'][valIndex]['value']=data.value
           }
         })
     }
 
 })
 this.setState({intent:this.state.intent})
+console.log(this.state.intent)
 }
 handleVideoChange(e,data){
   this.state.intent.forEach((intents,intentIndex,intentArray)=>{
     if(data.id===intentIndex){
-        intents.values.forEach((val,valIndex,valArray)=>{
+        intents.value.forEach((val,valIndex,valArray)=>{
           if(val.label==='video'){
-            intentArray[intentIndex]['values'][valIndex]['value']=data.value
+            intentArray[intentIndex]['value'][valIndex]['value']=data.value
           }
         })
     }
 
 })
 this.setState({intent:this.state.intent})
+console.log(this.state.intent)
 }
               render() {
+                  const { active } = this.state;
                 let arr=[];
                 let arrOfText=[];
                 let output = this.state.outputDocx;
@@ -412,8 +507,9 @@ this.setState({intent:this.state.intent})
                 this.props.toc.forEach((book,bookIndex,bookArr) => {
 
                             if(book.hasOwnProperty('name')){
-                              if(this.state.title==='')
-                              this.state.title = book["Domain"]
+
+
+
                               arr.push(
                                 <div>
                                   <Label id='tit1' color='teal' size='small'>Title</Label>
@@ -494,15 +590,14 @@ this.setState({intent:this.state.intent})
 
                             this.state.intent.forEach((intents,intentIndex,intentArray)=>{
                               console.log(intentIndex)
-                              intents.values.forEach((val,valIndex,valArray)=>{
+                              intents.value.forEach((val,valIndex,valArray)=>{
                                 const constant = val.value;
                                 if(val.label==='text'){
                                   let ansHtmlContent = val.value;
                                   if(this.state.emptyCheck=== false){
                                     arrOfText.push(<div><Form id='text'>
                                         <Label as='a' color='teal' ribbon>Text</Label>
-                                          <div dangerouslySetInnerHTML={{__html: ansHtmlContent}} ></div>
-                                        <TextArea placeholder='Edit Text' id = {intentIndex} autoHeight value={this.state.intent[intentIndex]['values'][valIndex]['value']} onChange={this.handleTextChange.bind(this)} />
+                                        <TextArea placeholder='Edit Text' id = {intentIndex} autoHeight value={this.state.intent[intentIndex]['value'][valIndex]['value']} onChange={this.handleTextChange.bind(this)} />
                                       </Form><br/></div>)
 
                                   }
@@ -523,8 +618,7 @@ this.setState({intent:this.state.intent})
                                     arrOfText.push(<div><br/>
                                        <Form id='blog'>
                                         <Label as='a' color='teal' ribbon>Blog</Label>
-                                        <div dangerouslySetInnerHTML={{__html: ansHtmlContent}} ></div>
-                                        <TextArea placeholder='Edit Blog Link' id={intentIndex} autoHeight value={this.state.intent[intentIndex]['values'][valIndex]['value']} onChange={this.handleBlogChange.bind(this)}/>
+                                        <TextArea placeholder='Edit Blog Link' id={intentIndex} autoHeight value={this.state.intent[intentIndex]['value'][valIndex]['value']} onChange={this.handleBlogChange.bind(this)}/>
                                       </Form>
                                       <br/></div>)
                                   }
@@ -533,7 +627,7 @@ this.setState({intent:this.state.intent})
                                        <Form id='blog'>
                                         <Label as='a' color='teal' ribbon>Blog</Label>
                                       <div>NOT DATA FOUND</div>
-                                        <TextArea placeholder='Edit Blog Link' id={intentIndex} autoHeight value={this.state.intent[intentIndex]['values'][valIndex]['value']} onChange={this.handleBlogChange.bind(this)}/>
+                                        <TextArea placeholder='Edit Blog Link' id={intentIndex} autoHeight value={this.state.intent[intentIndex]['value'][valIndex]['value']} onChange={this.handleBlogChange.bind(this)}/>
                                       </Form>
                                       <br/></div>)
                                   }
@@ -546,8 +640,7 @@ this.setState({intent:this.state.intent})
                                     arrOfText.push(<div><br/>
                                     <Form id='video'>
                                       <Label as='a' color='teal' ribbon>Video</Label>
-                                      <div dangerouslySetInnerHTML={{__html: ansHtmlContent}} ></div>
-                                      <TextArea placeholder='Edit Video Link' id={intentIndex} autoHeight   value={this.state.intent[intentIndex]['values'][valIndex]['value']} onChange={this.handleVideoChange.bind(this)}/>
+                                      <TextArea placeholder='Edit Video Link' id={intentIndex} autoHeight   value={this.state.intent[intentIndex]['value'][valIndex]['value']} onChange={this.handleVideoChange.bind(this)}/>
                                     </Form>
                                     <br/></div>)
                                   }
@@ -556,7 +649,7 @@ this.setState({intent:this.state.intent})
                                     <Form id='video'>
                                       <Label as='a' color='teal' ribbon>Video</Label>
                                       <div>NO DATA FOUND</div>
-                                      <TextArea placeholder='Edit Video Link' id={intentIndex} autoHeight  value={this.state.intent[intentIndex]['values'][valIndex]['value']} onChange={this.handleVideoChange.bind(this)}/>
+                                      <TextArea placeholder='Edit Video Link' id={intentIndex} autoHeight  value={this.state.intent[intentIndex]['value'][valIndex]['value']} onChange={this.handleVideoChange.bind(this)}/>
                                     </Form>
                                     <br/></div>)
                                   }
@@ -568,6 +661,20 @@ this.setState({intent:this.state.intent})
                   return (
 
                     <div class='Container'>
+                      <Dimmer
+                        active={active}
+                        onClickOutside={this.handleClose}
+                        page
+                        >
+                          <Header as='h3' icon inverted>
+                            <Icon size='small' name='book' />
+                            Pdf created Successfully!!! "Will take time to load"
+                            <Header.Subheader>Click anywhere to come out</Header.Subheader>
+
+                          </Header>
+                          <Loader />
+                        </Dimmer>
+
                         <Button color='green' icon='arrow left' id='edBtn12' size='medium' inverted  onClick={this.back.bind(this)}/>
                         <Grid divided='vertically'>
                             <Grid.Row columns={2}>
@@ -605,6 +712,11 @@ this.setState({intent:this.state.intent})
                                       src={require('../../../BookDocs/pdf/'+output)}
                                       width='855' height='600' type='application/pdf'/>
                                     </div>:
+                                  //   <div>
+                                  //   <embed id='pdf'
+                                  //   src={require('../../../BookDocs/pdf/'+output)}
+                                  //   width='855' height='600' type='application/pdf'/>
+                                  // </div>}
                                       <div>
                                   <Divider horizontal>
                                       <h3 id='preview'>Edit Answers</h3>
@@ -618,7 +730,7 @@ this.setState({intent:this.state.intent})
 
                                    </div>
                                    </div>
-}
+                                 }
                               </Table>
                           </Grid.Column>
                             </Grid.Row>
@@ -628,4 +740,3 @@ this.setState({intent:this.state.intent})
                 }
             }
             module.exports = EditBook;
-/* eslint-enable */

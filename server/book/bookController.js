@@ -17,6 +17,27 @@ const path = require('path');
 //let context = fs.readFileSync(path.resolve(__dirname, '../../BookDocs/input.docx'), 'binary');
 
 let bookController = {
+  sendFileLength:function(req,res){
+      var filearr=[];
+      fs.readdir(path.resolve(".") + '/BookDocs/pdf/', function(err, files) {
+          if (err) {
+              throw err;
+          }
+          files.map(function(file) {
+              //var resp = file;
+                              //if (file===fileName) {
+               // let path = '../../BookDocs/pdf'+ fileName
+              console.log("sasdsdf"+" "+file)
+              filearr.push(file);
+               //res.sendFile(path.resolve(".") + '/BookDocs/pdf/'+filearr);
+
+            });
+               let flength=files.length;
+              console.log(filearr);
+              res.json({filearr}) ;
+          });
+
+        },
     updateRating: function(req, res) {
         tocDoc.update({
             id: req.body.id
@@ -262,10 +283,10 @@ let bookController = {
                                                         session.close()
                                                         if (result) {
                                                             if (req.body.type === 'editedbook') {
-                                                                let bookData = JSON.parse(req.body.editedbook)
-                                                                te(bookData, req.body.username, res, req.body.type, email,template);
+                                                                let bookData = JSON.stringify(req.body.editedbook)
+                                                                addTemplate(JSON.parse(bookData), req.body.username, res, req.body.type, email,template,req.body.title);
                                                             } else {
-                                                                addTemplate(JSON.stringify(chapterData), req.body.username, res, req.body.type, email,template);
+                                                                addTemplate(JSON.stringify(chapterData), req.body.username, res, req.body.type, email,template,req.body.title);
                                                             }
 
                                                         }
@@ -299,7 +320,7 @@ let bookController = {
     }
 }
 
-let addTemplate = function(x, username, res, type, email,template) {
+let addTemplate = function(x, username, res, type, email,template,title) {
     let chapterData = x;
     let context = fs.readFileSync(path.resolve(__dirname, template), 'binary');
     console.log("getting into addTemplate")
@@ -307,7 +328,7 @@ let addTemplate = function(x, username, res, type, email,template) {
         d: chapterData
     };
     console.log(datas.d);
-    var arr = JSON.parse(datas.d);
+    var arr = JSON.parse(datas.d)
     console.log(arr);
     let finalJSON = {
         DOMAINNAME: '',
@@ -317,9 +338,18 @@ let addTemplate = function(x, username, res, type, email,template) {
     };
     let chapterArray = [];
     arr.forEach((book, bookIndex, bookArr) => {
+
         if (book.hasOwnProperty('name')) {
             finalJSON.DOMAINNAME = bookArr[bookIndex]["Domain"].toUpperCase();
-                finalJSON.BOOKTITLE = bookArr[bookIndex]["title"].toUpperCase();
+                if(title===undefined || title.trim() === ''){
+                    finalJSON.BOOKTITLE = bookArr[bookIndex]["title"].toUpperCase();
+                }
+
+                else {
+                  finalJSON.BOOKTITLE = title
+                }
+
+
             finalJSON.USERNAME = username;
             console.log("DOMAIN_NAME:", finalJSON.DOMAIN_NAME, "BOOKTITLE:", finalJSON.BOOKTITLE, "USERNAME:", finalJSON.USERNAME);
         } else {
@@ -327,20 +357,25 @@ let addTemplate = function(x, username, res, type, email,template) {
             Chap.chno = bookIndex;
             console.log('chapter index......', Chap.chno)
             bookArr[bookIndex]["Chapter"].forEach((Chapter, chapterIndex, chapterArr) => {
+
                 let topArray = [];
                 if (Chapter.hasOwnProperty('content')) {
                     let intents = []
                     chapterArr[chapterIndex]["content"].forEach((content, contentIndex, contentArray) => {
+
                         if (content.hasOwnProperty('name')) {
                             let chname = contentArray[contentIndex]["name"];
                             console.log('oooooooooooooooooooo')
                             console.log(chname)
                             Chap.ChapterName = chname.charAt(0).toUpperCase() + chname.substr(1, chname.length).toLowerCase();
+
                             console.log(Chap.ChapterName)
                         } else {
                             let intent = {};
                             let intentlbl=contentArray[contentIndex]["intent"];
                             intent.intent_label = intentlbl.charAt(0).toUpperCase()+intentlbl.substr(1,intentlbl.length).toLowerCase();
+                            console.log(intentlbl)
+                            console.log(contentArray[contentIndex])
                             let intentValue = []
                             contentArray[contentIndex]["value"].forEach((value, valueIndex, valueArray) => {
                                 let intentVal = {}
@@ -352,18 +387,24 @@ let addTemplate = function(x, username, res, type, email,template) {
                             intent.intent_value = intentValue
                             intents.push(intent);
                         }
+
                     });
                     Chap.intents = intents;
                 } else { //else
                     let top = {}
                     top.topicno = chapterIndex;
                     console.log('topicIndex', chapterIndex)
+
                     chapterArr[chapterIndex]["Topic"].forEach((topic, topicIndex, topicArr) => {
+
                         let subTopicArray = []
                         let subtop = {};
                         let intents = []
+
                         if (topic.hasOwnProperty('content')) {
+
                             topicArr[topicIndex]["content"].forEach((content, contentIndex, contentArr) => {
+
                                 if (content.hasOwnProperty('name')) {
                                     let tname = contentArr[contentIndex]["name"];
                                     console.log('pppppppppppppppppppppppppppppp')
@@ -372,6 +413,7 @@ let addTemplate = function(x, username, res, type, email,template) {
                                     console.log("topicname:", top.TopicName);
                                 } else {
                                     let intent = {};
+
                                     intent.intent_label = contentArr[contentIndex]["intent"];
                                     console.log("intent_value:", intent.intent_label);
                                     let intentValue = []
@@ -385,11 +427,13 @@ let addTemplate = function(x, username, res, type, email,template) {
                                     intent.intent_value = intentValue
                                     intents.push(intent)
                                 }
+
                             });
                             top.intents = intents
                         } else { //else
                             let SubTopicName
                             let subtopicno
+
                             topicArr[topicIndex]["Subtopic"].forEach((subtopic, subtopicIndex, subtopicArr) => {
                                 let intent = {};
                                 if (subtopic.hasOwnProperty('name')) {
@@ -397,6 +441,7 @@ let addTemplate = function(x, username, res, type, email,template) {
                                     SubTopicName = stname.charAt(0).toUpperCase() + stname.substr(1, stname.length).toLowerCase();
                                     subtopicno = subtopicIndex + 1;
                                 } else {
+
                                     intent.intent_label = subtopicArr[subtopicIndex]["intent"];
                                     console.log('intent....', intent.intent_label)
                                     let intentValue = []
@@ -406,11 +451,14 @@ let addTemplate = function(x, username, res, type, email,template) {
                                         intentVal.label = label1.charAt(0).toUpperCase()+label1.substr(1,label1.length).toLowerCase();
                                         intentVal.value = value['value']
                                         intentValue.push(intentVal)
+
                                     });
                                     intent.intent_value = intentValue
+
                                 }
                                 if (intent.intent_label !== undefined)
                                     intents.push(intent)
+
                             })
                             subtop.intents = intents
                             subtop.SubTopicName = SubTopicName
@@ -419,42 +467,60 @@ let addTemplate = function(x, username, res, type, email,template) {
                             console.log('subtopic......', subtop)
                             top.subtopic = subTopicArray;
                         }
+
                     });
+
                     topArray.push(top)
                     Chap.Topic = topArray;
                     console.log('topics..........', top);
+
                 }
+
             });
             console.log('chapters............', Chap)
             chapterArray.push(Chap)
+
+
         }
+
     });
     finalJSON.Chapters = chapterArray
     console.log(finalJSON);
     var zip = new JSZip(context);
     var docx = new Docxtemplater().loadZip(zip).setData(finalJSON).render();
     var buffer = docx.getZip().generate({type: "nodebuffer"});
+
     fs.writeFile(path.resolve(__dirname, '../../BookDocs/output.docx'), buffer);
-    return savePDF(x, res, type, username, finalJSON.BOOKTITLE, email);
+    if (type === "editedToc")
+        res.send({data:x})
+    else {
+      //  console.log(''../../../BookDocs/pdf/" + email + '/' + title + '.pdf');
+      return savePDF(x, res, type, username, finalJSON.BOOKTITLE, email);
+    }
+
+
 }
+
 let savePDF = function(x, res, type, username, title, email) {
+    console.log("inside savePDF")
     // var book1 = req.body.book;
     var unoconv1 = require('child_process').exec;
+    console.log("SINDU");
     //var cmd1='mv test1.docx test1.doc';
-    var cmd = 'unoconv -f pdf -o BookDocs/pdf/' + email + '/' + title + '.pdf BookDocs/output.docx';
-    console.log("yup")
+    var cmd = 'unoconv -f pdf -o BookDocs/pdf/' + email + '_' + title + '.pdf BookDocs/output.docx';
+
+    console.log(cmd)
     unoconv1(cmd, function(error, stdout, stderr) {
         console.log("yeh")
+        console.log(error)
+        console.log(stdout)
+        console.log(stderr)
         if (error === null) {
             // session.run(query).then(function(result) {
             //     /*eslint-disable*/
             //     session.close()
-            if (type === "editedToc")
-                res.send({data:x,path:email + '/' + title + '.pdf'})
-            else {
-              //  console.log(''../../../BookDocs/pdf/" + email + '/' + title + '.pdf');
-                res.send( email + '/' + title + '.pdf');
-            }
+                res.send( email + '_' + title + '.pdf');
+
 
             console.log("success");
 

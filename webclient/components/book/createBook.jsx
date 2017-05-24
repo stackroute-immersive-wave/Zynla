@@ -61,6 +61,7 @@ class CreateBook extends React.Component {
            this.handleAddSubTopic = this.handleAddSubTopic.bind(this);
            this.handleRemoveSubTopic = this.handleRemoveSubTopic.bind(this);
            this.saveToMongo = this.saveToMongo.bind(this);
+           this.saveBook = this.saveBook.bind(this);
            this.handleDomainAdd = this.handleDomainAdd.bind(this);
            this.handleTitleAdd = this.handleTitleAdd.bind(this);
            this.getDomains = this.getDomains.bind(this);
@@ -289,11 +290,22 @@ class CreateBook extends React.Component {
 
              }
 
+        saveBook(){
+          this.state.active=true
+          this.setState({active:this.state.active})
+          console.log(this.state.active)
+          this.saveToMongo()
+        }
+
         saveToMongo()
         {
-          this.state.viewBook=false;
-          this.setState({viewBook:this.state.viewBook})
+          //this.handleOpen();
+          //this.state.viewBook=false;
+
+
+          this.setState({viewBook:false})
           console.log("inside saveTocMongo")
+
           console.log(this.state.chapterData)
           let toc={}
           toc["chapdata"]=this.state.chapterData
@@ -319,17 +331,16 @@ class CreateBook extends React.Component {
                 console.log((JSON.stringify(success)))
                this.setState({outputDocx:success})
                 console.log(this.state.outputDocx);
-                this.state.viewBook=true;
-                this.setState({viewBook:this.state.viewBook})
-                console.log(this.state.viewBook)
-                // this.setState({output:"output"})
+                this.state.active=true
+                this.setState({active:this.state.active})
+                console.log(active)
               }.bind(this),
               error: function(error){
                 console.log("error");
                 console.log(error)
               }
             });
-            this.handleOpen();
+
           }
       getDomains(){
              let arr = [];
@@ -389,6 +400,20 @@ class CreateBook extends React.Component {
       const { active } = this.state;
         return(
           <div>
+            <Dimmer
+              active={active}
+              onClickOutside={this.handleClose}
+              page
+              >
+                <Header as='h3' icon inverted>
+                  <Icon size='small' name='book' />
+                  Pdf created Successfully!!! "Will take time to load"
+                  <Header.Subheader>Click anywhere to come out</Header.Subheader>
+
+                </Header>
+                <Loader />
+              </Dimmer>
+
             <Grid  divided='vertically'>
               <Grid.Row columns={2}>
                 <Segment>
@@ -439,21 +464,8 @@ class CreateBook extends React.Component {
                               topicType={this.state.topicType} />
                   </div><br/><br/>
                   <div>
-                    <Button onClick={this.saveToMongo} style={submitform} color='teal' id='subBtn'>Submit</Button>
+                    <Button onClick={this.saveBook} style={submitform} color='teal' id='subBtn'>Create Book</Button>
 
-                    <Dimmer
-                      active={active}
-                      onClickOutside={this.handleClose}
-                      page
-                      >
-                        <Header as='h3' icon inverted>
-                          <Icon size='small' name='book' />
-                          Pdf created Successfully!!! "Will take time to load"
-                          <Header.Subheader>Click anywhere to come out</Header.Subheader>
-
-                        </Header>
-                        <Loader />
-                      </Dimmer>
 
                   </div>
                 </Table>

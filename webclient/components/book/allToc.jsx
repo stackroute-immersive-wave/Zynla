@@ -12,7 +12,8 @@ import {
     Loader,
     Button,
     Dropdown,
-    Rating
+    Rating,
+
 } from 'semantic-ui-react';
 import TextField from 'material-ui/TextField';
 import {blue500} from 'material-ui/styles/colors';
@@ -43,7 +44,9 @@ class AllToc extends React.Component {
              checked:0,
              viewBook:false,
              output:'last2',
-             outputDocx:'output'
+             outputDocx:'output',
+             title:'',
+             active:false
         }
         this.asdfg={state:{}};
         this.add={state:{}};
@@ -56,7 +59,11 @@ class AllToc extends React.Component {
         this.getImage=this.getImage.bind(this);
         this.forwardToc=this.forwardToc.bind(this);
         this.checkbox=this.checkbox.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
+    handleOpen() {this.setState({ active: true });}
+    handleClose() {this.setState({ active: false });}
     handleOpen() {this.setState({ active: true });}
     handleClose() {this.setState({ active: false });}
     back()
@@ -97,6 +104,7 @@ class AllToc extends React.Component {
         }
     }
         getTocs() {
+          this.handleOpen()
         $.ajax({
             url: "/book/getTocs",
             type: 'GET',
@@ -109,6 +117,7 @@ class AllToc extends React.Component {
                 this.state.allTocs.map((data, index) => {
                     console.log("zzcxvcc" + data.author);
                 });
+                this.handleClose();
                 /* eslint-enable */
             }.bind(this),
             error: function(error) {
@@ -227,16 +236,18 @@ checkbox(e,data){
     render() {
         const { active } = this.state
         let arr = [];
+        let title = '';
         console.log(this.state.tocDetails[0].toc);
                 (this.state.tocDetails[0].toc).forEach((toc, tocIndex, tocArr) => {
             if (toc.hasOwnProperty('name')) {
+              title=toc['title']
 
                 arr.push(
                     /* eslint-disable */
                   <div>
-                  <Label id='do' color='teal'>Domain</Label>
+                  <Label id='do' color='teal'>Title</Label>
                 <TextField id='tocc'
-                  value={toc["name"]}
+                  value={toc['title']}
                   style={styles.style}
                 />
               </div>
@@ -293,8 +304,21 @@ checkbox(e,data){
         return (
           this.state.forward?
           <EditToc data={this.state.tocDetails}
-            backdata={this.back.bind(this)}/>:
+            backdata={this.back.bind(this)} title={title}/>:
             <div>
+              <Dimmer
+                active={active}
+
+                page
+                >
+                  <Header as='h3' icon inverted>
+                    <Icon size='small' name='book' />
+                    "Will take few secs to load"
+                    <Header.Subheader>Click anywhere to come out</Header.Subheader>
+
+                  </Header>
+                  <Loader />
+                </Dimmer>
                 <Grid divided='vertically'>
                     <Grid.Row columns={2}>
 
@@ -320,7 +344,7 @@ checkbox(e,data){
                                             })
 
                                           }
-                                          <Button primary  id='edBtn' size='small' inverted onClick={this.forwardToc.bind(this)}>EDIT</Button>
+                                          <Button primary  id='edBtn' size='small' inverted onClick={this.forwardToc.bind(this)}>View Book</Button>
 
                                           <Dimmer
                                             active={active}
@@ -329,7 +353,7 @@ checkbox(e,data){
                                             >
                                               <Header as='h3' icon inverted>
                                                 <Icon size='small' name='book' />
-                                                Pdf created Successfully!!! "Will take time to load"
+                                               "Will take few secs to load"
                                                 <Header.Subheader>Click anywhere to come out</Header.Subheader>
 
                                               </Header>
@@ -338,7 +362,7 @@ checkbox(e,data){
 
                                         </div>
                                     : ''
-}
+                                  }
 
                             </Table>
                         </Grid.Column>

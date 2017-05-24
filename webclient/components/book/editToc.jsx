@@ -5,7 +5,11 @@ import {
     Table,
     Segment,
     Label,
-    Button
+    Button,
+    Dimmer,
+    Header,
+    Icon,
+    Loader
 } from 'semantic-ui-react';
 import TextField from 'material-ui/TextField';
 import {blue500} from 'material-ui/styles/colors';
@@ -20,8 +24,8 @@ const styles = {
 };
 /* eslint-disable */
 class EditToc extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         var arr=new Set();
         this.state = {
           chapArr:arr,
@@ -29,7 +33,13 @@ class EditToc extends React.Component {
           dataArr2:[],
           forward:false,
           bookArr : null,
+          active: false,
+          viewBook:true,
+          email : ''
+
         };
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.checkvalues=this.checkvalues.bind(this);
         this.createJson=this.createJson.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
@@ -39,8 +49,14 @@ class EditToc extends React.Component {
         this.handleAddSubTopic = this.handleAddSubTopic.bind(this);
         this.handleRemoveSubTopic = this.handleRemoveSubTopic.bind(this);
     }
+    handleOpen() {this.setState({ active: true });}
+    handleClose() {this.setState({ active: false });}
     componentWillMount()
      {
+
+       this.state.email = Cookie.load('email')
+       this.setState({email:this.state.email})
+       console.log(this.state.email)
     }
 
     handleAdd(chapterName,index){
@@ -263,6 +279,8 @@ class EditToc extends React.Component {
           }
 createJson()
         {
+
+          this.handleOpen();
           this.state.forward = false;
           this.setState({forward:this.state.forward})
           console.log(this.state.dataArr2)
@@ -286,6 +304,7 @@ createJson()
               //console.log(len(i));
               console.log("pppppp");
               (this.props.data[0].toc).forEach((toc,tocIndex,tocArr) => {
+
               if (!toc.hasOwnProperty('name')) {
                   let arr=[]
                   tocArr[tocIndex]["Chapter"].forEach((chapter, chapterIndex, chapterArr) => {
@@ -327,7 +346,7 @@ createJson()
                       this.state.forward=true;
                   this.setState({forward:this.state.forward});
                   console.log(this.state.forward);
-
+                  this.handleClose();
                   }.bind(this),
                   error: function(error){
                     console.log("error");
@@ -360,14 +379,18 @@ checkvalues(e)
   console.log(this.state.chapArr);
   }
               render() {
+                  const { active } = this.state
                 let arr=[];
+                let title = '';
+                let email = this.state.email;
               (this.props.data[0].toc).forEach((toc,tocIndex,tocArr) => {
                   if (toc.hasOwnProperty('name')) {
 
+                    title = email+'_'+toc['title']
                   arr.push(
                     <div>
-                      <Label id='do' color='teal'>Domain</Label>
-                    <TextField id='tn' value={toc["name"]}
+                      <Label id='do' color='teal'>Title</Label>
+                    <TextField id='tn' value={toc["title"]}
                     style={styles.style}
                   />
                   </div>
@@ -421,6 +444,19 @@ checkvalues(e)
                     this.state.forward?
                     <EditBook data={this.state.bookArr} toc ={this.state.dataArr2} backdata={this.back1.bind(this)}/>:
                     <div class='Container'>
+                      <Dimmer
+                        active={active}
+                        onClickOutside={this.handleClose}
+                        page
+                        >
+                          <Header as='h3' icon inverted>
+                            <Icon size='small' name='book' />
+                           "Will take few secs to load"
+                            <Header.Subheader>Click anywhere to come out</Header.Subheader>
+
+                          </Header>
+                          <Loader />
+                        </Dimmer>
                         <Button color='green' icon='arrow left' id='edBtn1' size='small' inverted onClick={this.back.bind(this)}/>
                         <Grid divided='vertically'>
                             <Grid.Row columns={2}>
@@ -444,7 +480,7 @@ checkvalues(e)
                                        handleAddSubTopic={this.handleAddSubTopic}
                                        handleRemoveSubTopic={this.handleRemoveSubTopic}
                                         chapterType={this.state.chapterType} topicType={this.state.topicType}/>
-                                          <Button primary icon='settings' id='edBt' size='medium' inverted onClick={this.createJson} content='EDIT'/>
+                                          <Button primary icon='settings' id='edBt' size='medium' inverted onClick={this.createJson} content='View & Edit'/>
                                     </Table>
                                 </Grid.Column>
                               </Segment>
@@ -456,11 +492,11 @@ checkvalues(e)
                                             </Divider>
                                         </center>
 
-                                        <div>
-                                       <embed id='pdf'
-                                       src={require('../../../BookDocs/pdf/last2.pdf')}
-                                       width='855' height='600' type='application/pdf'/>
-                                   </div>
+                                   <div>
+                                   <embed id='pdf'
+                                    src={require('../../../BookDocs/pdf/'+title+'.pdf')}
+                                    width='855' height='600' type='application/pdf'/>}
+                                  </div>
 
                                     </Table>
                                 </Grid.Column>
