@@ -8,6 +8,7 @@
 }
 #table2{
   height: 700px;
+  width: 900px;
 }
 #tab1{
   height: 700px;
@@ -243,7 +244,6 @@ font-family: 'Philosopher';
 }
 #dropdown{
   width: 356px;
-  color:teal;
   margin-left: 20px;
   font-family: 'Philosopher';
 }

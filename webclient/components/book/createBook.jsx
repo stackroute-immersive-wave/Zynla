@@ -49,7 +49,7 @@ class CreateBook extends React.Component {
            listOfDomains:[],
            output:'last2',
            listOfTemplates:[],
-           outputDocx:'',
+           outputDocx:'input.pdf',
            path:'../../BookDocs/input.docx'
            };
            this.handleOpen = this.handleOpen.bind(this);
@@ -303,7 +303,7 @@ class CreateBook extends React.Component {
           //this.state.viewBook=false;
 
 
-          this.setState({viewBook:false})
+
           console.log("inside saveTocMongo")
 
           console.log(this.state.chapterData)
@@ -333,7 +333,8 @@ class CreateBook extends React.Component {
                 console.log(this.state.outputDocx);
                 this.state.active=true
                 this.setState({active:this.state.active})
-                console.log(active)
+                  this.setState({viewBook:false})
+                //console.log(active)
               }.bind(this),
               error: function(error){
                 console.log("error");
@@ -396,7 +397,9 @@ class CreateBook extends React.Component {
     render()
     {
     let output = this.state.outputDocx
-
+    console.log(output)
+    let domainPlaceHolder = 'domain'
+    let templatePlaceHolder = 'template'
       const { active } = this.state;
         return(
           <div>
@@ -427,14 +430,14 @@ class CreateBook extends React.Component {
                   </div><br/><br/>
 
 
-                      <Dropdown  id='dropdown'  placeholder='Select Domain'
+                      <Dropdown  id='dropdown' placeholder='Domain'
                          onChange={this.handleDomainAdd}
-                         fluid selection options={this.state.listOfDomains}
+                      fluid selection options={this.state.listOfDomains}
                          />
                   <br/>
                  <br/>
 
-                 <Dropdown  id='dropdown'  placeholder='Select Templates'
+                 <Dropdown  id='dropdown' placeholder='Select Template'
                     onChange={this.handleTemplate}
                     fluid selection options={this.state.listOfTemplates}
                     />

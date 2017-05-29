@@ -11,7 +11,7 @@ router.get('/getTocs',bookController.getTocs)
 router.post('/getDomainTocs',bookController.getDomainTocs)
 //router.post('/updateLikes',bookController.updateLikes)
 router.post('/updateRating',bookController.updateRating)
-
+router.get('/sendFileLength',bookController.sendFileLength);
 
 
 module.exports = router;

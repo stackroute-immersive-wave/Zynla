@@ -10,7 +10,7 @@ marginLeft:'3px',
 };
 let inputsubtopicstyle=
 {
-marginLeft:'80px',
+marginLeft:'75px',
 width:'180px',
 };
 export default class Topic extends React.Component {

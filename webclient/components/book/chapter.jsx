@@ -7,7 +7,7 @@ import {
 } from 'semantic-ui-react';
 import Topic from './topic';
 let addchapterstyle={
-marginLeft:'45px'
+marginLeft:'40px'
 };
 let removechapterstyle={
 marginLeft:'2px'

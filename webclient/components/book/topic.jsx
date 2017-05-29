@@ -6,7 +6,7 @@ import {
 } from 'semantic-ui-react';
 import SubTopic from './subTopic';
 let addtopicstyle={
-marginLeft:'61px'
+marginLeft:'56px'
 };
 let removetopicstyle={
 marginLeft:'2px'

@@ -58,7 +58,8 @@ class EditBook extends React.Component {
         viewBook:false,
         listOfTemplates:[],
         path:'../../BookDocs/input.docx',
-        active:false
+        active:false,
+        outputDocx:'input.pdf'
 
 
 
@@ -95,7 +96,12 @@ this.handleClose = this.handleClose.bind(this);
        let book = JSON.parse(this.props.data)
        this.setState({data:book})
             book.forEach((book, bookIndex, bookArr) => {
-
+                if(book.hasOwnProperty('name')){
+                  if(this.state.title!=='')
+                  this.state.data[bookIndex]['title']=this.state.title
+                  console.log(this.state.title)
+                  console.log(this.state.data[bookIndex]['title'])
+                }
                 if (!book.hasOwnProperty('name'))
                 	 {
                     bookArr[bookIndex]["Chapter"].forEach((chapter, chapterIndex, chapterArr) => {
@@ -403,8 +409,7 @@ this.handleClose = this.handleClose.bind(this);
 
     saveToMongo(){
       this.handleOpen()
-      this.state.viewBook=true;
-      this.setState({viewBook:this.state.viewBook})
+
       //console.log("inside saveTocMongo")
       //console.log(this.props.toc);
       var path = this.state.path;
@@ -417,14 +422,23 @@ this.handleClose = this.handleClose.bind(this);
       //console.log(this.state.data)
       //console.log(editedbook)
       let toc={}
-      toc["chapdata"]=this.props.toc
+      toc["chapdata"]=this.props.toc;
+
       let book=this.props.toc.slice();
+      // book.forEach((toc,tocIndex,content)=>{
+      //     if(content.hasOwnProperty('title')){
+      //       content[tocIndex]['title'] = this.state.title
+      //     }
+      //   })
+        book[0]['title'] = this.state.title
+        console.log(book[0]['title'])
             //console.log(book)
          var email = Cookie.load('email');
          var authorName = Cookie.load('username')
          //console.log(authorName)
          var title = this.state.title
          console.log(title)
+         let output = email+'_'+title+'.pdf'
          //console.log('title')
          //console.log(this.state.title)
          var domain = this.props.toc[0]["Domain"]
@@ -439,12 +453,15 @@ this.handleClose = this.handleClose.bind(this);
             console.log("success!!");
             //console.log(success.path)
             //console.log((JSON.stringify(success)))
-
-            this.setState({outputDocx:success})
+            console.log(success)
+            console.log(output)
+            this.setState({outputDocx:output})
             //console.log(this.state.outputDocx);
 
             //console.log(this.state.viewBook)
-            this.handleClose()
+
+            this.state.viewBook=true;
+            this.setState({viewBook:this.state.viewBook})
           }.bind(this),
           error: function(error){
             //console.log("error");
@@ -503,7 +520,7 @@ console.log(this.state.intent)
                 let arr=[];
                 let arrOfText=[];
                 let output = this.state.outputDocx;
-
+                console.log(output)
                 this.props.toc.forEach((book,bookIndex,bookArr) => {
 
                             if(book.hasOwnProperty('name')){

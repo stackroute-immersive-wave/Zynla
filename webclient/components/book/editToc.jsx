@@ -386,7 +386,8 @@ checkvalues(e)
               (this.props.data[0].toc).forEach((toc,tocIndex,tocArr) => {
                   if (toc.hasOwnProperty('name')) {
 
-                    title = email+'_'+toc['title']
+                    title = email+"_"+toc['title']+".pdf"
+                    console.log(title)
                   arr.push(
                     <div>
                       <Label id='do' color='teal'>Title</Label>
@@ -494,7 +495,8 @@ checkvalues(e)
 
                                    <div>
                                    <embed id='pdf'
-                                    src={require('../../../BookDocs/pdf/'+title+'.pdf')}
+
+                                    src={require('../../../BookDocs/pdf/'+title)}
                                     width='855' height='600' type='application/pdf'/>}
                                   </div>
 
