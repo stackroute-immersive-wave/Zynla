@@ -34,6 +34,7 @@ let submitform={
 };
 
 /* eslint-disable */
+//To create a new book
 class CreateBook extends React.Component {
    constructor() {
        super();
@@ -77,6 +78,7 @@ class CreateBook extends React.Component {
           this.state.chapterData[0]["title"]=data.value
           this.setState({chapterData:this.state.chapterData})
         }
+        //To add more chapters
         handleAdd(chapterName,index){
 
           console.log("handle add")
@@ -140,6 +142,7 @@ class CreateBook extends React.Component {
             this.setState({chapterData:newChapterData})
 
        }
+       //To add topics to the chapters
     handleAddTopic(topicName,topicIndex,chapterIndex){
           let chapterType = chapterIndex
           let chapterInd = "Chapter"
@@ -212,6 +215,7 @@ class CreateBook extends React.Component {
           this.setState({chapterData:this.state.chapterData})
 
         }
+        //To add subtopics to the topics
       handleAddSubTopic(subTopicName,subTopicIndex,topicIndex,chapterIndex){
           let chapterType = "Chapter"
           let chapterInd = "Chapter"
@@ -296,14 +300,9 @@ class CreateBook extends React.Component {
           console.log(this.state.active)
           this.saveToMongo()
         }
-
+//To save the toc's in the mongo database
         saveToMongo()
         {
-          //this.handleOpen();
-          //this.state.viewBook=false;
-
-
-
           console.log("inside saveTocMongo")
 
           console.log(this.state.chapterData)
@@ -343,6 +342,7 @@ class CreateBook extends React.Component {
             });
 
           }
+          //To get the domains from backend
       getDomains(){
              let arr = [];
              $.ajax({

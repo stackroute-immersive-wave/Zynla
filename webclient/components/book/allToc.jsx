@@ -24,6 +24,7 @@ const styles = {
     fontFamily:'Philosopher'
   }
 };
+//To view all toc's of existing books
 class AllToc extends React.Component {
     constructor() {
         super();
@@ -70,6 +71,7 @@ class AllToc extends React.Component {
     {
   this.setState({forward:false});
 }
+//To select the particular domains
     handleDomainAdd(e,data)
     {
       let d=data.value;
@@ -103,6 +105,7 @@ class AllToc extends React.Component {
           });
         }
     }
+    //To get all toc's
         getTocs() {
           this.handleOpen()
         $.ajax({
@@ -126,6 +129,7 @@ class AllToc extends React.Component {
             }
         })
     }
+    //to display the images of toc card
 getImage()
 {
   if(this.state.imageFlag === true)
@@ -153,6 +157,7 @@ getImage()
         this.getDomains();
         this.getImage();
     }
+    //To get the details of toc
     getTocDetails(data)
     {
         let arr = [];
@@ -163,6 +168,7 @@ getImage()
         console.log(this.state.tocDetails);
 
     }
+    //To rate the existing toc's
     updateRating(data)
     {
       console.log(this.state.rating);

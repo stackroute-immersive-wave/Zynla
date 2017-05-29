@@ -35,15 +35,15 @@ let listController = {
         let question = req.body.val;
         let lowerCaseQuestion = question.toLowerCase();
         let pos = require('pos');
-      //  let nlp = require('nlp_compromise');
-        client.hkeys('intents', function(err1, reply1) {
-                intentLexicon = reply1;
-                client.hgetall('intents', function(err2, reply2) {
-                      intentFullLexicon = reply2;
-                      client.hkeys('concepts', function(err3, reply3) {
-                          conceptLexicon = reply3;
-                           client.hgetall('concepts', function(err4, reply4) {
-                              conceptFullLexicon = reply4;
+        let nlp = require('nlp_compromise');
+        client.hkeys('intents', function(err, reply) {
+                intentLexicon = reply;
+                client.hgetall('intents', function(err, reply) {
+                      intentFullLexicon = reply;
+                      client.hkeys('concepts', function(err, reply) {
+                          conceptLexicon = reply;
+                           client.hgetall('concepts', function(err, reply) {
+                              conceptFullLexicon = reply;
                               let words = new pos.Lexer().lex(lowerCaseQuestion);
                               let tagger = new pos.Tagger();
                               let taggedWords = tagger.tag(words);
@@ -55,14 +55,15 @@ let listController = {
                                 console.log(intentFullLexicon[taggedWords[y][0]])
                                 intentsArr.push(intentFullLexicon[taggedWords[y][0]])
                               }
+                              if(taggedWords[y][1]=="NN" || taggedWords[y][1]=="NNS"){
                               if(conceptLexicon.includes(taggedWords[y][0]))
                               {
                                   conceptsArr.push(conceptFullLexicon[taggedWords[y][0]])
                               }
                               }
-                              /*eslint-disable*/
-                              let query='unwind $conceptsArr as token MATCH (n:concept)-[:concept_of|:same_as]-(m:concept) where n.name=token return collect(m.name)';
-                              /*eslint-enable*/
+                              }
+                              let query='unwind $conceptsArr as token MATCH (n:concept)-[:concept_of|:same_as]-(m:concept) where n.name=token return collect(m.name)'
+                              console.log(query,conceptsArr)
                               session.run(query,{"conceptsArr":conceptsArr}).then(function(result) {
                                 conceptsArr=result.records[0]._fields[0]
                                 console.log(result.records[0]._fields)
@@ -75,7 +76,6 @@ let listController = {
 
             });
      },
-
   getLikeStatus: function(req, res) {
   // console.log('router suggest ques');
   /* eslint-disable */
@@ -289,17 +289,16 @@ let listController = {
     addquestion: function(req, res) {
       console.dir(JSON.parse(req.body.suggestedQuestionconcepts))
       req.body.suggestedQuestionconcept =JSON.parse(req.body.suggestedQuestionconcepts)
-      req.body.suggestedIntents=JSON.parse(req.body.suggestedIntents)
 
       //console.log(req.body.heading)
         // req.body.heading = req.body.heading.charAt(0).toUpperCase() +
         // req.body.heading.substring(1, req.body.heading.length);
         // req.body.statement = req.body.statement.charAt(0).toUpperCase() +
         // req.body.statement.substring(1, req.body.statement.length);
-      //  let arr1 = req.body;
-      //  let arr = [];
-      //  let c = 0;
-      //  let max = 0;
+        let arr1 = req.body;
+        let arr = [];
+        let c = 0;
+        let max = 0;
         /*eslint-disable*/
         let imagesArray = [
             'http://www.phonefacts.co.uk/wp-content/uploads/2011/11/1-and-zeros.jpg',
@@ -329,14 +328,40 @@ let listController = {
                 /*eslint-disable*/
                 console.log("-----------------------");
                // console.log(JSON.parse(req.body));
-                 let query = 'match (c:concept), \
-                            (u:user {emailid:"' + req.body.email + '"}) \
-                            where c.name = "' + req.body.suggestedQuestionconcept[0]+ '" \
-                            create (n:question {value:"' + req.body.statement + '",name:"' + req.body.heading + '"}), \
-                            (n)<-[:' + req.body.suggestedIntents[0] +']-(c), \
-                            (u)-[:post {on : timestamp()}]->(n) \
-                            return n \
-                            ';
+               let query;
+              if(req.body.secounderyIntent=="use"){
+                query = 'match (c:concept), \
+                           (u:user {emailid:"' + req.body.email + '"}) \
+                           where c.name = "' + req.body.suggestedQuestionconcept[0]+ '" \
+                           create (n:question {value:"' + req.body.statement + '",name:"' + req.body.heading + '"}), \
+                           (use:use),\
+                           (n)<-[:use]-(use)<-[:' + req.body.primaryIntent +']-(c), \
+                           (u)-[:post {on : timestamp()}]->(n) \
+                           return n \
+                           ';
+
+              }else if (req.body.primaryIntent=="compare") {
+                query = 'match (c:concept),(cc:concept) ,\
+                           (u:user {emailid:"' + req.body.email + '"}) \
+                           where c.name = "' + req.body.suggestedQuestionconcept[0]+ '" and cc.name="' + req.body.suggestedQuestionconcept[1]+ '"\
+                           create (n:question {value:"' + req.body.statement + '",name:"' + req.body.heading + '"}),(o:compare) \
+                           (o)<-[:' + req.body.primaryIntent +']-(c), \
+                           (o)<-[:' + req.body.primaryIntent +']-(cc), \
+                           (o)-[:' + req.body.primaryIntent +']->(n), \
+                           (u)-[:post {on : timestamp()}]->(n) \
+                           return n \
+                           ';
+              }else {
+                 query = 'match (c:concept), \
+                           (u:user {emailid:"' + req.body.email + '"}) \
+                           where c.name = "' + req.body.suggestedQuestionconcept[0]+ '" \
+                           create (n:question {value:"' + req.body.statement + '",name:"' + req.body.heading + '"}), \
+                           (n)<-[:' + req.body.primaryIntent +']-(c), \
+                           (u)-[:post {on : timestamp()}]->(n) \
+                           return n \
+                           ';
+              }
+
                 console.log(query);
                 /*eslint-enable*/
                 session.run(query).then(function(result) {

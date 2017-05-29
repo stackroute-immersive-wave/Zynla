@@ -58,7 +58,7 @@ class EditToc extends React.Component {
        this.setState({email:this.state.email})
        console.log(this.state.email)
     }
-
+//To add the Chapters
     handleAdd(chapterName,index){
       console.log(this.state.dataArr)
       console.log(this.state.dataArr.length)
@@ -124,7 +124,7 @@ class EditToc extends React.Component {
         this.setState({dataArr:newChapterData})
 
     }
-
+//To add topics to the chapters
     handleAddTopic(topicName,topicIndex,chapterIndex){
       let chapterType = chapterIndex
       let chapterInd = "Chapter"
@@ -195,7 +195,7 @@ class EditToc extends React.Component {
 
 
     }
-
+//To add subtopic to the topics
     handleAddSubTopic(subTopicName,subTopicIndex,topicIndex,chapterIndex){
 
       let chapterType = "Chapter"
@@ -277,6 +277,7 @@ class EditToc extends React.Component {
         this.state.dataArr[chapterIndex][chapterInd][topicIndex][topicInd]=newChapterData
         this.setState({dataArr:this.state.dataArr})
           }
+          //To create Json of the book in which the user wants to edit
 createJson()
         {
 
@@ -363,6 +364,7 @@ createJson()
           this.props.backdata();
 
         }
+        //To check the particular chapters in which user wants to edit
 checkvalues(e)
 {
   console.log(e.target.value)

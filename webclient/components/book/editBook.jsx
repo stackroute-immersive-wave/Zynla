@@ -36,7 +36,7 @@ let cb={
   marginLeft:'30px'
 }
 
-
+//To edit the content of the book
 class EditBook extends React.Component {
     constructor(props) {
         super(props);
@@ -77,20 +77,11 @@ this.handleClose = this.handleClose.bind(this);
 
       this.state.title=e.target.value;
       this.setState({title:this.state.title})
-      //console.log(this.state.title)
     }
+    //on click of the radio button the data of that particular chapter will be displayed
     handleRadio(e,data){
-
-      //console.log(e.target.id)
-    	//console.log(data.id)
         let dataArray = [];
-        //console.log("hey")
-        //console.log(e.target.value);
         let va = e.target.value;
-
-
-      	//console.log(this.state.check)
-
        let dataArray1
        console.log(this.state.data);
        let book = JSON.parse(this.props.data)
@@ -162,13 +153,6 @@ this.handleClose = this.handleClose.bind(this);
 
                                   }
                                   else if (e.target.id === 'subBtn' && this.state.check===chapter){
-                                    // //console.log(chapter)
-                                    // //console.log('chapter')
-                                    // //console.log(this.state.intent)
-                                    // this.state.intent.push(this.state.nameInIntent)
-                                    // this.setState({intent:this.state.intent})
-                                    // console.log(this.state.nameInIntent)
-                                    // console.log(this.state.intent)
                                     let arrOfIntents = []
                                     let intent = this.state.intent
                                     console.log("intent",this.state.intent)
@@ -376,6 +360,7 @@ this.handleClose = this.handleClose.bind(this);
 
 
 		}
+    // choosing template for the book
     handleTemplate(e,data)
     {
      // console.log("out "+this.state.tFlag)
@@ -406,7 +391,7 @@ this.handleClose = this.handleClose.bind(this);
 
       this.setState({listOfTemplates:template})
     }
-
+//saving new ToC
     saveToMongo(){
       this.handleOpen()
 

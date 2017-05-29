@@ -17,6 +17,7 @@ const path = require('path');
 //let context = fs.readFileSync(path.resolve(__dirname, '../../BookDocs/input.docx'), 'binary');
 
 let bookController = {
+//Sending the books to Zukti
   sendFileLength:function(req,res){
       var filearr=[];
       fs.readdir(path.resolve(".") + '/BookDocs/pdf/', function(err, files) {
@@ -38,6 +39,7 @@ let bookController = {
           });
 
         },
+        //Updating the ToC rating
     updateRating: function(req, res) {
         tocDoc.update({
             id: req.body.id
@@ -117,6 +119,7 @@ let bookController = {
     //         })
     //     }
     // },
+    //Getting all toc
     getTocs: function(req, res) {
         console.log("inside me")
         tocDoc.find().then((docs) => {
@@ -125,6 +128,7 @@ let bookController = {
             res.send(err);
         });
     },
+
     checkdatas: function(req, res) {
         console.log("checkdatas");
         bookDoc.find().then((docs) => {
@@ -135,7 +139,7 @@ let bookController = {
         });
 
     },
-
+//On selecting the particular domain those ToC will only appear
     getDomainTocs: function(req, res) {
         let domain = req.body.domain;
         console.log("inside me")
@@ -146,6 +150,7 @@ let bookController = {
             res.send(err);
         });
     },
+    //Save the ToC
     saveToc: function(req, res) {
         console.log("inside bookController")
         // res.send("success entry")
@@ -307,7 +312,7 @@ let bookController = {
         });
 
     },
-
+//Get all the available domains
     getDomains: function(req, res) {
         client.smembers("domain", (error, reply) => {
             if (error) {
@@ -319,7 +324,7 @@ let bookController = {
         })
     }
 }
-
+//Adding new template to populate data into the docx
 let addTemplate = function(x, username, res, type, email,template,title) {
     let chapterData = x;
     let context = fs.readFileSync(path.resolve(__dirname, template), 'binary');
@@ -500,7 +505,7 @@ let addTemplate = function(x, username, res, type, email,template,title) {
 
 
 }
-
+//Converting docx to pdf
 let savePDF = function(x, res, type, username, title, email) {
     console.log("inside savePDF")
     // var book1 = req.body.book;

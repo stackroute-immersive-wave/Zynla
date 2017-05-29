@@ -293,6 +293,7 @@ class NavBar extends Component {
     }
 
     submitStatement() {
+        console.log(this)
         // ajax call after submitting the values which needed to be asked
         let conceptArr = [];
         /* eslint-disable */
@@ -300,29 +301,52 @@ class NavBar extends Component {
         /* eslint-enable */
         let email = Cookie.load('email');
         conceptArr = JSON.stringify(this.state.selectedConcepts);
-        // console.log("---------"+this.state.heading+"---"
-        //+this.state.heading.length);
-        // console.log("--------------"+this.state.statement+"---"
-        //+this.state.statement.length);
+        // console.log("---------"+this.state.heading+"---"+this.state.heading.length);
+        // console.log("--------------"+this.state.statement+"---"+this.state.statement.length);
         //  console.log("Inside submit st
-        // atement question intent is--------- " + conceptArr
-        //+"----"+conceptArr.length);
-if (validator.isEmpty(this.state.heading)
-|| validator.isEmpty(this.state.statement) ||
+        // atement question intent is--------- " + conceptArr+"----"+conceptArr.length);
+        if (validator.isEmpty(this.state.heading) || validator.isEmpty(this.state.statement) ||
             conceptArr.length === 0) {
-    document.getElementById('errorMessage').innerHTML = 'All Fields Required';
+            document.getElementById('errorMessage').innerHTML = 'All Fields Required';
         }
         else {
             document.getElementById('errorMessage').innerHTML = '';
+              let secounderyIntent;
+              let primaryIntent;
+              if (context.state.suggestedIntents.includes("use")){
+               secounderyIntent="use";
+              ["when","why","how","where"].forEach(function(data){
+                if(context.state.suggestedIntents.includes(data)){
+                  primaryIntent=data;
+                }
+              })
+              if(primaryIntent){}
+              else {
+                primaryIntent="definition"
+              }
+               }
+              else if (context.state.suggestedIntents.includes("compare")){
+                    primaryIntent="compare"
+                  }
+              else if (context.state.suggestedIntents.includes("advantages")){
+                primaryIntent="advantages";
+              }
+              else if (context.state.suggestedIntents.includes("disadvantage")){
+                primaryIntent="disadvantages";
+              }
+              else {
+                primaryIntent=context.state.suggestedIntents[0];
+              }
+              console.log(primaryIntent,secounderyIntent);
             let data = {
                 email: email,
                 profilepicture: Cookie.load('profilepicture'),
-                heading: this.state.heading,
-                statement: this.state.statement,
+                heading: context.state.heading,
+                statement: context.state.statement,
                 Concept: conceptArr,
-                intent: this.state.questionIntent,
-                suggestedIntents:JSON.stringify(this.state.suggestedIntents),
-        suggestedQuestionconcepts:JSON.stringify(this.state.selectedConcepts)
+                primaryIntent:primaryIntent,
+                secounderyIntent:secounderyIntent,
+                suggestedQuestionconcepts:JSON.stringify(context.state.selectedConcepts)
             };
             console.log(data);
             context.setState({activeDimmer: true});
@@ -332,7 +356,7 @@ if (validator.isEmpty(this.state.heading)
                 data: data,
                 success: function() {
                     context.setState({active: false, activeDimmer: false});
-        context.setState({heading: '', statement: '', selectedConcepts: []});
+                    context.setState({heading: '', statement: '', selectedConcepts: []});
                     context.submitQuestionAlert();
                 },
                 error: function() {}
