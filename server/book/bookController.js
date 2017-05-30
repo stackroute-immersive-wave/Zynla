@@ -158,6 +158,7 @@ let bookController = {
         let chapterData = JSON.parse(req.body.book);
         /* eslint-disable */
         let domain = chapterData[0]["Domain"];
+        
         /* eslint-enable */
         //let author = req.body.username;
         let email = req.body.author;
@@ -166,7 +167,7 @@ let bookController = {
         if(req.body.title===undefined)
     {
 
-             title = chapterData[0]["titles"];
+             title = chapterData[0]["title"];
         }
             /* eslint-enable */
         else{
@@ -197,11 +198,12 @@ let bookController = {
             console.log(query);
             console.log("toc query");
             session.close()
-            console.dir(result.records.length, "length")
-            if (result.summary.counters._stats.nodesCreated = 1) {
+            console.log(result.summary.counters._stats.nodesCreated, "length")
+            if (result.summary.counters._stats.nodesCreated === 1) {
                 let id = result.records[0]._fields[0]["identity"]["low"];
                 let toc = new tocDoc({author: req.body.author, timestamp: date, id: id, toc: chapterData})
                 toc.save().then((doc) => {
+
                     //creating book
                     chapterData.forEach((chapter, chapterIndex, chapterArr) => {
                         if (chapter.hasOwnProperty('name')) {
@@ -306,7 +308,111 @@ let bookController = {
                         }
                     })
                 }, (err) => {
-                    console.log(err)
+
+
+                    //creating book
+                    chapterData.forEach((chapter, chapterIndex, chapterArr) => {
+                        if (chapter.hasOwnProperty('name')) {
+                            //to set toc name and domain
+                            let query = 'match (n) where id(n)=' + id + ' set n.name="' + chapter.name + '",n.domain="' + chapter.domain + '"';
+                            session.run(query).then(function(result) {
+                                console.log("toc1 query");
+                                if (result) {}
+                                session.close()
+                                console.log("toc1 query close");
+                            })
+                        } else {
+                            chapterArr[chapterIndex]["Chapter"].forEach((topic, topicIndex, topicArr) => {
+                                let chapterId;
+                                if (topic.hasOwnProperty('name')) {
+                                    topicname = topic.name;
+                                } else {
+                                    topicArr[topicIndex]["Topic"].forEach((subTopic, subTopicIndex, subTopicArr) => {
+                                        let topicId;
+                                        if (subTopic.hasOwnProperty('name')) {
+                                            subTopicname = subTopic.name;
+                                        } else {
+
+                                            let query = '\
+                           match (concept:concept{name:"' + subTopicArr[subTopicIndex]["Subtopic"] + '"}),(topicname:concept{name:"' + topicname + '"}),(subTopicname:concept{name:"' + subTopicname + '"}),\
+                           (toc:toc) where id(toc)=' + id + '\
+                               merge (chapter:chapter{name:"' + topicname + '"})-[:chapter_of]->(toc) \
+                               merge (topic:topic{name:"' + subTopicname + '"})-[:topic_of]->(chapter) \
+                               merge (subtopic:subtopic{name:"' + subTopicArr[subTopicIndex]["Subtopic"] + '"})-[:topic_of]->(topic) \
+                               merge  (subtopic)-[:concept]->(concept)  \
+                               merge  (topic)-[:concept]->(subTopicname)\
+                               merge  (chapter)-[:concept]->(topicname) with concept\
+                               match (concept)-[r]-(:question)-[:answer_of]-(m)\
+                                where (m:text) or (m:blog)or (m:video)\
+                                 with  {intent:type(r),value:collect({label:labels(m)[0],value:m.value})}  as value  \
+                                match (topicname:concept{name:"' + topicname + '"})-[rrr]-(:question)-[:answer_of]-(n)\
+                                   where (n:text) or (n:blog)or (n:video)\
+                                    with  {intent:type(rrr),value:collect({label:labels(n)[0],value:n.value})} as conceptvalue ,value as value \
+                                    match (subTopicname:concept{name:"' + subTopicname + '"})-[rr]-(:question)-[:answer_of]-(l)\
+                                    where (l:text) or (l:blog)or (l:video)\
+                                     with  {intent:type(rr),value:collect({label:labels(l)[0],value:l.value})} as subtopicvalue,conceptvalue as conceptvalue ,value as value\
+                                    return collect(value) ,collect(conceptvalue),collect(subtopicvalue),"'+topicname+'","'+subTopicname+'"'
+                              ;
+                                            console.log(query)
+                                            session.run(query).then(function(result) {
+                                                /*eslint-disable*/
+                                                console.log(subTopicname, topicname);
+
+                                                let newSubTopicArr = []
+                                                newSubTopicArr.push({name: subTopicArr[subTopicIndex]["Subtopic"]
+                                                })
+                                                newSubTopicArr.push.apply(newSubTopicArr, result.records[0]._fields[0])
+                                                subTopicArr[subTopicIndex]["Subtopic"] = newSubTopicArr
+                                                let newtopicArr = [];
+                                                newtopicArr.push({name: result.records[0]._fields[4]})
+                                                console.log(newtopicArr,"newtopicArr",{name: subTopicname});
+                                                newtopicArr.push.apply(newtopicArr, result.records[0]._fields[2])
+                                                subTopicArr[0] = {
+                                                    content: newtopicArr
+                                                }
+                                                let newConceptArr = [];
+                                                newConceptArr.push({name: result.records[0]._fields[3]})
+                                                console.log(newConceptArr,"newConceptArr",{name: topicname});
+                                                newConceptArr.push.apply(newConceptArr, result.records[0]._fields[1])
+                                                topicArr[0] = {
+                                                    content: newConceptArr
+                                                };
+                                                // console.log("newConceptArr",result.records[0]._fields[2]);
+                                                if (chapterArr.length == (chapterIndex + 1) && topicArr.length == (topicIndex + 1) && subTopicArr.length == (subTopicIndex + 1))
+                                                    //  res.send(chapterData)
+                                                session.close()
+                                                if (chapterArr.length == (chapterIndex + 1) && topicArr.length == (topicIndex + 1) && subTopicArr.length == (subTopicIndex + 1)) {
+
+                                                    let book = new bookDoc({author: "aqib", timestamp: 1, id: 1, book: chapterData})
+                                                    book.save()
+
+                                                    let output = 'output'
+                                                    let path = '../../BookDocs/pdf/output.pdf'
+                                                    query = "match (n:toc) where id(n)= " + id + " create (b:book{path:'" + path + "'}) merge (b)-[:book_of]->(n) return n,b"
+                                                    //    console.log(query);
+                                                    session.run(query).then(function(result) {
+                                                        /*eslint-disable*/
+                                                        // console.log(result.summary.counters._stats.nodesCreated,"inside query");
+                                                        session.close()
+                                                        if (result) {
+                                                            if (req.body.type === 'editedbook') {
+                                                                let bookData = JSON.stringify(req.body.editedbook)
+                                                                addTemplate(JSON.parse(bookData), req.body.username, res, req.body.type, email,template,req.body.title);
+                                                            } else {
+                                                                addTemplate(JSON.stringify(chapterData), req.body.username, res, req.body.type, email,template,req.body.title);
+                                                            }
+
+                                                        }
+                                                    })
+                                                    console.log("end");
+                                                }
+                                            })
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
                 });
             }
         });

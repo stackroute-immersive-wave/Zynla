@@ -388,17 +388,19 @@ class NavBarPro extends Component {
         if (this.state.picture!=='') {
         /*eslint-disable*/
           if(this.state.allFiles.preview===undefined){
-          /*eslint-enable*/
+
           let pic=this.state.picture;
           imagechange = (<Image src={require("../../../webserver/pictures/"+pic)} style={{
               height: 204
-          }}/>);}
-          else{
+          }}/>);
+  console.log(pic);
+        }
+         else{
             console.log(this.state.allFiles.preview);
             imagechange = (<Image src={this.state.allFiles.preview} style={{
                 height: 204
             }}/>);
-          }
+           }
         }
         else { imagechange = (
                 <Image src={Cookie.load('profilepicture')}
@@ -554,3 +556,4 @@ module.exports = NavBarPro;
                   // <Grid>
                   //   <Grid.Column width = {11}>
                   //   {this.state.contentNew}
+  /*eslint-enable*/

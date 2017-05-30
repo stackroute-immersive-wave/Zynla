@@ -278,7 +278,7 @@ class EditToc extends React.Component {
         this.setState({dataArr:this.state.dataArr})
           }
           //To create Json of the book in which the user wants to edit
-createJson()
+        createJson()
         {
 
           this.handleOpen();

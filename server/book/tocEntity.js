@@ -15,7 +15,7 @@ let schema = new mongoose.Schema({
       Domain: String,
       name: String,
       _id : false,
-      title: String,
+      title: {type:String,unique:true,sparse:true},
       Chapter: {
         type:[
           {
