@@ -27,7 +27,27 @@ class questionCard extends React.Component {
 
     handleShow = () => this.setState({active: true})
     handleHide = () => this.setState({active: false})
-
+    //#Abu 25/4/2017 (To check whether the question is followed or not and to fix the iconName)
+  componentWillMount() {
+      let emailId = Cookie.load('email');
+      let arr = [];
+      $.ajax({
+          url: `/users/viewFollowCard/${emailId}`,
+          type: 'GET',
+          success: function(data) {
+            data.map(function(item) {
+              item.watchingList.map(function(items) {
+                arr.push(items);
+              });
+            });
+            for(let i = 0; i < arr.length; i = i + 1) {
+              if(this.props.id === arr[i].id) {
+                this.setState({iconName: 'minus'});
+              }
+            }
+          }.bind(this)
+        });
+  }
     /* To save the card which you follow in mongo db & Neo4j*/
     saveToProfile() {
         let emailId = Cookie.load('email');
@@ -54,6 +74,32 @@ class questionCard extends React.Component {
             error: function() {}
         });
     }
+    //#Abu 25/4/2017 (To unfollow the card and to remove its data from Mongo & Neo4j)
+        unfollowFromProfile() {
+            let emailId = Cookie.load('email');
+            $.ajax({
+                url: '/users/unfollowFromProfile',
+                type: 'PUT',
+                data: {
+                    emailId: emailId,
+                    id: this.props.id,
+                    displayImage: this.props.displayImage,
+                    heading: this.props.heading,
+                    statement: this.props.question,
+                    postedBy: this.props.postedBy,
+                    profileImage: this.props.profileImage,
+                    addedOn: this.props.addedOn,
+                    category: this.props.category,
+                    upVotes: this.props.upVotes,
+                    downVotes: this.props.downVotes,
+                    noofans: this.props.answerCounts
+                },
+                success: function() {
+                    this.setState({iconName: 'plus'});
+                }.bind(this),
+                error: function() {}
+            });
+        }
     getusers()
   {
       $.ajax({
@@ -184,7 +230,8 @@ inviteAlert (result) {
  /*eslint-disable*/
     render() {
         const {active} = this.state;
-        const content = (
+        //#Abu 26/4/2017 (commented to change the symbol for follow and unfollow)
+        /*const content = (
               <div><Button circular onClick={this.saveToProfile.bind(this)}
                   icon='plus' className='spacing' id='iconColor'
                   size='tiny' style={{fontSize: 13 + 'px'}}/>
@@ -209,7 +256,118 @@ inviteAlert (result) {
       </p>
        </Popup>
                   </div>
-          );
+          );*/
+
+          //#Abu 25/4/2017 (To change the symbol for following and unfollowing)
+                if(this.state.iconName == 'minus'){
+                  //console.log("icon is minus");
+                  var content = (
+
+                    <div><Button circular onClick={this.unfollowFromProfile.bind(this)} icon={this.state.iconName || 'minus'} className='spacing' id='iconColor' size='tiny' style={{
+                        'fontSize': 13 + 'px'
+                    }}/>
+
+                        <Popup wide open={this.state.isOpen} onClose={() => this.closePopup()} trigger={< Button circular onClick = {
+                            () => this.openPopup()
+                        }
+                        icon = 'mail outline' id = 'iconColor' size = 'tiny' style = {{'fonSize': 15 + 'px'}}/>} on='click' position='bottom right'>
+                            <Icon name='remove' onClick={() => this.closePopup()} style={{
+                                marginTop: 3 + 'px',
+                                marginBottom: 10 + 'px',
+                                marginLeft: 10 + 'px',
+                                float: 'right'
+                            }}/>
+                            <p style={{
+                                'text-align': 'center',
+                                'padding-right': '10px',
+                                'margin-top': '0px'
+                            }}>
+                                <div class="ui fluid icon input">
+                                    <input style={{
+                                        'resize': 'horizontal',
+                                        'width': '250px',
+                                        'height': '30px'
+                                    }} id="users" placeholder="Search friends Here" list="usernames" onKeyDown={this.changeval.bind(this)}/>
+                                    <datalist id="usernames"></datalist>
+                                </div><br/>
+                                <Button fluid animated='fade' onClick={this.findMail.bind(this)} color='red' className='butstyle'>
+                                    <Button.Content visible>
+                                        <p style={{
+                                            'text-align': 'center',
+                                            'color': 'white',
+                                            'font-family': 'Arial, Helvetica, sans-serif'
+                                        }}>
+                                            Invite</p>
+                                    </Button.Content>
+                                    <Button.Content hidden>
+                                        <p style={{
+                                            'text-align': 'center',
+                                            'color': 'white',
+                                            'font-family': 'Arial, Helvetica, sans-serif'
+                                        }}>
+                                            Invite a friend</p>
+                                    </Button.Content>
+                                </Button>
+                            </p>
+                        </Popup>
+                    </div>
+                );
+              }
+              else {
+              //  console.log("icon is plus and to follow the question");
+
+              var content = (
+
+                <div><Button circular onClick={this.saveToProfile.bind(this)} icon={this.state.iconName || 'plus'} className='spacing' id='iconColor' size='tiny' style={{
+                    'fontSize': 13 + 'px'
+                }}/>
+
+                      <Popup wide open={this.state.isOpen} onClose={() => this.closePopup()} trigger={< Button circular onClick = {
+                          () => this.openPopup()
+                      }
+                      icon = 'mail outline' id = 'iconColor' size = 'tiny' style = {{'fonSize': 15 + 'px'}}/>} on='click' position='bottom right'>
+                          <Icon name='remove' onClick={() => this.closePopup()} style={{
+                              marginTop: 3 + 'px',
+                              marginBottom: 10 + 'px',
+                              marginLeft: 10 + 'px',
+                              float: 'right'
+                          }}/>
+                          <p style={{
+                              'text-align': 'center',
+                              'padding-right': '10px',
+                              'margin-top': '0px'
+                          }}>
+                              <div class="ui fluid icon input">
+                                  <input style={{
+                                      'resize': 'horizontal',
+                                      'width': '250px',
+                                      'height': '30px'
+                                  }} id="users" placeholder="Search friends Here" list="usernames" onKeyDown={this.changeval.bind(this)}/>
+                                  <datalist id="usernames"></datalist>
+                              </div><br/>
+                              <Button fluid animated='fade' onClick={this.findMail.bind(this)} color='red' className='butstyle'>
+                                  <Button.Content visible>
+                                      <p style={{
+                                          'text-align': 'center',
+                                          'color': 'white',
+                                          'font-family': 'Arial, Helvetica, sans-serif'
+                                      }}>
+                                          Invite</p>
+                                  </Button.Content>
+                                  <Button.Content hidden>
+                                      <p style={{
+                                          'text-align': 'center',
+                                          'color': 'white',
+                                          'font-family': 'Arial, Helvetica, sans-serif'
+                                      }}>
+                                          Invite a friend</p>
+                                  </Button.Content>
+                              </Button>
+                          </p>
+                      </Popup>
+                  </div>
+              );
+              }
           let addedOn = parseInt(this.props.addedOn, 10);
        addedOn = new Date(addedOn).toString().substring(0, 10);
 

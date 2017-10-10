@@ -1,6 +1,6 @@
 import {PropTypes} from 'react';
-import RichTextEditor from 'react-rte';
 import React from 'react';
+import RichTextEditor from 'react-rte';
 import {
     Grid,
     Image,
@@ -16,7 +16,9 @@ import {
     Checkbox,
     Dimmer,
     Loader,
-    Header
+    Header,
+    Radio
+
 } from 'semantic-ui-react';
 import Cookie from 'react-cookie';
 // import RichTextEditor from 'react-rte';
@@ -98,6 +100,9 @@ class answerPage extends React.Component {
             report: '',
             reportResult: '',
             popupResult: '',
+            name: '',
+            usermail: '',
+            comment: '',
             objArray: [
                 {
                     id: 0,
@@ -130,7 +135,8 @@ class answerPage extends React.Component {
                         open: true
                     }
                 }
-            ]
+            ],
+            answerType:""
         };
         this.textVal = this.textVal.bind(this);
         this.getviewscount = this.getviewscount.bind(this);
@@ -138,12 +144,15 @@ class answerPage extends React.Component {
         this.postAnswer = this.postAnswer.bind(this);
         this.addcomment = this.addcomment.bind(this);
         this.locAlert = this.locAlert.bind(this);
+        this.getUserName = this.getUserName.bind(this);
     }
     static propTypes = {
         onChange: PropTypes.func
     };
     commentclose() {
       this.setState({modalState: false});
+      this.setState({commentmsg:false});
+      this.setState({comment: ''});
     }
     locAlert() {
     this.refs.container.success(
@@ -195,11 +204,13 @@ class answerPage extends React.Component {
       if((this.state.value.toString('html')).length > 11) {
         this.close();
         let id = window.location.hash.split('id=')[1];
-        // console.log('inside post Answer');
+         console.log("post answer name: "+this.state.name);
         let ansdata = {
             questionId: id,
             mail: Cookie.load('email'),
-            content: this.state.value.toString('html')
+            content: this.state.value.toString('html'),
+            name: this.state.name,
+            type:this.state.answerType
         };
         /* eslint-disable */
         let context = this;
@@ -212,6 +223,8 @@ class answerPage extends React.Component {
             success: function() {
                 // console.log('success', data);
                 context.setState({active: false});
+                context.setState({value: RichTextEditor.createEmptyValue()});
+                context.setState({errormsg: false});
                 context.getData();
             },
             error: function() {
@@ -245,7 +258,7 @@ class answerPage extends React.Component {
     }
     // Adding comments for question created by Aswini K
     addcomment() {
-        // console.log('views before increment');
+        if(this.state.comment!== ''){
         let id = window.location.hash.split('id=')[1];
         /* eslint-disable */
         let context = this;
@@ -263,10 +276,16 @@ class answerPage extends React.Component {
             success: function() {
                 context.changeModalState(123, false);
                 context.locAlert();
-                // this.setState({comment: Comments});
+                context.setState({commentmsg:false});
+                context.setState({comment: ''});
                 // console.log('inside success', this.state.commentdata);
             }
         });
+    }
+        else {
+             this.setState({commentmsg: true});
+
+    }
     }
     // Getting question data from mongo db created by Aswini K
     getData() {
@@ -278,11 +297,24 @@ class answerPage extends React.Component {
             success: function(data) {
                 this.setState({objArray: data});
                 this.setState({views: data[0].views});
+                console.log("like: "+data[0].upVotes);
+                console.log("dislike: "+data[0].downVotes);
                 this.getviewscount();
                 this.handleClose();
                 // console.log(this.state.objArray);
             }.bind(this)
         });
+    }
+    // #Pavithra_K Retrieves userName who posted the question
+    getUserName(mailId){
+      $.ajax({
+           url: '/users/getusername/'+ mailId,
+           type: 'GET',
+           success: function(data) {
+            console.log(data)
+              this.setState({name:data});
+           }.bind(this)
+         });
     }
     componentWillMount() {
         this.getData();
@@ -291,10 +323,11 @@ class answerPage extends React.Component {
     }
     // updating like for question by sumit(28/2/2017)
     updatelike() {
+        console.log(this.state.colorName)
       if(this.state.colorNameUnlike !== 'black') {
         let type = 'add';
         let color = 'blue';
-        let upVotesTemp = parseInt(this.state.upVotes, 10) + 1;
+        let upVotesTemp;//= parseInt(this.state.upVotes, 10) + 1;
         if (this.state.colorName === 'green') {
             type = 'add';
             upVotesTemp = parseInt(this.state.upVotes, 10) + 1;
@@ -305,8 +338,8 @@ class answerPage extends React.Component {
             color = 'green';
         }
         let id = window.location.hash.split('id=')[1];
-        // console.log('upvotes before increment',this.state.upVotes);
-        // console.log('upvotes after increment',upVotesTemp);
+        console.log('upvotes before increment',this.state.upVotes);
+        console.log('upvotes after increment',upVotesTemp);
         $.ajax({
             url: '/list/updateLike',
             type: 'POST',
@@ -316,10 +349,14 @@ class answerPage extends React.Component {
                 email: Cookie.load('email'),
                 type: type
             },
-            success: function() {
-                // console.log('comes');
+            success: function(){
+                console.log('comes');
                 this.setState({colorName: color, upVotes: upVotesTemp});
-            }.bind(this)
+                console.log("color: "+ this.state.colorName+"upvotes: "+ this.state.upVotes)
+            }.bind(this),
+            error: function(error){
+                console.log("error: "+error)
+            }
         });
       }
     }
@@ -329,7 +366,7 @@ class answerPage extends React.Component {
         if(this.state.colorName !== 'blue') {
         let type = 'add';
         let color = 'red';
-        let downVotesTemp = parseInt(this.state.downVotes, 10) + 1;
+        let downVotesTemp;//= parseInt(this.state.downVotes, 10) + 1;
         if (this.state.colorNameUnlike === 'red') {
             type = 'add';
             downVotesTemp = parseInt(this.state.downVotes, 10) + 1;
@@ -367,22 +404,28 @@ class answerPage extends React.Component {
                 email: email
             },
             success: function(data) {
-                // console.log(data);
+                 console.log(data.like);
                 if (data.like) {
                     this.setState({colorName: 'blue'});
+                    this.setState({upVotes:1})
                 } else {
                     this.setState({colorName: 'green'});
+                    this.setState({upVotes:0})
                 }
                 if (data.unlike) {
-                    this.setState({colorNameUnlike: 'black'});
+                   this.setState({colorNameUnlike: 'black'});
+                   this.setState({downVotes:1})
                 } else {
                     this.setState({colorNameUnlike: 'red'});
+                    this.setState({downVotes:0})
                 }
             }.bind(this)
         });
     }
     // Following the question created by Aswini K
+    //#Abu (4/5/2017) Function to check the question is following or not
     CheckingId() {
+      let id = window.location.hash.split('id=')[1];
         let emailId = Cookie.load('email');
         let arr = [];
         $.ajax({
@@ -391,11 +434,17 @@ class answerPage extends React.Component {
             success: function(data) {
                 data.map(function(item) {
                     item.watchingList.map(function(items) {
+                      console.log('inside CheckingId ');
+                      console.log(items);
                         arr.push(items);
                     });
                 });
                 for (let i = 0; i < arr.length; i = i + 1) {
-                    if (this.props.id === arr[i].id) {
+                  console.log(id);
+                  console.log(arr[i].id);
+
+                    if (id === arr[i].id) {
+                      console.log('inside CheckingId for assigning minus');
                         this.setState({iconName: 'minus'});
                     }
                 }
@@ -407,8 +456,9 @@ class answerPage extends React.Component {
         let id = window.location.hash.split('id=')[1];
         let emailId = Cookie.load('email');
         let quesObj = this.state.objArray;
+        if(this.state.iconName === 'add'){
+          console.log("inside cardAnswerPage/answerPage.jsx to follow "+id);
         $.ajax({
-
            url: '/users/saveToProfile',
             type: 'PUT',
             data: {
@@ -431,10 +481,43 @@ class answerPage extends React.Component {
             }.bind(this),
             error: function() {}
         });
+      }
+      else{
+        //#Abu (4/5/2017) Function to Unfollow the question
+        console.log("inside cardAnswerPage/answerPage.jsx to Unfollow "+id);
+        $.ajax({
+            url: '/users/unfollowFromProfile',
+            type: 'PUT',
+            data: {
+                emailId: emailId,
+                id: id,
+                displayImage: quesObj[0].displayImage,
+                heading: quesObj[0].heading,
+                statement: quesObj[0].question,
+                postedBy: quesObj[0].postedBy,
+                profileImage: quesObj[0].profileImage,
+                addedOn: quesObj[0].addedOn,
+                views: quesObj[0].views,
+                category: quesObj[0].category,
+                upVotes: quesObj[0].upVotes,
+                downVotes: quesObj[0].downVotes,
+                answerCounts: quesObj[0].answerCounts
+            },
+            success: function() {
+              console.log('sucess inside answerpage while unfollow');
+                this.setState({iconName: 'add'});
+            }.bind(this),
+            error: function() {
+              console.log('Error inside answerpage while unfollowing');
+            }
+        });
+      }
     }
     close = () => this.setState({modalStatus: false})
     warningModal = () => {
       this.setState({warnModalStatus: true});
+      this.setState({value: RichTextEditor.createEmptyValue()});
+      this.setState({errormsg: false});
     }
     warningModalCancel = () => {
       this.setState({warnModalStatus: false});
@@ -483,9 +566,11 @@ class answerPage extends React.Component {
             error: function() {}
         });
     }
+    handleAnsTypeChange = (e, { value }) => this.setState({ answerType:value });
 
     render() {
       let errorMessage;
+      let commentMessage;
         let quesObj = this.state.objArray;
         let arr = quesObj[0].tags;
         let arr1 = arr.replace('["', ' ');
@@ -552,6 +637,11 @@ class answerPage extends React.Component {
         }else {
           errorMessage = '';
         }
+        if(this.state.commentmsg) {
+          commentMessage = (<div className='errorCss'>Comments cannot be empty</div>);
+        }else {
+          commentMessage = '';
+        }
         return (
             <div>
               <Dimmer active={active} page>
@@ -607,6 +697,35 @@ class answerPage extends React.Component {
                                 Click to Answer
                             </Button>
                             <Modal open={this.state.modalStatus}>
+                            <Form>
+                              <Form.Field style={{display: "inline"}}>
+                                <Radio
+                                  label='text'
+                                  name='radioGroup'
+                                  value='text'
+                                  checked={this.state.answerType === 'text'}
+                                  onChange={this.handleAnsTypeChange}
+                                />
+                              </Form.Field>
+                              <Form.Field style={{display: "inline"}}>
+                                <Radio
+                                  label='video'
+                                  name='radioGroup'
+                                  value='video'
+                                  checked={this.state.answerType === 'video'}
+                                  onChange={this.handleAnsTypeChange}
+                                />
+                              </Form.Field>
+                              <Form.Field style={{display: "inline"}}>
+                                <Radio
+                                  label='blog'
+                                  name='radioGroup'
+                                  value='blog'
+                                  checked={this.state.answerType === 'blog'}
+                                  onChange={this.handleAnsTypeChange}
+                                />
+                              </Form.Field>
+                            </Form>
                                 <Modal.Content>
                                     <div style={titlestyle1}>
                                         {quesObj[0].heading}
@@ -654,7 +773,7 @@ class answerPage extends React.Component {
                                 buttonfolstyle
                             } > Add Comments </Button>}
                               open = {this.state.modalState} onClose={this.commentclose}>
-                                <Form style={formstyle}>
+                                <Form style={formstyle}>{commentMessage}
                                     <TextArea onChange={this.comment.bind(this)}
                                        onClick = {this.changeModalState.bind(this)}
                                         value={this.state.comment}/>
@@ -672,7 +791,7 @@ class answerPage extends React.Component {
                            style={ansstyle1}>{quesObj[0].answerCounts}&nbsp;
                             Answers</div>
                         <Divider clearing/>
-                        <DisplayAnswer ansCollection={this.state.objArray}/>
+                        <DisplayAnswer ansCollection={this.state.objArray} name={this.state.name}/>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

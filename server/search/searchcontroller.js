@@ -22,7 +22,7 @@ let searchController = {
 
     getuserprofile: function(req, res) {
         let session = driver.session();
-        let query = 'match (n:Concept {name:"' + req.body.q + '"})<-[:follow]-(u:User) return u';
+        let query = 'match (n:concept {name:"' + req.body.q + '"})<-[:following]-(u:user) return u';
         session.run(query).then(function(result) {
             let arr = [];
             for (let x = 0; x < result.records.length; x = x + 1) {
@@ -52,9 +52,10 @@ let searchController = {
     getQuestions: function(req, res) {
         let session = driver.session();
         /* eslint-disable */
-        let query = 'match (n:Concept)<-[r:question_of]-(m:Question) \
-         where n.name=~"(?i)' + req.body.q + '" return m';
+        let query = 'match (n:concept)-[*1..2]-(m:question) \
+         where n.name="'+ req.body.q + '" return m';
          /* eslint-enable */
+         console.log(query)
         session.run(query).then(function(result) {
             let arr = [];
             for (let x = 0; x < result.records.length; x = x + 1) {
@@ -79,7 +80,10 @@ let searchController = {
                 session.close();
             });
         });
-        session.close();
+        //<Shambhavi> 4/19/2017 commented because it
+        // was responsible app crashing and unnecessary data was
+      //displayed on search of related questions of certain concept.
+       // session.close();
     },
 
     getConcepts: function(req, res) {
@@ -87,6 +91,7 @@ let searchController = {
       const cmd = 'getConcepts';
 
       const concept = req.body.concept;
+      console.log(req.body)
       const searchMicroservice = require('seneca')();
 
       /* ToDO: Move IP and Port to config*/
@@ -101,9 +106,9 @@ let searchController = {
     followUser: function(req, res) {
        let session = driver.session();
        /* eslint-disable */
-       let query = 'match(n:User {name:"' + req.body.id + '"}),\
-                (m:User {name:"' + req.body.emailId + '"})\
-                create (n)-[:follow]->(m)\
+       let query = 'match(n:user {emailid:"' + req.body.id + '"}),\
+                (m:user {emailid:"' + req.body.emailId + '"})\
+                create (n)-[:following]->(m)\
                 return n,m;';
        /* eslint-enable */
        session.run(query).then(function() {
@@ -133,15 +138,51 @@ let searchController = {
            res.send('success');
        });
    },
+   //#Abu 25/4/2017 (Query to unfollow the people and decrementing the following)
+     unfollowUser: function(req, res) {
+        let session = driver.session();
+        /* eslint-disable */
+        let query = 'match(n:user {emailid:"' + req.body.id + '"})-[f:following]->(m:user {emailid:"' + req.body.emailId + '"}) delete f return m;';
+        /* eslint-enable */
+        console.log(query);
+        session.run(query).then(function() {
+            userProfileList.findOneAndUpdate({
+            emailId: req.body.id
+        }, {
+            $pop: {
+                followingUser: req.body.emailId
+            }
+        }, {new: true}).then(() => {
+            res.send('followed user deleted');
+        }, (err) => {
+            res.send(err);
+        });
+        userProfileList.findOneAndUpdate({
+        emailId: req.body.emailId
+     }, {
+        $inc: {
+            followerCount: -1
+        }
+     }, {new: true}).then(() => {
+        res.send('followerCount Decremented');
+     }, (err) => {
+        res.send(err);
+     });
+            session.close();
+            res.send('success');
+        });
+     },
     isFollow: function(req, res) {
-        let query = 'match (n:User {name:"' + req.body.name + '"})-[:follow]->(m:User) return m';
+       /*eslint-disable*/
+        let query = 'match (n:user {emailid:"' + req.body.name + '"})-[:following]->(m:user) return m';
+        /*eslint-enable*/
         let session = driver.session();
         session.run(query).then(function(result) {
             let namearr = [];
             for (let x = 0; x < result.records.length; x = x + 1) {
                 /* eslint-disable */
-                // console.log(result.records[x]._fields[0].properties.name);
-                let name = result.records[x]._fields[0].properties.name;
+                 console.log('follow ',result.records[x]._fields[0].properties.emailid);
+                let name = result.records[x]._fields[0].properties.emailid;
                 /* eslint-enable */
                 namearr.push(name);
             }
@@ -198,7 +239,27 @@ let searchController = {
           res.send(answer.result);
         });  /* eslint-disable */
 
-    }
+    },
+    //#Abu (29/4/2017) To Unfollow topic by calling user-search-microservice.js
+        UnFollowTopic: function(req, res) {
+          const role = 'do';
+          const cmd = 'UnFollowTopic';
+
+          const id = req.body.id;
+          const concept = req.body.concept;
+          const searchMicroservice = require('seneca')();
+
+          /*ToDO: Move IP and Port to config*/
+
+          searchMicroservice.client({pin: 'role:do, cmd:UnFollowTopic', host: '127.0.0.1', port: 3000});
+
+            searchMicroservice.act({role, cmd}, {id, concept}, (err, answer) => {
+              console.log("Unfollow topic inside searchController ");
+              console.log(answer.result);
+              res.send(answer.result);
+            });  /* eslint-disable */
+
+        }
 };
 
 module.exports = searchController;

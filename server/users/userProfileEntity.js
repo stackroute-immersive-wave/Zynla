@@ -159,7 +159,8 @@ const schema = new mongoose.Schema({
             answerCounts: Number,
             upVotes: Number,
             downVotes: Number,
-            views: Number
+            views: Number,
+            userName:String
         }
     ],
     preferenceList: [
@@ -174,7 +175,8 @@ const schema = new mongoose.Schema({
             upVotes: Number,
             downVotes: Number,
             views: Number,
-            position: Number
+            position: Number,
+            userName:String
         }
     ],
     watchingTopic: [

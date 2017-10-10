@@ -1,0 +1,76 @@
+[12 05 2017 12:32:27.803] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[12 05 2017 12:40:04.183] [DEBUG] - Mongoose is now disconnected..!
+[12 05 2017 12:57:55.501] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[12 05 2017 13:01:01.207] [DEBUG] - Mongoose is now disconnected..!
+[12 05 2017 13:04:25.806] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[12 05 2017 13:08:05.032] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[12 05 2017 13:23:06.991] [DEBUG] - Mongoose is now disconnected..!
+[12 05 2017 13:25:27.151] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[12 05 2017 13:26:32.812] [DEBUG] - { _id: 5914478825580475dc6e7234,
+  emailId: 'malarmathi1994@gmail.com',
+  __v: 0,
+  followerCount: 0,
+  followingUser: [],
+  reputation: 0,
+  interestCategory: [],
+  watchingTopic: [],
+  preferenceList: [],
+  watchingList: [],
+  answers: [],
+  lists: [],
+  profile: 
+   { phone: 'Phone',
+     education: 
+      { university: 'University',
+        highSchool: 'Secondary',
+        primary: 'Primary' },
+     address: 
+      { postalCode: 'postal Code',
+        city: 'City',
+        region: 'State',
+        country: 'Country',
+        Line2: 'Street',
+        Line1: 'H.No.' },
+     gender: 'gender',
+     dob: 'dob',
+     description: 'Describe About Yourself',
+     picture: 'http://emblemsbattlefield.com/uploads/posts/2014/10/facebook-default-photo-male_1.jpg',
+     name: 'name' } }
+[12 05 2017 13:26:33.581] [DEBUG] - { _id: 5914478825580475dc6e7234,
+  emailId: 'malarmathi1994@gmail.com',
+  __v: 0,
+  followerCount: 0,
+  followingUser: [],
+  reputation: 0,
+  interestCategory: [],
+  watchingTopic: [],
+  preferenceList: [],
+  watchingList: [],
+  answers: [],
+  lists: [],
+  profile: 
+   { phone: 'Phone',
+     education: 
+      { university: 'University',
+        highSchool: 'Secondary',
+        primary: 'Primary' },
+     address: 
+      { postalCode: 'postal Code',
+        city: 'City',
+        region: 'State',
+        country: 'Country',
+        Line2: 'Street',
+        Line1: 'H.No.' },
+     gender: 'gender',
+     dob: 'dob',
+     description: 'Describe About Yourself',
+     picture: 'http://emblemsbattlefield.com/uploads/posts/2014/10/facebook-default-photo-male_1.jpg',
+     name: 'name' } }
+[12 05 2017 13:27:43.521] [DEBUG] - Mongoose is now disconnected..!
+[12 05 2017 13:27:58.014] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[12 05 2017 13:33:01.605] [DEBUG] - Mongoose is now disconnected..!
+[12 05 2017 13:33:15.247] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[12 05 2017 13:37:36.416] [DEBUG] - Mongoose is now disconnected..!
+[12 05 2017 13:37:49.210] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[12 05 2017 13:44:21.167] [DEBUG] - Mongoose is now disconnected..!
+[12 05 2017 13:44:32.739] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla

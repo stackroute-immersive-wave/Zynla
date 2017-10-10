@@ -1,0 +1,690 @@
+[29 05 2017 04:04:48.299] [DEBUG] - { _id: 59227498f317803d1e3926f3,
+  emailId: 'sindhuvarshu95@gmail.com',
+  __v: 1,
+  followerCount: 0,
+  followingUser: 
+   [ 'saikumar.rohan@gmail.com',
+     'saikumar.rohan@gmail.com',
+     'akhileshwar08011995@gmail.com' ],
+  reputation: 0,
+  interestCategory: [ 'react' ],
+  watchingTopic: [],
+  preferenceList: 
+   [ { userName: 'Akhileshwar Rachaconda',
+       position: 0,
+       views: 13,
+       downVotes: 0,
+       upVotes: 1,
+       addedOn: '1493898475708',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'define component ?',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       id: 192,
+       _id: 5926734a092cac78891423e3 },
+     { userName: 'Akhileshwar Rachaconda',
+       position: 0,
+       views: 0,
+       downVotes: 0,
+       upVotes: 1,
+       addedOn: '1493900108441',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'advantages of  component  ?',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       id: 194,
+       _id: 5926a5efed76b57b4f464507 },
+     { userName: 'Akhileshwar Rachaconda',
+       position: 1,
+       views: 0,
+       downVotes: 0,
+       upVotes: 0,
+       addedOn: '1493985253439',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'advantages of render ?',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       displayImage: 'http://maxpixel.freegreatpicture.com/static/photo/1x/Online-Digital-Mobile-Smartphone-Data-Computer-1231889.jpg',
+       id: 165,
+       _id: 5926b77f739dea7fbeb7aa19 } ],
+  watchingList: 
+   [ { downVotes: 0,
+       upVotes: 0,
+       addedOn: '1493985253439',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'advantages of render ?',
+       displayImage: 'http://maxpixel.freegreatpicture.com/static/photo/1x/Online-Digital-Mobile-Smartphone-Data-Computer-1231889.jpg',
+       id: 165,
+       _id: 5922d56d1b437a46d0df46dc },
+     { downVotes: 0,
+       upVotes: 0,
+       addedOn: '1494217186054',
+       profileImage: 'https://lh5.googleusercontent.com/-NlSW1-g8XV0/AAAAAAAAAAI/AAAAAAAAABM/vp44HHLs7LQ/photo.jpg?sz=50',
+       postedBy: 'akhileshwar.r1@gmail.com',
+       heading: 'disadvantages of render ?',
+       displayImage: 'http://maxpixel.freegreatpicture.com/static/photo/1x/Float-Hand-Keep-About-Ball-Binary-Ball-Binary-457334.jpg',
+       id: 173,
+       _id: 5922d5771b437a46d0df46dd } ],
+  answers: 
+   [ { id: 630,
+       _id: 5923c07ac786324e217a87b3,
+       downVote: 0,
+       upVote: 0,
+       image: '',
+       addedOn: '1495515258111',
+       statement: '<p>texttt</p>' },
+     { id: 641,
+       _id: 5923ca27de90d44f5e005ed6,
+       downVote: 0,
+       upVote: 0,
+       image: '',
+       addedOn: '1495517735620',
+       statement: '<p>xsafdsfsdgfadsgsedgsd</p>' } ],
+  lists: 
+   [ { id: 600,
+       _id: 5922d5411b437a46d0df46da,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1495455041269',
+       displayImage: 'https://react.semantic-ui.com/logo.png',
+       image: '',
+       statement: 'explain',
+       category: '["react"]',
+       heading: 'what is react?' },
+     { id: 639,
+       _id: 5923c9fede90d44f5e005ed3,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1495517694834',
+       displayImage: 'https://c1.staticflickr.com/9/8386/8493376660_8e17303a8d.jpg',
+       image: '',
+       statement: 'explain..',
+       category: '["ref"]',
+       heading: 'what is ref??' },
+     { id: 1028,
+       _id: 59267471092cac78891423e5,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1495692401628',
+       displayImage: 'https://cdn.pixabay.com/photo/2015/06/28/09/36/email-824310_960_720.jpg',
+       image: '',
+       statement: 'explain',
+       category: '["react"]',
+       heading: 'what is react' } ],
+  profile: 
+   { phone: 'Phone',
+     education: 
+      { university: 'University',
+        highSchool: 'Secondary',
+        primary: 'Primary' },
+     address: 
+      { postalCode: 'postal Code',
+        city: 'City',
+        region: 'State',
+        country: 'Country',
+        Line2: 'Street',
+        Line1: 'H.No.' },
+     gender: 'female',
+     dob: '18-5-1994',
+     description: 'Describe About Yourself',
+     picture: '',
+     name: 'Sindhuja Pandiyan' } }
+[29 05 2017 04:04:48.478] [DEBUG] - { _id: 59227498f317803d1e3926f3,
+  emailId: 'sindhuvarshu95@gmail.com',
+  __v: 1,
+  followerCount: 0,
+  followingUser: 
+   [ 'saikumar.rohan@gmail.com',
+     'saikumar.rohan@gmail.com',
+     'akhileshwar08011995@gmail.com' ],
+  reputation: 0,
+  interestCategory: [ 'react' ],
+  watchingTopic: [],
+  preferenceList: 
+   [ { userName: 'Akhileshwar Rachaconda',
+       position: 0,
+       views: 13,
+       downVotes: 0,
+       upVotes: 1,
+       addedOn: '1493898475708',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'define component ?',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       id: 192,
+       _id: 5926734a092cac78891423e3 },
+     { userName: 'Akhileshwar Rachaconda',
+       position: 0,
+       views: 0,
+       downVotes: 0,
+       upVotes: 1,
+       addedOn: '1493900108441',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'advantages of  component  ?',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       id: 194,
+       _id: 5926a5efed76b57b4f464507 },
+     { userName: 'Akhileshwar Rachaconda',
+       position: 1,
+       views: 0,
+       downVotes: 0,
+       upVotes: 0,
+       addedOn: '1493985253439',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'advantages of render ?',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       displayImage: 'http://maxpixel.freegreatpicture.com/static/photo/1x/Online-Digital-Mobile-Smartphone-Data-Computer-1231889.jpg',
+       id: 165,
+       _id: 5926b77f739dea7fbeb7aa19 } ],
+  watchingList: 
+   [ { downVotes: 0,
+       upVotes: 0,
+       addedOn: '1493985253439',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'advantages of render ?',
+       displayImage: 'http://maxpixel.freegreatpicture.com/static/photo/1x/Online-Digital-Mobile-Smartphone-Data-Computer-1231889.jpg',
+       id: 165,
+       _id: 5922d56d1b437a46d0df46dc },
+     { downVotes: 0,
+       upVotes: 0,
+       addedOn: '1494217186054',
+       profileImage: 'https://lh5.googleusercontent.com/-NlSW1-g8XV0/AAAAAAAAAAI/AAAAAAAAABM/vp44HHLs7LQ/photo.jpg?sz=50',
+       postedBy: 'akhileshwar.r1@gmail.com',
+       heading: 'disadvantages of render ?',
+       displayImage: 'http://maxpixel.freegreatpicture.com/static/photo/1x/Float-Hand-Keep-About-Ball-Binary-Ball-Binary-457334.jpg',
+       id: 173,
+       _id: 5922d5771b437a46d0df46dd } ],
+  answers: 
+   [ { id: 630,
+       _id: 5923c07ac786324e217a87b3,
+       downVote: 0,
+       upVote: 0,
+       image: '',
+       addedOn: '1495515258111',
+       statement: '<p>texttt</p>' },
+     { id: 641,
+       _id: 5923ca27de90d44f5e005ed6,
+       downVote: 0,
+       upVote: 0,
+       image: '',
+       addedOn: '1495517735620',
+       statement: '<p>xsafdsfsdgfadsgsedgsd</p>' } ],
+  lists: 
+   [ { id: 600,
+       _id: 5922d5411b437a46d0df46da,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1495455041269',
+       displayImage: 'https://react.semantic-ui.com/logo.png',
+       image: '',
+       statement: 'explain',
+       category: '["react"]',
+       heading: 'what is react?' },
+     { id: 639,
+       _id: 5923c9fede90d44f5e005ed3,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1495517694834',
+       displayImage: 'https://c1.staticflickr.com/9/8386/8493376660_8e17303a8d.jpg',
+       image: '',
+       statement: 'explain..',
+       category: '["ref"]',
+       heading: 'what is ref??' },
+     { id: 1028,
+       _id: 59267471092cac78891423e5,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1495692401628',
+       displayImage: 'https://cdn.pixabay.com/photo/2015/06/28/09/36/email-824310_960_720.jpg',
+       image: '',
+       statement: 'explain',
+       category: '["react"]',
+       heading: 'what is react' } ],
+  profile: 
+   { phone: 'Phone',
+     education: 
+      { university: 'University',
+        highSchool: 'Secondary',
+        primary: 'Primary' },
+     address: 
+      { postalCode: 'postal Code',
+        city: 'City',
+        region: 'State',
+        country: 'Country',
+        Line2: 'Street',
+        Line1: 'H.No.' },
+     gender: 'female',
+     dob: '18-5-1994',
+     description: 'Describe About Yourself',
+     picture: '',
+     name: 'Sindhuja Pandiyan' } }
+[29 05 2017 05:02:27.236] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 05:02:38.903] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 05:11:34.439] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 05:11:44.138] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 05:24:42.593] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 05:24:52.781] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 05:34:12.664] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 05:34:22.040] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 05:39:16.694] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 05:39:25.494] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 05:49:00.134] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 05:49:13.837] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 05:58:27.755] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 05:59:11.959] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 06:32:13.952] [DEBUG] - { _id: 59227498f317803d1e3926f3,
+  emailId: 'sindhuvarshu95@gmail.com',
+  __v: 1,
+  followerCount: 0,
+  followingUser: 
+   [ 'saikumar.rohan@gmail.com',
+     'saikumar.rohan@gmail.com',
+     'akhileshwar08011995@gmail.com' ],
+  reputation: 0,
+  interestCategory: [ 'react' ],
+  watchingTopic: [],
+  preferenceList: 
+   [ { userName: 'Akhileshwar Rachaconda',
+       position: 0,
+       views: 13,
+       downVotes: 0,
+       upVotes: 1,
+       addedOn: '1493898475708',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'define component ?',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       id: 192,
+       _id: 5926734a092cac78891423e3 },
+     { userName: 'Akhileshwar Rachaconda',
+       position: 0,
+       views: 0,
+       downVotes: 0,
+       upVotes: 1,
+       addedOn: '1493900108441',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'advantages of  component  ?',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       id: 194,
+       _id: 5926a5efed76b57b4f464507 },
+     { userName: 'Akhileshwar Rachaconda',
+       position: 1,
+       views: 0,
+       downVotes: 0,
+       upVotes: 0,
+       addedOn: '1493985253439',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'advantages of render ?',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       displayImage: 'http://maxpixel.freegreatpicture.com/static/photo/1x/Online-Digital-Mobile-Smartphone-Data-Computer-1231889.jpg',
+       id: 165,
+       _id: 5926b77f739dea7fbeb7aa19 } ],
+  watchingList: 
+   [ { downVotes: 0,
+       upVotes: 0,
+       addedOn: '1493985253439',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'advantages of render ?',
+       displayImage: 'http://maxpixel.freegreatpicture.com/static/photo/1x/Online-Digital-Mobile-Smartphone-Data-Computer-1231889.jpg',
+       id: 165,
+       _id: 5922d56d1b437a46d0df46dc },
+     { downVotes: 0,
+       upVotes: 0,
+       addedOn: '1494217186054',
+       profileImage: 'https://lh5.googleusercontent.com/-NlSW1-g8XV0/AAAAAAAAAAI/AAAAAAAAABM/vp44HHLs7LQ/photo.jpg?sz=50',
+       postedBy: 'akhileshwar.r1@gmail.com',
+       heading: 'disadvantages of render ?',
+       displayImage: 'http://maxpixel.freegreatpicture.com/static/photo/1x/Float-Hand-Keep-About-Ball-Binary-Ball-Binary-457334.jpg',
+       id: 173,
+       _id: 5922d5771b437a46d0df46dd } ],
+  answers: 
+   [ { id: 630,
+       _id: 5923c07ac786324e217a87b3,
+       downVote: 0,
+       upVote: 0,
+       image: '',
+       addedOn: '1495515258111',
+       statement: '<p>texttt</p>' },
+     { id: 641,
+       _id: 5923ca27de90d44f5e005ed6,
+       downVote: 0,
+       upVote: 0,
+       image: '',
+       addedOn: '1495517735620',
+       statement: '<p>xsafdsfsdgfadsgsedgsd</p>' } ],
+  lists: 
+   [ { id: 600,
+       _id: 5922d5411b437a46d0df46da,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1495455041269',
+       displayImage: 'https://react.semantic-ui.com/logo.png',
+       image: '',
+       statement: 'explain',
+       category: '["react"]',
+       heading: 'what is react?' },
+     { id: 639,
+       _id: 5923c9fede90d44f5e005ed3,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1495517694834',
+       displayImage: 'https://c1.staticflickr.com/9/8386/8493376660_8e17303a8d.jpg',
+       image: '',
+       statement: 'explain..',
+       category: '["ref"]',
+       heading: 'what is ref??' },
+     { id: 1028,
+       _id: 59267471092cac78891423e5,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1495692401628',
+       displayImage: 'https://cdn.pixabay.com/photo/2015/06/28/09/36/email-824310_960_720.jpg',
+       image: '',
+       statement: 'explain',
+       category: '["react"]',
+       heading: 'what is react' },
+     { id: 649,
+       _id: 592bb33cc6b7cf200ab0f4a1,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1496036156751',
+       displayImage: 'https://react.semantic-ui.com/logo.png',
+       image: '',
+       statement: 'explain..',
+       category: '["forms"]',
+       heading: 'advantages of forms ?' },
+     { id: 670,
+       _id: 592bc00febb838208fddebd3,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1496039439432',
+       displayImage: 'https://c1.staticflickr.com/9/8386/8493376660_8e17303a8d.jpg',
+       image: '',
+       statement: 'explain',
+       category: '["context"]',
+       heading: 'what is context' } ],
+  profile: 
+   { phone: 'Phone',
+     education: 
+      { university: 'University',
+        highSchool: 'Secondary',
+        primary: 'Primary' },
+     address: 
+      { postalCode: 'postal Code',
+        city: 'City',
+        region: 'State',
+        country: 'Country',
+        Line2: 'Street',
+        Line1: 'H.No.' },
+     gender: 'female',
+     dob: '18-5-1994',
+     description: 'Describe About Yourself',
+     picture: '',
+     name: 'Sindhuja Pandiyan' } }
+[29 05 2017 06:32:14.206] [DEBUG] - { _id: 59227498f317803d1e3926f3,
+  emailId: 'sindhuvarshu95@gmail.com',
+  __v: 1,
+  followerCount: 0,
+  followingUser: 
+   [ 'saikumar.rohan@gmail.com',
+     'saikumar.rohan@gmail.com',
+     'akhileshwar08011995@gmail.com' ],
+  reputation: 0,
+  interestCategory: [ 'react' ],
+  watchingTopic: [],
+  preferenceList: 
+   [ { userName: 'Akhileshwar Rachaconda',
+       position: 0,
+       views: 13,
+       downVotes: 0,
+       upVotes: 1,
+       addedOn: '1493898475708',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'define component ?',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       id: 192,
+       _id: 5926734a092cac78891423e3 },
+     { userName: 'Akhileshwar Rachaconda',
+       position: 0,
+       views: 0,
+       downVotes: 0,
+       upVotes: 1,
+       addedOn: '1493900108441',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'advantages of  component  ?',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       id: 194,
+       _id: 5926a5efed76b57b4f464507 },
+     { userName: 'Akhileshwar Rachaconda',
+       position: 1,
+       views: 0,
+       downVotes: 0,
+       upVotes: 0,
+       addedOn: '1493985253439',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'advantages of render ?',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       displayImage: 'http://maxpixel.freegreatpicture.com/static/photo/1x/Online-Digital-Mobile-Smartphone-Data-Computer-1231889.jpg',
+       id: 165,
+       _id: 5926b77f739dea7fbeb7aa19 } ],
+  watchingList: 
+   [ { downVotes: 0,
+       upVotes: 0,
+       addedOn: '1493985253439',
+       profileImage: 'https://graph.facebook.com/1424919714246782/picture?width=9999',
+       postedBy: 'akhileshwar08011995@gmail.com',
+       heading: 'advantages of render ?',
+       displayImage: 'http://maxpixel.freegreatpicture.com/static/photo/1x/Online-Digital-Mobile-Smartphone-Data-Computer-1231889.jpg',
+       id: 165,
+       _id: 5922d56d1b437a46d0df46dc },
+     { downVotes: 0,
+       upVotes: 0,
+       addedOn: '1494217186054',
+       profileImage: 'https://lh5.googleusercontent.com/-NlSW1-g8XV0/AAAAAAAAAAI/AAAAAAAAABM/vp44HHLs7LQ/photo.jpg?sz=50',
+       postedBy: 'akhileshwar.r1@gmail.com',
+       heading: 'disadvantages of render ?',
+       displayImage: 'http://maxpixel.freegreatpicture.com/static/photo/1x/Float-Hand-Keep-About-Ball-Binary-Ball-Binary-457334.jpg',
+       id: 173,
+       _id: 5922d5771b437a46d0df46dd } ],
+  answers: 
+   [ { id: 630,
+       _id: 5923c07ac786324e217a87b3,
+       downVote: 0,
+       upVote: 0,
+       image: '',
+       addedOn: '1495515258111',
+       statement: '<p>texttt</p>' },
+     { id: 641,
+       _id: 5923ca27de90d44f5e005ed6,
+       downVote: 0,
+       upVote: 0,
+       image: '',
+       addedOn: '1495517735620',
+       statement: '<p>xsafdsfsdgfadsgsedgsd</p>' } ],
+  lists: 
+   [ { id: 600,
+       _id: 5922d5411b437a46d0df46da,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1495455041269',
+       displayImage: 'https://react.semantic-ui.com/logo.png',
+       image: '',
+       statement: 'explain',
+       category: '["react"]',
+       heading: 'what is react?' },
+     { id: 639,
+       _id: 5923c9fede90d44f5e005ed3,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1495517694834',
+       displayImage: 'https://c1.staticflickr.com/9/8386/8493376660_8e17303a8d.jpg',
+       image: '',
+       statement: 'explain..',
+       category: '["ref"]',
+       heading: 'what is ref??' },
+     { id: 1028,
+       _id: 59267471092cac78891423e5,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1495692401628',
+       displayImage: 'https://cdn.pixabay.com/photo/2015/06/28/09/36/email-824310_960_720.jpg',
+       image: '',
+       statement: 'explain',
+       category: '["react"]',
+       heading: 'what is react' },
+     { id: 649,
+       _id: 592bb33cc6b7cf200ab0f4a1,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1496036156751',
+       displayImage: 'https://react.semantic-ui.com/logo.png',
+       image: '',
+       statement: 'explain..',
+       category: '["forms"]',
+       heading: 'advantages of forms ?' },
+     { id: 670,
+       _id: 592bc00febb838208fddebd3,
+       downVote: '0',
+       acceptedCount: '0',
+       postedBy: 'sindhuvarshu95@gmail.com',
+       upVote: '0',
+       addedOn: '1496039439432',
+       displayImage: 'https://c1.staticflickr.com/9/8386/8493376660_8e17303a8d.jpg',
+       image: '',
+       statement: 'explain',
+       category: '["context"]',
+       heading: 'what is context' } ],
+  profile: 
+   { phone: 'Phone',
+     education: 
+      { university: 'University',
+        highSchool: 'Secondary',
+        primary: 'Primary' },
+     address: 
+      { postalCode: 'postal Code',
+        city: 'City',
+        region: 'State',
+        country: 'Country',
+        Line2: 'Street',
+        Line1: 'H.No.' },
+     gender: 'female',
+     dob: '18-5-1994',
+     description: 'Describe About Yourself',
+     picture: '',
+     name: 'Sindhuja Pandiyan' } }
+[29 05 2017 06:52:11.967] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 06:52:21.009] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 07:03:55.070] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 07:04:04.564] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 07:09:07.190] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 07:09:13.156] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 07:12:08.420] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 07:12:14.596] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 07:15:43.702] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 07:16:03.456] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 07:24:13.982] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 07:24:23.882] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 07:27:41.347] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 07:27:47.266] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 07:30:07.335] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 07:30:13.856] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 07:33:40.007] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 07:33:52.367] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 08:18:37.465] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 08:19:45.657] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 08:21:50.828] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 08:22:00.922] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 08:30:08.292] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 08:30:19.018] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 08:32:34.354] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 08:32:52.478] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 08:34:56.519] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 08:35:05.087] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 08:38:47.999] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 08:39:00.952] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 08:43:04.588] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 08:43:15.685] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 08:45:16.992] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 08:45:28.263] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 08:53:27.566] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 08:53:52.107] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 08:55:03.285] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 08:55:11.954] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 08:57:25.293] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 08:57:34.858] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 09:03:08.329] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 09:03:21.081] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 09:05:02.932] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 09:05:32.348] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 09:21:25.803] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 09:21:36.592] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 09:39:00.795] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 09:39:09.214] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 09:47:19.919] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 09:47:30.821] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 09:50:17.450] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 09:50:26.370] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 09:52:04.839] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 09:52:56.333] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 09:55:00.379] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 09:55:21.987] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 09:56:55.176] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 09:57:06.218] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 10:37:25.039] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 10:37:35.504] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 10:57:51.917] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 10:58:01.498] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 10:59:08.275] [DEBUG] - inside userController and in unfollowFromProfile to follow cards
+[29 05 2017 10:59:08.307] [DEBUG] - match (q:question)-[f:following]-(u:user) where id(q)=173 and u.emailid='sindhuvarshu95@gmail.com' delete f return q
+[29 05 2017 10:59:11.445] [DEBUG] - inside userController and in unfollowFromProfile to follow cards
+[29 05 2017 10:59:11.456] [DEBUG] - match (q:question)-[f:following]-(u:user) where id(q)=173 and u.emailid='sindhuvarshu95@gmail.com' delete f return q
+[29 05 2017 10:59:13.498] [DEBUG] - inside saveToProfile
+[29 05 2017 10:59:13.549] [DEBUG] - Inside get
+[29 05 2017 10:59:24.913] [DEBUG] - inside saveToProfile
+[29 05 2017 10:59:24.943] [DEBUG] - Inside get
+[29 05 2017 10:59:29.901] [DEBUG] - inside userController and in unfollowFromProfile to follow cards
+[29 05 2017 10:59:29.906] [DEBUG] - match (q:question)-[f:following]-(u:user) where id(q)=173 and u.emailid='sindhuvarshu95@gmail.com' delete f return q
+[29 05 2017 10:59:34.135] [DEBUG] - inside userController and in unfollowFromProfile to follow cards
+[29 05 2017 10:59:34.137] [DEBUG] - match (q:question)-[f:following]-(u:user) where id(q)=173 and u.emailid='sindhuvarshu95@gmail.com' delete f return q
+[29 05 2017 11:00:28.158] [DEBUG] - inside userController and in unfollowFromProfile to follow cards
+[29 05 2017 11:00:28.162] [DEBUG] - match (q:question)-[f:following]-(u:user) where id(q)=173 and u.emailid='sindhuvarshu95@gmail.com' delete f return q
+[29 05 2017 11:00:30.549] [DEBUG] - inside userController and in unfollowFromProfile to follow cards
+[29 05 2017 11:00:30.552] [DEBUG] - match (q:question)-[f:following]-(u:user) where id(q)=173 and u.emailid='sindhuvarshu95@gmail.com' delete f return q
+[29 05 2017 11:00:31.089] [DEBUG] - inside userController and in unfollowFromProfile to follow cards
+[29 05 2017 11:00:31.092] [DEBUG] - match (q:question)-[f:following]-(u:user) where id(q)=173 and u.emailid='sindhuvarshu95@gmail.com' delete f return q
+[29 05 2017 11:00:31.248] [DEBUG] - inside userController and in unfollowFromProfile to follow cards
+[29 05 2017 11:00:31.252] [DEBUG] - match (q:question)-[f:following]-(u:user) where id(q)=173 and u.emailid='sindhuvarshu95@gmail.com' delete f return q
+[29 05 2017 11:00:31.446] [DEBUG] - inside userController and in unfollowFromProfile to follow cards
+[29 05 2017 11:00:31.449] [DEBUG] - match (q:question)-[f:following]-(u:user) where id(q)=173 and u.emailid='sindhuvarshu95@gmail.com' delete f return q
+[29 05 2017 11:02:04.175] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 11:02:14.169] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla
+[29 05 2017 11:15:32.495] [DEBUG] - Mongoose is now disconnected..!
+[29 05 2017 11:15:45.076] [DEBUG] - Mongoose is now connected to  mongodb://127.0.0.1:27017/zynla

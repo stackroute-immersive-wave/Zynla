@@ -1,0 +1,28 @@
+As soon as you clone the code and do npm install and then hit on npm start you would get an error on semantic-ui-less.
+You need to configure that first.
+Go into nodemodules -> semantic-ui-less and change the file name from theme.config.example to theme.config.
+As soon as you change the file the file extenstion or the icon would change into an XML file 
+Then change the three paths of sitefolder, theme folder, import and font path. (They will be found in the bottom of the file)
+
+Replace them with the below text as follows:
+
+
+/*******************************
+            Folders
+*******************************/
+
+/* Path to theme packages */
+@themesFolder : 'themes';
+
+/* Path to site override folder */
+@siteFolder  : '../../app/semantic-ui/site';
+
+
+/*******************************
+         Import Theme
+*******************************/
+
+@import "~semantic-ui-less/theme.less";
+
+@fontPath : '../../../themes/@{theme}/assets/fonts';
+/* End Config */

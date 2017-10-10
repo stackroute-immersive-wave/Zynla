@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
+const RewriteImportPlugin = require("less-plugin-rewrite-import");
 module.exports = {
  devtool: 'cheap-module-eval-source-map',
  entry: {
@@ -29,12 +29,25 @@ module.exports = {
                 // include: [/flexboxgrid/,/react-select/]
               },
               {
+              test: /\.(jpe?g|png|gif|svg|pdf|docx)$/i,
+              loaders: ['file-loader']
+            },
+              {
 
                 test: /\.json$/,
                 loaders: ['json-loader']
 
+            },
+            {
+                test: /\.less/,
+                loader: 'style-loader!css-loader!less-loader',
+            },
+            {
+                test: /\.(png|jpg|gif|woff|svg|eot|ttf|woff2)$/,
+                loader: 'url-loader?limit=1024&name=[name]-[hash:8].[ext]!image-webpack',
             }]
  },
+
  watch: true,
  resolve: {
    extensions: ['', '.js', '.jsx', '/index.js', '/index.jsx', '.css']

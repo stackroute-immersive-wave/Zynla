@@ -8,6 +8,74 @@ let session = driver.session();
 let redis = require('redis');
 let client = redis.createClient();
 let listController = {
+
+  //#Indhu _method to match the question concept with dB concepts (26-Apr-17)
+  getQuestionConcept: function(req, res) {
+        let val = req.body.intent;
+        let concept = [];
+        /*eslint-disable*/
+        let query = 'match (n:concept)-[:concept_of|:same_as]-(m:concept) where n.name="' + val + '" return m,n';
+        /*eslint-enable*/
+        session.run(query).then(function(result) {
+            session.close();
+            for (let i = 0; i < result.records.length; i=i+1) {
+                console.log(result.records[i]._fields[0].properties.name);
+                concept.push(result.records[i]._fields[0].properties.name);
+            }
+            res.send(concept);
+        });
+
+    },
+
+    //#Indhu _function to get the concept(noun) from the posting question(26-Apr-17)
+    nlp: function(req, res) {
+        let conceptsArr=[];
+        let intentsArr=[];
+        let intentLexicon,intentFullLexicon,conceptFullLexicon,conceptLexicon;
+        let question = req.body.val;
+        let lowerCaseQuestion = question.toLowerCase();
+        let pos = require('pos');
+        let nlp = require('nlp_compromise');
+        client.hkeys('intents', function(err, reply) {
+                intentLexicon = reply;
+                client.hgetall('intents', function(err, reply) {
+                      intentFullLexicon = reply;
+                      client.hkeys('concepts', function(err, reply) {
+                          conceptLexicon = reply;
+                           client.hgetall('concepts', function(err, reply) {
+                              conceptFullLexicon = reply;
+                              let words = new pos.Lexer().lex(lowerCaseQuestion);
+                              let tagger = new pos.Tagger();
+                              let taggedWords = tagger.tag(words);
+                              console.log(taggedWords)
+                              for (let y = 0; y < taggedWords.length; y = y + 1) {
+                              if(intentLexicon.includes(taggedWords[y][0]))
+                              {
+                                console.log(intentLexicon.indexOf(taggedWords[y][0]))
+                                console.log(intentFullLexicon[taggedWords[y][0]])
+                                intentsArr.push(intentFullLexicon[taggedWords[y][0]])
+                              }
+                              if(taggedWords[y][1]=="NN" || taggedWords[y][1]=="NNS"){
+                              if(conceptLexicon.includes(taggedWords[y][0]))
+                              {
+                                  conceptsArr.push(conceptFullLexicon[taggedWords[y][0]])
+                              }
+                              }
+                              }
+                              let query='unwind $conceptsArr as token MATCH (n:concept)-[:concept_of|:same_as]-(m:concept) where n.name=token return collect(m.name)'
+                              console.log(query,conceptsArr)
+                              session.run(query,{"conceptsArr":conceptsArr}).then(function(result) {
+                                conceptsArr=result.records[0]._fields[0]
+                                console.log(result.records[0]._fields)
+                                console.log(intentsArr,conceptsArr)
+                                res.send({"intentsArr":intentsArr,"conceptsArr":conceptsArr})
+                              })
+                              });
+                          });
+                    });
+
+            });
+     },
   getLikeStatus: function(req, res) {
   // console.log('router suggest ques');
   /* eslint-disable */
@@ -17,7 +85,7 @@ let listController = {
     let queArray = req.body.qids;
     let mail = req.body.mail;
   let query = 'unwind '+queArray+' as idQues \
-  match (n:User {name:"'+mail+'"})-[x:liked]->(q:Like)<-[:has]-(qu:Question) where id(qu)=idQues \
+  match (n:user {emailid:"'+mail+'"})-[x:liked]-(qu:question) where id(qu)=idQues \
   return x,qu;';
   console.log(query);
   let likeQueIds = [];
@@ -37,7 +105,7 @@ let listController = {
       // console.log('error while connecting',err);
   });
   let query1 = 'unwind ' + queArray + ' as idQues \
-  match (n:User {name:"'+mail+'"})-[x:unliked]->(q:Unlike)<-[:has]-(qu:Question) where id(qu)=idQues \
+  match (n:user {emailid:"'+mail+'"})-[x:unliked]-(qu:question) where id(qu)=idQues \
   return x,qu;';
   // console.log(query1);
   /* eslint-enable */
@@ -105,9 +173,9 @@ let listController = {
         let email = req.body.email;
         let query = '';
         /*eslint-disable*/
-        query = 'match(n:Answer),\
-                   (p:User {name:"' + email + '"}), \
-                   (q:Question) \
+       query = 'match(n:answer),\
+                   (p:user {emailid:"' + email + '"}), \
+                   (q:question) \
                     where id(n)=' + id + ' and id(q)=' + qid + '\
                    create (n)-[:accepted_by]->(p), \
                    (q)-[:accept]->(n)';
@@ -167,7 +235,7 @@ let listController = {
        });
    },
     getQuestionIntent: function(req, res) {
-      client.smembers('intents', function(error, reply) {
+      client.hkeys('intents', function(error, reply) {
         if(error) {
           throw error;
      // console.log(error);
@@ -180,7 +248,7 @@ let listController = {
     },
 
     getconcepts: function(req, res) {
-      client.smembers('concepts', function(error, reply) {
+      client.hgetall('concepts', function(error, reply) {
               if (error) {
                   throw error;
               //  console.log(error);
@@ -219,11 +287,15 @@ let listController = {
 
     // router function to add a question
     addquestion: function(req, res) {
-        req.body.heading = req.body.heading.charAt(0).toUpperCase() +
-        req.body.heading.substring(1, req.body.heading.length);
-        req.body.statement = req.body.statement.charAt(0).toUpperCase() +
-        req.body.statement.substring(1, req.body.statement.length);
-        let arr1 = JSON.parse(req.body.Concept);
+      console.dir(JSON.parse(req.body.suggestedQuestionconcepts))
+      req.body.suggestedQuestionconcept =JSON.parse(req.body.suggestedQuestionconcepts)
+
+      //console.log(req.body.heading)
+        // req.body.heading = req.body.heading.charAt(0).toUpperCase() +
+        // req.body.heading.substring(1, req.body.heading.length);
+        // req.body.statement = req.body.statement.charAt(0).toUpperCase() +
+        // req.body.statement.substring(1, req.body.statement.length);
+        let arr1 = req.body;
         let arr = [];
         let c = 0;
         let max = 0;
@@ -251,45 +323,46 @@ let listController = {
         /*eslint-enable*/
         let randomNumber = Math.floor(Math.random() * imagesArray.length);
         // query to get all the concepts and find the base concept from the input provided
-        let query1 = 'match (c:Concept) return c.name;';
-        session.run(query1).then(function(result) {
-            if (result) {
-                for (let x in result.records) {
-                    if (x !== null) {
-                        /* eslint-disable */
-                        arr.push(result.records[x]._fields[0]);
-                        /* eslint-enable */
-                    }
-                    for (let i = 0; i < arr1.length; i = i + 1) {
-                        /* eslint-disable */
-                        for (let j = 0; j < arr.length; j = j + 1) {
-                            if (arr1[i] === arr[j]) {
-                                /* eslint-disable */
-                                c = j;
-                            }
-                        }
-                        if (max < c) {
-                            max = c;
-                        }
-                    }
-                }
+
                 // query to post a question at a particular base tag
                 /*eslint-disable*/
                 console.log("-----------------------");
-                console.log(req.body);
-                let query = 'match (c:Concept), \
-                            (u:User {name:"' + req.body.email + '"}) \
-                            where c.name = "' + arr[max] + '" \
-                            create (n:Question {Content:"' + req.body.statement + '",name:"' + req.body.heading + '"}), \
-                            (n)-[:question_of{intent:"' + req.body.intent + '"}]->(c), \
-                            (u)-[:post {on : timestamp()}]->(n), \
-                            (l:Like {count:0}), \
-                            (dl:Unlike {count:0}), \
-                            (n)-[:has]->(l), \
-                            (n)-[:has]->(dl) \
-                            return n \
-                            ';
-                            console.log(query);
+               // console.log(JSON.parse(req.body));
+               let query;
+              if(req.body.secounderyIntent=="use"){
+                query = 'match (c:concept), \
+                           (u:user {emailid:"' + req.body.email + '"}) \
+                           where c.name = "' + req.body.suggestedQuestionconcept[0]+ '" \
+                           create (n:question {value:"' + req.body.statement + '",name:"' + req.body.heading + '"}), \
+                           (use:use),\
+                           (n)<-[:use]-(use)<-[:' + req.body.primaryIntent +']-(c), \
+                           (u)-[:post {on : timestamp()}]->(n) \
+                           return n \
+                           ';
+
+              }else if (req.body.primaryIntent=="compare") {
+                query = 'match (c:concept),(cc:concept) ,\
+                           (u:user {emailid:"' + req.body.email + '"}) \
+                           where c.name = "' + req.body.suggestedQuestionconcept[0]+ '" and cc.name="' + req.body.suggestedQuestionconcept[1]+ '"\
+                           create (n:question {value:"' + req.body.statement + '",name:"' + req.body.heading + '"}),(o:compare) \
+                           (o)<-[:' + req.body.primaryIntent +']-(c), \
+                           (o)<-[:' + req.body.primaryIntent +']-(cc), \
+                           (o)-[:' + req.body.primaryIntent +']->(n), \
+                           (u)-[:post {on : timestamp()}]->(n) \
+                           return n \
+                           ';
+              }else {
+                 query = 'match (c:concept), \
+                           (u:user {emailid:"' + req.body.email + '"}) \
+                           where c.name = "' + req.body.suggestedQuestionconcept[0]+ '" \
+                           create (n:question {value:"' + req.body.statement + '",name:"' + req.body.heading + '"}), \
+                           (n)<-[:' + req.body.primaryIntent +']-(c), \
+                           (u)-[:post {on : timestamp()}]->(n) \
+                           return n \
+                           ';
+              }
+
+                console.log(query);
                 /*eslint-enable*/
                 session.run(query).then(function(result) {
                     console.log(result.records);
@@ -352,10 +425,9 @@ let listController = {
                         // logger.debug('error occurred');
                     }
                 });
-            }
-        });
+
     },
-    // Router for adding viwe count in mongo db created by Aswini K
+    // Router for adding view count in mongo db created by Aswini K
     updateviews: function(req, res) {
         let id = req.body.id;
         // console.log("ID:" + id);
@@ -371,17 +443,18 @@ let listController = {
             res.send(err);
         });
     },
+    /*eslint-disable*/
     // Router for storing comments for question in mongo and neo4j created by Aswini K
     updatecomments: function(req, res) {
-        let query = ' \
-match (n:Question),\
-(u:User {name:"' + req.body.mail + '" }) \
+      let query = '\
+match (n:question),\
+(u:user {emailid:"' + req.body.mail + '" })\
 where id(n) = ' + req.body.questionId + ' \
-create (m:Comment{name:"' + req.body.content + '"}), \
- (n)<-[:comment_of]-(m), \
-(m)-[:commented_by{on : timestamp()}]->(u) \
+create (m:comment{name:"' + req.body.content + '"}),\
+ (n)<-[:comment_of]-(m),\
+(m)-[:commented_by{on : timestamp()}]->(u)\
 return m';
-
+/*eslint-enable*/
         session.run(query).then(function(result) {
             // logger.debug(result);result.records[0]._fields[0].identity.low;
             console.log(result);
@@ -405,29 +478,91 @@ return m';
                 });
             } else {
                 // logger.debug('error occurred');
-                (err) => {
+                /*eslint-disable*/
+               (err) => {
                     res.send(err);
                 }
+                /*eslint-enable*/
             }
         });
     },
+    /* @pavithra K: get answer comments*/
+    getComments: function(req, res) {
+        console.log("inside get comments");
+        console.log("qid: "+req.body.qid);
+        let aid = parseInt(req.body.aid,10);
+       // console.log('Inside Ques get' + req.params.id);
+        List.find({id:req.body.qid,'topCards.id':req.body.aid}).then((docs) => {
+            // console.log('inside route', JSON.stringify(docs));
+            docs[0].topCards.forEach(function (item){
+
+              if(item.id === aid){
+                  console.log(item);
+                  res.send(item);
+              }
+            })
+
+        }, (err) => {
+          console.log("error",err)
+            res.send('Cant get the docs', err);
+        });
+    },
+    /* @pavithra K: add answer comments into db*/
     addanswerComment: function(req, res) {
+      /*eslint-disable*/
       console.log('inside addanswer');
-        let query = ' \
-match (n:Answer),\
-(u:User {name:"' + req.body.mail + '" }) \
+      console.log("AnswerID: "+req.body.answerId);
+         let query = ' \
+match (n),\
+(u:user {emailid:"' + req.body.email + '" }) \
 where id(n) = ' + req.body.answerId + ' \
-create (m:Comment{name:"' + req.body.content + '"}), \
+create (m:comment{name:"' + req.body.content + '"}), \
 (n)<-[:comment_of]-(m), \
 (m)-[:commented_by{on : timestamp()}]->(u) \
 return m';
+/*eslint-enable*/
+session.run(query).then(function(result) {
+            // logger.debug(result);result.records[0]._fields[0].identity.low;
+            console.log("answercomments",result);
+            if (result) {
+                let id = result.records[0]._fields[0].identity.low;
+                console.log("ID:" + id);
+                console.log("quesId:" + req.body.questionId);
+                console.log("ansid:" + req.body.answerId);
+               List.findOneAndUpdate({
+                    id: req.body.questionId,
+                    'topCards.id': req.body.answerId
+                }, {
+                    $push: {
+                        'topCards.$.comment': {
+                            id: id,
+                            createdBy: req.body.email,
+                            content: req.body.content,
+                            createdOn: new Date().getTime(),
+                            name: req.body.name
+                        }
+                    }
+                }, {new: true}).then((doc) => {
+                    console.log(doc);
+                    res.send(doc);
+                });
+            } else {
+                // logger.debug('error occurred');
+                /*eslint-disable*/
+                (err) => {
+                    res.send(err);
+                }
+                /*eslint-enable*/
+            }
+        });
+    },
 
-        session.run(query).then(function(result) {
+       /* session.run(query).then(function(result) {
             // logger.debug(result);result.records[0]._fields[0].identity.low;
             console.log(result);
             res.send(result);
         });
-    },
+    },*/
     inviteFrnds: function(req, res) {
         // router.post('/send', function handleSayHello(req, res) {
         // logger.debug(req.body.data);
@@ -481,13 +616,13 @@ return m';
             'like': false,
             'unlike': false
         };
-        let query = 'match (n:Question)-[:has]->(l)<-[:liked]-(x:User) where id(n)=' + id + ' and x.name="' + email + '" return x;';
+        let query = 'match (n:question)-[:liked]-(x:user) where id(n)=' + id + ' and x.emailid="' + email + '" return x;';
         session.run(query).then(function(result) {
             if (result) {
                 if (result.records.length > 0) {
                     data.like = true;
                 }
-                query = 'match (n:Question)-[:has]->(l)<-[:unliked]-(x:User) where id(n)=' + id + ' and x.name="' + email + '" return x;';
+                query = 'match (n:question)-[:unliked]-(x:user) where id(n)=' + id + ' and x.emailid="' + email + '" return x;';
                 session.run(query).then(function(result1) {
                     if (result1) {
                         if (result1.records.length > 0) {
@@ -502,25 +637,22 @@ return m';
         });
     },
     //router of updating like for question by sumit(3/3/2017)
-    updateLike: function(req, res) {
+   updateLike: function(req, res) {
       console.log('inside update like', req.body);
       var id = req.body.id;
       var email = req.body.email;
       let query = "";
       if (req.body.type == 'add') {
-          query = 'match(n:Question)-[:has]->(m:Like), \
-                  (p:User {name:"' + email + '"})\
+          query = 'match(n:question), \
+                  (p:user {emailid:"' + email + '"})\
                   where id(n)=' + req.body.id + ' \
-                  set m.count=' + req.body.upVotes + ' \
-                  create (p)-[:liked]->(m) \
-                  return m;';
+                  create (p)-[:liked]->(n) \
+                ';
       } else {
-          query = 'match(n:Question)-[:has]->(m:Like)<-[x:liked]- \
-                  (p:User {name:"' + email + '"})\
+          query = 'match(n:question)-[x:liked]- \
+                  (p:user {emailid:"' + email + '"})\
                   where id(n)=' + req.body.id + ' \
-                  set m.count=' + req.body.upVotes + ' \
-                  delete x \
-                  return m;';
+                  delete x ;';
       }
       session.run(query).then(function(result) {
           if (result) {
@@ -540,24 +672,20 @@ return m';
       });
   },
   //router of updating unlike for question by sumit(4/3/2017)
-  updateunlike: function(req, res) {
+ updateunlike: function(req, res) {
       var id = req.body.id;
       var email = req.body.email;
       let query = "";
       if (req.body.type == 'add') {
-          query = 'match(n:Question)-[:has]->(m:Unlike), \
-                  (p:User {name:"' + email + '"})\
+          query = 'match(n:question), \
+                  (p:user {emailid:"' + email + '"})\
                   where id(n)=' + req.body.id + ' \
-                  set m.count=' + req.body.downVotes + ' \
-                  create (p)-[:unliked]->(m) \
-                  return m;';
+                  create (p)-[:disliked]->(n);';
       } else {
-          query = 'match(n:Question)-[:has]->(m:Unlike)<-[x:unliked]- \
-                  (p:User {name:"' + email + '"})\
+          query = 'match(n:question)-[x:disliked]- \
+                  (p:user {emailid:"' + email + '"})\
                   where id(n)=' + req.body.id + ' \
-                  set m.count=' + req.body.downVotes + ' \
-                  delete x \
-                  return m;';
+                  delete x ;';
       }
       session.run(query).then(function(result) {
           if (result) {
@@ -575,7 +703,7 @@ return m';
       });
   },
     getImages: function(req, res) {
-        let query = 'match(n:Domain) return n.name';
+        let query = 'match(n:domain) return n.name';
         let arr = [];
         session.run(query).then(function(result) {
             console.log("result:" + result);
@@ -595,8 +723,8 @@ return m';
   let id = req.body.id;
   let email = req.body.email;
   let type = req.body.type;
-  let query1 = 'match (n:User {name:"'+email+'"}),\
-(q:Question),\
+  let query1 = 'match (n:user {emailid:"'+email+'"}),\
+(q:question),\
 (n)-[x:report]->(q) where id(q)=' + id + ' \
 return x;';
 //         let query = 'match (n:User {name:"'+email+'"}), \
@@ -612,8 +740,8 @@ session.run(query1).then(function(result) {
      res.send("Already Reported");
    }
    else {
-     let query = 'match (n:User {name:"'+email+'"}), \
-     (q:Question) where id(q)=' + id + ' \
+     let query = 'match (n:user {emailid:"'+email+'"}), \
+     (q:question) where id(q)=' + id + ' \
      create (n)-[:report {type:"'+type+'",on:timestamp()}]->(q) \
      return q;';
           session.run(query).then(function(result) {
@@ -629,8 +757,8 @@ changePopup: function(req, res){
   let session = driver.session();
 let id = req.body.id;
 let email = req.body.email;
-let query1 = 'match (n:User {name:"'+email+'"}),\
-(q:Question),\
+let query1 = 'match (n:user {emailid:"'+email+'"}),\
+(q:question),\
 (n)-[x:report]->(q) where id(q)=' + id + ' \
 return x;';
 //         let query = 'match (n:User {name:"'+email+'"}), \

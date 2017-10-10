@@ -1,5 +1,5 @@
 import React from 'react';
-import {Segment} from 'semantic-ui-react';
+// import {Segment} from 'semantic-ui-react';
 class ChatCard extends React.Component {
   constructor() {
     super();
@@ -9,27 +9,27 @@ class ChatCard extends React.Component {
     /* eslint-disable */
     let chatContent = this.props.data.message;
     console.log(chatContent);
-    let render = (
+    let chatCardContent = (
       <div className = "chatcard">
         {this.props.data.message}
       </div>
     );
-    if(this.props.data.by !== 'bot') {
-      console.log(this.props.data.by);
-      render = (
-
-        <div className = "chatcardhuman">
-          <Segment>
-          {this.props.data.message}
-        </Segment>
-        </div>
-
-      );
-    }
+    // if(this.props.data.by !== 'bot') {
+    //   console.log(this.props.data.by);
+    //   chatCardContent = (
+    //
+    //     <div className = "chatcardhuman">
+    //       <Segment>
+    //       {this.props.data.message}
+    //     </Segment>
+    //     </div>
+    //
+    //   );
+    // }
     /* eslint-enable */
     return (
       <div>
-        {render}
+        {chatCardContent}
       </div>
     );
   }

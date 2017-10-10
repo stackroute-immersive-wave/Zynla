@@ -23,24 +23,25 @@ if(error){
 var db=mongoose.connection;
 db.on('error',console.error.bind(console,'Conection Error..!!!!!!'));
 db.once('open',function(){
-    console.log("Connection eatablished to MongoDB Successfully"+mongoURL);
+    console.log("Connection eatablished to MongoDB Successfully "+mongoURL);
 });
 userAddMicroservice.add({role:'search',cmd:'searchuser'},
 	function(msg, done) {
 
- console.log("Inside Microservice"+msg.question);
+ console.log("Inside Microservice to searchuser "+msg.question);
 /*Neo4j COde */
 let session = driver.session();
-let query = 'match (n:Concept {name:"' + msg.question + '"})<-[:follow]-(u:User) return u';
+let query = 'match (n:concept {name:"' + msg.question + '"})<-[:following]-(u:user) return u';
 session.run(query).then(function(result) {
 		let arr = [];
 		for (let x = 0; x < result.records.length; x = x + 1) {
 				/* eslint-disable */
-				let y = result.records[x]._fields[0].properties.name;
+				let y = result.records[x]._fields[0].properties.emailid;
 				/* eslint-enable */
 				arr.push(y);
 		}
-		session.close();
+    console.log(arr,"from get people")
+	session.close();
 		console.log()
 		done(arr);
 }).catch(function() {
@@ -50,9 +51,9 @@ session.run(query).then(function(result) {
 	userAddMicroservice.add({role:'get',cmd:'getuserprofile'},
 		function(msg, done) {
 
-	 console.log("Inside Microservice"+msg.question);
+	 console.log("Inside Microservice to getuserprofile "+msg.question);
         let session = driver.session();
-        let query = 'match (n:Concept {name:"' + msg.question + '"})<-[:follow]-(u:User) return u';
+        let query = 'match (n:concept {name:"' + msg.question + '"})<-[:following]-(u:user) return u';
         session.run(query).then(function(result) {
             console.log('connected');
             let arr = [];
@@ -81,35 +82,34 @@ session.run(query).then(function(result) {
  })
  userAddMicroservice.add({role:'get',cmd:'getConcepts'},
 	 function(msg, done) {
-
-	console.log("Inside Microservice"+msg.concept);
-
- let query = 'match (n)<-[r]-(m:Concept) where n.name="' + msg.concept + '" return m';
+ console.log("Inside Microservice to getConcepts "+msg.concept);
+ let query = 'match (n)<-[r]-(m:concept) where n.name="' + msg.concept + '" return m';
  let session = driver.session();
  session.run(query).then(function(result) {
-		 let json = [];
-		 for (let x = 0; x < result.records.length; x = x + 1) {
-				 /* eslint-disable */
-				 let y = result.records[x]._fields[0].properties.name;
-				 let i = result.records[x]._fields[0].Image;
-				 /* eslint-enable */
-				 json.push({name: y, image: i});
-		 }
-		 done(json);
-		 session.close();
+ 	 let json = [];
+ 	 for (let x = 0; x < result.records.length; x = x + 1) {
+ 			 /* eslint-disable */
+ 			 let y = result.records[x]._fields[0].properties.name;
+ 			 let i = result.records[x]._fields[0].properties.Image;
+ 			 /* eslint-enable */
+         console.log(y,i);
+ 			 json.push({name: y, image: i});
+ 	 }
+ 	 done(json);
+ 	 session.close();
  });
 })
 userAddMicroservice.add({role:'get',cmd:'followUser'},
 	function(msg, done) {
 
- console.log("Inside Microservice"+msg.id);
+ console.log("Inside Microservice to followUser "+msg.id);
 
 
  let session = driver.session();
  /* eslint-disable */
- let query = 'match(n:User {name:"' + msg.id + '"}),\
-          (m:User {name:"' + msg.emailId + '"})\
-          create (n)-[:follow]->(m)\
+ let query = 'match(n:user {emailid:"' + msg.id + '"}),\
+          (m:user {emailid:"' + msg.emailId + '"})\
+          create (n)-[:following]->(m)\
           return n,m;';
  /* eslint-enable */
  session.run(query).then(function() {
@@ -143,8 +143,8 @@ userAddMicroservice.add({role:'get',cmd:'followUser'},
 userAddMicroservice.add({role:'get',cmd:'isFollow'},
 	function(msg, done) {
 
- console.log("Inside Microservice"+msg.name);
-let query = 'match (n:User {name:"' + msg.name + '"})-[:follow]->(m:User) return m';
+ console.log("Inside Microservice to isFollow "+msg.name);
+let query = 'match (n:user {emailid:"' + msg.name + '"})-[:following]->(m:user) return m';
 let session = driver.session();
 session.run(query).then(function(result) {
 		let namearr = [];
@@ -178,9 +178,9 @@ session.run(query).then(function(result) {
 userAddMicroservice.add({role:'get',cmd:'getQuestions'},
 	function(msg, done) {
 
- console.log("Inside Microservice"+msg.q);
+ console.log("Inside Microservice to get questions "+msg.q);
 let session1 = driver.session();
-let query = 'match (n:Concept)<-[r:question_of]-(m:Question) where n.name=~"(?i)' + msg.q + '" return m';
+let query = 'match (n:concept)<-[r:definition]-(m:question) where n.name=~"(?i)' + msg.q + '" return m';
 console.log('Neo4j Query:'+query);
 session1.run(query).then(function(result) {
 		let arr = [];
@@ -198,7 +198,7 @@ session1.run(query).then(function(result) {
 				}
 		}).then((docs) => {
 				arrobj.push(docs);
-				console.log("userAddMicroservice"+docs);
+				console.log("userAddMicroservice "+docs);
 				done(docs);
 				session1.close();
 		});
@@ -216,9 +216,9 @@ session1.close();
 userAddMicroservice.add({role:'get',cmd:'isFollowTopic'},
 	function(msg, done) {
 
- console.log("Inside Microservice"+msg.q);
+ console.log("Inside Microservice to isFollowTopic "+msg.q);
  let arr = [];
-let query = 'match (n:User {name:"' + msg.name + '"})-[r:follow]->(m:Concept {name:"' + msg.q + '"}) return r';
+let query = 'match (n:user {emailid:"' + msg.name + '"})-[r:following]->(m:concept {name:"' + msg.q + '"}) return r';
 /* eslint-enable */
 let session = driver.session();
 session.run(query).then(function(result) {
@@ -233,16 +233,55 @@ session.run(query).then(function(result) {
 })
 userAddMicroservice.add({role:'do',cmd:'followTopic'},
 	function(msg, done) {
-
- console.log("Inside Microservice"+msg.id);
+console.log('testing what msg is inside followTopic '+msg);
+ console.log("Inside Microservice to follow topic "+msg.q);
 let session = driver.session();
 /* eslint-disable */
-let query ='match(n:User {name:"' + msg.id + '"}),(m:Concept {name:"' + msg.concept + '"}) create (n)-[:follow]->(m) return n,m'
+let query ='match(n:user {emailid:"' + msg.id + '"}),(m:concept {name:"' + msg.concept + '"}) merge (n)-[:following]->(m) return n,m'
 /* eslint-enable */
+console.log(query);
 session.run(query).then(function() {
-			 session.close();
-			done({'result':'success'});
-	});
-	})
+    userProfileList.findOneAndUpdate({
+    emailId: msg.id
+}, {
+    $push: {
+        watchingTopic: msg.concept
+    }
+}, {new: true}).then(() => {
+    //res.send('following topic added');
+}, (err) => {
+  //  res.send(err);
+});
+    session.close();
+    let result = {'result':'success'}
+    done(result);
+});
+})
+//#Abu (29/4/2017) To Unfollow topic by deleting the follow link in neo4j and removing the concept in watchingTopic in mongodb
+  userAddMicroservice.add({role:'do',cmd:'UnFollowTopic'},
+  	function(msg, done) {
+   console.log("Inside Microservice to UnFollow topic "+msg.id);
+  let session = driver.session();
+  /* eslint-disable */
+  let query ='match(n:user {emailid:"' + msg.id  + '"})-[f:following]->(m:concept {name:"' + msg.concept + '"}) delete f return m;';
+  /* eslint-enable */
+  console.log(query);
+  session.run(query).then(function() {
+      userProfileList.findOneAndUpdate({
+      emailId: msg.id
+  }, {
+      $pop: {
+          watchingTopic: msg.concept
+      }
+  }, {new: true}).then(() => {
+      //res.send('Unfollowing topic success');
+  }, (err) => {
+      //res.send(err);
+  });
+      session.close();
+      let result = {'result':'success'}
+      done(result);
+  });
+  })
 /*ToDO: Move IP and Port to config*/
 userAddMicroservice.listen({host: '127.0.0.1', port: '3000'});

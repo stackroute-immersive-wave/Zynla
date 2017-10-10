@@ -3,6 +3,11 @@ const router = require('express').Router();
 const passport = require('passport');
 
 let userController = require('./userController.js');
+console.log(global.vini);
+//create a profileQues
+router.post('/profileQues',userController.userQues);
+// get userProfileQuestion
+router.get('/getProfileQues',userController.getUserQues);
 
 // Create new user
 router.post('/login', passport.authenticate('local', {failureRedirect: '/'}), userController.logIn);
@@ -10,6 +15,8 @@ router.post('/login', passport.authenticate('local', {failureRedirect: '/'}), us
 // Delete a user based on :id
 router.post('/send', userController.sendEmail);
 router.get('/getAllUserName', userController.getAllUserName);
+router.get('/getusername/:emailId', userController.getUserName);
+
 
 // Update a user based on :id
 router.post('/signup', userController.signUp);
@@ -21,13 +28,14 @@ router.post('/checkuser', userController.checkUser);
 router.post('/logOut', userController.logOut);
 // Update user watchingList
 router.put('/saveToProfile', userController.saveToProfile);
-
+// To remove cards from watchingList
+router.put('/unfollowFromProfile', userController.unfollowFromProfile);
 // Get the user Following List
 router.get('/viewFollowCard/:emailId', userController.viewFollowCard);
 // Get the user List
 router.get('/getAllCards/:emailId', userController.getAllCards);
 
-// Get the folloeing category
+// Get the following category
 router.get('/', userController.viewFav);
 
 router.get('/auth/facebook', passport.authenticate('facebook', {

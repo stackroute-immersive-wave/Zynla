@@ -1,4 +1,4 @@
-# Zynla
+#Zynla
 #### Quencing Thirsty Minds
 
 Zynla is a place where you can find the Webs best answers from friends, experts, and communities all within the topics you love.
